@@ -1,3 +1,3 @@
-# shipping-inspection-application
+# shipping_inspection_app
 
-Repository for the shipping inspection project developed by Year 3 ASE students.
+Shipping inspection project developed by Year 3 ASE students.
