@@ -38,8 +38,17 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation:
+      FloatingActionButtonLocation.startFloat,
       appBar: AppBar(
         title: Text(widget.title),
+        leading: Transform.scale(
+          scale: 0.7,
+          child: FloatingActionButton(
+            onPressed: () {  },
+            child: const Icon(Icons.menu),
+          ),
+        ),
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
