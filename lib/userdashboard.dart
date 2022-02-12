@@ -59,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: Drawer(
         child: ListView(
           children: [
+
             DrawerHeader(
                 decoration: const BoxDecoration(
                   color: Colors.purple,
@@ -75,6 +76,33 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
             ),
+
+            ListTile(
+              title: const Text("Help"),
+              iconColor: Colors.purple,
+              leading: IconButton(
+                onPressed: () {  },
+                icon: const Icon(Icons.help),
+              ),
+            ),
+
+            const Divider(
+              color: Colors.grey,
+            ),
+
+            ListTile(
+              title: const Text("Settings"),
+              iconColor: Colors.purple,
+              leading: IconButton(
+                onPressed: () {  },
+                icon: const Icon(Icons.settings),
+              ),
+            ),
+
+            const Divider(
+              color: Colors.grey,
+            ),
+
           ]
         ),
       ),
