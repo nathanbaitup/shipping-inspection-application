@@ -35,9 +35,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       floatingActionButtonLocation:
       FloatingActionButtonLocation.startFloat,
       appBar: AppBar(
@@ -45,9 +48,16 @@ class _MyHomePageState extends State<MyHomePage> {
         leading: Transform.scale(
           scale: 0.7,
           child: FloatingActionButton(
-            onPressed: () {  },
+            onPressed: () => _scaffoldKey.currentState?.openDrawer(),
             child: const Icon(Icons.menu),
           ),
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: const [
+            DrawerHeader(child: Text('Header Temp'))
+          ],
         ),
       ),
       body: Center(
