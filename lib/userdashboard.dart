@@ -45,6 +45,9 @@ class _MyHomePageState extends State<MyHomePage> {
       FloatingActionButtonLocation.startFloat,
       appBar: AppBar(
         title: Text(widget.title),
+        titleTextStyle: const TextStyle(color: Colors.purple),
+        centerTitle: true,
+        backgroundColor: Colors.white,
         leading: Transform.scale(
           scale: 0.7,
           child: FloatingActionButton(
@@ -56,7 +59,11 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: Drawer(
         child: ListView(
           children: const [
-            DrawerHeader(child: Text('Header Temp'))
+            DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.purple,
+                ),
+                child: Text('Header Temp'))
           ],
         ),
       ),
