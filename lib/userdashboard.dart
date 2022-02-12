@@ -58,13 +58,24 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       drawer: Drawer(
         child: ListView(
-          children: const [
+          children: [
             DrawerHeader(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.purple,
                 ),
-                child: Text('Header Temp'))
-          ],
+                  child: Container (
+                    alignment: Alignment.centerLeft,
+                    child: const Text(
+                      'Idwal Vessel Inspection App',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 28,
+                        fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ),
+            ),
+          ]
         ),
       ),
       body: Center(
