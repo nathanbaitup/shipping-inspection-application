@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shipping_inspection_app/sectors/communication/startup.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -23,10 +24,7 @@ class _MyHomePageState extends State<MyHomePage> {
       'AR',
       style: optionStyle,
     ),
-    Text(
-      'Calls',
-      style: optionStyle,
-    ),
+    CommunicationFront(),
   ];
 
   void _onItemTapped(int index) {
