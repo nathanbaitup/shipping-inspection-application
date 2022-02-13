@@ -19,4 +19,3 @@ class ShipApp extends StatelessWidget {
     );
   }
 }
-
