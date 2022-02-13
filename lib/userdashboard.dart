@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shipping_inspection_app/menu-settings.dart';
+import 'package:shipping_inspection_app/menu-help.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -43,6 +45,9 @@ class _MyHomePageState extends State<MyHomePage> {
       key: _scaffoldKey,
       floatingActionButtonLocation:
       FloatingActionButtonLocation.startFloat,
+
+      // -- App Bar Start
+
       appBar: AppBar(
         title: Text(widget.title),
         titleTextStyle: const TextStyle(color: Colors.purple),
@@ -56,6 +61,12 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
+
+      // -- App Bar End
+
+
+      // -- Burger Menu Start
+
       drawer: Drawer(
         child: ListView(
           children: [
@@ -81,9 +92,18 @@ class _MyHomePageState extends State<MyHomePage> {
               title: const Text("Help"),
               iconColor: Colors.purple,
               leading: IconButton(
-                onPressed: () {  },
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => const MenuHelp()));
+                },
                 icon: const Icon(Icons.help),
               ),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => const MenuHelp()));
+            }
             ),
 
             const Divider(
@@ -94,9 +114,18 @@ class _MyHomePageState extends State<MyHomePage> {
               title: const Text("Settings"),
               iconColor: Colors.purple,
               leading: IconButton(
-                onPressed: () {  },
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => const MenuSettings()));
+                },
                 icon: const Icon(Icons.settings),
               ),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => const MenuSettings()));
+            }
             ),
 
             const Divider(
@@ -106,6 +135,12 @@ class _MyHomePageState extends State<MyHomePage> {
           ]
         ),
       ),
+
+      // -- Burger Menu End
+
+
+      // -- Nav Bar Start
+
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
@@ -128,6 +163,9 @@ class _MyHomePageState extends State<MyHomePage> {
         selectedItemColor: Colors.purple,
         onTap: _onItemTapped,
       ),
+
+      // -- Nav Bar End
+
     );
   }
 }
