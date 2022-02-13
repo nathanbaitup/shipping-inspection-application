@@ -79,6 +79,22 @@ class _QuestionnaireHubState extends State<QuestionnaireHub> {
                         ),
                       ],
                     ),
+                    TableRow(
+                      children: [
+                        Text(
+                          "Engine Room",
+                          textScaleFactor: 1.5,
+                        ),
+                        Text(
+                          "1 of 2",
+                          textScaleFactor: 1.5,
+                        ),
+                        ElevatedButton(
+                          onPressed: null,
+                          child: Text("Go to this Section?"),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
