@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 
@@ -37,7 +38,7 @@ class _QuestionnaireSectionState extends State<QuestionnaireSection> {
                       "1.Was the fire detection system free of alarms or signs of tampering?"),
                   SizedBox(height: 5),
                   Text(
-                      "2.What was the condition of the fire main and ancillaries such as pipework hydrants andvalves?"),
+                      "2.What was the condition of the fire main and ancillaries such as pipework hydrants and valves?"),
                 ],
               ),
 

@@ -22,6 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
       'Home',
       style: optionStyle,
     ),
+    // TODO: Remove this before final commit as this is only used for page testing.
     QuestionnaireSection(),
     Text(
       'Calls',
