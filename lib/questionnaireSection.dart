@@ -14,7 +14,7 @@ class QuestionnaireSection extends StatefulWidget {
 }
 
 class _QuestionnaireSectionState extends State<QuestionnaireSection> {
-  //TODO: create a variable that updates the state based on if AR or camera button is pressed to update the camera view.
+  List<Image> imageViewer = [];
 
   @override
   Widget build(BuildContext context) {
@@ -23,21 +23,23 @@ class _QuestionnaireSectionState extends State<QuestionnaireSection> {
         child: SafeArea(
           child: Column(
             children: <Widget>[
+              const SizedBox(height: 20),
               const Center(
                 child: Text(
-                    "This section contains questions on the fire and safety inspection."),
+                    "This section contains questions on the fire and safety inspection.",
+                    style: TextStyle(fontWeight: FontWeight.bold)),
               ),
+              const SizedBox(height: 20),
 
-              // Column specifically for adding the questions to the questionnaire.
               //TODO: Update to dynamic data
-              // Will be updated to work dynamically to get IDs of the questions and display
-              // In the same page rather than a separate page for each question.
+              // Column specifically for adding the questions to the questionnaire.
               Column(
                 children: const <Widget>[
                   Text(
                     "Questions:",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
                   ),
                   SizedBox(height: 5),
@@ -48,32 +50,33 @@ class _QuestionnaireSectionState extends State<QuestionnaireSection> {
                       "2.What was the condition of the fire main and ancillaries such as pipework hydrants and valves?"),
                 ],
               ),
-
               const SizedBox(
-                height: 50,
+                height: 70,
                 width: 350,
                 child: Divider(color: Colors.grey),
               ),
-              // REFERENCE ACCESSED 13/02/2022
-              //Used for the flutter image slideshow widget.
-              ImageSlideshow(
-                width: double.infinity,
-                height: 200.0,
-                initialPage: 0,
-                children: [
-                  Image.asset('images/f&s1.png'),
-                  Image.asset('images/f&s2.png'),
-                ],
-              ),
+
+              if (imageViewer.isEmpty)
+                const Text(
+                    'No images are available, please capture an image to be displayed here.')
+              else
+                // REFERENCE ACCESSED 13/02/2022
+                //Used for the flutter image slideshow widget.
+                ImageSlideshow(
+                  width: double.infinity,
+                  height: 200.0,
+                  initialPage: 0,
+                  children: imageViewer,
+                ),
               // END REFERENCE
+
               const SizedBox(height: 20),
 
               //The buttons to take an image, view the question within AR and to save a surveyors answers.
               ElevatedButton(
-                onPressed: () async {
-                  //TODO: allow variable of what button has been pressed to be parsed into the camera screen to display the camera page layout.
-                  await availableCameras().then(
-                    (value) => Navigator.push(
+                onPressed: () async => await availableCameras().then(
+                  (value) async {
+                    final capturedImages = await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => CameraScreen(
@@ -81,26 +84,26 @@ class _QuestionnaireSectionState extends State<QuestionnaireSection> {
                           buttonID: 'addImage',
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                    setState(() => imageViewer = imageViewer + capturedImages);
+                  },
+                ),
                 child: const Text('Add Images'),
               ),
               ElevatedButton(
-                onPressed: () async {
-                  //TODO: allow variable of what button has been pressed to be parsed into the camera screen to display the AR page layout.
-                  await availableCameras().then(
-                    (value) => Navigator.push(
+                onPressed: () async => await availableCameras().then(
+                  (value) async {
+                    final capturedImages = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CameraScreen(
-                          cameras: value,
-                          buttonID: 'ar',
-                        ),
-                      ),
-                    ),
-                  );
-                },
+                          builder: (context) => CameraScreen(
+                                cameras: value,
+                                buttonID: 'ar',
+                              )),
+                    );
+                    setState(() => imageViewer = imageViewer + capturedImages);
+                  },
+                ),
                 child: const Text('View in AR'),
                 style: ElevatedButton.styleFrom(primary: Colors.orangeAccent),
               ),
