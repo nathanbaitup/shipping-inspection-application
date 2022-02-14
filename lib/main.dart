@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/userdashboard.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const ShipApp());
 }
 

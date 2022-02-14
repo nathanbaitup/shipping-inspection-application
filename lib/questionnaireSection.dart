@@ -1,6 +1,10 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:shipping_inspection_app/utils/camera_screen.dart';
+
+//TODO: 1. Get access to this page by parsing the page to load from the questionnaire hub page.
+// TODO: 2. Based on the button press, parse in the key to display the corresponding questions.
 
 class QuestionnaireSection extends StatefulWidget {
   const QuestionnaireSection({Key? key}) : super(key: key);
@@ -10,6 +14,8 @@ class QuestionnaireSection extends StatefulWidget {
 }
 
 class _QuestionnaireSectionState extends State<QuestionnaireSection> {
+  //TODO: create a variable that updates the state based on if AR or camera button is pressed to update the camera view.
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,6 +29,7 @@ class _QuestionnaireSectionState extends State<QuestionnaireSection> {
               ),
 
               // Column specifically for adding the questions to the questionnaire.
+              //TODO: Update to dynamic data
               // Will be updated to work dynamically to get IDs of the questions and display
               // In the same page rather than a separate page for each question.
               Column(
@@ -63,11 +70,23 @@ class _QuestionnaireSectionState extends State<QuestionnaireSection> {
 
               //The buttons to take an image, view the question within AR and to save a surveyors answers.
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  //TODO: allow variable of what button has been pressed to be parsed into the camera screen to display the camera page layout.
+                  await availableCameras().then(
+                    (value) => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CameraScreen(cameras: value),
+                      ),
+                    ),
+                  );
+                },
                 child: const Text('Add Images'),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  //TODO: allow variable of what button has been pressed to be parsed into the camera screen to display the AR page layout.
+                },
                 child: const Text('View in AR'),
                 style: ElevatedButton.styleFrom(primary: Colors.orangeAccent),
               ),
