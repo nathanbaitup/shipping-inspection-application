@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shipping_inspection_app/questionnaireHub.dart';
 import 'package:shipping_inspection_app/menu-settings.dart';
 import 'package:shipping_inspection_app/menu-help.dart';
 
@@ -15,16 +16,13 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     Text(
       'Home',
       style: optionStyle,
     ),
-    Text(
-      'AR',
-      style: optionStyle,
-    ),
+    QuestionnaireHub(),
     Text(
       'Calls',
       style: optionStyle,
