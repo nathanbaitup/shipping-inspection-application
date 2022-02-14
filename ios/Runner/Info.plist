@@ -43,5 +43,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+    <string>Camera used to take and upload images of parts of vessel relating to the question asked.</string>
 </dict>
 </plist>
