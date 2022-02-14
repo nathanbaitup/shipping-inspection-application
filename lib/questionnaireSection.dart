@@ -76,7 +76,10 @@ class _QuestionnaireSectionState extends State<QuestionnaireSection> {
                     (value) => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CameraScreen(cameras: value),
+                        builder: (context) => CameraScreen(
+                          cameras: value,
+                          buttonID: 'addImage',
+                        ),
                       ),
                     ),
                   );
@@ -84,8 +87,19 @@ class _QuestionnaireSectionState extends State<QuestionnaireSection> {
                 child: const Text('Add Images'),
               ),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   //TODO: allow variable of what button has been pressed to be parsed into the camera screen to display the AR page layout.
+                  await availableCameras().then(
+                    (value) => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CameraScreen(
+                          cameras: value,
+                          buttonID: 'ar',
+                        ),
+                      ),
+                    ),
+                  );
                 },
                 child: const Text('View in AR'),
                 style: ElevatedButton.styleFrom(primary: Colors.orangeAccent),
