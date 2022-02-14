@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/menu-settings.dart';
 import 'package:shipping_inspection_app/menu-help.dart';
-import 'package:shipping_inspection_app/questionnaireSection.dart';
+import 'package:shipping_inspection_app/questionnaire_section.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);

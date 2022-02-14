@@ -2,9 +2,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:shipping_inspection_app/utils/camera_screen.dart';
+import 'package:shipping_inspection_app/utils/questions/question_brain.dart';
 
-//TODO: 1. Get access to this page by parsing the page to load from the questionnaire hub page.
-// TODO: 2. Based on the button press, parse in the key to display the corresponding questions.
+QuestionBrain questionBrain = new QuestionBrain();
 
 class QuestionnaireSection extends StatefulWidget {
   const QuestionnaireSection({Key? key}) : super(key: key);
@@ -15,6 +15,24 @@ class QuestionnaireSection extends StatefulWidget {
 
 class _QuestionnaireSectionState extends State<QuestionnaireSection> {
   List<Image> imageViewer = [];
+  List<String> questionsToAsk = [];
+  List<Text> displayQuestions = [];
+
+  // Uses the question brain to get all the questions needed to display on the page
+  // and then creates a text widget for each question to be displayed.
+  void addDisplayQuestions() {
+    //TODO: change f&s from hardcoded to parsed in data, need questionnaire hub to do this.
+    questionsToAsk = questionBrain.getQuestions('f&s');
+    for (var question in questionsToAsk) {
+      displayQuestions.add(Text(question));
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    addDisplayQuestions();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,24 +49,17 @@ class _QuestionnaireSectionState extends State<QuestionnaireSection> {
               ),
               const SizedBox(height: 20),
 
-              //TODO: Update to dynamic data
               // Column specifically for adding the questions to the questionnaire.
+              const Text(
+                "Questions:",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              const SizedBox(height: 5),
               Column(
-                children: const <Widget>[
-                  Text(
-                    "Questions:",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                      "1.Was the fire detection system free of alarms or signs of tampering?"),
-                  SizedBox(height: 5),
-                  Text(
-                      "2.What was the condition of the fire main and ancillaries such as pipework hydrants and valves?"),
-                ],
+                children: displayQuestions,
               ),
               const SizedBox(
                 height: 70,
@@ -69,9 +80,7 @@ class _QuestionnaireSectionState extends State<QuestionnaireSection> {
                   children: imageViewer,
                 ),
               // END REFERENCE
-
               const SizedBox(height: 20),
-
               //The buttons to take an image, view the question within AR and to save a surveyors answers.
               ElevatedButton(
                 onPressed: () async => await availableCameras().then(
