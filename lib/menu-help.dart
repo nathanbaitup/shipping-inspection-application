@@ -11,7 +11,13 @@ class _MenuHelpState extends State<MenuHelp> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(
+          color: Colors.purple,
+        ),
+      ),
       body: Center(
           child: Text("Help")
       ),
