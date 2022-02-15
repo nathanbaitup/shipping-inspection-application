@@ -23,12 +23,8 @@ class _MyHomePageState extends State<MyHomePage> {
       'Home',
       style: optionStyle,
     ),
-    Text(
-      'AR',
-      style: optionStyle,
-    ),
-    CommunicationFront(),
     QuestionnaireHub(),
+    CommunicationFront(),
     Text(
       'Calls',
       style: optionStyle,
@@ -47,8 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      floatingActionButtonLocation:
-      FloatingActionButtonLocation.startFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
 
       // -- App Bar Start
 
@@ -68,31 +63,27 @@ class _MyHomePageState extends State<MyHomePage> {
 
       // -- App Bar End
 
-
       // -- Burger Menu Start
 
       drawer: Drawer(
-        child: ListView(
-          children: [
-
-            DrawerHeader(
-                decoration: const BoxDecoration(
-                  color: Colors.purple,
-                ),
-                  child: Container (
-                    alignment: Alignment.centerLeft,
-                    child: const Text(
-                      'Idwal Vessel Inspection App',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                    ),
+        child: ListView(children: [
+          DrawerHeader(
+            decoration: const BoxDecoration(
+              color: Colors.purple,
             ),
-
-            ListTile(
+            child: Container(
+              alignment: Alignment.centerLeft,
+              child: const Text(
+                'Idwal Vessel Inspection App',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 28,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            ),
+          ),
+          ListTile(
               title: const Text("Help"),
               iconColor: Colors.purple,
               leading: IconButton(
@@ -103,18 +94,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 icon: const Icon(Icons.help),
               ),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => const MenuHelp()));
-            }
-            ),
-
-            const Divider(
-              color: Colors.grey,
-            ),
-
-            ListTile(
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => const MenuHelp()));
+              }),
+          const Divider(
+            color: Colors.grey,
+          ),
+          ListTile(
               title: const Text("Settings"),
               iconColor: Colors.purple,
               leading: IconButton(
@@ -125,23 +113,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 icon: const Icon(Icons.settings),
               ),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => const MenuSettings()));
-            }
-            ),
-
-            const Divider(
-              color: Colors.grey,
-            ),
-
-          ]
-        ),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => const MenuSettings()));
+              }),
+          const Divider(
+            color: Colors.grey,
+          ),
+        ]),
       ),
 
       // -- Burger Menu End
-
 
       // -- Nav Bar Start
 
@@ -169,7 +152,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
 
       // -- Nav Bar End
-
     );
   }
 }
