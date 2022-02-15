@@ -2,12 +2,14 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:shipping_inspection_app/utils/camera_screen.dart';
-import 'package:shipping_inspection_app/utils/questions/question_brain.dart';
+import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 
-QuestionBrain questionBrain = new QuestionBrain();
+QuestionBrain questionBrain = QuestionBrain();
 
 class QuestionnaireSection extends StatefulWidget {
-  const QuestionnaireSection({Key? key}) : super(key: key);
+  final String questionID;
+  const QuestionnaireSection({required this.questionID, Key? key})
+      : super(key: key);
 
   @override
   _QuestionnaireSectionState createState() => _QuestionnaireSectionState();
@@ -17,12 +19,13 @@ class _QuestionnaireSectionState extends State<QuestionnaireSection> {
   List<Image> imageViewer = [];
   List<String> questionsToAsk = [];
   List<Text> displayQuestions = [];
+  String pageTitle = 'untitled';
 
-  // Uses the question brain to get all the questions needed to display on the page
+  // Uses the question brain to get the page title and all the questions needed to display on the page
   // and then creates a text widget for each question to be displayed.
   void addDisplayQuestions() {
-    //TODO: change f&s from hardcoded to parsed in data, need questionnaire hub to do this.
-    questionsToAsk = questionBrain.getQuestions('f&s');
+    pageTitle = questionBrain.getPageTitle(widget.questionID);
+    questionsToAsk = questionBrain.getQuestions(widget.questionID);
     for (var question in questionsToAsk) {
       displayQuestions.add(Text(question));
     }
@@ -37,15 +40,28 @@ class _QuestionnaireSectionState extends State<QuestionnaireSection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(pageTitle),
+        titleTextStyle: const TextStyle(color: Colors.purple),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        leading: Transform.scale(
+          scale: 0.7,
+          child: FloatingActionButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Icon(Icons.arrow_back),
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
             children: <Widget>[
               const SizedBox(height: 20),
-              const Center(
+              Center(
                 child: Text(
-                    "This section contains questions on the fire and safety inspection.",
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                    "This section contains questions on the $pageTitle inspection.",
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
               ),
               const SizedBox(height: 20),
 
@@ -58,8 +74,10 @@ class _QuestionnaireSectionState extends State<QuestionnaireSection> {
                 ),
               ),
               const SizedBox(height: 5),
-              Column(
-                children: displayQuestions,
+              Center(
+                child: Column(
+                  children: displayQuestions,
+                ),
               ),
               const SizedBox(
                 height: 70,
