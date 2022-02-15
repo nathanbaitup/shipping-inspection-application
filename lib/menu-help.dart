@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class MenuHelp extends StatefulWidget {
   const MenuHelp({Key? key}) : super(key: key);
@@ -24,81 +25,15 @@ class _MenuHelpState extends State<MenuHelp> {
 
       body: ListView(
         padding: const EdgeInsets.all(8),
-        children: <Widget>[
+        children: const <Widget>[
 
-          Container(
-            height: 50,
-            child: const Center(child: Text('Question 1')),
+          QuestionWidget(
+              title: "Question 1"
           ),
 
-          const Divider(
+          Divider(
             color: Colors.grey,
             thickness: dividerThickness,
-          ),
-
-          Container(
-            height: 50,
-            child: const Center(child: Text('Question 2')),
-          ),
-
-          const Divider(
-            color: Colors.grey,
-            thickness: dividerThickness,
-          ),
-
-          Container(
-            height: 50,
-            child: const Center(child: Text('Question 3')),
-          ),
-
-          const Divider(
-            color: Colors.grey,
-            thickness: dividerThickness,
-          ),
-
-          Container(
-            height: 50,
-            child: const Center(child: Text('Question 4')),
-          ),
-
-          const Divider(
-            color: Colors.grey,
-            thickness: dividerThickness,
-          ),
-
-          Container(
-            height: 50,
-            child: const Center(child: Text('Question 5')),
-          ),
-
-          const Divider(
-            color: Colors.grey,
-            thickness: dividerThickness,
-          ),
-
-          Container(
-            height: 50,
-            child: const Center(child: Text('Question 6')),
-          ),
-
-          const Divider(
-            color: Colors.grey,
-            thickness: dividerThickness,
-          ),
-
-          Container(
-            height: 50,
-            child: const Center(child: Text('Question 7')),
-          ),
-
-          const Divider(
-            color: Colors.grey,
-            thickness: dividerThickness,
-          ),
-
-          Container(
-            height: 50,
-            child: const Center(child: Text('Question 8')),
           ),
 
         ],
@@ -106,4 +41,36 @@ class _MenuHelpState extends State<MenuHelp> {
     );
   }
 
+}
+
+class QuestionWidget extends StatelessWidget {
+  const QuestionWidget({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(title),
+      onTap: () =>
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) =>
+                AlertDialog(
+                  title: const Text('AlertDialog Title'),
+                  content: const Text('AlertDialog description'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'Cancel'),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'OK'),
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
+          ),
+    );
+  }
 }
