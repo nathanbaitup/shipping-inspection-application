@@ -39,6 +39,26 @@ class _MenuHelpState extends State<MenuHelp> {
             thickness: dividerThickness,
           ),
 
+          QuestionWidget(
+            title: "Question 2",
+            id: 2,
+          ),
+
+          Divider(
+            color: Colors.grey,
+            thickness: dividerThickness,
+          ),
+
+          QuestionWidget(
+            title: "Question 3",
+            id: 3,
+          ),
+
+          Divider(
+            color: Colors.grey,
+            thickness: dividerThickness,
+          ),
+
         ],
       )
     );
@@ -50,7 +70,15 @@ List questionContent(int id) {
   switch(id) {
     case 1:
       content[0] = "Question 1 Answer";
-      content[1] = "Here is the answer to the question you selected.";
+      content[1] = "Here is the answer to the question you selected (1).";
+      break;
+    case 2:
+      content[0] = "Question 2 Answer";
+      content[1] = "Here is the answer to the question you selected (2).";
+      break;
+    case 3:
+      content[0] = "Question 3 Answer";
+      content[1] = "Here is the answer to the question you selected (3).";
       break;
   }
   return content;
