@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+var content = List.filled(2, "", growable: false);
+
 class MenuHelp extends StatefulWidget {
   const MenuHelp({Key? key}) : super(key: key);
 
@@ -28,7 +30,8 @@ class _MenuHelpState extends State<MenuHelp> {
         children: const <Widget>[
 
           QuestionWidget(
-              title: "Question 1"
+              title: "Question 1",
+              id: 1,
           ),
 
           Divider(
@@ -43,34 +46,43 @@ class _MenuHelpState extends State<MenuHelp> {
 
 }
 
+List questionContent(int id) {
+  switch(id) {
+    case 1:
+      content[0] = "Question 1 Answer";
+      content[1] = "Here is the answer to the question you selected.";
+      break;
+  }
+  return content;
+}
+
 class QuestionWidget extends StatelessWidget {
-  const QuestionWidget({Key? key, required this.title}) : super(key: key);
+  const QuestionWidget({Key? key, required this.title, required this.id}) : super(key: key);
 
   final String title;
+  final int id;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(title),
-      onTap: () =>
-          showDialog<String>(
-            context: context,
-            builder: (BuildContext context) =>
-                AlertDialog(
-                  title: const Text('AlertDialog Title'),
-                  content: const Text('AlertDialog description'),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, 'Cancel'),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, 'OK'),
-                      child: const Text('OK'),
-                    ),
-                  ],
-                ),
-          ),
+      onTap: () {
+        questionContent(id);
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) =>
+              AlertDialog(
+                title: Text(content[0]),
+                content: Text(content[1]),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'Close'),
+                    child: const Text('Close'),
+                  ),
+                ],
+              ),
+        );
+      }
     );
   }
 }
