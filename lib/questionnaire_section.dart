@@ -19,7 +19,7 @@ class _QuestionnaireSectionState extends State<QuestionnaireSection> {
   List<Image> imageViewer = [];
   List<String> questionsToAsk = [];
   List<Text> displayQuestions = [];
-  String pageTitle = 'untitled';
+  String pageTitle = '';
 
   // Uses the question brain to get the page title and all the questions needed to display on the page
   // and then creates a text widget for each question to be displayed.

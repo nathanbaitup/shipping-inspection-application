@@ -30,7 +30,7 @@ class QuestionBrain {
   }
 
   String getPageTitle(String questionID) {
-    String title = "Untitled";
+    String title = "Idwal Vessel Inspection";
     for (var question in _questionBank) {
       if (question.questionID == questionID) {
         title = question.questionTitle;
