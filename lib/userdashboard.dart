@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shipping_inspection_app/sectors/communication/startup.dart';
 import 'package:shipping_inspection_app/questionnaireHub.dart';
 import 'package:shipping_inspection_app/menu-settings.dart';
 import 'package:shipping_inspection_app/menu-help.dart';
@@ -22,6 +23,11 @@ class _MyHomePageState extends State<MyHomePage> {
       'Home',
       style: optionStyle,
     ),
+    Text(
+      'AR',
+      style: optionStyle,
+    ),
+    CommunicationFront(),
     QuestionnaireHub(),
     Text(
       'Calls',
