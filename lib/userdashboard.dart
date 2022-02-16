@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shipping_inspection_app/home.dart';
 import 'package:shipping_inspection_app/sectors/communication/startup.dart';
 import 'package:shipping_inspection_app/questionnaireHub.dart';
 import 'package:shipping_inspection_app/menu-settings.dart';
@@ -19,10 +20,11 @@ class _MyHomePageState extends State<MyHomePage> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Home',
-      style: optionStyle,
-    ),
+    // Text(
+    //   'Home',
+    //   style: optionStyle,
+    // ),
+    Home(),
     QuestionnaireHub(),
     CommunicationFront(),
     Text(
