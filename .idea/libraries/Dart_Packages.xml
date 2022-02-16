@@ -282,6 +282,13 @@
             </list>
           </value>
         </entry>
+        <entry key="percent_indicator">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/percent_indicator-3.4.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="permission_handler">
           <value>
             <list>
@@ -469,6 +476,7 @@
       <root url="file://$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/path_provider_platform_interface-2.0.3/lib" />
       <root url="file://$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.5/lib" />
       <root url="file://$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/pedantic-1.11.1/lib" />
+      <root url="file://$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/percent_indicator-3.4.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.3.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/permission_handler_platform_interface-3.7.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/platform-3.1.0/lib" />
