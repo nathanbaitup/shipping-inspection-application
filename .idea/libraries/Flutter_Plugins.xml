@@ -1,6 +1,17 @@
 <component name="libraryTable">
   <library name="Flutter Plugins" type="FlutterPluginsLibraryType">
-    <CLASSES />
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.3.0" />
+      <root url="file://$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.5" />
+      <root url="file://$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.9" />
+      <root url="file://$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/camera-0.9.4+12" />
+      <root url="file://$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.11" />
+      <root url="file://$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-2.1.5" />
+      <root url="file://$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/camera_web-0.2.1+2" />
+      <root url="file://$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-2.0.5" />
+      <root url="file://$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/agora_rtc_engine-4.2.1" />
+      <root url="file://$PROJECT_DIR$/../../../../../../flutter_/.pub-cache/hosted/pub.dartlang.org/agora_uikit-0.0.4" />
+    </CLASSES>
     <JAVADOC />
     <SOURCES />
   </library>
