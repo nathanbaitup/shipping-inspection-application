@@ -22,7 +22,7 @@ class HomeState extends State<Home> {
   Text subheading(String title) {
     return Text(
       title,
-      style: TextStyle(
+      style: const TextStyle(
           color: LightColors.sDarkBlue,
           fontSize: 20.0,
           fontWeight: FontWeight.w700,
@@ -31,7 +31,7 @@ class HomeState extends State<Home> {
   }
 
   static CircleAvatar calendarIcon() {
-    return CircleAvatar(
+    return const CircleAvatar(
       radius: 25.0,
       backgroundColor: LightColors.sGreen,
       child: Icon(
@@ -73,7 +73,7 @@ class HomeState extends State<Home> {
                             circularStrokeCap: CircularStrokeCap.round,
                             progressColor: LightColors.sRed,
                             backgroundColor: LightColors.sLavender,
-                            center: CircleAvatar(
+                            center: const CircleAvatar(
                               backgroundColor: LightColors.sBlue,
                               radius: 35.0,
                               backgroundImage: AssetImage(
@@ -85,7 +85,7 @@ class HomeState extends State<Home> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Container(
-                                child: Text(
+                                child: const Text(
                                   'Ms. Ships',
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
@@ -96,11 +96,11 @@ class HomeState extends State<Home> {
                                 ),
                               ),
                               Container(
-                                child: Text(
-                                  'Surveyor',
+                                child: const Text(
+                                  'Vessel Surveyor',
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
-                                    fontSize: 16.0,
+                                    fontSize: 20.0,
                                     color: Colors.black45,
                                     fontWeight: FontWeight.w400,
                                   ),
@@ -119,7 +119,7 @@ class HomeState extends State<Home> {
                   children: <Widget>[
                     Container(
                       color: Colors.transparent,
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                           horizontal: 20.0, vertical: 10.0),
                       child: Column(
                         children: <Widget>[
@@ -127,7 +127,17 @@ class HomeState extends State<Home> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              subheading('My Tasks'),
+                        const Text(
+                        'My Tasks',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontSize: 23.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+
+
                               GestureDetector(
                                 onTap: () {
                                   Navigator.push(
@@ -147,7 +157,7 @@ class HomeState extends State<Home> {
                             title: 'To Do',
                             subtitle: '5 task(s) to do',
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15.0,
                           ),
                           TaskList(
@@ -168,46 +178,106 @@ class HomeState extends State<Home> {
                     ),
                     Container(
                       color: Colors.transparent,
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                           horizontal: 20.0, vertical: 10.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          subheading('Active Questionnaires'),
+                        const Text(
+                        'Active Questionnaires',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontSize: 23.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                           SizedBox(height: 5.0),
                           Row(
                             children: <Widget>[
-                              ActiveQuestionnairesCard(
+                              GestureDetector(
+                                child: ActiveQuestionnairesCard(
 
-                                cardColor: LightColors.sPurple,
-                                loadingPercent: 0.25,
-                                title: 'Fire & Safety',
-                                subtitle: 'X of Y questions answered',
+                                  cardColor: LightColors.sPurple,
+                                  loadingPercent: 0.25,
+                                  title: 'Fire & Safety',
+                                  subtitle: 'X of Y questions answered',
+
+                                ),
+
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => QuestionnaireHub()),
+                                  );
+                                },
                               ),
                               SizedBox(width: 20.0),
-                              ActiveQuestionnairesCard(
-                                cardColor: LightColors.sPurple,
-                                loadingPercent: 0.6,
-                                title: 'Lifesaving',
-                                subtitle: 'X of Y questions answered',
+
+                              GestureDetector(
+                                child: ActiveQuestionnairesCard(
+
+                                  cardColor: LightColors.sPurple,
+                                  loadingPercent: 0.6,
+                                  title: 'Lifesaving',
+                                  subtitle: 'X of Y questions answered',
+
+                                ),
+
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => QuestionnaireHub()),
+                                  );
+                                },
                               ),
+
+
                             ],
                           ),
                           Row(
                             children: <Widget>[
-                              ActiveQuestionnairesCard(
-                                cardColor: LightColors.sPurple,
-                                loadingPercent: 0.45,
-                                title: 'Engine Room',
-                                subtitle: 'X of Y questions answered',
+                              GestureDetector(
+                                child: ActiveQuestionnairesCard(
+
+                                  cardColor: LightColors.sPurple,
+                                  loadingPercent: 0.45,
+                                  title: 'Engine Room',
+                                  subtitle: 'X of Y questions answered',
+
+                                ),
+
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => QuestionnaireHub()),
+                                  );
+                                },
                               ),
+
                               SizedBox(width: 20.0),
-                              ActiveQuestionnairesCard(
-                                cardColor: LightColors.sPurple,
-                                loadingPercent: 0.9,
-                                title: 'Pollution Control',
-                                subtitle: 'X of Y questions answered',
+                              GestureDetector(
+                                child: ActiveQuestionnairesCard(
+
+                                  cardColor: LightColors.sPurple,
+                                  loadingPercent: 0.9,
+                                  title: 'Pollution Control',
+                                  subtitle: 'X of Y questions answered',
+
+                                ),
+
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => QuestionnaireHub()),
+                                  );
+                                },
                               ),
+
                             ],
                           ),
                         ],

@@ -35,9 +35,9 @@ class ActiveQuestionnairesCard extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: CircularPercentIndicator(
                 animation: true,
-                radius: 75.0,
+                radius: 80.0,
                 percent: loadingPercent,
-                lineWidth: 5.0,
+                lineWidth: 7.5,
                 circularStrokeCap: CircularStrokeCap.round,
                 backgroundColor: Colors.white10,
                 progressColor: Colors.white,
@@ -54,7 +54,7 @@ class ActiveQuestionnairesCard extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: 14.0,
+                    fontSize: 19.0,
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
                   ),
