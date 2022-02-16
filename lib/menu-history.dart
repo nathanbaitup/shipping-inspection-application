@@ -20,15 +20,14 @@ class _MenuHistoryState extends State<MenuHistory> {
     records.add(Record("[Example User 3]", DateTime.now(), "[Example 3]"));
   }
 
-  List<ListTile> formatRecords() {
-    List<ListTile> recordListTiles = [];
+  List<RecordWidget> formatRecords() {
+    List<RecordWidget> recordListTiles = [];
     for(var i = 0; i < records.length; i++) {
       var currentRecord = records[i];
-      recordListTiles.add(ListTile(
-          title: Text("User " + currentRecord.user +
-              " added a response to section " +
-              currentRecord.section + " at " +
-              currentRecord.dateTime.toString() + "."),
+      recordListTiles.add(RecordWidget(
+          user: currentRecord.user,
+          dateTime: currentRecord.dateTime,
+          section: currentRecord.section,
         )
       );
     }
@@ -52,7 +51,31 @@ class _MenuHistoryState extends State<MenuHistory> {
         )
     );
   }
+}
 
+class RecordWidget extends StatelessWidget {
+  const RecordWidget({Key? key, required this.user, required this.dateTime, required this.section}) : super(key: key);
 
+  final String user;
+  final DateTime dateTime;
+  final String section;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          title: Text("User " + user +
+              " added a response to section " +
+              section + " at " +
+              dateTime.toString() + "."),
+        ),
+        const Divider(
+          color: Colors.grey,
+          thickness: 1,
+        ),
+      ]
+    );
+  }
 
 }
