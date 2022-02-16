@@ -1,2 +1,0 @@
-io/agora/agora_flutter_uikit/BuildConfig.java
- io.agora.agora_flutter_uikit.BuildConfig
