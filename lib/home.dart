@@ -53,7 +53,7 @@ class HomeState extends State<Home> {
             TopContainer(
               height: 200,
               width: width,
-              padding: EdgeInsets.all(10.0),
+              padding: EdgeInsets.all(0.0),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -66,13 +66,13 @@ class HomeState extends State<Home> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           CircularPercentIndicator(
-                            radius: 90.0,
-                            lineWidth: 5.0,
+                            radius: 100.0,
+                            lineWidth: 6.5,
                             animation: true,
                             percent: 0.75,
                             circularStrokeCap: CircularStrokeCap.round,
                             progressColor: LightColors.sRed,
-                            backgroundColor: LightColors.sPurple,
+                            backgroundColor: LightColors.sLavender,
                             center: CircleAvatar(
                               backgroundColor: LightColors.sBlue,
                               radius: 35.0,
@@ -89,7 +89,7 @@ class HomeState extends State<Home> {
                                   'Ms. Ships',
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
-                                    fontSize: 22.0,
+                                    fontSize: 30.0,
                                     color: LightColors.sDarkBlue,
                                     fontWeight: FontWeight.w800,
                                   ),
@@ -145,7 +145,7 @@ class HomeState extends State<Home> {
                             icon: Icons.alarm,
                             iconBackgroundColor: LightColors.sRed,
                             title: 'To Do',
-                            subtitle: '5 tasks to do',
+                            subtitle: '5 task(s) to do',
                           ),
                           SizedBox(
                             height: 15.0,
@@ -161,7 +161,7 @@ class HomeState extends State<Home> {
                             icon: Icons.check_circle_outline,
                             iconBackgroundColor: LightColors.sBlue,
                             title: 'Done',
-                            subtitle: '18 tasks completed',
+                            subtitle: '18 task(s) completed',
                           ),
                         ],
                       ),
@@ -178,34 +178,35 @@ class HomeState extends State<Home> {
                           Row(
                             children: <Widget>[
                               ActiveQuestionnairesCard(
-                                cardColor: LightColors.sLavender,
+
+                                cardColor: LightColors.sPurple,
                                 loadingPercent: 0.25,
                                 title: 'Fire & Safety',
-                                subtitle: '9 hours progress',
+                                subtitle: 'X of Y questions answered',
                               ),
                               SizedBox(width: 20.0),
                               ActiveQuestionnairesCard(
-                                cardColor: LightColors.sLavender,
+                                cardColor: LightColors.sPurple,
                                 loadingPercent: 0.6,
                                 title: 'Lifesaving',
-                                subtitle: '20 hours progress',
+                                subtitle: 'X of Y questions answered',
                               ),
                             ],
                           ),
                           Row(
                             children: <Widget>[
                               ActiveQuestionnairesCard(
-                                cardColor: LightColors.sLavender,
+                                cardColor: LightColors.sPurple,
                                 loadingPercent: 0.45,
                                 title: 'Engine Room',
-                                subtitle: '5 hours progress',
+                                subtitle: 'X of Y questions answered',
                               ),
                               SizedBox(width: 20.0),
                               ActiveQuestionnairesCard(
-                                cardColor: LightColors.sLavender,
+                                cardColor: LightColors.sPurple,
                                 loadingPercent: 0.9,
                                 title: 'Pollution Control',
-                                subtitle: '23 hours progress',
+                                subtitle: 'X of Y questions answered',
                               ),
                             ],
                           ),

@@ -8,7 +8,7 @@ class LightColors  {
 
   static const Color sPurple = Color(0xFF9370DB);
   static const Color sRed = Color(0xFFE46472);
-  static const Color sLavender = Color(0xFFD5E4FE);
+  static const Color sLavender = Color(0xFFDBCFF3);
   static const Color sBlue = Color(0xFF6488E4);
   static const Color sLightGreen = Color(0xFFD9E6DC);
   static const Color sGreen = Color(0xFF309397);

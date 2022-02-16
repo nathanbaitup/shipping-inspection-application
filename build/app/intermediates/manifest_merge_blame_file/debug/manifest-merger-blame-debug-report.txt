@@ -1,0 +1,99 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.shipping_inspection_app"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="31" />
+10    <!--
+11         Flutter needs it to communicate with the running application
+12         to allow setting breakpoints, to provide hot reload, etc.
+13    -->
+14    <uses-permission android:name="android.permission.INTERNET" />
+14-->C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\android\app\src\debug\AndroidManifest.xml:6:5-66
+14-->C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\android\app\src\debug\AndroidManifest.xml:6:22-64
+15    <uses-permission android:name="android.permission.CAMERA" />
+15-->[:camera] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\camera\intermediates\library_manifest\debug\AndroidManifest.xml:9:5-65
+15-->[:camera] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\camera\intermediates\library_manifest\debug\AndroidManifest.xml:9:22-62
+16    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+16-->[:camera] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\camera\intermediates\library_manifest\debug\AndroidManifest.xml:10:5-71
+16-->[:camera] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\camera\intermediates\library_manifest\debug\AndroidManifest.xml:10:22-68
+17    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+17-->[:agora_rtc_engine] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\agora_rtc_engine\intermediates\library_manifest\debug\AndroidManifest.xml:10:5-75
+17-->[:agora_rtc_engine] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\agora_rtc_engine\intermediates\library_manifest\debug\AndroidManifest.xml:10:22-72
+18    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+18-->[:agora_rtc_engine] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\agora_rtc_engine\intermediates\library_manifest\debug\AndroidManifest.xml:14:5-80
+18-->[:agora_rtc_engine] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\agora_rtc_engine\intermediates\library_manifest\debug\AndroidManifest.xml:14:22-77
+19    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+19-->[:agora_rtc_engine] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\agora_rtc_engine\intermediates\library_manifest\debug\AndroidManifest.xml:15:5-79
+19-->[:agora_rtc_engine] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\agora_rtc_engine\intermediates\library_manifest\debug\AndroidManifest.xml:15:22-76
+20    <uses-permission android:name="android.permission.BLUETOOTH" />
+20-->[:agora_rtc_engine] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\agora_rtc_engine\intermediates\library_manifest\debug\AndroidManifest.xml:16:5-68
+20-->[:agora_rtc_engine] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\agora_rtc_engine\intermediates\library_manifest\debug\AndroidManifest.xml:16:22-65
+21    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+21-->[:agora_rtc_engine] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\agora_rtc_engine\intermediates\library_manifest\debug\AndroidManifest.xml:17:5-76
+21-->[:agora_rtc_engine] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\agora_rtc_engine\intermediates\library_manifest\debug\AndroidManifest.xml:17:22-73
+22    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+22-->[:agora_rtc_engine] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\agora_rtc_engine\intermediates\library_manifest\debug\AndroidManifest.xml:18:5-80
+22-->[:agora_rtc_engine] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\agora_rtc_engine\intermediates\library_manifest\debug\AndroidManifest.xml:18:22-77
+23    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
+23-->[:agora_rtc_engine] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\agora_rtc_engine\intermediates\library_manifest\debug\AndroidManifest.xml:19:5-21:47
+23-->[:agora_rtc_engine] C:\Users\c1989519\OneDrive - Cardiff University\Documents\dev\shipping-inspection-application\build\agora_rtc_engine\intermediates\library_manifest\debug\AndroidManifest.xml:20:9-70
+24
+25    <application
+26        android:name="android.app.Application"
+27        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+27-->[androidx.core:core:1.6.0] C:\Users\c1989519\.gradle\caches\transforms-2\files-2.1\122df2e57d294d1a53db26bbc3b813c1\core-1.6.0\AndroidManifest.xml:24:18-86
+28        android:debuggable="true"
+29        android:icon="@mipmap/ic_launcher"
+30        android:label="Idwal Shipping Inspection" >
+31        <activity
+32            android:name="com.example.shipping_inspection_app.MainActivity"
+33            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+34            android:exported="true"
+35            android:hardwareAccelerated="true"
+36            android:launchMode="singleTop"
+37            android:theme="@style/LaunchTheme"
+38            android:windowSoftInputMode="adjustResize" >
+39
+40            <!--
+41                 Specifies an Android theme to apply to this Activity as soon as
+42                 the Android process has started. This theme is visible to the user
+43                 while the Flutter UI initializes. After that, this theme continues
+44                 to determine the Window background behind the Flutter UI.
+45            -->
+46            <meta-data
+47                android:name="io.flutter.embedding.android.NormalTheme"
+48                android:resource="@style/NormalTheme" />
+49
+50            <intent-filter>
+51                <action android:name="android.intent.action.MAIN" />
+52
+53                <category android:name="android.intent.category.LAUNCHER" />
+54            </intent-filter>
+55        </activity>
+56        <!--
+57             Don't delete the meta-data below.
+58             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+59        -->
+60        <meta-data
+61            android:name="flutterEmbedding"
+62            android:value="2" />
+63
+64        <uses-library
+64-->[androidx.window:window:1.0.0-beta04] C:\Users\c1989519\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:25:9-27:40
+65            android:name="androidx.window.extensions"
+65-->[androidx.window:window:1.0.0-beta04] C:\Users\c1989519\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:26:13-54
+66            android:required="false" />
+66-->[androidx.window:window:1.0.0-beta04] C:\Users\c1989519\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:27:13-37
+67        <uses-library
+67-->[androidx.window:window:1.0.0-beta04] C:\Users\c1989519\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:28:9-30:40
+68            android:name="androidx.window.sidecar"
+68-->[androidx.window:window:1.0.0-beta04] C:\Users\c1989519\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:29:13-51
+69            android:required="false" />
+69-->[androidx.window:window:1.0.0-beta04] C:\Users\c1989519\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:30:13-37
+70    </application>
+71
+72</manifest>
