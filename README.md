@@ -30,5 +30,5 @@ Instructions on their use and documentation are provided below.
 [flutter_image_slideshow]: <https://github.com/edasandesu/flutter_image_slideshow>
 [camera]: <https://github.com/flutter/plugins/tree/main/packages/camera/camera>
 [path]: <https://github.com/dart-lang/path>
-
+[percent_indicator]: <https://pub.dev/packages/percent_indicator>
 [flutter_test]: <https://docs.flutter.dev/cookbook/testing>
