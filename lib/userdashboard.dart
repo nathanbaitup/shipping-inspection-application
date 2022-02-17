@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shipping_inspection_app/home.dart';
 import 'package:shipping_inspection_app/sectors/communication/startup.dart';
 import 'package:shipping_inspection_app/questionnaireHub.dart';
 import 'package:shipping_inspection_app/menu-settings.dart';
 import 'package:shipping_inspection_app/menu-help.dart';
 import 'package:shipping_inspection_app/menu-history.dart';
+
+import 'home.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -20,10 +23,11 @@ class _MyHomePageState extends State<MyHomePage> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Home',
-      style: optionStyle,
-    ),
+    // Text(
+    //   'Home',
+    //   style: optionStyle,
+    // ),
+    Home(),
     QuestionnaireHub(),
     CommunicationFront(),
     Text(
