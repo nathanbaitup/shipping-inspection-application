@@ -23,6 +23,7 @@ Instructions on their use and documentation are provided below.
 | [path][path] | - | Used to get an image path to display the captured images on the application. |
 |  |  | |
 | [flutter_test][flutter_test] | - | Used as the testing library for application testing.|
+| [Percent indicator][percent_indicator] | - | Used to allow the inclusion of more aesthetically pleasing percentage indicators in the application.|
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. Place all links to documentation used here to keep README clean. Ref: http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
