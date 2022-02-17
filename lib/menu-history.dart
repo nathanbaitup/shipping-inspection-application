@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shipping_inspection_app/sectors/history/record.dart';
 
 List<Record> records = [];
@@ -15,9 +16,9 @@ class _MenuHistoryState extends State<MenuHistory> {
   //Hard coded entries below -- to be removed
   void hardCodedRecords() {
     records.clear();
-    records.add(Record("[Example User 1]", DateTime.now(), "[Example 1]"));
-    records.add(Record("[Example User 2]", DateTime.now(), "[Example 2]"));
-    records.add(Record("[Example User 3]", DateTime.now(), "[Example 3]"));
+    records.add(Record("Sarah", DateTime.now(), "Fire & Safety"));
+    records.add(Record("Sarah", DateTime.now(), "Lifesaving"));
+    records.add(Record("Jeremy", DateTime.now(), "Engine Room"));
   }
 
   List<RecordWidget> formatRecords() {
@@ -54,21 +55,32 @@ class _MenuHistoryState extends State<MenuHistory> {
 }
 
 class RecordWidget extends StatelessWidget {
-  const RecordWidget({Key? key, required this.user, required this.dateTime, required this.section}) : super(key: key);
+  RecordWidget({Key? key, required this.user, required this.dateTime, required this.section}) : super(key: key);
 
   final String user;
   final DateTime dateTime;
   final String section;
+
+  TextStyle bold = const TextStyle(fontWeight: FontWeight.bold);
+  String formattedDate = "";
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ListTile(
-          title: Text("User " + user +
-              " added a response to section " +
-              section + " at " +
-              dateTime.toString() + "."),
+          title: Text.rich(
+            TextSpan(
+              text: "User ",
+              children: <TextSpan>[
+                TextSpan(text: user, style: bold),
+                TextSpan(text: " added a response to section "),
+                TextSpan(text: section, style: bold),
+                TextSpan(text: " at "),
+                TextSpan(text: formattedDate = DateFormat('kk:mm (yyyy-MM-dd)').format(dateTime), style: bold)
+              ]
+            )
+          )
         ),
         const Divider(
           color: Colors.grey,
