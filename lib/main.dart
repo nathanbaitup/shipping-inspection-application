@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/userdashboard.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const ShipApp());
 }
 
@@ -15,8 +16,7 @@ class ShipApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: const MyHomePage(title: 'Shipping Application'),
+      home: const MyHomePage(title: 'Idwal Vessel Inspection App'),
     );
   }
 }
-
