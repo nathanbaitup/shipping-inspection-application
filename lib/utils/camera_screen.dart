@@ -127,8 +127,8 @@ class _CameraScreenState extends State<CameraScreen> {
               padding: const EdgeInsets.all(15.0),
               child: Center(
                 child: SizedBox(
-                  height: 600.0,
-                  width: 400.0,
+                  height: MediaQuery.of(context).size.height / 1.27,
+                  width: MediaQuery.of(context).size.width - 10,
                   child: CameraPreview(_controller),
                 ),
               ),
