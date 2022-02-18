@@ -5,11 +5,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shipping_inspection_app/utils/task_list.dart';
 import 'package:shipping_inspection_app/utils/active_questionnaire_card.dart';
 import 'package:shipping_inspection_app/utils/homecontainer.dart';
-import 'package:shipping_inspection_app/questionnaireHub.dart';
-
-
-
-
+import 'package:shipping_inspection_app/sectors/survey/survey_hub.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -57,7 +53,6 @@ class HomeState extends State<Home> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 0, vertical: 0.0),
@@ -127,23 +122,21 @@ class HomeState extends State<Home> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                        const Text(
-                        'My Tasks',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontSize: 23.0,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-
-
+                              const Text(
+                                'My Tasks',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontSize: 23.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => QuestionnaireHub()),
+                                        builder: (context) => SurveyHub()),
                                   );
                                 },
                                 child: calendarIcon(),
@@ -183,101 +176,84 @@ class HomeState extends State<Home> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                        const Text(
-                        'Active Questionnaires',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontSize: 23.0,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                          const Text(
+                            'Active Surveys',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontSize: 23.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
                           SizedBox(height: 5.0),
                           Row(
                             children: <Widget>[
                               GestureDetector(
                                 child: ActiveQuestionnairesCard(
-
                                   cardColor: LightColors.sPurple,
                                   loadingPercent: 0.25,
                                   title: 'Fire & Safety',
                                   subtitle: 'X of Y questions answered',
-
                                 ),
-
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => QuestionnaireHub()),
+                                        builder: (context) => SurveyHub()),
                                   );
                                 },
                               ),
                               SizedBox(width: 20.0),
-
                               GestureDetector(
                                 child: ActiveQuestionnairesCard(
-
                                   cardColor: LightColors.sPurple,
                                   loadingPercent: 0.6,
                                   title: 'Lifesaving',
                                   subtitle: 'X of Y questions answered',
-
                                 ),
-
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => QuestionnaireHub()),
+                                        builder: (context) => SurveyHub()),
                                   );
                                 },
                               ),
-
-
                             ],
                           ),
                           Row(
                             children: <Widget>[
                               GestureDetector(
                                 child: ActiveQuestionnairesCard(
-
                                   cardColor: LightColors.sPurple,
                                   loadingPercent: 0.45,
                                   title: 'Engine Room',
                                   subtitle: 'X of Y questions answered',
-
                                 ),
-
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => QuestionnaireHub()),
+                                        builder: (context) => SurveyHub()),
                                   );
                                 },
                               ),
-
                               SizedBox(width: 20.0),
                               GestureDetector(
                                 child: ActiveQuestionnairesCard(
-
                                   cardColor: LightColors.sPurple,
                                   loadingPercent: 0.9,
                                   title: 'Pollution Control',
                                   subtitle: 'X of Y questions answered',
-
                                 ),
-
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => QuestionnaireHub()),
+                                        builder: (context) => SurveyHub()),
                                   );
                                 },
                               ),
-
                             ],
                           ),
                         ],
@@ -293,9 +269,3 @@ class HomeState extends State<Home> {
     );
   }
 }
-
-
-
-
-
-
