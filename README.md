@@ -19,7 +19,7 @@ Instructions on their use and documentation are provided below.
 | Name | Version | UseCase |
 | ------ | ------ | ------ |
 | [flutter_image_slideshow][flutter_image_slideshow] | any | Used to create a image slideshow on the questionnaire_section page.  |
-| [camera][camera] | - | Used to access the camera of a device to capture images on board a vessel and for video calling and AR use. |
+| [camera][camera] | 0.9.4 | Used to access the camera of a device to capture images on board a vessel and for video calling and AR use. |
 | [path][path] | - | Used to get an image path to display the captured images on the application. |
 | [flutter_test][flutter_test] | - | Used as the testing library for application testing.|
 | [percent_indicator][percent_indicator] | - | Used to allow the inclusion of more aesthetically pleasing percentage indicators in the application.|
