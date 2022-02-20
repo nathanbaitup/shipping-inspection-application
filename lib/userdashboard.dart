@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/home.dart';
+import 'package:shipping_inspection_app/menu-feedback.dart';
 import 'package:shipping_inspection_app/sectors/communication/startup.dart';
 import 'package:shipping_inspection_app/questionnaireHub.dart';
 import 'package:shipping_inspection_app/menu-settings.dart';
@@ -125,6 +126,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => const MenuHistory()));
+              }),
+
+          const Divider(
+            color: Colors.grey,
+          ),
+
+          ListTile(
+              title: const Text("Feedback"),
+              iconColor: Colors.purple,
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => const MenuFeedback()));
+                },
+                icon: const Icon(Icons.question_answer),
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => const MenuFeedback()));
               }),
 
           const Divider(
