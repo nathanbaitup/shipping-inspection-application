@@ -1,20 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shipping_inspection_app/questionnaire_section.dart';
+import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
 
-class QuestionnaireHub extends StatefulWidget {
-  const QuestionnaireHub({Key? key}) : super(key: key);
+class SurveyHub extends StatefulWidget {
+  const SurveyHub({Key? key}) : super(key: key);
 
   @override
-  _QuestionnaireHubState createState() => _QuestionnaireHubState();
+  _SurveyHubState createState() => _SurveyHubState();
 }
 
-class _QuestionnaireHubState extends State<QuestionnaireHub> {
+class _SurveyHubState extends State<SurveyHub> {
   void loadQuestion(String questionID) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => QuestionnaireSection(questionID: questionID),
+        builder: (context) => SurveySection(questionID: questionID),
       ),
     );
   }
@@ -29,7 +29,7 @@ class _QuestionnaireHubState extends State<QuestionnaireHub> {
               const Padding(
                 padding: EdgeInsets.all(10.0),
                 child: Text(
-                  "Questionnaire Hub",
+                  "Survey Hub",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 24,
@@ -52,7 +52,7 @@ class _QuestionnaireHubState extends State<QuestionnaireHub> {
                           textScaleFactor: 1.5,
                         ),
                         Text(
-                          "Questionnaire Link",
+                          "Survey Link",
                           textScaleFactor: 1.5,
                         ),
                       ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/home.dart';
 import 'package:shipping_inspection_app/sectors/communication/startup.dart';
-import 'package:shipping_inspection_app/questionnaireHub.dart';
+import 'package:shipping_inspection_app/sectors/survey/survey_hub.dart';
 import 'package:shipping_inspection_app/menu-settings.dart';
 import 'package:shipping_inspection_app/menu-help.dart';
 import 'package:shipping_inspection_app/menu-history.dart';
@@ -28,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
     //   style: optionStyle,
     // ),
     Home(),
-    QuestionnaireHub(),
+    SurveyHub(),
     CommunicationFront(),
     Text(
       'Calls',
@@ -88,7 +88,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-
           ListTile(
               title: const Text("Help"),
               iconColor: Colors.purple,
@@ -105,11 +104,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => const MenuHelp()));
               }),
-
           const Divider(
             color: Colors.grey,
           ),
-
           ListTile(
               title: const Text("History"),
               iconColor: Colors.purple,
@@ -126,11 +123,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => const MenuHistory()));
               }),
-
           const Divider(
             color: Colors.grey,
           ),
-
           ListTile(
               title: const Text("Settings"),
               iconColor: Colors.purple,
@@ -147,11 +142,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => const MenuSettings()));
               }),
-
           const Divider(
             color: Colors.grey,
           ),
-
         ]),
       ),
 

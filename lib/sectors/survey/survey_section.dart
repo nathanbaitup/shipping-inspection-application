@@ -6,16 +6,15 @@ import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
 
-class QuestionnaireSection extends StatefulWidget {
+class SurveySection extends StatefulWidget {
   final String questionID;
-  const QuestionnaireSection({required this.questionID, Key? key})
-      : super(key: key);
+  const SurveySection({required this.questionID, Key? key}) : super(key: key);
 
   @override
-  _QuestionnaireSectionState createState() => _QuestionnaireSectionState();
+  _SurveySectionState createState() => _SurveySectionState();
 }
 
-class _QuestionnaireSectionState extends State<QuestionnaireSection> {
+class _SurveySectionState extends State<SurveySection> {
   List<Image> imageViewer = [];
   List<String> questionsToAsk = [];
   List<Text> displayQuestions = [];
@@ -60,14 +59,14 @@ class _QuestionnaireSectionState extends State<QuestionnaireSection> {
               const SizedBox(height: 20),
               Center(
                 child: Text(
-                    "This section contains questions on the $pageTitle inspection.",
+                    "This section relates to the inspection of $pageTitle.",
                     style: const TextStyle(fontWeight: FontWeight.bold)),
               ),
               const SizedBox(height: 20),
 
-              // Column specifically for adding the questions to the questionnaire.
+              // Column specifically for adding the questions to the survey.
               const Text(
-                "Questions:",
+                "Survey:",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
