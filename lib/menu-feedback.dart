@@ -11,8 +11,15 @@ class _MenuFeedbackState extends State<MenuFeedback> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-        body: Center(
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          iconTheme: const IconThemeData(
+            color: Colors.purple,
+          ),
+        ),
+
+        body: const Center(
           child: Text("Placeholder")
         )
     );
