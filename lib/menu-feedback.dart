@@ -16,6 +16,8 @@ class _MenuFeedbackState extends State<MenuFeedback> {
     final Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
+        resizeToAvoidBottomInset : false,
+
         appBar: AppBar(
           backgroundColor: Colors.white,
           iconTheme: const IconThemeData(
@@ -54,6 +56,22 @@ class _MenuFeedbackState extends State<MenuFeedback> {
                   decoration: const InputDecoration(
                       hintText: 'you@example.com',
                       labelText: 'Email'
+                  )
+                ),
+
+                TextFormField(
+                  keyboardType: TextInputType.multiline,
+                  minLines: 3,
+                  maxLines: null,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your feedback';
+                      }
+                      return null;
+                    },
+                  decoration: const InputDecoration(
+                      hintText: 'Please enter all feedback for the application here',
+                      labelText: 'Feedback'
                   )
                 ),
 
