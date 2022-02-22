@@ -10,6 +10,7 @@ class MenuFeedback extends StatefulWidget {
 class _MenuFeedbackState extends State<MenuFeedback> {
 
   final _formKey = GlobalKey<FormState>();
+  double _currentSliderValue = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +74,27 @@ class _MenuFeedbackState extends State<MenuFeedback> {
                       hintText: 'Please enter all feedback for the application here',
                       labelText: 'Feedback'
                   )
+                ),
+
+                Container(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Column(
+                    children: const [
+                      Text("Please adjust the following slider based on your experience with the application. (E.g. 10 - Excellent, 1 - Very Poor)")
+                    ],
+                  ),
+                ),
+
+                Slider(
+                  value: _currentSliderValue,
+                  max: 10,
+                  divisions: 10,
+                  label: _currentSliderValue.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _currentSliderValue = value;
+                    });
+                  },
                 ),
 
                 Container(
