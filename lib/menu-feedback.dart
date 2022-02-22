@@ -13,6 +13,8 @@ class _MenuFeedbackState extends State<MenuFeedback> {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -21,49 +23,59 @@ class _MenuFeedbackState extends State<MenuFeedback> {
           ),
         ),
 
-        body: Form (
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+        body: Container(
+          padding: const EdgeInsets.all(20.0),
+          child: Form (
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
 
-              Text("1. Please enter your name. *"),
+                TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your name';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                      hintText: 'John',
+                      labelText: 'Name'
+                  )
+                ),
 
-              TextFormField(
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your name';
-                  }
-                  return null;
-                }
-              ),
+                TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                      hintText: 'you@example.com',
+                      labelText: 'Email'
+                  )
+                ),
 
-              Text("2. Please enter your email. *"),
-
-              TextFormField(
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  return null;
-                }
-              ),
-
-              Center(
-                child: ElevatedButton(
+                Container(
+                  width: screenSize.width,
+                  child: ElevatedButton(
+                    child: const Text('Submit'),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Processing Data')),
+                          const SnackBar(content: Text('Processing feedback...')),
                         );
                       }
-                    }, child: const Text("Submit")
+                    },
+                  ),
+                  margin: const EdgeInsets.only(top: 20.0),
                 )
-              )
-            ],
+              ],
+            )
           )
         )
-    );
+        );
   }
 
 }
