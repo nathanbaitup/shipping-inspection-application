@@ -67,7 +67,7 @@ class _SurveyHubState extends State<SurveyHub> {
                           textScaleFactor: 1.5,
                         ),
                         Text(
-                          "X of ${questionBrain.getNumberOfQuestions("f&s")}",
+                          "${questionBrain.getAnswerAmount("f&s")} of ${questionBrain.getQuestionAmount("f&s")}",
                           textScaleFactor: 1.5,
                         ),
                         ElevatedButton(
@@ -85,7 +85,7 @@ class _SurveyHubState extends State<SurveyHub> {
                           textScaleFactor: 1.5,
                         ),
                         Text(
-                          "X of ${questionBrain.getNumberOfQuestions("lifesaving")}",
+                          "${questionBrain.getAnswerAmount("lifesaving")} of ${questionBrain.getQuestionAmount("lifesaving")}",
                           textScaleFactor: 1.5,
                         ),
                         ElevatedButton(
@@ -103,7 +103,7 @@ class _SurveyHubState extends State<SurveyHub> {
                           textScaleFactor: 1.5,
                         ),
                         Text(
-                          "X of ${questionBrain.getNumberOfQuestions("engine")}",
+                          "${questionBrain.getAnswerAmount("engine")} of ${questionBrain.getQuestionAmount("engine")}",
                           textScaleFactor: 1.5,
                         ),
                         ElevatedButton(

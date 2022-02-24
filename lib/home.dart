@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
@@ -204,7 +203,7 @@ class HomeState extends State<Home> {
                                   loadingPercent: 0.25,
                                   title: 'Fire & Safety',
                                   subtitle:
-                                      'X of ${questionBrain.getNumberOfQuestions('f&s')} questions answered',
+                                      '${questionBrain.getAnswerAmount('f&s')} of ${questionBrain.getQuestionAmount('f&s')} questions answered',
                                 ),
                                 onTap: () {
                                   loadQuestion('f&s');
@@ -217,7 +216,7 @@ class HomeState extends State<Home> {
                                   loadingPercent: 0.6,
                                   title: 'Lifesaving',
                                   subtitle:
-                                      'X of ${questionBrain.getNumberOfQuestions('lifesaving')} questions answered',
+                                      '${questionBrain.getAnswerAmount('lifesaving')} of ${questionBrain.getQuestionAmount('lifesaving')} questions answered',
                                 ),
                                 onTap: () {
                                   loadQuestion('lifesaving');
@@ -233,7 +232,7 @@ class HomeState extends State<Home> {
                                   loadingPercent: 0.45,
                                   title: 'Engine Room',
                                   subtitle:
-                                      'X of ${questionBrain.getNumberOfQuestions('engine')} questions answered',
+                                      '${questionBrain.getAnswerAmount('engine')} of ${questionBrain.getQuestionAmount('engine')} questions answered',
                                 ),
                                 onTap: () {
                                   loadQuestion('engine');
