@@ -41,7 +41,7 @@ void main() {
   group('Question amount retrievals', () {
     test("Should retrieve amount of 2 from f&s section", () {
       var amount = questionBrain.getQuestionAmount('f&s');
-      expect(amount, '2');
+      expect(amount, 2);
     });
   });
 
@@ -72,7 +72,7 @@ void main() {
       expect(questions.length, 4);
 
       var unansweredQuestions = questionBrain.getQuestionAmount('idwalNewQ');
-      expect(unansweredQuestions, '4');
+      expect(unansweredQuestions, 4);
     });
 
     test(
@@ -88,10 +88,33 @@ void main() {
           'answeredTest', 'Question Title', 'test question 4', false);
 
       var unansweredQuestions = questionBrain.getQuestionAmount('answeredTest');
-      expect(unansweredQuestions, '4');
+      expect(unansweredQuestions, 4);
 
       var answeredQuestions = questionBrain.getAnswerAmount('answeredTest');
-      expect(answeredQuestions, '3');
+      expect(answeredQuestions, 3);
+    });
+  });
+
+  // Checks that the percentage changes based on if a question is answered or not.
+  group('Check that the percentage can be displayed', () {
+    test("Should return 0% complete.", () {
+      questionBrain.addQuestionToBank(
+          'percentageTest', 'Percentage Test', 'test question 1', false);
+      questionBrain.addQuestionToBank(
+          'percentageTest', 'Percentage Test', 'test question 2', false);
+
+      var percentage = questionBrain.questionPercentage('percentageTest');
+      expect(percentage, 0.0);
+    });
+
+    test("Should return 50% complete.", () {
+      questionBrain.addQuestionToBank(
+          'percentageTest2', 'Percentage Test', 'test question 1', false);
+      questionBrain.addQuestionToBank(
+          'percentageTest2', 'Percentage Test', 'test question 2', true);
+
+      var percentage = questionBrain.questionPercentage('percentageTest2');
+      expect(percentage, 0.5);
     });
   });
 }
