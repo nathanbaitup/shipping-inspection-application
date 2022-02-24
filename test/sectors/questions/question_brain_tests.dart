@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shipping_inspection_app/sectors/questions/question.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
@@ -34,6 +35,13 @@ void main() {
     test("Should retrieve default title of Idwal Shipping", () {
       final String title = questionBrain.getPageTitle('random');
       expect(title, 'Idwal Vessel Inspection');
+    });
+  });
+
+  group('Question amount retrievals', () {
+    test("Should retrieve amount of 2 from f&s section", () {
+      var amount = questionBrain.getQuestionAmount('f&s');
+      expect(amount, '2');
     });
   });
 }
