@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
@@ -200,7 +201,8 @@ class HomeState extends State<Home> {
                               GestureDetector(
                                 child: ActiveQuestionnairesCard(
                                   cardColor: LightColors.sPurple,
-                                  loadingPercent: 0.25,
+                                  loadingPercent:
+                                      questionBrain.questionPercentage('f&s'),
                                   title: 'Fire & Safety',
                                   subtitle:
                                       '${questionBrain.getAnswerAmount('f&s')} of ${questionBrain.getQuestionAmount('f&s')} questions answered',
@@ -213,7 +215,8 @@ class HomeState extends State<Home> {
                               GestureDetector(
                                 child: ActiveQuestionnairesCard(
                                   cardColor: LightColors.sPurple,
-                                  loadingPercent: 0.6,
+                                  loadingPercent: questionBrain
+                                      .questionPercentage('lifesaving'),
                                   title: 'Lifesaving',
                                   subtitle:
                                       '${questionBrain.getAnswerAmount('lifesaving')} of ${questionBrain.getQuestionAmount('lifesaving')} questions answered',
@@ -229,7 +232,8 @@ class HomeState extends State<Home> {
                               GestureDetector(
                                 child: ActiveQuestionnairesCard(
                                   cardColor: LightColors.sPurple,
-                                  loadingPercent: 0.45,
+                                  loadingPercent: questionBrain
+                                      .questionPercentage('engine'),
                                   title: 'Engine Room',
                                   subtitle:
                                       '${questionBrain.getAnswerAmount('engine')} of ${questionBrain.getQuestionAmount('engine')} questions answered',

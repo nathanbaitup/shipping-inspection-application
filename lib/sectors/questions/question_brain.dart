@@ -46,30 +46,36 @@ class QuestionBrain {
   }
 
   // Creates an integer based on the amount of questions per section.
-  String getQuestionAmount(String questionID) {
+  int getQuestionAmount(String questionID) {
     int questionAmount = 0;
     for (var question in _questionBank) {
       if (question.questionID == questionID) {
         questionAmount++;
       }
     }
-    return questionAmount.toString();
+    return questionAmount;
   }
 
   //Returns the amount of questions that have been answered per section.
-  String getAnswerAmount(String questionID) {
+  int getAnswerAmount(String questionID) {
     int answerAmount = 0;
     for (var question in _questionBank) {
       if (question.questionID == questionID && question.answered == true) {
         answerAmount++;
       }
     }
-    return answerAmount.toString();
+    return answerAmount;
   }
 
+  // Allows for questions to be added to the question bank.
   void addQuestionToBank(String questionID, String questionTitle,
       String questionText, bool answered) {
     _questionBank
         .add(Question(questionID, questionTitle, questionText, answered));
+  }
+
+  // Returns the current percentage of question completion for use on the home screen.
+  double questionPercentage(String questionID) {
+    return getAnswerAmount(questionID) / getQuestionAmount(questionID);
   }
 }
