@@ -36,7 +36,17 @@ class QuestionBrain {
         title = question.questionTitle;
       }
     }
-    print(title);
     return title;
+  }
+
+  // Creates an integer based on the amount of questions per section.
+  String getNumberOfQuestions(String questionID) {
+    int questionAmount = 0;
+    for (var question in _questionBank) {
+      if (question.questionID == questionID) {
+        questionAmount++;
+      }
+    }
+    return questionAmount.toString();
   }
 }
