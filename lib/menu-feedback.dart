@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shipping_inspection_app/sectors/feedback/feedback.dart';
+import 'package:shipping_inspection_app/sectors/userfeedback/feedback.dart';
 
 class MenuFeedback extends StatefulWidget {
   const MenuFeedback({Key? key}) : super(key: key);
@@ -8,6 +10,11 @@ class MenuFeedback extends StatefulWidget {
 }
 
 class _MenuFeedbackState extends State<MenuFeedback> {
+
+  late String name;
+  late String email;
+  late String feedback;
+  late int sliderFeedback = 5;
 
   final _formKey = GlobalKey<FormState>();
   double _currentSliderValue = 5;
@@ -38,6 +45,8 @@ class _MenuFeedbackState extends State<MenuFeedback> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your name';
+                    } else {
+                      name = value;
                     }
                     return null;
                   },
@@ -51,6 +60,8 @@ class _MenuFeedbackState extends State<MenuFeedback> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
+                    } else {
+                      email = value;
                     }
                     return null;
                   },
@@ -67,6 +78,8 @@ class _MenuFeedbackState extends State<MenuFeedback> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your feedback';
+                      } else {
+                        feedback = value;
                       }
                       return null;
                     },
@@ -80,7 +93,9 @@ class _MenuFeedbackState extends State<MenuFeedback> {
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Column(
                     children: const [
-                      Text("Please adjust the following slider based on your experience with the application. (E.g. 10 - Excellent, 1 - Very Poor)")
+                      Text("Please adjust the slider based on your "
+                          "overall experience with the application. "
+                          "(E.g. 10 - Excellent, 1 - Very Poor)")
                     ],
                   ),
                 ),
@@ -93,6 +108,7 @@ class _MenuFeedbackState extends State<MenuFeedback> {
                   onChanged: (double value) {
                     setState(() {
                       _currentSliderValue = value;
+                      sliderFeedback = _currentSliderValue.toInt();
                     });
                   },
                 ),
@@ -106,6 +122,12 @@ class _MenuFeedbackState extends State<MenuFeedback> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Processing feedback...')),
                         );
+                        UserFeedback newFeedback = UserFeedback(name, email, feedback, sliderFeedback);
+
+                        // -- IMPORTANT -- 
+                        //The following prints are temporary and should be rewritten to work with the database once a database is implemented!!!!
+                        print("FEEDBACK FORM OUTPUT:");
+                        print(newFeedback.name + " - " + newFeedback.email + " - " + newFeedback.feedback + " - " + newFeedback.sliderFeedback.toString());
                       }
                     },
                   ),
