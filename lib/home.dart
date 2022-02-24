@@ -18,6 +18,7 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
+  // Takes the user to the required survey section when pressing on an active survey.
   void loadQuestion(String questionID) {
     Navigator.push(
       context,
