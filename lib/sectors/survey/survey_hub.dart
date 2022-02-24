@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
+
+QuestionBrain questionBrain = QuestionBrain();
 
 class SurveyHub extends StatefulWidget {
   const SurveyHub({Key? key}) : super(key: key);
@@ -63,8 +66,8 @@ class _SurveyHubState extends State<SurveyHub> {
                           "Fire & Safety",
                           textScaleFactor: 1.5,
                         ),
-                        const Text(
-                          "1 of 3",
+                        Text(
+                          "X of ${questionBrain.getNumberOfQuestions("f&s")}",
                           textScaleFactor: 1.5,
                         ),
                         ElevatedButton(
@@ -81,8 +84,8 @@ class _SurveyHubState extends State<SurveyHub> {
                           "Lifesaving",
                           textScaleFactor: 1.5,
                         ),
-                        const Text(
-                          "1 of 2",
+                        Text(
+                          "X of ${questionBrain.getNumberOfQuestions("lifesaving")}",
                           textScaleFactor: 1.5,
                         ),
                         ElevatedButton(
@@ -99,8 +102,8 @@ class _SurveyHubState extends State<SurveyHub> {
                           "Engine Room",
                           textScaleFactor: 1.5,
                         ),
-                        const Text(
-                          "1 of 2",
+                        Text(
+                          "X of ${questionBrain.getNumberOfQuestions("engine")}",
                           textScaleFactor: 1.5,
                         ),
                         ElevatedButton(

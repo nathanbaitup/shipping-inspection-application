@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shipping_inspection_app/utils/task_list.dart';
 import 'package:shipping_inspection_app/utils/active_questionnaire_card.dart';
 import 'package:shipping_inspection_app/utils/homecontainer.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_hub.dart';
+
+QuestionBrain questionBrain = QuestionBrain();
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -193,7 +196,8 @@ class HomeState extends State<Home> {
                                   cardColor: LightColors.sPurple,
                                   loadingPercent: 0.25,
                                   title: 'Fire & Safety',
-                                  subtitle: 'X of Y questions answered',
+                                  subtitle:
+                                      'X of ${questionBrain.getNumberOfQuestions("f&s")} questions answered',
                                 ),
                                 onTap: () {
                                   Navigator.push(
@@ -209,7 +213,8 @@ class HomeState extends State<Home> {
                                   cardColor: LightColors.sPurple,
                                   loadingPercent: 0.6,
                                   title: 'Lifesaving',
-                                  subtitle: 'X of Y questions answered',
+                                  subtitle:
+                                      'X of ${questionBrain.getNumberOfQuestions("lifesaving")} questions answered',
                                 ),
                                 onTap: () {
                                   Navigator.push(
@@ -228,7 +233,8 @@ class HomeState extends State<Home> {
                                   cardColor: LightColors.sPurple,
                                   loadingPercent: 0.45,
                                   title: 'Engine Room',
-                                  subtitle: 'X of Y questions answered',
+                                  subtitle:
+                                      'X of ${questionBrain.getNumberOfQuestions("engine")} questions answered',
                                 ),
                                 onTap: () {
                                   Navigator.push(
