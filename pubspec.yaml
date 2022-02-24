@@ -39,6 +39,10 @@ dependencies:
 #  https://pub:dev/packages/agora_uikit:
   agora_uikit: ^0.0.4
 
+#  ARCore dependency
+#  https://pub.dev/packages/arcore_flutter_plugin
+  arcore_flutter_plugin: 0.1.0-null-safety.3
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

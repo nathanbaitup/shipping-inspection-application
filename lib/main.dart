@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shipping_inspection_app/sectors/ar_hub.dart';
 import 'package:shipping_inspection_app/userdashboard.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const ShipApp());
+  runApp(const HelloWorld());
 }
 
 class ShipApp extends StatelessWidget {
