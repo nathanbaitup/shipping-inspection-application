@@ -145,7 +145,8 @@ class HomeState extends State<Home> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const SurveyHub()),
+                                        builder: (context) =>
+                                            const SurveyHub()),
                                   );
                                 },
                                 child: calendarIcon(),
@@ -250,7 +251,8 @@ class HomeState extends State<Home> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const SurveyHub()),
+                                        builder: (context) =>
+                                            const SurveyHub()),
                                   );
                                 },
                               ),
