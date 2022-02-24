@@ -66,4 +66,10 @@ class QuestionBrain {
     }
     return answerAmount.toString();
   }
+
+  void addQuestionToBank(String questionID, String questionTitle,
+      String questionText, bool answered) {
+    _questionBank
+        .add(Question(questionID, questionTitle, questionText, answered));
+  }
 }
