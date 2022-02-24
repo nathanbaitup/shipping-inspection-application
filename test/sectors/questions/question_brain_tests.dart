@@ -37,6 +37,7 @@ void main() {
     });
   });
 
+  // Tests that the total number of questions from the question bank can be queried.
   group('Question amount retrievals', () {
     test("Should retrieve amount of 2 from f&s section", () {
       var amount = questionBrain.getQuestionAmount('f&s');
@@ -44,6 +45,8 @@ void main() {
     });
   });
 
+  // Tests that questions can be added to the question bank, and checks that
+  // the total amount of questions that have been answered can be queried.
   group('Adding a question to the question bank', () {
     test("Should add question section with ID addQTest to the question bank",
         () {
