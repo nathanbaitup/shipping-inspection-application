@@ -15,7 +15,6 @@ class _MenuHistoryState extends State<MenuHistory> {
 
   List<RecordWidget> formatRecords() {
     List<RecordWidget> recordListTiles = [];
-    print(globals.records.length);
     for(var i = 0; i < globals.records.length; i++) {
       var currentRecord = globals.records[i];
       List<String> currentRecordText = List<String>.filled(5, "");
