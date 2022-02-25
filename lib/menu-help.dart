@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shipping_inspection_app/utils/colours.dart';
 
 var content = List.filled(2, "", growable: false);
 
@@ -21,7 +22,7 @@ class _MenuHelpState extends State<MenuHelp> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(
-          color: Colors.purple,
+          color: LightColors.sPurple,
         ),
       ),
 

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/communication/videocall.dart';
+import 'package:shipping_inspection_app/utils/colours.dart';
 
 class CommunicationFront extends StatefulWidget {
   const CommunicationFront({Key? key}) : super(key: key);
@@ -58,7 +59,7 @@ class _CommunicationFrontState extends State<CommunicationFront> {
                       child: const Text('Join'),
                       style: ButtonStyle(
                           backgroundColor:
-                              MaterialStateProperty.all(Colors.blueAccent),
+                              MaterialStateProperty.all(LightColors.sPurple),
                           foregroundColor:
                               MaterialStateProperty.all(Colors.white)),
                     ),
