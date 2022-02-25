@@ -31,13 +31,13 @@ class _ArHubState extends State<ArHub> {
   // Changed from the ArCoreView being the body to a stack so we can place widgets on top of the AR view.
   @override
   Widget build(BuildContext context) {
-    return RepaintBoundary(
-      key: _key,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('View in AR'),
-        ),
-        body: SafeArea(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('View in AR'),
+      ),
+      body: SafeArea(
+        child: RepaintBoundary(
+          key: _key,
           child: Stack(
             children: <Widget>[
               ArCoreView(
@@ -62,7 +62,7 @@ class _ArHubState extends State<ArHub> {
                     ),
                   ),
                   RawMaterialButton(
-                    onPressed: () {},
+                    onPressed: () => Navigator.pop(context, imageViewer),
                     elevation: 5.0,
                     fillColor: Colors.grey,
                     shape: const CircleBorder(),
@@ -104,7 +104,8 @@ class _ArHubState extends State<ArHub> {
 
   // Creates a sphere and adds to the creator view.
   void _addSphere(ArCoreController controller) async {
-    final material = ArCoreMaterial(color: Color.fromARGB(120, 66, 134, 244));
+    final material =
+        ArCoreMaterial(color: const Color.fromARGB(120, 66, 134, 244));
     final sphere = ArCoreSphere(
       materials: [material],
       radius: 0.1,
@@ -137,7 +138,7 @@ class _ArHubState extends State<ArHub> {
   // Creates a cube and adds to the creator view.
   void _addCube(ArCoreController controller) async {
     final material = ArCoreMaterial(
-      color: Color.fromARGB(120, 66, 134, 244),
+      color: const Color.fromARGB(120, 66, 134, 244),
       metallic: 1.0,
     );
     final cube = ArCoreCube(
@@ -167,7 +168,7 @@ class _ArHubState extends State<ArHub> {
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData!.buffer.asUint8List();
 
-    File imgFile = new File('$directory/screenshot.png');
+    File imgFile = File('$directory/screenshot.png');
     imagePaths.add(imgFile.path);
     imgFile.writeAsBytes(pngBytes).then((value) async {
       setState(() {

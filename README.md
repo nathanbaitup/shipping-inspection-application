@@ -26,6 +26,7 @@ Instructions on their use and documentation are provided below.
 | [agora-uikit][agora-uikit] | 0.0.4 | Used to bring [Agora](https://www.agora.io/en/) Video calling functionality to the application.|
 | [intl][intl] | 0.17.0 | Used to appropriately format date and time values.  |
 | [settings_ui][settings_ui] | 2.0.2 | Used to display the settings menu found within the drawer menu.  |
+| [arcore_flutter_plugin][arcore_flutter_plugin] | 0.1.0-null-safety.3 | Used to implement Google ARCore within flutter to provide an AR experience when answering the survey. |
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. Place all links to documentation used here to keep README clean. Ref: http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
@@ -37,3 +38,4 @@ Instructions on their use and documentation are provided below.
 [agora-uikit]: <https://pub.dev/packages/agora_uikit>
 [intl]: <https://pub.dev/packages/intl>
 [settings_ui]: <https://pub.dev/packages/settings_ui>
+[arcore_flutter_plugin]: <https://pub.dev/packages/arcore_flutter_plugin>
