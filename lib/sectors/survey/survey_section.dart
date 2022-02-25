@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:shipping_inspection_app/utils/camera_screen.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
+import 'package:shipping_inspection_app/utils/colours.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
 
@@ -41,7 +42,7 @@ class _SurveySectionState extends State<SurveySection> {
     return Scaffold(
       appBar: AppBar(
         title: Text(pageTitle),
-        titleTextStyle: const TextStyle(color: Colors.purple),
+        titleTextStyle: const TextStyle(color: LightColors.sPurple),
         centerTitle: true,
         backgroundColor: Colors.white,
         leading: Transform.scale(
@@ -131,12 +132,12 @@ class _SurveySectionState extends State<SurveySection> {
                   },
                 ),
                 child: const Text('View in AR'),
-                style: ElevatedButton.styleFrom(primary: Colors.orangeAccent),
+                style: ElevatedButton.styleFrom(primary: LightColors.sPurpleL),
               ),
               ElevatedButton(
                 onPressed: () {},
                 child: const Text('Save Responses'),
-                style: ElevatedButton.styleFrom(primary: Colors.green),
+                style: ElevatedButton.styleFrom(primary: LightColors.sPurpleLL),
               ),
             ],
           ),

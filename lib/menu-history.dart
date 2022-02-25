@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shipping_inspection_app/sectors/history/record.dart';
+import 'package:shipping_inspection_app/utils/colours.dart';
 
 List<Record> records = [];
 
@@ -42,7 +43,7 @@ class _MenuHistoryState extends State<MenuHistory> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           iconTheme: const IconThemeData(
-            color: Colors.purple,
+            color: LightColors.sPurple,
           ),
         ),
 
