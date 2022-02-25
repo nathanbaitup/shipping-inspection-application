@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shipping_inspection_app/sectors/history/globals.dart' as globals;
 import 'package:shipping_inspection_app/sectors/history/record.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
-
-List<Record> records = [];
 
 class MenuHistory extends StatefulWidget {
   const MenuHistory({Key? key}) : super(key: key);
@@ -14,18 +13,11 @@ class MenuHistory extends StatefulWidget {
 
 class _MenuHistoryState extends State<MenuHistory> {
 
-  //Hard coded entries below -- to be removed
-  void hardCodedRecords() {
-    records.clear();
-    records.add(Record("add", "Sarah", DateTime.now(), "Fire & Safety"));
-    records.add(Record("add", "Sarah", DateTime.now(), "Lifesaving"));
-    records.add(Record("add", "Jeremy", DateTime.now(), "Engine Room"));
-  }
-
   List<RecordWidget> formatRecords() {
     List<RecordWidget> recordListTiles = [];
-    for(var i = 0; i < records.length; i++) {
-      var currentRecord = records[i];
+    print(globals.records.length);
+    for(var i = 0; i < globals.records.length; i++) {
+      var currentRecord = globals.records[i];
       List<String> currentRecordText = List<String>.filled(5, "");
 
       switch(currentRecord.type) {
@@ -63,7 +55,6 @@ class _MenuHistoryState extends State<MenuHistory> {
 
   @override
   Widget build(BuildContext context) {
-    hardCodedRecords();
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
