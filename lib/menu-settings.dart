@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:shipping_inspection_app/utils/colours.dart';
 
 class MenuSettings extends StatefulWidget {
   const MenuSettings({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class _MenuSettingsState extends State<MenuSettings> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(
-          color: Colors.purple,
+          color: LightColors.sPurple,
         ),
       ),
 
@@ -30,7 +31,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                 'Common',
                 style: TextStyle(
                   color: Colors.black,
-                  decorationColor: Colors.purple,
+                  decorationColor: LightColors.sPurple,
                   decorationThickness: 2,
                   decoration: TextDecoration.underline
                 ),
@@ -39,21 +40,21 @@ class _MenuSettingsState extends State<MenuSettings> {
               SettingsTile(
                 title: const Text('Status'),
                 leading: const Icon(Icons.person,
-                    color: Colors.purple),
+                    color: LightColors.sPurple),
                 value: const Text('Online'),
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile(
                 title: const Text('Language'),
                 leading: const Icon(Icons.language,
-                    color: Colors.purple),
+                    color: LightColors.sPurple),
                 value: const Text('English'),
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile.switchTile(
                 title: const Text('Use System Theme'),
                 leading: const Icon(Icons.phone_android,
-                    color: Colors.purple),
+                    color: LightColors.sPurple),
                 initialValue: isSwitched,
                 onToggle: (value) {
                   setState(() {
@@ -69,7 +70,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                 'System',
                 style: TextStyle(
                     color: Colors.black,
-                    decorationColor: Colors.purple,
+                    decorationColor: LightColors.sPurple,
                     decorationThickness: 2,
                     decoration: TextDecoration.underline
                 ),
@@ -78,19 +79,19 @@ class _MenuSettingsState extends State<MenuSettings> {
               SettingsTile.navigation(
                 title: const Text('Camera'),
                 leading: const Icon(Icons.camera_alt,
-                    color: Colors.purple),
+                    color: LightColors.sPurple),
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile.navigation(
                 title: const Text('Sound'),
                 leading: const Icon(Icons.volume_up,
-                    color: Colors.purple),
+                    color: LightColors.sPurple),
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile.navigation(
                 title: const Text('Microphone'),
                 leading: const Icon(Icons.mic,
-                    color: Colors.purple),
+                    color: LightColors.sPurple),
                 onPressed: (BuildContext context) {},
               ),
             ]
@@ -110,31 +111,31 @@ class _MenuSettingsState extends State<MenuSettings> {
               SettingsTile.navigation(
                 title: const Text('Username'),
                 leading: const Icon(Icons.text_format,
-                    color: Colors.purple),
+                    color: LightColors.sPurple),
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile.navigation(
                 title: const Text('Password'),
                 leading: const Icon(Icons.password,
-                    color: Colors.purple),
+                    color: LightColors.sPurple),
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile.navigation(
                 title: const Text('Phone number'),
                 leading: const Icon(Icons.phone,
-                    color: Colors.purple),
+                    color: LightColors.sPurple),
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile.navigation(
                 title: const Text('Email'),
                 leading: const Icon(Icons.email,
-                    color: Colors.purple),
+                    color: LightColors.sPurple),
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile.navigation(
                 title: const Text('Sign out'),
                 leading: const Icon(Icons.exit_to_app,
-                    color: Colors.purple),
+                    color: LightColors.sPurple),
                 onPressed: (BuildContext context) {},
               ),
             ],

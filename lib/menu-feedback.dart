@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shipping_inspection_app/sectors/feedback/feedback.dart';
 import 'package:shipping_inspection_app/sectors/userfeedback/feedback.dart';
+import 'package:shipping_inspection_app/utils/colours.dart';
 
 class MenuFeedback extends StatefulWidget {
   const MenuFeedback({Key? key}) : super(key: key);
@@ -29,7 +29,7 @@ class _MenuFeedbackState extends State<MenuFeedback> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           iconTheme: const IconThemeData(
-            color: Colors.purple,
+            color: LightColors.sPurple,
           ),
         ),
 

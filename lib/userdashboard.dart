@@ -6,6 +6,7 @@ import 'package:shipping_inspection_app/sectors/survey/survey_hub.dart';
 import 'package:shipping_inspection_app/menu-settings.dart';
 import 'package:shipping_inspection_app/menu-help.dart';
 import 'package:shipping_inspection_app/menu-history.dart';
+import 'package:shipping_inspection_app/utils/colours.dart';
 
 import 'home.dart';
 
@@ -24,10 +25,6 @@ class _MyHomePageState extends State<MyHomePage> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    // Text(
-    //   'Home',
-    //   style: optionStyle,
-    // ),
     Home(),
     SurveyHub(),
     CommunicationFront(),
@@ -55,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       appBar: AppBar(
         title: Text(widget.title),
-        titleTextStyle: const TextStyle(color: Colors.purple),
+        titleTextStyle: const TextStyle(color: LightColors.sPurple),
         centerTitle: true,
         backgroundColor: Colors.white,
         leading: Transform.scale(
@@ -75,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListView(children: [
           DrawerHeader(
             decoration: const BoxDecoration(
-              color: Colors.purple,
+              color: LightColors.sPurple,
             ),
             child: Container(
               alignment: Alignment.centerLeft,
@@ -91,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           ListTile(
               title: const Text("Help"),
-              iconColor: Colors.purple,
+              iconColor: LightColors.sPurple,
               leading: IconButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -110,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           ListTile(
               title: const Text("History"),
-              iconColor: Colors.purple,
+              iconColor: LightColors.sPurple,
               leading: IconButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -129,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           ListTile(
               title: const Text("Feedback"),
-              iconColor: Colors.purple,
+              iconColor: LightColors.sPurple,
               leading: IconButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -150,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
           ListTile(
               title: const Text("Settings"),
-              iconColor: Colors.purple,
+              iconColor: LightColors.sPurple,
               leading: IconButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -193,7 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.purple,
+        selectedItemColor: LightColors.sPurple,
         onTap: _onItemTapped,
       ),
 
