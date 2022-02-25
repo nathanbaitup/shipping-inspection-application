@@ -30,19 +30,29 @@ dependencies:
   settings_ui: ^2.0.1
   flutter:
     sdk: flutter
+
+  # Used to display images in a slideshow format
+  # https://pub.dev/packages/flutter_image_slideshow
   flutter_image_slideshow: any
+
+  # Used to capture images during a survey
+  # https://pub.dev/packages/camera
   camera: ^0.9.4
   path_provider:
   path:
 
-# Video calling dependency
-#  https://pub:dev/packages/agora_uikit:
+  # Video calling dependency
+  #  https://pub:dev/packages/agora_uikit:
   agora_uikit: ^0.0.4
 
+  # ARCore dependency
+  # https://pub.dev/packages/arcore_flutter_plugin
+  arcore_flutter_plugin: 0.1.0-null-safety.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+
   percent_indicator: ^3.4.0
 
 dev_dependencies:

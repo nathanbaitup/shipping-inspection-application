@@ -5,6 +5,8 @@ import 'package:shipping_inspection_app/utils/camera_screen.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 
+import '../ar/ar_hub.dart';
+
 QuestionBrain questionBrain = QuestionBrain();
 
 class SurveySection extends StatefulWidget {
@@ -123,10 +125,8 @@ class _SurveySectionState extends State<SurveySection> {
                     final capturedImages = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => CameraScreen(
-                                cameras: value,
-                                buttonID: 'ar',
-                              )),
+                        builder: (context) => const ArHub(),
+                      ),
                     );
                     setState(() => imageViewer = imageViewer + capturedImages);
                   },

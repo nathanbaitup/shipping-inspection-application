@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
 
+import '../ar/ar_hub.dart';
+
 QuestionBrain questionBrain = QuestionBrain();
 
 class SurveyHub extends StatefulWidget {
@@ -116,6 +118,17 @@ class _SurveyHubState extends State<SurveyHub> {
                     ),
                   ],
                 ),
+              ),
+              ElevatedButton(
+                child: const Text("Open AR Mode"),
+                onPressed: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ArHub(),
+                    ),
+                  );
+                },
               ),
             ],
           ),
