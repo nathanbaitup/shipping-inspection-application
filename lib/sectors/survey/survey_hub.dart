@@ -1,6 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
+
+QuestionBrain questionBrain = QuestionBrain();
 
 class SurveyHub extends StatefulWidget {
   const SurveyHub({Key? key}) : super(key: key);
@@ -10,6 +12,7 @@ class SurveyHub extends StatefulWidget {
 }
 
 class _SurveyHubState extends State<SurveyHub> {
+  // Takes the user to the required survey section when pressing on an active survey.
   void loadQuestion(String questionID) {
     Navigator.push(
       context,
@@ -63,8 +66,8 @@ class _SurveyHubState extends State<SurveyHub> {
                           "Fire & Safety",
                           textScaleFactor: 1.5,
                         ),
-                        const Text(
-                          "1 of 3",
+                        Text(
+                          "${questionBrain.getAnswerAmount("f&s")} of ${questionBrain.getQuestionAmount("f&s")}",
                           textScaleFactor: 1.5,
                         ),
                         ElevatedButton(
@@ -81,8 +84,8 @@ class _SurveyHubState extends State<SurveyHub> {
                           "Lifesaving",
                           textScaleFactor: 1.5,
                         ),
-                        const Text(
-                          "1 of 2",
+                        Text(
+                          "${questionBrain.getAnswerAmount("lifesaving")} of ${questionBrain.getQuestionAmount("lifesaving")}",
                           textScaleFactor: 1.5,
                         ),
                         ElevatedButton(
@@ -99,8 +102,8 @@ class _SurveyHubState extends State<SurveyHub> {
                           "Engine Room",
                           textScaleFactor: 1.5,
                         ),
-                        const Text(
-                          "1 of 2",
+                        Text(
+                          "${questionBrain.getAnswerAmount("engine")} of ${questionBrain.getQuestionAmount("engine")}",
                           textScaleFactor: 1.5,
                         ),
                         ElevatedButton(
