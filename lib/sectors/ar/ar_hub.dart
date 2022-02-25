@@ -1,5 +1,12 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
+import 'package:flutter/rendering.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 
 // REFERENCE ACCESSED 24/02/2022 https://pub.dev/packages/arcore_flutter_plugin
@@ -17,13 +24,17 @@ class ArHub extends StatefulWidget {
 }
 
 class _ArHubState extends State<ArHub> {
+  final GlobalKey _key = GlobalKey();
   late ArCoreController arCoreController;
+  List<String> imagePaths = [];
+  List<Image> imageViewer = [];
 
   // Changed from the ArCoreView being the body to a stack so we can place widgets on top of the AR view.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return RepaintBoundary(
+      key: _key,
+      child: Scaffold(
         appBar: AppBar(
           title: const Text('View in AR'),
         ),
@@ -38,7 +49,9 @@ class _ArHubState extends State<ArHub> {
               Row(
                 children: [
                   RawMaterialButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _takeScreenshot();
+                    },
                     elevation: 5.0,
                     fillColor: Colors.purple,
                     shape: const CircleBorder(),
@@ -59,6 +72,15 @@ class _ArHubState extends State<ArHub> {
                       Icons.check,
                       size: 35.0,
                       color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 75.0,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: imageViewer,
+                      ),
                     ),
                   ),
                 ],
@@ -134,5 +156,28 @@ class _ArHubState extends State<ArHub> {
       position: vector.Vector3(-0.5, 0.5, -3.5),
     );
     controller.addArCoreNode(node);
+  }
+
+  // REFERENCE ACCESSED 25/02/2022 https://www.kindacode.com/article/how-to-programmatically-take-screenshots-in-flutter/
+  // Used to take a screenshot of the current widget displayed.
+  void _takeScreenshot() async {
+    RenderRepaintBoundary boundary =
+        _key.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    ui.Image image = await boundary.toImage();
+    final directory = (await getApplicationDocumentsDirectory()).path;
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List pngBytes = byteData!.buffer.asUint8List();
+
+    File imgFile = new File('$directory/screenshot.png');
+    imagePaths.add(imgFile.path);
+    imgFile.writeAsBytes(pngBytes).then((value) async {
+      setState(() {
+        imageViewer.add(Image.file(
+          File(imgFile.path),
+          width: 75.0,
+          height: 75.0,
+        ));
+      });
+    });
   }
 }
