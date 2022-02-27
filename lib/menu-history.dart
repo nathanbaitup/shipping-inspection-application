@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shipping_inspection_app/sectors/history/globals.dart' as globals;
 import 'package:shipping_inspection_app/sectors/history/record.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
-
-List<Record> records = [];
 
 class MenuHistory extends StatefulWidget {
   const MenuHistory({Key? key}) : super(key: key);
@@ -14,22 +13,39 @@ class MenuHistory extends StatefulWidget {
 
 class _MenuHistoryState extends State<MenuHistory> {
 
-  //Hard coded entries below -- to be removed
-  void hardCodedRecords() {
-    records.clear();
-    records.add(Record("Sarah", DateTime.now(), "Fire & Safety"));
-    records.add(Record("Sarah", DateTime.now(), "Lifesaving"));
-    records.add(Record("Jeremy", DateTime.now(), "Engine Room"));
-  }
-
   List<RecordWidget> formatRecords() {
     List<RecordWidget> recordListTiles = [];
-    for(var i = 0; i < records.length; i++) {
-      var currentRecord = records[i];
+    for(var i = 0; i < globals.records.length; i++) {
+      var currentRecord = globals.records[i];
+      List<String> currentRecordText = List<String>.filled(5, "");
+
+      switch(currentRecord.type) {
+        case "add": {
+          currentRecordText[0] = currentRecord.user;
+          currentRecordText[1] = " added a response to section ";
+          currentRecordText[2] = currentRecord.section;
+          currentRecordText[3] = " at ";
+          currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)').format(currentRecord.dateTime);
+        }
+        break;
+
+        case "enter": {
+          currentRecordText[0] = currentRecord.user;
+          currentRecordText[1] = " visited the ";
+          currentRecordText[2] = currentRecord.section;
+          currentRecordText[3] = " section at ";
+          currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)').format(currentRecord.dateTime);
+        }
+        break;
+
+        default: {
+          currentRecordText[0] = "NULL RECORD";
+        }
+        break;
+      }
+
       recordListTiles.add(RecordWidget(
-          user: currentRecord.user,
-          dateTime: currentRecord.dateTime,
-          section: currentRecord.section,
+          record: currentRecordText,
         )
       );
     }
@@ -38,7 +54,6 @@ class _MenuHistoryState extends State<MenuHistory> {
 
   @override
   Widget build(BuildContext context) {
-    hardCodedRecords();
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -56,11 +71,9 @@ class _MenuHistoryState extends State<MenuHistory> {
 }
 
 class RecordWidget extends StatelessWidget {
-  RecordWidget({Key? key, required this.user, required this.dateTime, required this.section}) : super(key: key);
+  RecordWidget({Key? key, required this.record}) : super(key: key);
 
-  final String user;
-  final DateTime dateTime;
-  final String section;
+  final List<String> record;
 
   TextStyle bold = const TextStyle(fontWeight: FontWeight.bold);
   String formattedDate = "";
@@ -74,19 +87,19 @@ class RecordWidget extends StatelessWidget {
             TextSpan(
               text: "User ",
               children: <TextSpan>[
-                TextSpan(text: user, style: bold),
-                TextSpan(text: " added a response to section "),
-                TextSpan(text: section, style: bold),
-                TextSpan(text: " at "),
-                TextSpan(text: formattedDate = DateFormat('kk:mm (yyyy-MM-dd)').format(dateTime), style: bold)
+                TextSpan(text: record[0], style: bold),
+                TextSpan(text: record[1]),
+                TextSpan(text: record[2], style: bold),
+                TextSpan(text: record[3]),
+                TextSpan(text: record[4], style: bold)
               ]
-            )
+            ),
           )
         ),
-        const Divider(
-          color: Colors.grey,
-          thickness: 1,
-        ),
+      const Divider(
+        color: Colors.grey,
+        thickness: 1,
+      ),
       ]
     );
   }

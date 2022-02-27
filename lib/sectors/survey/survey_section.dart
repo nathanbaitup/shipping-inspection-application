@@ -4,6 +4,7 @@ import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:shipping_inspection_app/utils/camera_screen.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
+import 'package:shipping_inspection_app/sectors/history/globals.dart' as globals;
 
 import '../ar/ar_hub.dart';
 
@@ -23,6 +24,8 @@ class _SurveySectionState extends State<SurveySection> {
   List<Text> displayQuestions = [];
   String pageTitle = '';
 
+
+
   // Uses the question brain to get the page title and all the questions needed to display on the page
   // and then creates a text widget for each question to be displayed.
   void addDisplayQuestions() {
@@ -33,10 +36,15 @@ class _SurveySectionState extends State<SurveySection> {
     }
   }
 
+  void addEnterRecord() {
+    globals.addRecord("enter", "current", DateTime.now(), pageTitle);
+  }
+
   @override
   void initState() {
     super.initState();
     addDisplayQuestions();
+    addEnterRecord();
   }
 
   @override
