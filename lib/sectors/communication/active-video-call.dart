@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
-import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
+import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
+import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remove_view;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/sectors/communication/keys/credentials.dart';
 
 /// APP ID AND TOKEN
 /// TOKEN MUST BE CHANGED EVERY 24HRS, IF NOT WORKING GENERATE NEW TOKEN
-const APP_ID = appIDAgora;
-const Token = tokenAgora;
+const appID = appIDAgora;
+const agoraToken = tokenAgora;
 
 class VideoCallFragment extends StatefulWidget {
   const VideoCallFragment({Key? key}) : super(key: key);
@@ -34,22 +34,23 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
     await [Permission.camera, Permission.microphone].request();
 
     // Creating an instance of the Agora Engine.
-    RtcEngineContext context = RtcEngineContext(APP_ID);
+    RtcEngineContext context = RtcEngineContext(appID);
     var engine = await RtcEngine.createWithContext(context);
     // Event Handeling of memebers joining and leaving.
+    // TODO Remove print statments before merge request
     engine.setEventHandler(RtcEngineEventHandler(
         joinChannelSuccess: (String channel, int uid, int elapsed) {
-      print('joinChannelSuccess ${channel} ${uid}');
+      print('joinChannelSuccess $channel $uid');
       setState(() {
         _joined = true;
       });
     }, userJoined: (int uid, int elapsed) {
-      print('userJoined ${uid}');
+      print('userJoined $uid');
       setState(() {
         _remoteUid = uid;
       });
     }, userOffline: (int uid, UserOfflineReason reason) {
-      print('userOffline ${uid}');
+      print('userOffline $uid');
       setState(() {
         _remoteUid = 0;
       });
@@ -58,7 +59,7 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
     await engine.enableVideo();
     // CHANNEL CONNECTION INFOMATION
     // TODO Change 'test' channel name to a variable called on a init screen before.
-    await engine.joinChannel(Token, 'test', null, 0);
+    await engine.joinChannel(agoraToken, 'test', null, 0);
   }
 
   // UI elements
@@ -81,7 +82,7 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
               child: Container(
                 width: 100,
                 height: 100,
-                color: Color.fromARGB(255, 255, 255, 255),
+                color: const Color.fromARGB(255, 255, 255, 255),
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -104,9 +105,9 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
   // Local device viewfinder.
   Widget _renderLocalPreview() {
     if (_joined) {
-      return RtcLocalView.SurfaceView();
+      return rtc_local_view.SurfaceView();
     } else {
-      return Text(
+      return const Text(
         'Please join channel first',
         textAlign: TextAlign.center,
       );
@@ -116,12 +117,12 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
   // Other particpant viewfinder.
   Widget _renderRemoteVideo() {
     if (_remoteUid != 0) {
-      return RtcRemoteView.SurfaceView(
+      return rtc_remove_view.SurfaceView(
         uid: _remoteUid,
         channelId: "test",
       );
     } else {
-      return Text(
+      return const Text(
         'Please wait remote user join',
         textAlign: TextAlign.center,
       );
