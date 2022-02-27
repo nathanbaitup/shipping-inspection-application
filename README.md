@@ -23,7 +23,7 @@ Instructions on their use and documentation are provided below.
 | [path][path] | - | Used to get an image path to display the captured images on the application. |
 | [flutter_test][flutter_test] | - | Used as the testing library for application testing.|
 | [percent_indicator][percent_indicator] | - | Used to allow the inclusion of more aesthetically pleasing percentage indicators in the application.|
-| [agora_rtc_engine][agora-uikit] | 5.0.0 | Used to bring [Agora](https://www.agora.io/en/) Video calling functionality to the application.|
+| [agora_rtc_engine][agora_rtc_engine] | 5.0.0 | Used to bring [Agora](https://www.agora.io/en/) Video calling functionality to the application.|
 | [permission_handler][permission_handler] | 9.2.0 | Handles permissions on all platforms with one command (Android, iOS, Web).|
 | [intl][intl] | 0.17.0 | Used to appropriately format date and time values.  |
 | [settings_ui][settings_ui] | 2.0.2 | Used to display the settings menu found within the drawer menu.  |
