@@ -41,9 +41,12 @@ dependencies:
   path_provider:
   path:
 
-  # Video calling dependency
-  #  https://pub:dev/packages/agora_uikit:
-  agora_uikit: ^0.0.4
+  # Offical Agora Engine for Flutter to bring Video Calling functionaility
+  # Permission Handler takes care of permissions for all platforms (Android, iOS and Web)
+  # https://pub.dev/packages/agora_rtc_engine/versions/5.0.0
+  # https://pub.dev/packages/permission_handler
+  agora_rtc_engine: ^5.0.0
+  permission_handler: ^9.2.0
 
   # ARCore dependency
   # https://pub.dev/packages/arcore_flutter_plugin
