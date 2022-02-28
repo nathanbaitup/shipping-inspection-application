@@ -6,6 +6,9 @@ import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remove_view;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/sectors/communication/keys/credentials.dart';
 
+// TODO Hide status bar when call is happening, dispose method to bring bar back
+//  https://stackoverflow.com/q/43877288
+
 /// APP ID AND TOKEN
 /// TOKEN MUST BE CHANGED EVERY 24HRS, IF NOT WORKING GENERATE NEW TOKEN
 const appID = appIDAgora;
