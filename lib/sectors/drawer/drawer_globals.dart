@@ -11,3 +11,7 @@ void addRecord(type, user, dateTime, section) {
 void setUsername(newUsername) {
   username = newUsername;
 }
+
+String getUsername() {
+  return username;
+}

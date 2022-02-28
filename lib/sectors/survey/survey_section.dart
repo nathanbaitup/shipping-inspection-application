@@ -37,7 +37,7 @@ class _SurveySectionState extends State<SurveySection> {
   }
 
   void addEnterRecord() {
-    globals.addRecord("enter", "current", DateTime.now(), pageTitle);
+    globals.addRecord("enter", globals.getUsername(), DateTime.now(), pageTitle);
   }
 
   @override
