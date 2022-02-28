@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shipping_inspection_app/sectors/userfeedback/feedback.dart';
+import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
 import 'package:shipping_inspection_app/utils/colours.dart';
 
 class SettingsUsername extends StatefulWidget {
@@ -41,7 +41,9 @@ class _SettingsUsernameState extends State<SettingsUsername> {
                       padding: const EdgeInsets.only(top: 20.0),
                       child: Column(
                         children: const [
-                          Text("Your username is currently: ")
+                          Center(
+                            child: Text("Your username is currently: ")
+                          )
                         ],
                       ),
                     ),
@@ -71,7 +73,7 @@ class _SettingsUsernameState extends State<SettingsUsername> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Processing username change...')),
                             );
-                            print(username);
+                            globals.setUsername(username);
                           }
                         },
                       ),

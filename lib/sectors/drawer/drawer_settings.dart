@@ -82,7 +82,6 @@ class _MenuSettingsState extends State<MenuSettings> {
                 leading: const Icon(Icons.text_format,
                     color: LightColors.sPurple),
                 onPressed: (BuildContext context) {
-                  print("PRESSED");
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) => const SettingsUsername()));
                 },
