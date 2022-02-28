@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
 
+import '../../utils/qr_scanner_controller.dart';
 import '../ar/ar_hub.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
@@ -120,12 +121,12 @@ class _SurveyHubState extends State<SurveyHub> {
                 ),
               ),
               ElevatedButton(
-                child: const Text("Open AR Mode"),
+                child: const Text("Open Camera"),
                 onPressed: () async {
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ArHub(),
+                      builder: (context) => const QRScanner(),
                     ),
                   );
                 },

@@ -8,6 +8,8 @@ import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 
+import '../survey/survey_section.dart';
+
 // REFERENCE ACCESSED 24/02/2022 https://pub.dev/packages/arcore_flutter_plugin
 // Used to implement ARCore into the application with the default options.
 // This acts as a basic example of what can be done with AR, we will use the controller to build
@@ -16,7 +18,8 @@ import 'package:vector_math/vector_math_64.dart' as vector;
 // For AR to work in an emulator, emulator with AR google play services is required.
 
 class ArHub extends StatefulWidget {
-  const ArHub({Key? key}) : super(key: key);
+  final String questionID;
+  const ArHub({required this.questionID, Key? key}) : super(key: key);
 
   @override
   _ArHubState createState() => _ArHubState();
@@ -62,7 +65,13 @@ class _ArHubState extends State<ArHub> {
                     ),
                   ),
                   RawMaterialButton(
-                    onPressed: () => Navigator.pop(context, imageViewer),
+                    onPressed: () async => await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            SurveySection(questionID: widget.questionID),
+                      ),
+                    ),
                     elevation: 5.0,
                     fillColor: Colors.grey,
                     shape: const CircleBorder(),

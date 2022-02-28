@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:shipping_inspection_app/userdashboard.dart';
-import 'package:shipping_inspection_app/utils/qr_scanner_controller.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const QRScanner()); //TODO: change back to ShipApp()
+  runApp(const ShipApp());
 }
 
 class ShipApp extends StatelessWidget {

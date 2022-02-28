@@ -4,7 +4,8 @@ import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:shipping_inspection_app/utils/camera_screen.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
-import 'package:shipping_inspection_app/sectors/history/globals.dart' as globals;
+import 'package:shipping_inspection_app/sectors/history/globals.dart'
+    as globals;
 
 import '../ar/ar_hub.dart';
 
@@ -23,8 +24,6 @@ class _SurveySectionState extends State<SurveySection> {
   List<String> questionsToAsk = [];
   List<Text> displayQuestions = [];
   String pageTitle = '';
-
-
 
   // Uses the question brain to get the page title and all the questions needed to display on the page
   // and then creates a text widget for each question to be displayed.
@@ -119,6 +118,7 @@ class _SurveySectionState extends State<SurveySection> {
                         builder: (context) => CameraScreen(
                           cameras: value,
                           buttonID: 'addImage',
+                          questionID: widget.questionID,
                         ),
                       ),
                     );
@@ -133,7 +133,9 @@ class _SurveySectionState extends State<SurveySection> {
                     final capturedImages = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ArHub(),
+                        builder: (context) => ArHub(
+                          questionID: widget.questionID,
+                        ),
                       ),
                     );
                     setState(() => imageViewer = imageViewer + capturedImages);
