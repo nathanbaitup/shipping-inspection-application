@@ -12,6 +12,10 @@ class ChannelNameSelection extends StatefulWidget {
 }
 
 class _ChannelNameSelectionState extends State<ChannelNameSelection> {
+  // To store the channel name captured by the textfield.
+  late String channelName;
+  final _channelNameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -29,6 +33,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.8,
             child: TextFormField(
+              controller: _channelNameController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
@@ -59,12 +64,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
             height: MediaQuery.of(context).size.width * 0.16,
             child: MaterialButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const VideoCallFragment(),
-                  ),
-                );
+                _performChannelNameConnection();
               },
               color: Colors.blue,
               shape: RoundedRectangleBorder(
@@ -74,5 +74,18 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
             ),
           )
         ]));
+  }
+
+  void _performChannelNameConnection() async {
+    String channelNameSelection = _channelNameController.text;
+
+    Navigator.push(
+      this.context,
+      MaterialPageRoute(
+          builder: (context) =>
+              VideoCallFragment(channelName: channelNameSelection)),
+    );
+
+    print('channel name selected: $channelNameSelection');
   }
 }
