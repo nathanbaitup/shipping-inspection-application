@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/sectors/communication/keys/credentials.dart';
 
 import '../../utils/colours.dart';
+import '../survey/survey_hub.dart';
 
 // TODO Hide status bar when call is happening, dispose method to bring bar back
 //  https://stackoverflow.com/q/43877288
@@ -181,6 +182,26 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
             onPressed: _onSwitchCamera,
             child: const Icon(
               Icons.switch_camera,
+              color: LightColors.sPurple,
+              size: 20.0,
+            ),
+            shape: const CircleBorder(),
+            elevation: 2.0,
+            fillColor: Colors.white,
+            padding: const EdgeInsets.all(12.0),
+          ),
+          //This button takes the user to the survey hub page.
+          RawMaterialButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SurveyHub(),
+                ),
+              );
+            },
+            child: const Icon(
+              Icons.list_rounded,
               color: LightColors.sPurple,
               size: 20.0,
             ),
