@@ -148,7 +148,7 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          //The mute button
+          //The mute button.
           RawMaterialButton(
             onPressed: _onCallToggleMute,
             child: Icon(
@@ -156,10 +156,23 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
               color: muted ? Colors.white : Colors.blueAccent,
               size: 20.0,
             ),
-            shape: CircleBorder(),
+            shape: const CircleBorder(),
             elevation: 2.0,
             fillColor: muted ? Colors.blueAccent : Colors.white,
             padding: const EdgeInsets.all(12.0),
+          ),
+          //End call button.
+          RawMaterialButton(
+            onPressed: () => _onVideoCallEnd(context),
+            child: const Icon(
+              Icons.call_end,
+              color: Colors.white,
+              size: 35.0,
+            ),
+            shape: const CircleBorder(),
+            elevation: 2.0,
+            fillColor: Colors.redAccent,
+            padding: const EdgeInsets.all(15.0),
           ),
         ],
       ),
@@ -173,5 +186,11 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
       muted = !muted;
     });
     RtcEngine.instance?.muteLocalAudioStream(muted);
+  }
+
+  //This widget allows the user to leave the channel, and go back to the channel entry page.
+  void _onVideoCallEnd(BuildContext context) {
+    RtcEngine.instance?.leaveChannel();
+    Navigator.pop(context);
   }
 }
