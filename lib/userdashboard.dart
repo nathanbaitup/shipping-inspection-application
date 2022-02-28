@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/home.dart';
 import 'package:shipping_inspection_app/menu-feedback.dart';
-import 'package:shipping_inspection_app/sectors/communication/active-video-call.dart';
+import 'package:shipping_inspection_app/sectors/communication/channel-selection.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_hub.dart';
 import 'package:shipping_inspection_app/menu-settings.dart';
 import 'package:shipping_inspection_app/menu-help.dart';
@@ -27,7 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
   static const List<Widget> _widgetOptions = <Widget>[
     Home(),
     SurveyHub(),
-    VideoCallFragment(),
+    ChannelNameSelection(),
     Text(
       'Calls',
       style: optionStyle,
