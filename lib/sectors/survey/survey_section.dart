@@ -4,7 +4,7 @@ import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:shipping_inspection_app/utils/camera_screen.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
-import 'package:shipping_inspection_app/sectors/history/globals.dart' as globals;
+import '../drawer/drawer_globals.dart' as globals;
 
 import '../ar/ar_hub.dart';
 
@@ -37,7 +37,7 @@ class _SurveySectionState extends State<SurveySection> {
   }
 
   void addEnterRecord() {
-    globals.addRecord("enter", "current", DateTime.now(), pageTitle);
+    globals.addRecord("enter", globals.getUsername(), DateTime.now(), pageTitle);
   }
 
   @override

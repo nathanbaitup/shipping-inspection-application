@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shipping_inspection_app/sectors/history/globals.dart' as globals;
-import 'package:shipping_inspection_app/sectors/history/record.dart';
+import 'drawer_globals.dart' as globals;
 import 'package:shipping_inspection_app/utils/colours.dart';
 
 class MenuHistory extends StatefulWidget {

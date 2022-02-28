@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:shipping_inspection_app/sectors/drawer/settings/settings_username.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 
 class MenuSettings extends StatefulWidget {
@@ -66,6 +67,29 @@ class _MenuSettingsState extends State<MenuSettings> {
           ),
 
           SettingsSection(
+            title: const Text(
+              'Account',
+              style: TextStyle(
+                  color: Colors.black,
+                  decorationColor: Colors.purple,
+                  decorationThickness: 2,
+                  decoration: TextDecoration.underline
+              ),
+            ),
+            tiles: [
+              SettingsTile.navigation(
+                title: const Text('Username'),
+                leading: const Icon(Icons.text_format,
+                    color: LightColors.sPurple),
+                onPressed: (BuildContext context) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => const SettingsUsername()));
+                },
+              ),
+            ],
+          ),
+
+          SettingsSection(
               title: const Text(
                 'System',
                 style: TextStyle(
@@ -95,50 +119,6 @@ class _MenuSettingsState extends State<MenuSettings> {
                 onPressed: (BuildContext context) {},
               ),
             ]
-          ),
-
-          SettingsSection(
-            title: const Text(
-              'Account',
-              style: TextStyle(
-                  color: Colors.black,
-                  decorationColor: Colors.purple,
-                  decorationThickness: 2,
-                  decoration: TextDecoration.underline
-              ),
-            ),
-            tiles: [
-              SettingsTile.navigation(
-                title: const Text('Username'),
-                leading: const Icon(Icons.text_format,
-                    color: LightColors.sPurple),
-                onPressed: (BuildContext context) {},
-              ),
-              SettingsTile.navigation(
-                title: const Text('Password'),
-                leading: const Icon(Icons.password,
-                    color: LightColors.sPurple),
-                onPressed: (BuildContext context) {},
-              ),
-              SettingsTile.navigation(
-                title: const Text('Phone number'),
-                leading: const Icon(Icons.phone,
-                    color: LightColors.sPurple),
-                onPressed: (BuildContext context) {},
-              ),
-              SettingsTile.navigation(
-                title: const Text('Email'),
-                leading: const Icon(Icons.email,
-                    color: LightColors.sPurple),
-                onPressed: (BuildContext context) {},
-              ),
-              SettingsTile.navigation(
-                title: const Text('Sign out'),
-                leading: const Icon(Icons.exit_to_app,
-                    color: LightColors.sPurple),
-                onPressed: (BuildContext context) {},
-              ),
-            ],
           ),
 
         ]
