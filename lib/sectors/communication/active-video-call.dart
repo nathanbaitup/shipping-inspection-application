@@ -29,6 +29,7 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
   bool _joined = false;
   int _remoteUid = 0;
   bool _switch = false;
+  bool muted = false;
 
   @override
   void initState() {
@@ -105,6 +106,7 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
                 ),
               ),
             ),
+            _videoCallToolbar(),
           ],
         ),
       ),
@@ -136,5 +138,40 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
         textAlign: TextAlign.center,
       );
     }
+  }
+
+  //Here is the bottom tool bar for video calling that will show what buttons the user what buttons they will have available to them
+  Widget _videoCallToolbar() {
+    return Container(
+      alignment: Alignment.bottomCenter,
+      padding: const EdgeInsets.symmetric(vertical: 48),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          //The mute button
+          RawMaterialButton(
+            onPressed: _onCallToggleMute,
+            child: Icon(
+              muted ? Icons.mic_off : Icons.mic,
+              color: muted ? Colors.white : Colors.blueAccent,
+              size: 20.0,
+            ),
+            shape: CircleBorder(),
+            elevation: 2.0,
+            fillColor: muted ? Colors.blueAccent : Colors.white,
+            padding: const EdgeInsets.all(12.0),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //This widget is what allows the user to mute their audio stream if they need to. Using RtcEngine.instance?.muteLocalAudioStream()
+  //to allow for it to happen.
+  void _onCallToggleMute() {
+    setState(() {
+      muted = !muted;
+    });
+    RtcEngine.instance?.muteLocalAudioStream(muted);
   }
 }
