@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:shipping_inspection_app/sectors/drawer/settings/settings_username.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 
 class MenuSettings extends StatefulWidget {
@@ -80,7 +81,11 @@ class _MenuSettingsState extends State<MenuSettings> {
                 title: const Text('Username'),
                 leading: const Icon(Icons.text_format,
                     color: LightColors.sPurple),
-                onPressed: (BuildContext context) {},
+                onPressed: (BuildContext context) {
+                  print("PRESSED");
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => const SettingsUsername()));
+                },
               ),
             ],
           ),
