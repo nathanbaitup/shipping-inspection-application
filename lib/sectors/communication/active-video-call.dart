@@ -6,6 +6,8 @@ import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remove_view;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/sectors/communication/keys/credentials.dart';
 
+import '../../utils/colours.dart';
+
 // TODO Hide status bar when call is happening, dispose method to bring bar back
 //  https://stackoverflow.com/q/43877288
 
@@ -153,12 +155,12 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
             onPressed: _onCallToggleMute,
             child: Icon(
               muted ? Icons.mic_off : Icons.mic,
-              color: muted ? Colors.white : Colors.blueAccent,
+              color: muted ? Colors.white : LightColors.sPurple,
               size: 20.0,
             ),
             shape: const CircleBorder(),
             elevation: 2.0,
-            fillColor: muted ? Colors.blueAccent : Colors.white,
+            fillColor: muted ? LightColors.sPurple : Colors.white,
             padding: const EdgeInsets.all(12.0),
           ),
           //End call button.
@@ -173,6 +175,19 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
             elevation: 2.0,
             fillColor: Colors.redAccent,
             padding: const EdgeInsets.all(15.0),
+          ),
+          //Switch camera button (Rear and Front)
+          RawMaterialButton(
+            onPressed: _onSwitchCamera,
+            child: const Icon(
+              Icons.switch_camera,
+              color: LightColors.sPurple,
+              size: 20.0,
+            ),
+            shape: const CircleBorder(),
+            elevation: 2.0,
+            fillColor: Colors.white,
+            padding: const EdgeInsets.all(12.0),
           ),
         ],
       ),
@@ -192,5 +207,10 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
   void _onVideoCallEnd(BuildContext context) {
     RtcEngine.instance?.leaveChannel();
     Navigator.pop(context);
+  }
+
+  //This widget allows the user to  switch from front and rear camera.
+  void _onSwitchCamera() {
+    RtcEngine.instance?.switchCamera();
   }
 }
