@@ -9,13 +9,17 @@ import 'package:shipping_inspection_app/sectors/communication/keys/credentials.d
 // TODO Hide status bar when call is happening, dispose method to bring bar back
 //  https://stackoverflow.com/q/43877288
 
+// TODO Add dispose method to end call when end call button is pressed or left the screen
+
 /// APP ID AND TOKEN
 /// TOKEN MUST BE CHANGED EVERY 24HRS, IF NOT WORKING GENERATE NEW TOKEN
 const appID = appIDAgora;
 const agoraToken = tokenAgora;
 
 class VideoCallFragment extends StatefulWidget {
-  const VideoCallFragment({Key? key}) : super(key: key);
+  String channelName;
+
+  VideoCallFragment({Key? key, required this.channelName}) : super(key: key);
 
   @override
   _VideoCallFragmentState createState() => _VideoCallFragmentState();
@@ -61,8 +65,10 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
     // Enabling video within the engine with the permissions granted before hand.
     await engine.enableVideo();
     // CHANNEL CONNECTION INFOMATION
-    // TODO Change 'test' channel name to a variable called on a init screen before.
+    // TODO Research token having a different channel name each time
     await engine.joinChannel(agoraToken, 'test', null, 0);
+    // add 'widget.channelName' to pass channel name across from selection screen beforehand
+    print('HELLO THIS IS FROM THE CALLING SCREEN ' + widget.channelName);
   }
 
   // UI elements
