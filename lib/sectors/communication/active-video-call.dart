@@ -6,6 +6,9 @@ import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remove_view;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/sectors/communication/keys/credentials.dart';
 
+import '../../utils/colours.dart';
+import '../survey/survey_hub.dart';
+
 // TODO Hide status bar when call is happening, dispose method to bring bar back
 //  https://stackoverflow.com/q/43877288
 
@@ -29,6 +32,7 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
   bool _joined = false;
   int _remoteUid = 0;
   bool _switch = false;
+  bool muted = false;
 
   @override
   void initState() {
@@ -105,6 +109,7 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
                 ),
               ),
             ),
+            _videoCallToolbar(),
           ],
         ),
       ),
@@ -136,5 +141,97 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
         textAlign: TextAlign.center,
       );
     }
+  }
+
+  //Here is the bottom tool bar for video calling that will show what buttons the user what buttons they will have available to them
+  Widget _videoCallToolbar() {
+    return Container(
+      alignment: Alignment.bottomCenter,
+      padding: const EdgeInsets.symmetric(vertical: 48),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          //The mute button.
+          RawMaterialButton(
+            onPressed: _onCallToggleMute,
+            child: Icon(
+              muted ? Icons.mic_off : Icons.mic,
+              color: muted ? Colors.white : LightColors.sPurple,
+              size: 20.0,
+            ),
+            shape: const CircleBorder(),
+            elevation: 2.0,
+            fillColor: muted ? LightColors.sPurple : Colors.white,
+            padding: const EdgeInsets.all(12.0),
+          ),
+          //End call button.
+          RawMaterialButton(
+            onPressed: () => _onVideoCallEnd(context),
+            child: const Icon(
+              Icons.call_end,
+              color: Colors.white,
+              size: 35.0,
+            ),
+            shape: const CircleBorder(),
+            elevation: 2.0,
+            fillColor: Colors.redAccent,
+            padding: const EdgeInsets.all(15.0),
+          ),
+          //Switch camera button (Rear and Front)
+          RawMaterialButton(
+            onPressed: _onSwitchCamera,
+            child: const Icon(
+              Icons.switch_camera,
+              color: LightColors.sPurple,
+              size: 20.0,
+            ),
+            shape: const CircleBorder(),
+            elevation: 2.0,
+            fillColor: Colors.white,
+            padding: const EdgeInsets.all(12.0),
+          ),
+          //This button takes the user to the survey hub page.
+          RawMaterialButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SurveyHub(),
+                ),
+              );
+            },
+            child: const Icon(
+              Icons.list_rounded,
+              color: LightColors.sPurple,
+              size: 20.0,
+            ),
+            shape: const CircleBorder(),
+            elevation: 2.0,
+            fillColor: Colors.white,
+            padding: const EdgeInsets.all(12.0),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //This widget is what allows the user to mute their audio stream if they need to. Using RtcEngine.instance?.muteLocalAudioStream()
+  //to allow for it to happen.
+  void _onCallToggleMute() {
+    setState(() {
+      muted = !muted;
+    });
+    RtcEngine.instance?.muteLocalAudioStream(muted);
+  }
+
+  //This widget allows the user to leave the channel, and go back to the channel entry page.
+  void _onVideoCallEnd(BuildContext context) {
+    RtcEngine.instance?.leaveChannel();
+    Navigator.pop(context);
+  }
+
+  //This widget allows the user to  switch from front and rear camera.
+  void _onSwitchCamera() {
+    RtcEngine.instance?.switchCamera();
   }
 }
