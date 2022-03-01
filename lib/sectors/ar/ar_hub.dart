@@ -19,7 +19,9 @@ import '../survey/survey_section.dart';
 
 class ArHub extends StatefulWidget {
   final String questionID;
-  const ArHub({required this.questionID, Key? key}) : super(key: key);
+  final bool openThroughQR;
+  const ArHub({required this.questionID, required this.openThroughQR, Key? key})
+      : super(key: key);
 
   @override
   _ArHubState createState() => _ArHubState();
@@ -28,72 +30,110 @@ class ArHub extends StatefulWidget {
 class _ArHubState extends State<ArHub> {
   final GlobalKey _key = GlobalKey();
   late ArCoreController arCoreController;
+  late bool openThroughQR;
   List<String> imagePaths = [];
   List<Image> imageViewer = [];
 
-  // Changed from the ArCoreView being the body to a stack so we can place widgets on top of the AR view.
+  @override
+  void initState() {
+    super.initState();
+    // Sets if the AR page has been opened through AR to true or false for navigation.
+    openThroughQR = widget.openThroughQR;
+  }
+
+  // Returns the user to the survey_section screen, ensuring they are returned to the section they are currently surveying.
+  void _returnToSectionScreen() async {
+    // If the user opened a section through the QR scanner, then only one screen
+    // needs to be removed from the stack.
+    if (openThroughQR) {
+      Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SurveySection(questionID: widget.questionID),
+        ),
+        (Route<dynamic> route) => true,
+      );
+      // If opened manually, two screens need to be removed otherwise there
+      // will be two section screens open with the user needing to close both screens.
+    } else {
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SurveySection(questionID: widget.questionID),
+        ),
+        (Route<dynamic> route) => true,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('View in AR'),
-      ),
-      body: SafeArea(
-        child: RepaintBoundary(
-          key: _key,
-          child: Stack(
-            children: <Widget>[
-              ArCoreView(
-                onArCoreViewCreated: _onArCoreViewCreated,
-                enableTapRecognizer: true,
-              ),
-              // TODO: Buttons are static, don't actually function but are an idea of the overall layout.
-              Row(
-                children: [
-                  RawMaterialButton(
-                    onPressed: () {
-                      _takeScreenshot();
-                    },
-                    elevation: 5.0,
-                    fillColor: Colors.purple,
-                    shape: const CircleBorder(),
-                    padding: const EdgeInsets.all(15.0),
-                    child: const Icon(
-                      Icons.photo_camera,
-                      size: 35.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                  RawMaterialButton(
-                    onPressed: () async => await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            SurveySection(questionID: widget.questionID),
+    // WillPopScope overrides the on back press to ensure the user is taken back
+    // to the survey_section screen, and not the QR camera.
+    return WillPopScope(
+      onWillPop: () async {
+        _returnToSectionScreen();
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('View in AR'),
+        ),
+        body: SafeArea(
+          child: RepaintBoundary(
+            key: _key,
+            // Stack View is used to place widgets on top of the camera view to display questions to the user.
+            child: Stack(
+              children: <Widget>[
+                ArCoreView(
+                  onArCoreViewCreated: _onArCoreViewCreated,
+                  enableTapRecognizer: true,
+                ),
+                // TODO: Buttons are static, don't actually function but are an idea of the overall layout.
+                Row(
+                  children: [
+                    RawMaterialButton(
+                      onPressed: () {
+                        _takeScreenshot();
+                      },
+                      elevation: 5.0,
+                      fillColor: Colors.purple,
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(15.0),
+                      child: const Icon(
+                        Icons.photo_camera,
+                        size: 35.0,
+                        color: Colors.white,
                       ),
                     ),
-                    elevation: 5.0,
-                    fillColor: Colors.grey,
-                    shape: const CircleBorder(),
-                    padding: const EdgeInsets.all(10.0),
-                    child: const Icon(
-                      Icons.check,
-                      size: 35.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 75.0,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: imageViewer,
+                    RawMaterialButton(
+                      onPressed: () async => _returnToSectionScreen(),
+                      elevation: 5.0,
+                      fillColor: Colors.grey,
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(10.0),
+                      child: const Icon(
+                        Icons.check,
+                        size: 35.0,
+                        color: Colors.white,
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    SizedBox(
+                      width: 75.0,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: imageViewer,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -163,8 +203,8 @@ class _ArHubState extends State<ArHub> {
 
   @override
   void dispose() {
-    super.dispose();
     arCoreController.dispose();
+    super.dispose();
   }
 
   // REFERENCE ACCESSED 25/02/2022 https://www.kindacode.com/article/how-to-programmatically-take-screenshots-in-flutter/

@@ -47,36 +47,9 @@ class _QRScannerState extends State<QRScanner> {
       _launchARSection('${_qrResult?.code}');
     });
   }
-
-  @override
-  void dispose() {
-    _qrController?.dispose();
-    super.dispose();
-  }
   // END REFERENCE
 
-// TODO: Ensure when pressing the back button on device or burger returns to the questionnaire section and not the QR camera.
-// TODO: Remove QR Camera from navigator list.
-// TODO: Code cleanup
-
-  // Checks if the QR codes scanned are useful for use within the application,
-  // and navigates to the page of the AR section to survey.
-  _launchARSection(String qrResult) async {
-    if (_qrResult?.code == "f&s" ||
-        _qrResult?.code == "engine" ||
-        _qrResult?.code == "lifesaving") {
-      Navigator.pop(context);
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ArHub(questionID: '${_qrResult?.code}'),
-        ),
-      );
-    } else {
-      debugPrint('Could not launch AR section');
-    }
-  }
-
+  // Styling for the QR Scanner Page.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -109,5 +82,30 @@ class _QRScannerState extends State<QRScanner> {
         ),
       ),
     );
+  }
+
+  // Checks if the QR codes scanned are useful for use within the application,
+  // and navigates to the page of the AR section to survey.
+  _launchARSection(String qrResult) async {
+    if (_qrResult?.code == "f&s" ||
+        _qrResult?.code == "engine" ||
+        _qrResult?.code == "lifesaving") {
+      Navigator.pop(context);
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              ArHub(questionID: '${_qrResult?.code}', openThroughQR: true),
+        ),
+      );
+    } else {
+      debugPrint('Could not launch AR section');
+    }
+  }
+
+  @override
+  void dispose() {
+    _qrController?.dispose();
+    super.dispose();
   }
 }

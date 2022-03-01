@@ -40,6 +40,7 @@ class _SurveySectionState extends State<SurveySection> {
     globals.addRecord("enter", "current", DateTime.now(), pageTitle);
   }
 
+  // Initializes the state and gets the questions, page title and record for the history feature.
   @override
   void initState() {
     super.initState();
@@ -151,6 +152,7 @@ class _SurveySectionState extends State<SurveySection> {
                           MaterialPageRoute(
                             builder: (context) => ArHub(
                               questionID: widget.questionID,
+                              openThroughQR: false,
                             ),
                           ),
                         );
