@@ -33,14 +33,15 @@ class _QRScannerState extends State<QRScanner> {
     if (_qrResult == "f&s" ||
         _qrResult == "engine" ||
         _qrResult == "lifesaving") {
-      await Navigator.push(
+      await Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
           builder: (context) => ArHub(questionID: _qrResult),
         ),
+        (Route<dynamic> route) => false,
       );
     } else {
-      throw 'Could not launch AR section';
+      debugPrint('Could not launch AR section');
     }
   }
 
