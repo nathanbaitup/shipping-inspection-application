@@ -50,14 +50,11 @@ dependencies:
   arcore_flutter_plugin: 0.1.0-null-safety.3
 
   # QR Scanner dependency
-  # https://pub.dev/packages/mobile_scanner
-  mobile_scanner: ^0.1.2
-
-  # Used for testing - remove later. (rick roll)
-  url_launcher: ^6.0.20
+  # https://pub.dev/packages/qr_code_scanner
+  qr_code_scanner: ^0.7.0
 
   # Used to capture and ask dependency requests.
-  #  https://pub.dev/packages/permission_handler
+  # https://pub.dev/packages/permission_handler
   permission_handler: ^8.0.0+1
 
   # The following adds the Cupertino Icons font to your application.

@@ -20,7 +20,7 @@ class _ShipAppState extends State<ShipApp> {
   void initState() {
     super.initState();
     // Requests camera and microphone permissions on app load.
-    requestPermissions();
+    _requestPermissions();
   }
 
   @override
@@ -38,7 +38,7 @@ class _ShipAppState extends State<ShipApp> {
 
   // Checks if permissions have been granted and asks the user for permission if not.
   // If permission is permanently denied, the user is taken to the app settings to toggle on or off.
-  Future<void> requestPermissions() async {
+  Future<void> _requestPermissions() async {
     // REFERENCE ACCESSED 01/03/2022 https://pub.dev/packages/permission_handler
     // Used to request permissions needed to use the application as intended.
     final status = await [Permission.camera, Permission.microphone].request();
