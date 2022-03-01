@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remove_view;
+import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/sectors/communication/keys/credentials.dart';
 
 import '../../utils/colours.dart';
 import '../survey/survey_hub.dart';
-
-// TODO Hide status bar when call is happening, dispose method to bring bar back
-//  https://stackoverflow.com/q/43877288
 
 // TODO Add dispose method to end call when end call button is pressed or left the screen
 
@@ -38,6 +36,7 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
   void initState() {
     super.initState();
     initPlatformState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
   // Requesting permissions if not already granted from the PermissionHandler dependecy
@@ -193,6 +192,8 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
           //This button takes the user to the survey hub page.
           RawMaterialButton(
             onPressed: () {
+              SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                  overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -227,6 +228,8 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
   //This widget allows the user to leave the channel, and go back to the channel entry page.
   void _onVideoCallEnd(BuildContext context) {
     RtcEngine.instance?.leaveChannel();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
     Navigator.pop(context);
   }
 
