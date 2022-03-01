@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/utils/camera_screen.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
@@ -110,37 +111,55 @@ class _SurveySectionState extends State<SurveySection> {
               const SizedBox(height: 20),
               //The buttons to take an image, view the question within AR and to save a surveyors answers.
               ElevatedButton(
-                onPressed: () async => await availableCameras().then(
-                  (value) async {
-                    final capturedImages = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CameraScreen(
-                          cameras: value,
-                          buttonID: 'addImage',
-                          questionID: widget.questionID,
-                        ),
-                      ),
+                onPressed: () async {
+                  if (await Permission.camera.status.isDenied) {
+                    await Permission.camera.request();
+                    debugPrint(
+                        "Camera Permissions are required to access Camera.");
+                  } else {
+                    await availableCameras().then(
+                      (value) async {
+                        final capturedImages = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CameraScreen(
+                              cameras: value,
+                              buttonID: 'addImage',
+                              questionID: widget.questionID,
+                            ),
+                          ),
+                        );
+                        setState(
+                            () => imageViewer = imageViewer + capturedImages);
+                      },
                     );
-                    setState(() => imageViewer = imageViewer + capturedImages);
-                  },
-                ),
+                  }
+                },
                 child: const Text('Add Images'),
               ),
               ElevatedButton(
-                onPressed: () async => await availableCameras().then(
-                  (value) async {
-                    final capturedImages = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ArHub(
-                          questionID: widget.questionID,
-                        ),
-                      ),
+                onPressed: () async {
+                  if (await Permission.camera.status.isDenied) {
+                    await Permission.camera.request();
+                    debugPrint(
+                        "Camera Permissions are required to access QR Scanner");
+                  } else {
+                    await availableCameras().then(
+                      (value) async {
+                        final capturedImages = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ArHub(
+                              questionID: widget.questionID,
+                            ),
+                          ),
+                        );
+                        setState(
+                            () => imageViewer = imageViewer + capturedImages);
+                      },
                     );
-                    setState(() => imageViewer = imageViewer + capturedImages);
-                  },
-                ),
+                  }
+                },
                 child: const Text('View in AR'),
                 style: ElevatedButton.styleFrom(primary: LightColors.sPurpleL),
               ),

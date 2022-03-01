@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
 
 import '../../utils/qr_scanner_controller.dart';
-import '../ar/ar_hub.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
 
@@ -121,16 +121,21 @@ class _SurveyHubState extends State<SurveyHub> {
                 ),
               ),
               ElevatedButton(
-                child: const Text("Open Camera"),
-                onPressed: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const QRScanner(),
-                    ),
-                  );
-                },
-              ),
+                  child: const Text("Open Camera"),
+                  onPressed: () async {
+                    if (await Permission.camera.status.isDenied) {
+                      await Permission.camera.request();
+                      debugPrint(
+                          "Camera Permissions are required to access QR Scanner");
+                    } else {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const QRScanner(),
+                        ),
+                      );
+                    }
+                  }),
             ],
           ),
         ),

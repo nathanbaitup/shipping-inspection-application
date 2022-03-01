@@ -53,7 +53,12 @@ dependencies:
   # https://pub.dev/packages/mobile_scanner
   mobile_scanner: ^0.1.2
 
+  # Used for testing - remove later. (rick roll)
   url_launcher: ^6.0.20
+
+  # Used to capture and ask dependency requests.
+  #  https://pub.dev/packages/permission_handler
+  permission_handler: ^8.0.0+1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
