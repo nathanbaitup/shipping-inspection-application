@@ -8,7 +8,12 @@ import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 
+import '../questions/question_brain.dart';
 import '../survey/survey_section.dart';
+
+// Used to get the page title for a Section based off the questionID.
+// TODO: this will change the title for a singular view, all AR components need to be separated and called from the AR hub.
+QuestionBrain questionBrain = QuestionBrain();
 
 // REFERENCE ACCESSED 24/02/2022 https://pub.dev/packages/arcore_flutter_plugin
 // Used to implement ARCore into the application with the default options.
@@ -31,6 +36,7 @@ class _ArHubState extends State<ArHub> {
   final GlobalKey _key = GlobalKey();
   late ArCoreController arCoreController;
   late bool openThroughQR;
+  late String pageTitle;
   List<String> imagePaths = [];
   List<Image> imageViewer = [];
 
@@ -39,6 +45,7 @@ class _ArHubState extends State<ArHub> {
     super.initState();
     // Sets if the AR page has been opened through AR to true or false for navigation.
     openThroughQR = widget.openThroughQR;
+    pageTitle = questionBrain.getPageTitle(widget.questionID);
   }
 
   // Returns the user to the survey_section screen, ensuring they are returned to the section they are currently surveying.
@@ -80,7 +87,7 @@ class _ArHubState extends State<ArHub> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('View in AR'),
+          title: Text(pageTitle),
         ),
         body: SafeArea(
           child: RepaintBoundary(
