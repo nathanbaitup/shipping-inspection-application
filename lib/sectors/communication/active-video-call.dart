@@ -10,8 +10,6 @@ import 'package:shipping_inspection_app/sectors/communication/keys/credentials.d
 import '../../utils/colours.dart';
 import '../survey/survey_hub.dart';
 
-// TODO Add dispose method to end call when end call button is pressed or left the screen
-
 /// APP ID AND TOKEN
 /// TOKEN MUST BE CHANGED EVERY 24HRS, IF NOT WORKING GENERATE NEW TOKEN
 const appID = appIDAgora;
@@ -47,20 +45,19 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
     RtcEngineContext context = RtcEngineContext(appID);
     var engine = await RtcEngine.createWithContext(context);
     // Event Handeling of memebers joining and leaving.
-    // TODO Remove print statments before merge request
     engine.setEventHandler(RtcEngineEventHandler(
         joinChannelSuccess: (String channel, int uid, int elapsed) {
-      print('joinChannelSuccess $channel $uid');
+      // print('joinChannelSuccess $channel $uid');
       setState(() {
         _joined = true;
       });
     }, userJoined: (int uid, int elapsed) {
-      print('userJoined $uid');
+      // print('userJoined $uid');
       setState(() {
         _remoteUid = uid;
       });
     }, userOffline: (int uid, UserOfflineReason reason) {
-      print('userOffline $uid');
+      // print('userOffline $uid');
       setState(() {
         _remoteUid = 0;
       });
@@ -68,16 +65,14 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
     // Enabling video within the engine with the permissions granted before hand.
     await engine.enableVideo();
     // CHANNEL CONNECTION INFOMATION
-    // TODO Research token having a different channel name each time
     await engine.joinChannel(agoraToken, 'test', null, 0);
     // add 'widget.channelName' to pass channel name across from selection screen beforehand
-    print('HELLO THIS IS FROM THE CALLING SCREEN ' + widget.channelName);
+    // print('HELLO THIS IS FROM THE CALLING SCREEN ' + widget.channelName);
   }
 
   // UI elements
   // Generated inside a new MaterialApp to avoid Agora glitches.
   // TODO Make within the application to reduce size and improve app response time.
-  // TODO Add buttons to end call, flip camera, mute mic and take to questionaire page
   // TODO Swap views around showing other user in the bigger picture
   @override
   Widget build(BuildContext context) {
