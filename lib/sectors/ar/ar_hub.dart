@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
 import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 
 // REFERENCE ACCESSED 24/02/2022 https://pub.dev/packages/arcore_flutter_plugin
@@ -40,49 +41,76 @@ class _ArHubState extends State<ArHub> {
           key: _key,
           child: Stack(
             children: <Widget>[
+
               ArCoreView(
                 onArCoreViewCreated: _onArCoreViewCreated,
                 enableTapRecognizer: true,
               ),
-              // TODO: Buttons are static, don't actually function but are an idea of the overall layout.
-              Row(
-                children: [
-                  RawMaterialButton(
-                    onPressed: () {
-                      _takeScreenshot();
-                    },
-                    elevation: 5.0,
-                    fillColor: Colors.purple,
-                    shape: const CircleBorder(),
-                    padding: const EdgeInsets.all(15.0),
-                    child: const Icon(
-                      Icons.photo_camera,
-                      size: 35.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                  RawMaterialButton(
-                    onPressed: () => Navigator.pop(context, imageViewer),
-                    elevation: 5.0,
-                    fillColor: Colors.grey,
-                    shape: const CircleBorder(),
-                    padding: const EdgeInsets.all(10.0),
-                    child: const Icon(
-                      Icons.check,
-                      size: 35.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 75.0,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: imageViewer,
+
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Row(
+                    children: [
+
+                      RawMaterialButton(
+                        onPressed: () {
+                          _takeScreenshot();
+                        },
+                        elevation: 5.0,
+                        fillColor: LightColors.sPurple,
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(20.0),
+                        child: const Icon(
+                          Icons.photo_camera,
+                          size: 35.0,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
+
+                      const Spacer(),
+
+                      RawMaterialButton(
+                        onPressed: () => Navigator.pop(context, imageViewer),
+                        elevation: 5.0,
+                        fillColor: LightColors.sPurpleL,
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(10.0),
+                        child: const Icon(
+                          Icons.check,
+                          size: 35.0,
+                          color: Colors.white,
+                        ),
+                      ),
+
+                      const Spacer(),
+
+                      RawMaterialButton(
+                        onPressed: () => Navigator.pop(context, imageViewer),
+                        elevation: 5.0,
+                        fillColor: LightColors.sPurpleLL,
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(10.0),
+                        child: const Icon(
+                          Icons.close,
+                          size: 35.0,
+                          color: Colors.white,
+                        ),
+                      ),
+
+                      SizedBox(
+                        width: 75.0,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: imageViewer,
+                          ),
+                        ),
+                      ),
+
+                    ],
                   ),
-                ],
+                ),
               ),
             ],
           ),
