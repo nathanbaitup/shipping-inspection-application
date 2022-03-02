@@ -4,13 +4,17 @@ import 'package:flutter/material.dart';
 
 import '../sectors/ar/ar_hub.dart';
 
-//TODO: Convert camera layouts from portrait to landscape.
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
   // The name of the button that was pressed on the questionnaire section page.
   // Used to decide what screen is shown to the user on each button press.
   final String buttonID;
-  const CameraScreen({required this.cameras, required this.buttonID, Key? key})
+  final String questionID;
+  const CameraScreen(
+      {required this.cameras,
+      required this.buttonID,
+      required this.questionID,
+      Key? key})
       : super(key: key);
 
   @override
@@ -81,7 +85,7 @@ class _CameraScreenState extends State<CameraScreen> {
     }
     // If the AR button is pressed, then display the AR camera to the user.
     if (widget.buttonID == 'ar') {
-      return const ArHub();
+      return ArHub(questionID: widget.questionID, openThroughQR: false);
     }
     // Default camera viewer.
     return SafeArea(
