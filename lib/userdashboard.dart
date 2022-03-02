@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/home.dart';
-import 'package:shipping_inspection_app/menu-feedback.dart';
 import 'package:shipping_inspection_app/sectors/communication/channel-selection.dart';
+import 'package:shipping_inspection_app/sectors/drawer/drawer_feedback.dart';
+import 'package:shipping_inspection_app/sectors/drawer/drawer_history.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_hub.dart';
-import 'package:shipping_inspection_app/menu-settings.dart';
-import 'package:shipping_inspection_app/menu-help.dart';
-import 'package:shipping_inspection_app/menu-history.dart';
+import 'package:shipping_inspection_app/sectors/drawer/drawer_settings.dart';
+import 'package:shipping_inspection_app/sectors/drawer/drawer_help.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 
 import 'home.dart';
