@@ -60,7 +60,7 @@ class HomeState extends State<Home> {
         child: Column(
           children: <Widget>[
             TopContainer(
-              height: 200,
+              height: 120,
               width: width,
               padding: const EdgeInsets.all(0.0),
               child: Column(
@@ -74,8 +74,8 @@ class HomeState extends State<Home> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           CircularPercentIndicator(
-                            radius: 100.0,
-                            lineWidth: 6.5,
+                            radius: 80.0,
+                            lineWidth: 6.0,
                             animation: true,
                             percent: 0.75,
                             circularStrokeCap: CircularStrokeCap.round,
@@ -83,7 +83,7 @@ class HomeState extends State<Home> {
                             backgroundColor: LightColors.sLavender,
                             center: const CircleAvatar(
                               backgroundColor: LightColors.sBlue,
-                              radius: 35.0,
+                              radius: 28.0,
                               backgroundImage: AssetImage(
                                 'images/avatar.png',
                               ),
@@ -96,7 +96,7 @@ class HomeState extends State<Home> {
                                 'Ms. Ships',
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  fontSize: 30.0,
+                                  fontSize: 25.0,
                                   color: LightColors.sDarkBlue,
                                   fontWeight: FontWeight.w800,
                                 ),
@@ -105,7 +105,7 @@ class HomeState extends State<Home> {
                                 'Vessel Surveyor',
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  fontSize: 20.0,
+                                  fontSize: 18.0,
                                   color: Colors.black45,
                                   fontWeight: FontWeight.w400,
                                 ),
