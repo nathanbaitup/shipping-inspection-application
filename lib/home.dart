@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
+import 'package:shipping_inspection_app/tasks.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shipping_inspection_app/utils/task_list.dart';
@@ -146,7 +147,7 @@ class HomeState extends State<Home> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const SurveyHub()),
+                                             TasksPage()),
                                   );
                                 },
                                 child: calendarIcon(),
