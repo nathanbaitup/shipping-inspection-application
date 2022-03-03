@@ -1,5 +1,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.shipping_inspection_app">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Permissions for camera usage -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.ar" />
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- Permissions options for the `storage` group -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
    <application
         android:label="Idwal Shipping Inspection"
         android:name="${applicationName}"

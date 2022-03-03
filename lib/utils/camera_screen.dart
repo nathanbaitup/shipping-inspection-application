@@ -2,13 +2,19 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-//TODO: Convert camera layouts from portrait to landscape.
+import '../sectors/ar/ar_hub.dart';
+
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
   // The name of the button that was pressed on the questionnaire section page.
   // Used to decide what screen is shown to the user on each button press.
   final String buttonID;
-  const CameraScreen({required this.cameras, required this.buttonID, Key? key})
+  final String questionID;
+  const CameraScreen(
+      {required this.cameras,
+      required this.buttonID,
+      required this.questionID,
+      Key? key})
       : super(key: key);
 
   @override
@@ -78,44 +84,8 @@ class _CameraScreenState extends State<CameraScreen> {
       );
     }
     // If the AR button is pressed, then display the AR camera to the user.
-    //TODO: Build out an example of what the AR could look like.
     if (widget.buttonID == 'ar') {
-      return SafeArea(
-        child: Stack(
-          children: <Widget>[
-            CameraPreview(_controller),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                RawMaterialButton(
-                  onPressed: () async => captureImage(),
-                  elevation: 5.0,
-                  fillColor: Colors.purple,
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(15.0),
-                  child: const Icon(
-                    Icons.photo_camera,
-                    size: 35.0,
-                    color: Colors.white,
-                  ),
-                ),
-                RawMaterialButton(
-                  onPressed: () => Navigator.pop(context, imageViewer),
-                  elevation: 5.0,
-                  fillColor: Colors.grey,
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(10.0),
-                  child: const Icon(
-                    Icons.check,
-                    size: 35.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
+      return ArHub(questionID: widget.questionID, openThroughQR: false);
     }
     // Default camera viewer.
     return SafeArea(
@@ -127,8 +97,8 @@ class _CameraScreenState extends State<CameraScreen> {
               padding: const EdgeInsets.all(15.0),
               child: Center(
                 child: SizedBox(
-                  height: 600.0,
-                  width: 400.0,
+                  height: MediaQuery.of(context).size.height / 1.27,
+                  width: MediaQuery.of(context).size.width - 10,
                   child: CameraPreview(_controller),
                 ),
               ),

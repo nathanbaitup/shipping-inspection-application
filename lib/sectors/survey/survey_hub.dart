@@ -1,20 +1,26 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shipping_inspection_app/questionnaire_section.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
+import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
 
-class QuestionnaireHub extends StatefulWidget {
-  const QuestionnaireHub({Key? key}) : super(key: key);
+import '../../utils/qr_scanner_controller.dart';
+
+QuestionBrain questionBrain = QuestionBrain();
+
+class SurveyHub extends StatefulWidget {
+  const SurveyHub({Key? key}) : super(key: key);
 
   @override
-  _QuestionnaireHubState createState() => _QuestionnaireHubState();
+  _SurveyHubState createState() => _SurveyHubState();
 }
 
-class _QuestionnaireHubState extends State<QuestionnaireHub> {
+class _SurveyHubState extends State<SurveyHub> {
+  // Takes the user to the required survey section when pressing on an active survey.
   void loadQuestion(String questionID) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => QuestionnaireSection(questionID: questionID),
+        builder: (context) => SurveySection(questionID: questionID),
       ),
     );
   }
@@ -29,7 +35,7 @@ class _QuestionnaireHubState extends State<QuestionnaireHub> {
               const Padding(
                 padding: EdgeInsets.all(10.0),
                 child: Text(
-                  "Questionnaire Hub",
+                  "Survey Hub",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 24,
@@ -52,7 +58,7 @@ class _QuestionnaireHubState extends State<QuestionnaireHub> {
                           textScaleFactor: 1.5,
                         ),
                         Text(
-                          "Questionnaire Link",
+                          "Survey Link",
                           textScaleFactor: 1.5,
                         ),
                       ],
@@ -63,8 +69,8 @@ class _QuestionnaireHubState extends State<QuestionnaireHub> {
                           "Fire & Safety",
                           textScaleFactor: 1.5,
                         ),
-                        const Text(
-                          "1 of 3",
+                        Text(
+                          "${questionBrain.getAnswerAmount("f&s")} of ${questionBrain.getQuestionAmount("f&s")}",
                           textScaleFactor: 1.5,
                         ),
                         ElevatedButton(
@@ -81,8 +87,8 @@ class _QuestionnaireHubState extends State<QuestionnaireHub> {
                           "Lifesaving",
                           textScaleFactor: 1.5,
                         ),
-                        const Text(
-                          "1 of 2",
+                        Text(
+                          "${questionBrain.getAnswerAmount("lifesaving")} of ${questionBrain.getQuestionAmount("lifesaving")}",
                           textScaleFactor: 1.5,
                         ),
                         ElevatedButton(
@@ -99,8 +105,8 @@ class _QuestionnaireHubState extends State<QuestionnaireHub> {
                           "Engine Room",
                           textScaleFactor: 1.5,
                         ),
-                        const Text(
-                          "1 of 2",
+                        Text(
+                          "${questionBrain.getAnswerAmount("engine")} of ${questionBrain.getQuestionAmount("engine")}",
                           textScaleFactor: 1.5,
                         ),
                         ElevatedButton(
@@ -114,6 +120,22 @@ class _QuestionnaireHubState extends State<QuestionnaireHub> {
                   ],
                 ),
               ),
+              ElevatedButton(
+                  child: const Text("Open Camera"),
+                  onPressed: () async {
+                    if (await Permission.camera.status.isDenied) {
+                      await Permission.camera.request();
+                      debugPrint(
+                          "Camera Permissions are required to access QR Scanner");
+                    } else {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const QRScanner(),
+                        ),
+                      );
+                    }
+                  }),
             ],
           ),
         ),
