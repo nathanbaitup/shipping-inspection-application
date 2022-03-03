@@ -13,7 +13,7 @@ class TaskContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 15.0),
+      margin: EdgeInsets.symmetric(vertical: 10.0),
       padding: EdgeInsets.all(20.0),
 
       child: Column(
