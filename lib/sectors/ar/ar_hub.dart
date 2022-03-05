@@ -255,5 +255,23 @@ class _ArHubState extends State<ArHub> {
       });
     });
   }
-  // END REFERENCE
+// END REFERENCE
+
+
+}
+
+class ARContentWidget extends StatelessWidget {
+  ARContentWidget({Key? key, required this.arcontent}) : super(key: key);
+
+  final List<String> arcontent;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+        children: [
+          Text("Section: " + arcontent[0]),
+        ]
+    );
+  }
+
 }
