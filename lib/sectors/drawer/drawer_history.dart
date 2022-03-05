@@ -37,6 +37,15 @@ class _MenuHistoryState extends State<MenuHistory> {
         }
         break;
 
+        case "call": {
+          currentRecordText[0] = currentRecord.user;
+          currentRecordText[1] = " joined a call channel called ";
+          currentRecordText[2] = currentRecord.section;
+          currentRecordText[3] = " at ";
+          currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)').format(currentRecord.dateTime);
+        }
+        break;
+
         default: {
           currentRecordText[0] = "NULL RECORD";
         }
