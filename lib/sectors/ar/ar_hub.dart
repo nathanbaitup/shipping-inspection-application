@@ -25,8 +25,9 @@ QuestionBrain questionBrain = QuestionBrain();
 
 class ArHub extends StatefulWidget {
   final String questionID;
+  final List<String> arContent;
   final bool openThroughQR;
-  const ArHub({required this.questionID, required this.openThroughQR, Key? key})
+  const ArHub({required this.questionID, required this.openThroughQR, required this.arContent, Key? key})
       : super(key: key);
 
   @override
@@ -100,6 +101,11 @@ class _ArHubState extends State<ArHub> {
                   onArCoreViewCreated: _onArCoreViewCreated,
                   enableTapRecognizer: true,
                 ),
+
+                ARContentWidget(
+                  arContent: widget.arContent,
+                ),
+
                 Positioned.fill(
                   child: Align(
                     alignment: Alignment.bottomCenter,
@@ -261,15 +267,15 @@ class _ArHubState extends State<ArHub> {
 }
 
 class ARContentWidget extends StatelessWidget {
-  ARContentWidget({Key? key, required this.arcontent}) : super(key: key);
+  ARContentWidget({Key? key, required this.arContent}) : super(key: key);
 
-  final List<String> arcontent;
+  final List<String> arContent;
 
   @override
   Widget build(BuildContext context) {
     return Column(
         children: [
-          Text("Section: " + arcontent[0]),
+          Text("Section: " + arContent[0]),
         ]
     );
   }
