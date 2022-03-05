@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:shipping_inspection_app/sectors/communication/active-video-call.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
+import '../drawer/drawer_globals.dart' as globals;
 
 class ChannelNameSelection extends StatefulWidget {
   const ChannelNameSelection({Key? key}) : super(key: key);
@@ -65,6 +66,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
             height: MediaQuery.of(context).size.width * 0.16,
             child: MaterialButton(
               onPressed: () {
+                addChannelRecord();
                 _performChannelNameConnection();
               },
               color: LightColors.sPurple,
@@ -75,6 +77,16 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
             ),
           )
         ]));
+  }
+
+  void addChannelRecord() {
+
+    globals.addRecord(
+        "call",
+        globals.getUsername(),
+        DateTime.now(),
+        _channelNameController.text);
+
   }
 
   void _performChannelNameConnection() async {
@@ -89,4 +101,5 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
 
     print('channel name selected: $channelNameSelection');
   }
+
 }
