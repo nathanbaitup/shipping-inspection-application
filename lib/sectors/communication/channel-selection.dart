@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:shipping_inspection_app/sectors/communication/active-video-call.dart';
+import 'package:shipping_inspection_app/utils/colours.dart';
+import '../drawer/drawer_globals.dart' as globals;
 
 class ChannelNameSelection extends StatefulWidget {
   const ChannelNameSelection({Key? key}) : super(key: key);
@@ -52,7 +54,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(color: Colors.blue, width: 2)),
+                    borderSide: const BorderSide(color: LightColors.sPurpleLL, width: 2)),
                 prefixIcon: const Icon(Icons.video_call),
                 hintText: 'Channel Name',
               ),
@@ -64,9 +66,10 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
             height: MediaQuery.of(context).size.width * 0.16,
             child: MaterialButton(
               onPressed: () {
+                addChannelRecord();
                 _performChannelNameConnection();
               },
-              color: Colors.blue,
+              color: LightColors.sPurple,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15)),
               child: const Text('Join/Create Channel'),
@@ -74,6 +77,16 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
             ),
           )
         ]));
+  }
+
+  void addChannelRecord() {
+
+    globals.addRecord(
+        "call",
+        globals.getUsername(),
+        DateTime.now(),
+        _channelNameController.text);
+
   }
 
   void _performChannelNameConnection() async {
@@ -88,4 +101,5 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
 
     print('channel name selected: $channelNameSelection');
   }
+
 }
