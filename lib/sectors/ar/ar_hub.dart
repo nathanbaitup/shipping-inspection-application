@@ -102,8 +102,16 @@ class _ArHubState extends State<ArHub> {
                   enableTapRecognizer: true,
                 ),
 
-                ARContentWidget(
-                  arContent: widget.arContent,
+                Row(
+                  children: [
+                    ARQuestionWidget(
+                      arContent: widget.arContent,
+                    ),
+
+                    ARContentWidget(
+                      arContent: widget.arContent,
+                    ),
+                  ],
                 ),
 
                 Positioned.fill(
@@ -266,6 +274,40 @@ class _ArHubState extends State<ArHub> {
 
 }
 
+class ARQuestionWidget extends StatelessWidget {
+  ARQuestionWidget({Key? key, required this.arContent}) : super(key: key);
+
+  final List<String> arContent;
+
+  @override
+  Widget build(BuildContext context) {
+    final double c_width = MediaQuery.of(context).size.width*0.32;
+    return Column(
+        children: [
+          Container(
+            width: c_width,
+            margin: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  color: LightColors.sPurple,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(20))
+            ),
+            child: Text(
+              "Section: " + arContent[0],
+              style: const TextStyle(
+                color: LightColors.sPurple,
+              ),
+            ),
+          )
+        ]
+    );
+  }
+
+}
+
 class ARContentWidget extends StatelessWidget {
   ARContentWidget({Key? key, required this.arContent}) : super(key: key);
 
@@ -273,9 +315,29 @@ class ARContentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double c_width = MediaQuery.of(context).size.width*0.58;
     return Column(
         children: [
-          Text("Section: " + arContent[0]),
+          Container(
+            width: c_width,
+            margin: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  color: LightColors.sPurple,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(20))
+            ),
+            child: Flexible(
+              child: Text(
+              "Question: " + arContent[1],
+                style: const TextStyle(
+                  color: LightColors.sPurple,
+                ),
+              ),
+            )
+          )
         ]
     );
   }
