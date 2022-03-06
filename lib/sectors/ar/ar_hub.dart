@@ -318,25 +318,30 @@ class ARContentWidget extends StatelessWidget {
     final double c_width = MediaQuery.of(context).size.width*0.58;
     return Column(
         children: [
-          Container(
-            width: c_width,
-            margin: const EdgeInsets.all(10.0),
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(
-                  color: LightColors.sPurple,
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(20))
-            ),
-            child: Flexible(
-              child: Text(
-              "Question: " + arContent[1],
-                style: const TextStyle(
-                  color: LightColors.sPurple,
+          InkWell(
+            child: Container(
+              width: c_width,
+              margin: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    color: LightColors.sPurple,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(20))
+              ),
+              child: Flexible(
+                child: Text(
+                "Question: " + arContent[1],
+                  style: const TextStyle(
+                    color: LightColors.sPurple,
+                  ),
                 ),
               ),
-            )
+            ),
+            onTap: () {
+              print("change question");
+            },
           )
         ]
     );
