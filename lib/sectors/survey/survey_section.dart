@@ -147,11 +147,15 @@ class _SurveySectionState extends State<SurveySection> {
                   } else {
                     await availableCameras().then(
                       (value) async {
+                        List<String> arContentPush = [pageTitle] + questionsToAsk;
+                        print(arContentPush);
+                        print("CONTENT FOR AR HUB");
                         final capturedImages = await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ArHub(
                               questionID: widget.questionID,
+                              arContent: arContentPush,
                               openThroughQR: false,
                             ),
                           ),

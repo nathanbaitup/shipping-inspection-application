@@ -95,7 +95,7 @@ class _QRScannerState extends State<QRScanner> {
         context,
         MaterialPageRoute(
           builder: (context) =>
-              ArHub(questionID: '${_qrResult?.code}', openThroughQR: true),
+              ArHub(questionID: '${_qrResult?.code}', arContent: [" "], openThroughQR: true),
         ),
       );
     } else {

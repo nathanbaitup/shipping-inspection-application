@@ -85,7 +85,7 @@ class _CameraScreenState extends State<CameraScreen> {
     }
     // If the AR button is pressed, then display the AR camera to the user.
     if (widget.buttonID == 'ar') {
-      return ArHub(questionID: widget.questionID, openThroughQR: false);
+      return ArHub(questionID: widget.questionID, arContent: [" "], openThroughQR: false);
     }
     // Default camera viewer.
     return SafeArea(

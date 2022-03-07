@@ -25,8 +25,9 @@ QuestionBrain questionBrain = QuestionBrain();
 
 class ArHub extends StatefulWidget {
   final String questionID;
+  final List<String> arContent;
   final bool openThroughQR;
-  const ArHub({required this.questionID, required this.openThroughQR, Key? key})
+  const ArHub({required this.questionID, required this.openThroughQR, required this.arContent, Key? key})
       : super(key: key);
 
   @override
@@ -100,6 +101,19 @@ class _ArHubState extends State<ArHub> {
                   onArCoreViewCreated: _onArCoreViewCreated,
                   enableTapRecognizer: true,
                 ),
+
+                Row(
+                  children: [
+                    ARQuestionWidget(
+                      arContent: widget.arContent,
+                    ),
+
+                    ARContentWidget(
+                      arContent: widget.arContent,
+                    ),
+                  ],
+                ),
+
                 Positioned.fill(
                   child: Align(
                     alignment: Alignment.bottomCenter,
@@ -255,5 +269,101 @@ class _ArHubState extends State<ArHub> {
       });
     });
   }
-  // END REFERENCE
+// END REFERENCE
+
+
+}
+
+class ARQuestionWidget extends StatelessWidget {
+  ARQuestionWidget({Key? key, required this.arContent}) : super(key: key);
+
+  final List<String> arContent;
+
+  @override
+  Widget build(BuildContext context) {
+    final double c_width = MediaQuery.of(context).size.width*0.32;
+    return Column(
+        children: [
+          Container(
+            width: c_width,
+            margin: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  color: LightColors.sPurple,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(20))
+            ),
+            child: Text(
+              "Section: " + arContent[0],
+              style: const TextStyle(
+                color: LightColors.sPurple,
+              ),
+            ),
+          )
+        ]
+    );
+  }
+
+}
+
+class ARContentWidget extends StatefulWidget {
+  final List<String> arContent;
+
+  const ARContentWidget({Key? key, required this.arContent}) : super(key: key);
+
+  @override
+  _MyARContentState createState() => _MyARContentState();
+
+}
+
+class _MyARContentState extends State<ARContentWidget> {
+
+  int widgetQuestionID = 1;
+
+  void _updateWidgetQuestion() {
+    setState(() {
+      int newQuestion = widgetQuestionID + 1;
+      if (newQuestion > (widget.arContent.length - 1)) {
+        newQuestion = 1;
+      }
+      widgetQuestionID = newQuestion;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double cWidth = MediaQuery.of(context).size.width*0.58;
+    return Column(
+        children: [
+          InkWell(
+            child: Container(
+              width: cWidth,
+              margin: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    color: LightColors.sPurple,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(20))
+              ),
+              child: Text(
+                "Question: " + widget.arContent[widgetQuestionID],
+                style: const TextStyle(
+                  color: LightColors.sPurple,
+                ),
+              ),
+            ),
+            onTap: () {
+              _updateWidgetQuestion();
+              print("tapped");
+              print(widgetQuestionID);
+            },
+          )
+        ]
+    );
+  }
+
 }
