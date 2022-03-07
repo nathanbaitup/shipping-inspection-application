@@ -308,19 +308,38 @@ class ARQuestionWidget extends StatelessWidget {
 
 }
 
-class ARContentWidget extends StatelessWidget {
-  ARContentWidget({Key? key, required this.arContent}) : super(key: key);
-
+class ARContentWidget extends StatefulWidget {
   final List<String> arContent;
+
+  const ARContentWidget({Key? key, required this.arContent}) : super(key: key);
+
+  @override
+  _MyARContentState createState() => _MyARContentState();
+
+}
+
+class _MyARContentState extends State<ARContentWidget> {
+
+  int widgetQuestionID = 1;
+
+  void _updateWidgetQuestion() {
+    setState(() {
+      int newQuestion = widgetQuestionID + 1;
+      if (newQuestion > (widget.arContent.length - 1)) {
+        newQuestion = 1;
+      }
+      widgetQuestionID = newQuestion;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final double c_width = MediaQuery.of(context).size.width*0.58;
+    final double cWidth = MediaQuery.of(context).size.width*0.58;
     return Column(
         children: [
           InkWell(
             child: Container(
-              width: c_width,
+              width: cWidth,
               margin: const EdgeInsets.all(10.0),
               padding: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
@@ -330,17 +349,17 @@ class ARContentWidget extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(20))
               ),
-              child: Flexible(
-                child: Text(
-                "Question: " + arContent[1],
-                  style: const TextStyle(
-                    color: LightColors.sPurple,
-                  ),
+              child: Text(
+                "Question: " + widget.arContent[widgetQuestionID],
+                style: const TextStyle(
+                  color: LightColors.sPurple,
                 ),
               ),
             ),
             onTap: () {
-              print("change question");
+              _updateWidgetQuestion();
+              print("tapped");
+              print(widgetQuestionID);
             },
           )
         ]
