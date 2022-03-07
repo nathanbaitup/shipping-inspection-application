@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:shipping_inspection_app/sectors/drawer/settings/settings_sound.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_username.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -123,7 +124,10 @@ class _MenuSettingsState extends State<MenuSettings> {
                 title: const Text('Sound'),
                 leading: const Icon(Icons.volume_up,
                     color: LightColors.sPurple),
-                onPressed: (BuildContext context) {},
+                onPressed: (BuildContext context) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => const SettingsSound()));
+                },
               ),
               SettingsTile.navigation(
                 title: const Text('Microphone'),
