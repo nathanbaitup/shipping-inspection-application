@@ -44,40 +44,53 @@ class _SettingsSoundState extends State<SettingsSound> {
           ),
         ),
 
-        body: Container(
-            margin: const EdgeInsets.only(top:25),
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                Text("Current Volume:"),
+        body: Column(
+          children: [
 
-                Text(
-                  currentVolumeRounded.toString(),
-                  style: const TextStyle(
-                    color: LightColors.sPurple,
-                    fontWeight: FontWeight.bold,
+            Container(
+              margin: const EdgeInsets.only(top:25),
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Text("Current Volume:"),
+
+                  Text(
+                    currentVolumeRounded.toString(),
+                    style: const TextStyle(
+                      color: LightColors.sPurple,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
 
 
-                // ----> REFERENCE START
-                //REFERENCE: https://www.fluttercampus.com/guide/238/increase-decrease-volume-flutter/
-                Slider(
-                  value: currentVolume,
-                  onChanged: (newVolume){
-                    currentVolume = newVolume;
-                    currentVolumeRounded = ((currentVolume * 10).round());
-                    PerfectVolumeControl.setVolume(newVolume); //set new volume
-                    setState((){});
-                  },
-                  min: 0, //
-                  max:  1,
-                  divisions: 100,
-                )
-                // <---- REFERENCE END
-              ]
+                  // ----> REFERENCE START
+                  //REFERENCE: https://www.fluttercampus.com/guide/238/increase-decrease-volume-flutter/
+                  Slider(
+                    value: currentVolume,
+                    onChanged: (newVolume){
+                      currentVolume = newVolume;
+                      currentVolumeRounded = ((currentVolume * 10).round());
+                      PerfectVolumeControl.setVolume(newVolume); //set new volume
+                      setState((){});
+                    },
+                    min: 0, //
+                    max:  1,
+                    divisions: 100,
+                  )
+                  // <---- REFERENCE END
+                ]
+              )
+            ),
+
+            Container(
+              margin: const EdgeInsets.only(top:25),
+              child: FloatingActionButton(
+                onPressed: () {  },
+                child: const Icon(Icons.mic)
+              )
             )
-      )
+          ]
+        )
     );
   }
 
