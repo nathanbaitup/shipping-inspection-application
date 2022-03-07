@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
 import 'package:shipping_inspection_app/utils/colours.dart';
+import 'package:perfect_volume_control/perfect_volume_control.dart';
 
 class SettingsSound extends StatefulWidget {
   const SettingsSound({Key? key}) : super(key: key);
@@ -10,6 +10,27 @@ class SettingsSound extends StatefulWidget {
 }
 
 class _SettingsSoundState extends State<SettingsSound> {
+
+  double currentVolume = 0.5;
+  int currentVolumeRounded = 5;
+
+  @override
+  void initState() {
+    PerfectVolumeControl.hideUI = false; //set if system UI is hided or not on volume up/down
+    Future.delayed(Duration.zero,() async {
+      currentVolume = await PerfectVolumeControl.getVolume();
+      setState(() {
+        //refresh UI
+      });
+    });
+
+    PerfectVolumeControl.stream.listen((volume) {
+      setState(() {
+        currentVolume = volume;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +45,39 @@ class _SettingsSoundState extends State<SettingsSound> {
         ),
 
         body: Container(
-        )
+            margin: const EdgeInsets.only(top:25),
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Text("Current Volume:"),
+
+                Text(
+                  currentVolumeRounded.toString(),
+                  style: const TextStyle(
+                    color: LightColors.sPurple,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+
+                // ----> REFERENCE START
+                //REFERENCE: https://www.fluttercampus.com/guide/238/increase-decrease-volume-flutter/
+                Slider(
+                  value: currentVolume,
+                  onChanged: (newVolume){
+                    currentVolume = newVolume;
+                    currentVolumeRounded = ((currentVolume * 10).round());
+                    PerfectVolumeControl.setVolume(newVolume); //set new volume
+                    setState((){});
+                  },
+                  min: 0, //
+                  max:  1,
+                  divisions: 100,
+                )
+                // <---- REFERENCE END
+              ]
+            )
+      )
     );
   }
 
