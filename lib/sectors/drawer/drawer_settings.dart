@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_username.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MenuSettings extends StatefulWidget {
   const MenuSettings({Key? key}) : super(key: key);
@@ -104,7 +105,19 @@ class _MenuSettingsState extends State<MenuSettings> {
                 title: const Text('Camera'),
                 leading: const Icon(Icons.camera_alt,
                     color: LightColors.sPurple),
-                onPressed: (BuildContext context) {},
+                onPressed: (BuildContext context) async {
+                  var status = await Permission.camera.status;
+                  if (status.isDenied) {
+                    Permission.camera.status.isGranted;
+                    if (await Permission.camera.request().isGranted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Camera Permission Granted!')),
+                      );
+                    }
+                  } else {
+                    openAppSettings();
+                  }
+                },
               ),
               SettingsTile.navigation(
                 title: const Text('Sound'),
