@@ -68,6 +68,10 @@ dev_dependencies:
   flutter_lints: ^1.0.0
   syncfusion_flutter_charts: ^19.4.50
 
+  # Flutter native splash screen dependency
+  # https://pub.dev/packages/flutter_native_splash
+  flutter_native_splash: ^2.1.0
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
