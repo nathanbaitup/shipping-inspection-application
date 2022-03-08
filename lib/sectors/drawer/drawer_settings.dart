@@ -16,8 +16,24 @@ class _MenuSettingsState extends State<MenuSettings> {
 
   bool isSwitched = false;
 
+  bool cameraSwitch = false;
+  bool micSwitch = false;
+
+  Future<void> updateSwitches() async {
+    var cameraStatus = await Permission.camera.status;
+    if (cameraStatus.isGranted) {
+      setState(() { cameraSwitch = true; });
+    } else { setState(() { cameraSwitch = false; }); }
+
+    var micStatus = await Permission.microphone.status;
+    if (micStatus.isGranted) {
+      setState(() { micSwitch = true; });
+    } else { setState(() { micSwitch = false; }); }
+  }
+
   @override
   Widget build(BuildContext context) {
+    updateSwitches();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -102,23 +118,30 @@ class _MenuSettingsState extends State<MenuSettings> {
                 ),
               ),
             tiles: [
-              SettingsTile.navigation(
+              SettingsTile.switchTile(
                 title: const Text('Camera'),
+                activeSwitchColor: LightColors.sPurple,
                 leading: const Icon(Icons.camera_alt,
                     color: LightColors.sPurple),
-                onPressed: (BuildContext context) async {
+                onToggle: (bool value) async {
                   var status = await Permission.camera.status;
                   if (status.isDenied) {
-                    Permission.camera.status.isGranted;
                     if (await Permission.camera.request().isGranted) {
+                      cameraSwitch = true;
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Camera Permission Granted!')),
+                      const SnackBar(content: Text('Camera Permission Granted!')),
                       );
+                    } else {
+                      cameraSwitch = false;
                     }
                   } else {
-                    openAppSettings();
+                  openAppSettings();
                   }
-                },
+                  setState(() {
+                    value = cameraSwitch;
+                  });
+                }, initialValue: cameraSwitch,
+
               ),
               SettingsTile.navigation(
                 title: const Text('Sound'),
@@ -129,23 +152,29 @@ class _MenuSettingsState extends State<MenuSettings> {
                       builder: (BuildContext context) => const SettingsSound()));
                 },
               ),
-              SettingsTile.navigation(
+              SettingsTile.switchTile(
                 title: const Text('Microphone'),
+                activeSwitchColor: LightColors.sPurple,
                 leading: const Icon(Icons.mic,
                     color: LightColors.sPurple),
-                onPressed: (BuildContext context) async {
+                onToggle: (bool value) async {
                   var status = await Permission.microphone.status;
                   if (status.isDenied) {
-                    Permission.microphone.status.isGranted;
                     if (await Permission.microphone.request().isGranted) {
+                      micSwitch = true;
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Microphone Permission Granted!')),
                       );
+                    } else {
+                      micSwitch = false;
                     }
                   } else {
                     openAppSettings();
                   }
-                },
+                  setState(() {
+                    value = micSwitch;
+                  });
+                }, initialValue: micSwitch,
               ),
             ]
           ),

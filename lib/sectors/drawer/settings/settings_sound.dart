@@ -18,13 +18,10 @@ class _SettingsSoundState extends State<SettingsSound> {
   @override
   void initState() {
 
-    //Sound Init
-    PerfectVolumeControl.hideUI = false; //set if system UI is hided or not on volume up/down
+    PerfectVolumeControl.hideUI = false; //Set if system UI for sound is hidden
     Future.delayed(Duration.zero,() async {
       currentVolume = await PerfectVolumeControl.getVolume();
-      setState(() {
-        //refresh UI
-      });
+      setState(() {});
     });
 
     PerfectVolumeControl.stream.listen((volume) {
