@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:shipping_inspection_app/sectors/drawer/settings/settings_sound.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_username.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MenuSettings extends StatefulWidget {
   const MenuSettings({Key? key}) : super(key: key);
@@ -14,8 +16,24 @@ class _MenuSettingsState extends State<MenuSettings> {
 
   bool isSwitched = false;
 
+  bool cameraSwitch = false;
+  bool micSwitch = false;
+
+  Future<void> updateSwitches() async {
+    var cameraStatus = await Permission.camera.status;
+    if (cameraStatus.isGranted) {
+      setState(() { cameraSwitch = true; });
+    } else { setState(() { cameraSwitch = false; }); }
+
+    var micStatus = await Permission.microphone.status;
+    if (micStatus.isGranted) {
+      setState(() { micSwitch = true; });
+    } else { setState(() { micSwitch = false; }); }
+  }
+
   @override
   Widget build(BuildContext context) {
+    updateSwitches();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -100,23 +118,63 @@ class _MenuSettingsState extends State<MenuSettings> {
                 ),
               ),
             tiles: [
-              SettingsTile.navigation(
+              SettingsTile.switchTile(
                 title: const Text('Camera'),
+                activeSwitchColor: LightColors.sPurple,
                 leading: const Icon(Icons.camera_alt,
                     color: LightColors.sPurple),
-                onPressed: (BuildContext context) {},
+                onToggle: (bool value) async {
+                  var status = await Permission.camera.status;
+                  if (status.isDenied) {
+                    if (await Permission.camera.request().isGranted) {
+                      cameraSwitch = true;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Camera Permission Granted!')),
+                      );
+                    } else {
+                      cameraSwitch = false;
+                    }
+                  } else {
+                  openAppSettings();
+                  }
+                  setState(() {
+                    value = cameraSwitch;
+                  });
+                }, initialValue: cameraSwitch,
+
               ),
               SettingsTile.navigation(
                 title: const Text('Sound'),
                 leading: const Icon(Icons.volume_up,
                     color: LightColors.sPurple),
-                onPressed: (BuildContext context) {},
+                onPressed: (BuildContext context) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => const SettingsSound()));
+                },
               ),
-              SettingsTile.navigation(
+              SettingsTile.switchTile(
                 title: const Text('Microphone'),
+                activeSwitchColor: LightColors.sPurple,
                 leading: const Icon(Icons.mic,
                     color: LightColors.sPurple),
-                onPressed: (BuildContext context) {},
+                onToggle: (bool value) async {
+                  var status = await Permission.microphone.status;
+                  if (status.isDenied) {
+                    if (await Permission.microphone.request().isGranted) {
+                      micSwitch = true;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Microphone Permission Granted!')),
+                      );
+                    } else {
+                      micSwitch = false;
+                    }
+                  } else {
+                    openAppSettings();
+                  }
+                  setState(() {
+                    value = micSwitch;
+                  });
+                }, initialValue: micSwitch,
               ),
             ]
           ),
