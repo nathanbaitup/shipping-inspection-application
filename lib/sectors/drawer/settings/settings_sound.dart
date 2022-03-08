@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:perfect_volume_control/perfect_volume_control.dart';
 
@@ -16,6 +17,8 @@ class _SettingsSoundState extends State<SettingsSound> {
 
   @override
   void initState() {
+
+    //Sound Init
     PerfectVolumeControl.hideUI = false; //set if system UI is hided or not on volume up/down
     Future.delayed(Duration.zero,() async {
       currentVolume = await PerfectVolumeControl.getVolume();
@@ -81,14 +84,6 @@ class _SettingsSoundState extends State<SettingsSound> {
                 ]
               )
             ),
-
-            Container(
-              margin: const EdgeInsets.only(top:25),
-              child: FloatingActionButton(
-                onPressed: () {  },
-                child: const Icon(Icons.mic)
-              )
-            )
           ]
         )
     );

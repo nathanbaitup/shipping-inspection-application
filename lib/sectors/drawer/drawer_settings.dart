@@ -133,7 +133,19 @@ class _MenuSettingsState extends State<MenuSettings> {
                 title: const Text('Microphone'),
                 leading: const Icon(Icons.mic,
                     color: LightColors.sPurple),
-                onPressed: (BuildContext context) {},
+                onPressed: (BuildContext context) async {
+                  var status = await Permission.microphone.status;
+                  if (status.isDenied) {
+                    Permission.microphone.status.isGranted;
+                    if (await Permission.microphone.request().isGranted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Microphone Permission Granted!')),
+                      );
+                    }
+                  } else {
+                    openAppSettings();
+                  }
+                },
               ),
             ]
           ),
