@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
+import '../drawer/drawer_globals.dart' as globals;
 
 import '../../utils/qr_scanner_controller.dart';
 
@@ -23,6 +24,24 @@ class _SurveyHubState extends State<SurveyHub> {
         builder: (context) => SurveySection(questionID: questionID),
       ),
     );
+  }
+
+  // Checks if camera permissions have been granted and takes the user to the QR
+  // camera, updating the history page to allow for tracking.
+  void openCamera() async {
+    if (await Permission.camera.status.isDenied) {
+      await Permission.camera.request();
+      debugPrint("Camera Permissions are required to access QR Scanner");
+    } else {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const QRScanner(),
+        ),
+      );
+      globals.addRecord(
+          'opened', globals.getUsername(), DateTime.now(), 'QR camera');
+    }
   }
 
   @override
@@ -122,20 +141,7 @@ class _SurveyHubState extends State<SurveyHub> {
               ),
               ElevatedButton(
                   child: const Text("Open Camera"),
-                  onPressed: () async {
-                    if (await Permission.camera.status.isDenied) {
-                      await Permission.camera.request();
-                      debugPrint(
-                          "Camera Permissions are required to access QR Scanner");
-                    } else {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const QRScanner(),
-                        ),
-                      );
-                    }
-                  }),
+                  onPressed: () async => openCamera()),
             ],
           ),
         ),

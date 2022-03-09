@@ -1,6 +1,4 @@
-
 class Record {
-
   String type; //current types: enter, add
   String user;
   DateTime dateTime;
