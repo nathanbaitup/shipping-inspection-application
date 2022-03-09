@@ -13,6 +13,14 @@ class _SettingsUsernameState extends State<SettingsUsername> {
 
   late String username;
 
+  String currentUsername = globals.getUsername();
+
+  void updateCurrentUsername() {
+    setState(() {
+      currentUsername = globals.getUsername();
+    });
+  }
+
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -40,9 +48,19 @@ class _SettingsUsernameState extends State<SettingsUsername> {
                     Container(
                       padding: const EdgeInsets.only(top: 20.0),
                       child: Column(
-                        children: const [
+                        children: [
                           Center(
-                            child: Text("Your username is currently: ")
+                            child: Column(
+                              children: [
+                                const Text("Your username is currently: "),
+                                Text(currentUsername,
+                                  style: const TextStyle(
+                                    color: LightColors.sPurple,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
                           )
                         ],
                       ),
@@ -73,7 +91,9 @@ class _SettingsUsernameState extends State<SettingsUsername> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Processing username change...')),
                             );
+                            globals.addRecord("settings-username-change", globals.getUsername(), DateTime.now(), username);
                             globals.setUsername(username);
+                            updateCurrentUsername();
                           }
                         },
                       ),
