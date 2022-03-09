@@ -57,7 +57,8 @@ class _SettingsUsernameState extends State<SettingsUsername> {
                                   style: const TextStyle(
                                     color: LightColors.sPurple,
                                     fontWeight: FontWeight.bold,
-                                  ),),
+                                  ),
+                                ),
                               ],
                             ),
                           )
@@ -90,6 +91,7 @@ class _SettingsUsernameState extends State<SettingsUsername> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Processing username change...')),
                             );
+                            globals.addRecord("settings-username-change", globals.getUsername(), DateTime.now(), username);
                             globals.setUsername(username);
                             updateCurrentUsername();
                           }
