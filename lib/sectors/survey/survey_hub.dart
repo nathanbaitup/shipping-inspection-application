@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
-import '../drawer/drawer_globals.dart' as globals;
+import '../drawer/drawer_globals.dart' as history_global;
 
 import '../../utils/qr_scanner_controller.dart';
 
@@ -39,8 +39,9 @@ class _SurveyHubState extends State<SurveyHub> {
           builder: (context) => const QRScanner(),
         ),
       );
-      globals.addRecord(
-          'opened', globals.getUsername(), DateTime.now(), 'QR camera');
+      // Adds a record of the QR camera being opened to the history page.
+      history_global.addRecord(
+          'opened', history_global.getUsername(), DateTime.now(), 'QR camera');
     }
   }
 
