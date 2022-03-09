@@ -46,9 +46,9 @@ class _MenuHistoryState extends State<MenuHistory> {
         }
         break;
 
-        case "settings-permission": {
+        case "settings-permission-add": {
           currentRecordText[0] = currentRecord.user;
-          currentRecordText[1] = " editing device permissions regarding ";
+          currentRecordText[1] = " added device permissions for the ";
           currentRecordText[2] = currentRecord.section;
           currentRecordText[3] = " at ";
           currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)').format(currentRecord.dateTime);

@@ -138,6 +138,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                   var status = await Permission.camera.status;
                   if (status.isDenied) {
                     if (await Permission.camera.request().isGranted) {
+                      globals.addRecord("settings-permission-add", globals.getUsername(), DateTime.now(), "Camera");
                       cameraSwitch = true;
                       ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Camera Permission Granted!')),
@@ -172,6 +173,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                   var status = await Permission.microphone.status;
                   if (status.isDenied) {
                     if (await Permission.microphone.request().isGranted) {
+                      globals.addRecord("settings-permission-add", globals.getUsername(), DateTime.now(), "Microphone");
                       micSwitch = true;
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Microphone Permission Granted!')),
