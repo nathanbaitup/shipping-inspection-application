@@ -11,6 +11,7 @@ import 'package:vector_math/vector_math_64.dart' as vector;
 
 import '../questions/question_brain.dart';
 import '../survey/survey_section.dart';
+import '../drawer/drawer_globals.dart' as history_globals;
 
 // Used to get the page title for a Section based off the questionID.
 // TODO: this will change the title for a singular view, all AR components need to be separated and called from the AR hub.
@@ -80,6 +81,8 @@ class _ArHubState extends State<ArHub> {
         (Route<dynamic> route) => true,
       );
     }
+    history_globals.addRecord("pressed", history_globals.getUsername(),
+        DateTime.now(), 'return to section');
   }
 
   @override
@@ -123,6 +126,11 @@ class _ArHubState extends State<ArHub> {
                         RawMaterialButton(
                           onPressed: () {
                             _takeScreenshot();
+                            history_globals.addRecord(
+                                "pressed",
+                                history_globals.getUsername(),
+                                DateTime.now(),
+                                'take screenshot');
                           },
                           elevation: 5.0,
                           fillColor: LightColors.sPurple,
@@ -149,7 +157,7 @@ class _ArHubState extends State<ArHub> {
                         ),
                         const Spacer(),
                         RawMaterialButton(
-                          onPressed: () => Navigator.pop(context, imageViewer),
+                          onPressed: () => _returnToSectionScreen(),
                           elevation: 5.0,
                           fillColor: LightColors.sPurpleLL,
                           shape: const CircleBorder(),
@@ -349,8 +357,6 @@ class _MyARContentState extends State<ARContentWidget> {
         ),
         onTap: () {
           _updateWidgetQuestion();
-          debugPrint("tapped");
-          print(widgetQuestionID);
         },
       )
     ]);

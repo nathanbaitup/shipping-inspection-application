@@ -40,6 +40,35 @@ class _SurveySectionState extends State<SurveySection> {
         "enter", globals.getUsername(), DateTime.now(), pageTitle);
   }
 
+  // Checks if the camera permission has been granted and opens the AR hub for
+  // the intended section loading the questions based on the current page to
+  // display within the AR view.
+  void openARSection() async {
+    if (await Permission.camera.status.isDenied) {
+      await Permission.camera.request();
+      debugPrint("Camera Permissions are required to access QR Scanner");
+    } else {
+      globals.addRecord("opened", globals.getUsername(), DateTime.now(),
+          '$pageTitle AR session through button press');
+      await availableCameras().then(
+        (value) async {
+          List<String> arContentPush = [pageTitle] + questionsToAsk;
+          final capturedImages = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ArHub(
+                questionID: widget.questionID,
+                arContent: arContentPush,
+                openThroughQR: false,
+              ),
+            ),
+          );
+          setState(() => imageViewer = imageViewer + capturedImages);
+        },
+      );
+    }
+  }
+
   // Initializes the state and gets the questions, page title and record for the history feature.
   @override
   void initState() {
@@ -139,33 +168,7 @@ class _SurveySectionState extends State<SurveySection> {
                 child: const Text('Add Images'),
               ),
               ElevatedButton(
-                onPressed: () async {
-                  if (await Permission.camera.status.isDenied) {
-                    await Permission.camera.request();
-                    debugPrint(
-                        "Camera Permissions are required to access QR Scanner");
-                  } else {
-                    await availableCameras().then(
-                      (value) async {
-                        List<String> arContentPush = [pageTitle] + questionsToAsk;
-                        print(arContentPush);
-                        print("CONTENT FOR AR HUB");
-                        final capturedImages = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ArHub(
-                              questionID: widget.questionID,
-                              arContent: arContentPush,
-                              openThroughQR: false,
-                            ),
-                          ),
-                        );
-                        setState(
-                            () => imageViewer = imageViewer + capturedImages);
-                      },
-                    );
-                  }
-                },
+                onPressed: () async => openARSection(),
                 child: const Text('View in AR'),
                 style: ElevatedButton.styleFrom(primary: LightColors.sPurpleL),
               ),

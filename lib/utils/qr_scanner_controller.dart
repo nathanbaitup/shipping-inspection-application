@@ -101,7 +101,7 @@ class _QRScannerState extends State<QRScanner> {
       questionsToAsk = questionBrain.getQuestions('${_qrResult?.code}');
       String arTitle = questionBrain.getPageTitle('${_qrResult?.code}');
       List<String> arContentPush = [arTitle] + questionsToAsk;
-
+      // Loads the AR session based on the scanned result.
       Navigator.pop(context);
       await Navigator.push(
         context,
@@ -114,7 +114,7 @@ class _QRScannerState extends State<QRScanner> {
       );
       // Adds a message to say what page has been opened from the QR camera.
       history_globals.addRecord('opened', history_globals.getUsername(),
-          DateTime.now(), '$arTitle AR screen through QR camera');
+          DateTime.now(), '$arTitle AR session through QR camera');
     } else {
       debugPrint('Could not launch AR section');
     }
