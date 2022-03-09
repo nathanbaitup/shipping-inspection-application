@@ -11,6 +11,7 @@ import 'package:vector_math/vector_math_64.dart' as vector;
 
 import '../questions/question_brain.dart';
 import '../survey/survey_section.dart';
+import '../drawer/drawer_globals.dart' as history_globals;
 
 // Used to get the page title for a Section based off the questionID.
 // TODO: this will change the title for a singular view, all AR components need to be separated and called from the AR hub.
@@ -27,7 +28,11 @@ class ArHub extends StatefulWidget {
   final String questionID;
   final List<String> arContent;
   final bool openThroughQR;
-  const ArHub({required this.questionID, required this.openThroughQR, required this.arContent, Key? key})
+  const ArHub(
+      {required this.questionID,
+      required this.openThroughQR,
+      required this.arContent,
+      Key? key})
       : super(key: key);
 
   @override
@@ -76,6 +81,8 @@ class _ArHubState extends State<ArHub> {
         (Route<dynamic> route) => true,
       );
     }
+    history_globals.addRecord("pressed", history_globals.getUsername(),
+        DateTime.now(), 'return to section');
   }
 
   @override
@@ -101,19 +108,16 @@ class _ArHubState extends State<ArHub> {
                   onArCoreViewCreated: _onArCoreViewCreated,
                   enableTapRecognizer: true,
                 ),
-
                 Row(
                   children: [
                     ARQuestionWidget(
                       arContent: widget.arContent,
                     ),
-
                     ARContentWidget(
                       arContent: widget.arContent,
                     ),
                   ],
                 ),
-
                 Positioned.fill(
                   child: Align(
                     alignment: Alignment.bottomCenter,
@@ -122,6 +126,11 @@ class _ArHubState extends State<ArHub> {
                         RawMaterialButton(
                           onPressed: () {
                             _takeScreenshot();
+                            history_globals.addRecord(
+                                "pressed",
+                                history_globals.getUsername(),
+                                DateTime.now(),
+                                'take screenshot');
                           },
                           elevation: 5.0,
                           fillColor: LightColors.sPurple,
@@ -148,7 +157,7 @@ class _ArHubState extends State<ArHub> {
                         ),
                         const Spacer(),
                         RawMaterialButton(
-                          onPressed: () => Navigator.pop(context, imageViewer),
+                          onPressed: () => _returnToSectionScreen(),
                           elevation: 5.0,
                           fillColor: LightColors.sPurpleLL,
                           shape: const CircleBorder(),
@@ -270,42 +279,36 @@ class _ArHubState extends State<ArHub> {
     });
   }
 // END REFERENCE
-
-
 }
 
 class ARQuestionWidget extends StatelessWidget {
-  ARQuestionWidget({Key? key, required this.arContent}) : super(key: key);
+  const ARQuestionWidget({Key? key, required this.arContent}) : super(key: key);
 
   final List<String> arContent;
 
   @override
   Widget build(BuildContext context) {
-    final double c_width = MediaQuery.of(context).size.width*0.32;
-    return Column(
-        children: [
-          Container(
-            width: c_width,
-            margin: const EdgeInsets.all(10.0),
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(
-                  color: LightColors.sPurple,
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(20))
+    final double cWidth = MediaQuery.of(context).size.width * 0.32;
+    return Column(children: [
+      Container(
+        width: cWidth,
+        margin: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: LightColors.sPurple,
             ),
-            child: Text(
-              "Section: " + arContent[0],
-              style: const TextStyle(
-                color: LightColors.sPurple,
-              ),
-            ),
-          )
-        ]
-    );
+            borderRadius: const BorderRadius.all(Radius.circular(20))),
+        child: Text(
+          "Section: " + arContent[0],
+          style: const TextStyle(
+            color: LightColors.sPurple,
+          ),
+        ),
+      )
+    ]);
   }
-
 }
 
 class ARContentWidget extends StatefulWidget {
@@ -315,11 +318,9 @@ class ARContentWidget extends StatefulWidget {
 
   @override
   _MyARContentState createState() => _MyARContentState();
-
 }
 
 class _MyARContentState extends State<ARContentWidget> {
-
   int widgetQuestionID = 1;
 
   void _updateWidgetQuestion() {
@@ -334,36 +335,30 @@ class _MyARContentState extends State<ARContentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final double cWidth = MediaQuery.of(context).size.width*0.58;
-    return Column(
-        children: [
-          InkWell(
-            child: Container(
-              width: cWidth,
-              margin: const EdgeInsets.all(10.0),
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    color: LightColors.sPurple,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(20))
+    final double cWidth = MediaQuery.of(context).size.width * 0.58;
+    return Column(children: [
+      InkWell(
+        child: Container(
+          width: cWidth,
+          margin: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                color: LightColors.sPurple,
               ),
-              child: Text(
-                "Question: " + widget.arContent[widgetQuestionID],
-                style: const TextStyle(
-                  color: LightColors.sPurple,
-                ),
-              ),
+              borderRadius: const BorderRadius.all(Radius.circular(20))),
+          child: Text(
+            "Question: " + widget.arContent[widgetQuestionID],
+            style: const TextStyle(
+              color: LightColors.sPurple,
             ),
-            onTap: () {
-              _updateWidgetQuestion();
-              print("tapped");
-              print(widgetQuestionID);
-            },
-          )
-        ]
-    );
+          ),
+        ),
+        onTap: () {
+          _updateWidgetQuestion();
+        },
+      )
+    ]);
   }
-
 }
