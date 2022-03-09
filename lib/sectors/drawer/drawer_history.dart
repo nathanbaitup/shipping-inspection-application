@@ -46,6 +46,24 @@ class _MenuHistoryState extends State<MenuHistory> {
         }
         break;
 
+        case "settings-permission": {
+          currentRecordText[0] = currentRecord.user;
+          currentRecordText[1] = " editing device permissions regarding ";
+          currentRecordText[2] = currentRecord.section;
+          currentRecordText[3] = " at ";
+          currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)').format(currentRecord.dateTime);
+        }
+        break;
+
+        case "settings-change": {
+          currentRecordText[0] = currentRecord.user;
+          currentRecordText[1] = " changed the device's ";
+          currentRecordText[2] = currentRecord.section;
+          currentRecordText[3] = " at ";
+          currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)').format(currentRecord.dateTime);
+        }
+        break;
+
         default: {
           currentRecordText[0] = "NULL RECORD";
         }
