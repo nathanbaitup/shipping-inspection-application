@@ -52,6 +52,7 @@ class _SurveyHubState extends State<SurveyHub> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      resizeToAvoidBottomInset : false,
       body: SafeArea(
         child: Center(
           child: Column(
@@ -100,7 +101,7 @@ class _SurveyHubState extends State<SurveyHub> {
                     ),
 
                     RawMaterialButton(
-                      fillColor: LightColors.sPurpleL,
+                      fillColor: LightColors.sDarkYellow,
                       elevation: 2,
                       shape: const CircleBorder(),
                       child: const Text(
@@ -161,7 +162,7 @@ class _SurveyHubState extends State<SurveyHub> {
                     ),
 
                     RawMaterialButton(
-                      fillColor: LightColors.sPurpleL,
+                      fillColor: LightColors.sDarkYellow,
                       elevation: 2,
                       shape: const CircleBorder(),
                       child: const Text(
@@ -174,45 +175,59 @@ class _SurveyHubState extends State<SurveyHub> {
                       ),
                       onPressed: () {  },
                     ),
+
+                    Expanded(
+                      child: SizedBox(
+                        height: 35,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(color: Colors.grey, width: 1.5),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.search,
+                              size: 20,
+                            ),
+                            hintText: "Search",
+                            contentPadding: EdgeInsets.zero
+                          ),
+                          style: const TextStyle(
+                            fontSize: 14,
+                          )
+                        ),
+                      )
+                    )
                   ],
                 ),
               ),
 
-              Padding(
-                padding: const EdgeInsets.all(10.0),
+              Container(
+                padding: const EdgeInsets.only(
+                  top: 10,
+                  left: 20,
+                  right: 20,
+                ),
                 child: Table(
                   children: [
-                    const TableRow(
-                      children: [
-                        Text(
-                          "Sections",
-                          textScaleFactor: 1.5,
-                        ),
-                        Text(
-                          "Progress",
-                          textScaleFactor: 1.5,
-                        ),
-                        Text(
-                          "Survey Link",
-                          textScaleFactor: 1.5,
-                        ),
-                      ],
-                    ),
                     TableRow(
                       children: [
                         const Text(
                           "Fire & Safety",
-                          textScaleFactor: 1.5,
+                          textScaleFactor: 1,
                         ),
                         Text(
                           "${questionBrain.getAnswerAmount("f&s")} of ${questionBrain.getQuestionAmount("f&s")}",
-                          textScaleFactor: 1.5,
+                          textScaleFactor: 1,
                         ),
                         ElevatedButton(
                           onPressed: () {
                             loadQuestion('f&s');
                           },
-                          child: const Text("Go to this Section?"),
+                          child: const Text("Open"),
                         ),
                       ],
                     ),
@@ -220,17 +235,17 @@ class _SurveyHubState extends State<SurveyHub> {
                       children: [
                         const Text(
                           "Lifesaving",
-                          textScaleFactor: 1.5,
+                          textScaleFactor: 1,
                         ),
                         Text(
                           "${questionBrain.getAnswerAmount("lifesaving")} of ${questionBrain.getQuestionAmount("lifesaving")}",
-                          textScaleFactor: 1.5,
+                          textScaleFactor: 1,
                         ),
                         ElevatedButton(
                           onPressed: () {
                             loadQuestion('lifesaving');
                           },
-                          child: const Text("Go to this Section?"),
+                          child: const Text("Open"),
                         ),
                       ],
                     ),
@@ -238,17 +253,17 @@ class _SurveyHubState extends State<SurveyHub> {
                       children: [
                         const Text(
                           "Engine Room",
-                          textScaleFactor: 1.5,
+                          textScaleFactor: 1,
                         ),
                         Text(
                           "${questionBrain.getAnswerAmount("engine")} of ${questionBrain.getQuestionAmount("engine")}",
-                          textScaleFactor: 1.5,
+                          textScaleFactor: 1,
                         ),
                         ElevatedButton(
                           onPressed: () {
                             loadQuestion('engine');
                           },
-                          child: const Text("Go to this Section?"),
+                          child: const Text("Open"),
                         ),
                       ],
                     ),
