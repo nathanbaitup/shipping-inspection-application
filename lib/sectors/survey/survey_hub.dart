@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shipping_inspection_app/sectors/drawer/drawer_help.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
+import 'package:shipping_inspection_app/utils/colours.dart';
+import 'package:shipping_inspection_app/utils/homecontainer.dart';
 import '../drawer/drawer_globals.dart' as history_global;
 
 import '../../utils/qr_scanner_controller.dart';
@@ -47,22 +50,134 @@ class _SurveyHubState extends State<SurveyHub> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: Column(
             children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text(
-                  "Survey Hub",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+              Container(
+                  height: 100,
+                  width: screenWidth,
+                  padding: const EdgeInsets.all(0.0),
+                  decoration: const BoxDecoration(
+                      color: LightColors.sPurple,
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(30.0),
+                        bottomLeft: Radius.circular(30.0),
+                      )),
+                  child: const Center(
+                    child: Text(
+                      "AR Hub",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 28,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  )
+              ),
+
+              Container(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10.0),
+                      decoration: const BoxDecoration(
+                          color: LightColors.sPurple,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                      child: const Text(
+                        "QR Camera",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+
+                    RawMaterialButton(
+                      fillColor: LightColors.sPurpleL,
+                      elevation: 2,
+                      shape: const CircleBorder(),
+                      child: const Text(
+                        "?",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onPressed: () {  },
+                    ),
+
+                    const Spacer(),
+
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        primary: Colors.white,
+                        backgroundColor: LightColors.sPurpleL,
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0)),
+                      ),
+                      child: const Text(
+                        "Open QR Camera",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onPressed: () async => openCamera()
+                    ),
+                  ],
                 ),
               ),
+
+              const Divider(),
+
+              Container(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10.0),
+                      decoration: const BoxDecoration(
+                        color: LightColors.sPurple,
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                      child: const Text(
+                        "Sections",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+
+                    RawMaterialButton(
+                      fillColor: LightColors.sPurpleL,
+                      elevation: 2,
+                      shape: const CircleBorder(),
+                      child: const Text(
+                        "?",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onPressed: () {  },
+                    ),
+                  ],
+                ),
+              ),
+
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Table(
@@ -140,9 +255,6 @@ class _SurveyHubState extends State<SurveyHub> {
                   ],
                 ),
               ),
-              ElevatedButton(
-                  child: const Text("Open Camera"),
-                  onPressed: () async => openCamera()),
             ],
           ),
         ),
