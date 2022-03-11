@@ -5,5 +5,3 @@ flutter_test: # Name of the lane
   stage: test # type of stage
   script:
     - flutter test # Run Flutter test
-  tags:
-    - flutter # Tags for runner
