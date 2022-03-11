@@ -4,7 +4,11 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:shipping_inspection_app/shared/loading.dart';
 
 import '../sectors/ar/ar_hub.dart';
+import '../sectors/drawer/drawer_globals.dart' as history_globals;
+import '../sectors/questions/question_brain.dart';
 import 'colours.dart';
+
+QuestionBrain questionBrain = QuestionBrain();
 
 class QRScanner extends StatefulWidget {
   const QRScanner({Key? key}) : super(key: key);
@@ -14,6 +18,8 @@ class QRScanner extends StatefulWidget {
 }
 
 class _QRScannerState extends State<QRScanner> {
+  List<String> questionsToAsk = [];
+
   // REFERENCE ACCESSED 01/03/2022 https://pub.dev/packages/qr_code_scanner
   // Used dependency to implement scanning of QR codes.
   // Chose this dependency over the newer, supported version as it provides more access to creating a controller and also is a stable build,
@@ -41,7 +47,8 @@ class _QRScannerState extends State<QRScanner> {
     }
   }
 
-  // Creates the QR controller where it sets the scanned data into the result.
+  // Creates the QR controller where it checks if the scanned data can be used to
+  // launch the correct AR section.
   void _onQRViewCreated(QRViewController qrController) {
     _qrController = qrController;
     qrController.scannedDataStream.listen((scannedResult) {
@@ -101,6 +108,11 @@ class _QRScannerState extends State<QRScanner> {
     if (_qrResult?.code == "f&s" ||
         _qrResult?.code == "engine" ||
         _qrResult?.code == "lifesaving") {
+      // Uses the question brain to load the questions and title based on the scanned QR.
+      questionsToAsk = questionBrain.getQuestions('${_qrResult?.code}');
+      String arTitle = questionBrain.getPageTitle('${_qrResult?.code}');
+      List<String> arContentPush = [arTitle] + questionsToAsk;
+      // Loads the AR session based on the scanned result.
       Navigator.pop(context);
       loading = false;
       await Navigator.push(
@@ -108,10 +120,13 @@ class _QRScannerState extends State<QRScanner> {
         MaterialPageRoute(
           builder: (context) => ArHub(
               questionID: '${_qrResult?.code}',
-              arContent: [" "],
+              arContent: arContentPush,
               openThroughQR: true),
         ),
       );
+      // Adds a message to say what page has been opened from the QR camera.
+      history_globals.addRecord('opened', history_globals.getUsername(),
+          DateTime.now(), '$arTitle AR session through QR camera');
     } else {
       debugPrint('Could not launch AR section');
     }
