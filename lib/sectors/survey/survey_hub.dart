@@ -42,15 +42,17 @@ class _SurveyHubState extends State<SurveyHub> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset : false,
       body: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
         child: SafeArea(
           child: Center(
             child: Column(
               children: <Widget>[
                 Container(
-                    height: 100,
+                    height: screenHeight * 0.12,
                     width: screenWidth,
                     padding: const EdgeInsets.all(0.0),
                     decoration: const BoxDecoration(
@@ -73,6 +75,7 @@ class _SurveyHubState extends State<SurveyHub> {
                 ),
 
                 Container(
+                  height: screenHeight * 0.12,
                   padding: const EdgeInsets.all(20.0),
                   child: Row(
                     children: [
@@ -92,10 +95,13 @@ class _SurveyHubState extends State<SurveyHub> {
                         ),
                       ),
 
-                      RawMaterialButton(
-                        fillColor: LightColors.sDarkYellow,
-                        elevation: 2,
-                        shape: const CircleBorder(),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          primary: Colors.white,
+                          backgroundColor: LightColors.sDarkYellow,
+                          elevation: 2,
+                          shape: const CircleBorder(),
+                        ),
                         child: const Text(
                           "?",
                           style: TextStyle(
@@ -134,9 +140,13 @@ class _SurveyHubState extends State<SurveyHub> {
                   ),
                 ),
 
-                const Divider(),
+                const Divider(
+                  thickness: 1,
+                  height: 1,
+                ),
 
                 Container(
+                  height: screenHeight * 0.12,
                   padding: const EdgeInsets.all(20.0),
                   child: Row(
                     children: [
@@ -156,10 +166,13 @@ class _SurveyHubState extends State<SurveyHub> {
                         ),
                       ),
 
-                      RawMaterialButton(
-                        fillColor: LightColors.sDarkYellow,
-                        elevation: 2,
-                        shape: const CircleBorder(),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          primary: Colors.white,
+                          backgroundColor: LightColors.sDarkYellow,
+                          elevation: 2,
+                          shape: const CircleBorder(),
+                        ),
                         child: const Text(
                           "?",
                           style: TextStyle(
@@ -201,23 +214,35 @@ class _SurveyHubState extends State<SurveyHub> {
                 ),
 
                 Container(
+                  height: screenHeight * 0.45,
                   padding: const EdgeInsets.only(
-                    top: 10,
                     left: 20,
                     right: 20,
                   ),
-                  child: Column(
-                    children: const [
-                      SurveySectionWidget(
-                          sectionName: "Fire & Safety",
-                          sectionMethod: "f&s"),
-                      SurveySectionWidget(
-                          sectionName: "Lifesaving",
-                          sectionMethod: "lifesaving"),
-                      SurveySectionWidget(
-                          sectionName: "Engine Room",
-                          sectionMethod: "engine"),
-                    ],
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      children: const [
+                        SurveySectionWidget(
+                            sectionName: "Fire & Safety",
+                            sectionMethod: "f&s"),
+                        SurveySectionWidget(
+                            sectionName: "Lifesaving",
+                            sectionMethod: "lifesaving"),
+                        SurveySectionWidget(
+                            sectionName: "Engine Room",
+                            sectionMethod: "engine"),
+                        SurveySectionWidget(
+                            sectionName: "Placeholder",
+                            sectionMethod: "engine"),
+                        SurveySectionWidget(
+                            sectionName: "Placeholder",
+                            sectionMethod: "engine"),
+                        SurveySectionWidget(
+                            sectionName: "Placeholder",
+                            sectionMethod: "engine"),
+                      ],
+                    ),
                   ),
                 ),
               ],
