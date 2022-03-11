@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path/path.dart';
+import 'dart:math';
 import 'package:shipping_inspection_app/sectors/communication/active-video-call.dart';
 import 'package:shipping_inspection_app/shared/loading.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
@@ -85,7 +85,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
 
                       MaterialButton(
                         onPressed: () {
-                          copyChannelToClipboard(context);
+                          channelClipboard(context);
                         },
                         color: LightColors.sPurpleL,
                         shape: RoundedRectangleBorder(
@@ -95,11 +95,13 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                       ),
 
                       MaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          channelGenerate();
+                        },
                         color: LightColors.sPurpleLL,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15)),
-                        child: const Text('Generate Channel Name'),
+                        child: const Text('Generate Channel'),
                         textColor: Colors.white,
                       ),
                   ]
@@ -108,12 +110,23 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
               ]));
   }
 
-  void copyChannelToClipboard(BuildContext context) {
+  void channelClipboard(BuildContext context) {
     Clipboard.setData(ClipboardData(text: _channelNameController.text));
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Copied to Clipboard!')),
     );
+  }
+
+  void channelGenerate() {
+    String output = "";
+    var r = Random();
+    const _capitalChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const _numChars = '1234567890';
+    output = ("IDWAL-" +
+        List.generate(3, (index) => _capitalChars[r.nextInt(_capitalChars.length)]).join() +
+        List.generate(3, (index) => _numChars[r.nextInt(_numChars.length)]).join());
+    _channelNameController.text = output;
   }
 
   void addChannelRecord() {
