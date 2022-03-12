@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/home.dart';
-import 'package:shipping_inspection_app/sectors/communication/startup.dart';
+import 'package:shipping_inspection_app/sectors/communication/channel-selection.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_feedback.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_history.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_hub.dart';
@@ -27,7 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
   static const List<Widget> _widgetOptions = <Widget>[
     Home(),
     SurveyHub(),
-    CommunicationFront(),
+    ChannelNameSelection(),
     Text(
       'Calls',
       style: optionStyle,
@@ -140,11 +140,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => const MenuFeedback()));
               }),
-
           const Divider(
             color: Colors.grey,
           ),
-
           ListTile(
               title: const Text("Settings"),
               iconColor: LightColors.sPurple,

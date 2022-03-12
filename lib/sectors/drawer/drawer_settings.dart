@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:shipping_inspection_app/sectors/drawer/settings/settings_sound.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_username.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
 
 class MenuSettings extends StatefulWidget {
   const MenuSettings({Key? key}) : super(key: key);
@@ -14,8 +17,33 @@ class _MenuSettingsState extends State<MenuSettings> {
 
   bool isSwitched = false;
 
+  bool cameraSwitch = false;
+  bool micSwitch = false;
+
+  String usernameSubtext = "";
+
+  Future<void> updateSwitches() async {
+    var cameraStatus = await Permission.camera.status;
+    if (cameraStatus.isGranted) {
+      setState(() { cameraSwitch = true; });
+    } else { setState(() { cameraSwitch = false; }); }
+
+    var micStatus = await Permission.microphone.status;
+    if (micStatus.isGranted) {
+      setState(() { micSwitch = true; });
+    } else { setState(() { micSwitch = false; }); }
+  }
+
+  void updateText() {
+    setState(() {
+      usernameSubtext = "Currently '" + globals.getUsername() + "'";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    updateSwitches();
+    updateText();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -39,21 +67,21 @@ class _MenuSettingsState extends State<MenuSettings> {
             ),
             tiles: [
               SettingsTile(
-                title: const Text('Status'),
-                leading: const Icon(Icons.person,
-                    color: LightColors.sPurple),
-                value: const Text('Online'),
-                onPressed: (BuildContext context) {},
-              ),
-              SettingsTile(
                 title: const Text('Language'),
                 leading: const Icon(Icons.language,
                     color: LightColors.sPurple),
                 value: const Text('English'),
                 onPressed: (BuildContext context) {},
               ),
+              SettingsTile.navigation(
+                title: const Text('History Preferences'),
+                leading: const Icon(Icons.history,
+                    color: LightColors.sPurple),
+                onPressed: (BuildContext context) {},
+              ),
               SettingsTile.switchTile(
-                title: const Text('Use System Theme'),
+                title: const Text('Night Mode'),
+                activeSwitchColor: LightColors.sPurple,
                 leading: const Icon(Icons.phone_android,
                     color: LightColors.sPurple),
                 initialValue: isSwitched,
@@ -81,6 +109,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                 title: const Text('Username'),
                 leading: const Icon(Icons.text_format,
                     color: LightColors.sPurple),
+                value: Text(usernameSubtext),
                 onPressed: (BuildContext context) {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) => const SettingsUsername()));
@@ -100,23 +129,65 @@ class _MenuSettingsState extends State<MenuSettings> {
                 ),
               ),
             tiles: [
-              SettingsTile.navigation(
+              SettingsTile.switchTile(
                 title: const Text('Camera'),
+                activeSwitchColor: LightColors.sPurple,
                 leading: const Icon(Icons.camera_alt,
                     color: LightColors.sPurple),
-                onPressed: (BuildContext context) {},
+                onToggle: (bool value) async {
+                  var status = await Permission.camera.status;
+                  if (status.isDenied) {
+                    if (await Permission.camera.request().isGranted) {
+                      globals.addRecord("settings-permission-add", globals.getUsername(), DateTime.now(), "Camera");
+                      cameraSwitch = true;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Camera Permission Granted!')),
+                      );
+                    } else {
+                      cameraSwitch = false;
+                    }
+                  } else {
+                  openAppSettings();
+                  }
+                  setState(() {
+                    value = cameraSwitch;
+                  });
+                }, initialValue: cameraSwitch,
+
               ),
               SettingsTile.navigation(
                 title: const Text('Sound'),
                 leading: const Icon(Icons.volume_up,
                     color: LightColors.sPurple),
-                onPressed: (BuildContext context) {},
+                onPressed: (BuildContext context) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => const SettingsSound()));
+                },
               ),
-              SettingsTile.navigation(
+              SettingsTile.switchTile(
                 title: const Text('Microphone'),
+                activeSwitchColor: LightColors.sPurple,
                 leading: const Icon(Icons.mic,
                     color: LightColors.sPurple),
-                onPressed: (BuildContext context) {},
+                onToggle: (bool value) async {
+                  var status = await Permission.microphone.status;
+                  if (status.isDenied) {
+                    if (await Permission.microphone.request().isGranted) {
+                      globals.addRecord("settings-permission-add", globals.getUsername(), DateTime.now(), "Microphone");
+                      micSwitch = true;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Microphone Permission Granted!')),
+                      );
+                    } else {
+                      micSwitch = false;
+                    }
+                  } else {
+                    openAppSettings();
+                  }
+                  setState(() {
+                    value = micSwitch;
+                  });
+                }, initialValue: micSwitch,
               ),
             ]
           ),
