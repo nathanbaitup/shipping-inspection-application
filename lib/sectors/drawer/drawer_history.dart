@@ -18,6 +18,8 @@ class _MenuHistoryState extends State<MenuHistory> {
       List<String> currentRecordText = List<String>.filled(5, "");
 
       switch (currentRecord.type) {
+
+        // CATEGORY: Section Response Logging
         case "add":
           {
             currentRecordText[0] = currentRecord.user;
@@ -29,6 +31,7 @@ class _MenuHistoryState extends State<MenuHistory> {
           }
           break;
 
+        // CATEGORY: Section Entering Logging
         case "enter":
           {
             currentRecordText[0] = currentRecord.user;
@@ -40,6 +43,7 @@ class _MenuHistoryState extends State<MenuHistory> {
           }
           break;
 
+        // CATEGORY: Communications Logging
         case "call":
           {
             currentRecordText[0] = currentRecord.user;
@@ -51,6 +55,8 @@ class _MenuHistoryState extends State<MenuHistory> {
           }
           break;
 
+        // Unclear usage: For opening via QR
+        // CATEGORY: QR Usage Logging
         case "opened":
           {
             currentRecordText[0] = currentRecord.user;
@@ -62,6 +68,8 @@ class _MenuHistoryState extends State<MenuHistory> {
           }
           break;
 
+        // Unclear Usage: For leaving via QR
+        // CATEGORY: QR Usage Logging
         case "pressed":
           {
             currentRecordText[0] = currentRecord.user;
@@ -73,6 +81,7 @@ class _MenuHistoryState extends State<MenuHistory> {
           }
           break;
 
+        // CATEGORY: Settings Change Logging
         case "settings-permission-add":
           {
             currentRecordText[0] = currentRecord.user;
@@ -84,6 +93,7 @@ class _MenuHistoryState extends State<MenuHistory> {
           }
           break;
 
+        // CATEGORY: Settings Change Logging
         case "settings-username-change":
           {
             currentRecordText[1] = "changed the device's username to ";
@@ -94,6 +104,7 @@ class _MenuHistoryState extends State<MenuHistory> {
           }
           break;
 
+        // CATEGORY: Settings Change Logging
         case "settings-language-change":
           {
             currentRecordText[0] = currentRecord.user;

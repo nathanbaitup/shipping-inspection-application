@@ -26,14 +26,26 @@ class _MenuSettingsState extends State<MenuSettings> {
 
   Future<void> updateSwitches() async {
     var cameraStatus = await Permission.camera.status;
-    if (cameraStatus.isGranted) {
-      setState(() { cameraSwitch = true; });
-    } else { setState(() { cameraSwitch = false; }); }
+    if (mounted) {
+      setState(() {
+        if (cameraStatus.isGranted) {
+          cameraSwitch = true;
+        } else {
+          cameraSwitch = false;
+        }
+      });
+    }
 
     var micStatus = await Permission.microphone.status;
-    if (micStatus.isGranted) {
-      setState(() { micSwitch = true; });
-    } else { setState(() { micSwitch = false; }); }
+    if (mounted) {
+      setState(() {
+        if (micStatus.isGranted) {
+          micSwitch = true;
+        } else {
+          micSwitch = false;
+        }
+      });
+    }
   }
 
   void updateText() {
@@ -150,6 +162,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                       );
                     } else {
                       cameraSwitch = false;
+                      openAppSettings();
                     }
                   } else {
                   openAppSettings();
@@ -185,6 +198,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                       );
                     } else {
                       micSwitch = false;
+                      openAppSettings();
                     }
                   } else {
                     openAppSettings();
