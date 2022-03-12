@@ -6,6 +6,8 @@ import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
 
+import 'settings/settings_history.dart';
+
 class MenuSettings extends StatefulWidget {
   const MenuSettings({Key? key}) : super(key: key);
 
@@ -74,10 +76,13 @@ class _MenuSettingsState extends State<MenuSettings> {
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile.navigation(
-                title: const Text('History Preferences'),
+                title: const Text('History'),
                 leading: const Icon(Icons.history,
                     color: LightColors.sPurple),
-                onPressed: (BuildContext context) {},
+                onPressed: (BuildContext context) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => const SettingsHistory()));
+                },
               ),
               SettingsTile.switchTile(
                 title: const Text('Night Mode'),
