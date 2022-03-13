@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
 import 'package:shipping_inspection_app/sectors/communication/active-video-call.dart';
+import 'package:shipping_inspection_app/sectors/drawer/drawer_help.dart';
 import 'package:shipping_inspection_app/shared/loading.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import '../drawer/drawer_globals.dart' as globals;
@@ -63,6 +64,14 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                               color: LightColors.sPurpleLL, width: 2)),
                       prefixIcon: const Icon(Icons.video_call),
                       hintText: 'Channel Name',
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            showOptionsDialog(context);
+                          });
+                        },
+                        icon: const Icon(Icons.more_vert),
+                      ),
                     ),
                   ),
                 ),
@@ -158,5 +167,39 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
     });
 
     print('channel name selected: $channelNameSelection');
+  }
+}
+
+showOptionsDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return const OptionsWidget();
+    },
+  );
+}
+
+class OptionsWidget extends StatelessWidget {
+  const OptionsWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+        title: const Text('Select Channel'),
+        children: <Widget>[
+          SimpleDialogOption(
+          onPressed: () { Navigator.pop(context); },
+          child: const Text('Option 1'),
+          ),
+          SimpleDialogOption(
+          onPressed: () { Navigator.pop(context); },
+          child: const Text('Option 2'),
+          ),
+          SimpleDialogOption(
+            onPressed: () { Navigator.pop(context); },
+            child: const Text('Option 3'),
+          ),
+        ]
+    );
   }
 }
