@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/utils/back_button.dart';
 import 'package:shipping_inspection_app/utils/taskcontainer.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
+import 'package:shipping_inspection_app/add_task.dart';
 
 
 class TasksPage extends StatelessWidget {
@@ -38,7 +39,12 @@ class TasksPage extends StatelessWidget {
                       ),
                       child: TextButton(
 
-                        onPressed: () {  },
+                        onPressed: () {  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddTask(),
+                          ),
+                        ); },
                         child: Center(
                           child: Text(
                             'Add task',
@@ -46,6 +52,7 @@ class TasksPage extends StatelessWidget {
                                 color: Colors.white,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 16),
+
                           ),
                         ),
                       ),

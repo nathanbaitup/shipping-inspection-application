@@ -18,7 +18,7 @@ class MyBackButton extends StatelessWidget {
           child: Icon(
             Icons.arrow_back_ios,
             size: 25,
-            color: LightColors.sDarkBlue,
+            color: LightColors.sPurple,
           ),
         ),
       ),
