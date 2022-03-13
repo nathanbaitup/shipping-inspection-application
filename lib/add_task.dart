@@ -77,19 +77,25 @@ class AddTask extends StatelessWidget {
                               spacing: 10.0,
                               children: <Widget>[
                                 Chip(
-                                  label: Text("To-Do"),
                                   labelStyle: TextStyle(color: Colors.white),
                                   backgroundColor: LightColors.sRed,
+                                    label: Container(
+                                      child: Text("To-Do"),
+                                    )
 
                                 ),
                                 Chip(
-                                  label: Text("In Progress"),
                                   backgroundColor: LightColors.sDarkYellow,
+                                  label: Container(
+                                    child: Text("In Progress"),
+                                  )
 
                                 ),
                                 Chip(
-                                  label: Text("Done"),
                                   backgroundColor: LightColors.sBlue,
+                                    label: Container(
+                                  child: Text("Done"),
+                                )
 
                                 ),
 
