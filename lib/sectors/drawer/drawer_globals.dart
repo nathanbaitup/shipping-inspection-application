@@ -6,6 +6,8 @@ String username = "Current User";
 
 List<bool> historyPrefs = List<bool>.filled(5, true, growable: false);
 
+List<String> savedChannels = List<String>.filled(3, "> Empty <", growable: false);
+
 void addRecord(type, user, dateTime, section) {
   records.add(Record(type, user, dateTime, section));
 }
