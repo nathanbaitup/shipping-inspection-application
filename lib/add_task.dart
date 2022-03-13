@@ -80,6 +80,8 @@ class AddTask extends StatelessWidget {
                                   labelStyle: TextStyle(color: Colors.white),
                                   backgroundColor: LightColors.sRed,
                                     label: Container(
+                                      padding: EdgeInsets.all(7),
+
                                       child: Text("To-Do"),
                                     )
 
@@ -87,14 +89,18 @@ class AddTask extends StatelessWidget {
                                 Chip(
                                   backgroundColor: LightColors.sDarkYellow,
                                   label: Container(
+                                    padding: EdgeInsets.all(7),
                                     child: Text("In Progress"),
                                   )
 
                                 ),
                                 Chip(
-                                  backgroundColor: LightColors.sBlue,
+                                    labelStyle: TextStyle(color: Colors.white),
+                                    backgroundColor: LightColors.sBlue,
                                     label: Container(
-                                  child: Text("Done"),
+                                      padding: EdgeInsets.all(7),
+
+                                      child: Text("Done"),
                                 )
 
                                 ),
