@@ -1,7 +1,8 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
+import 'package:flutter/services.dart';
+import 'dart:math';
 import 'package:shipping_inspection_app/sectors/communication/active-video-call.dart';
 import 'package:shipping_inspection_app/shared/loading.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
@@ -67,21 +68,65 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                 ),
                 Container(
                   alignment: Alignment.bottomCenter,
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: MediaQuery.of(context).size.width * 0.16,
-                  child: MaterialButton(
-                    onPressed: () {
-                      addChannelRecord();
-                      _performChannelNameConnection();
-                    },
-                    color: LightColors.sPurple,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    child: const Text('Join/Create Channel'),
-                    textColor: Colors.white,
+                  padding: const EdgeInsets.only(top: 15),
+                  child: Column(
+                    children: [
+                      MaterialButton(
+                      onPressed: () {
+                        addChannelRecord();
+                        _performChannelNameConnection();
+                      },
+                      color: LightColors.sPurple,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      child: const Text('Join/Create Channel'),
+                      textColor: Colors.white,
+                      ),
+
+                      MaterialButton(
+                        onPressed: () {
+                          channelClipboard(context);
+                        },
+                        color: LightColors.sPurpleL,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        child: const Text('Copy to Clipboard'),
+                        textColor: Colors.white,
+                      ),
+
+                      MaterialButton(
+                        onPressed: () {
+                          channelGenerate();
+                        },
+                        color: LightColors.sPurpleLL,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        child: const Text('Generate Channel'),
+                        textColor: Colors.white,
+                      ),
+                  ]
                   ),
                 )
               ]));
+  }
+
+  void channelClipboard(BuildContext context) {
+    Clipboard.setData(ClipboardData(text: _channelNameController.text));
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Copied to Clipboard!')),
+    );
+  }
+
+  void channelGenerate() {
+    String output = "";
+    var r = Random();
+    const _capitalChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const _numChars = '1234567890';
+    output = ("IDWAL-" +
+        List.generate(3, (index) => _capitalChars[r.nextInt(_capitalChars.length)]).join() +
+        List.generate(3, (index) => _numChars[r.nextInt(_numChars.length)]).join());
+    _channelNameController.text = output;
   }
 
   void addChannelRecord() {
