@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
 import 'package:shipping_inspection_app/sectors/communication/active-video-call.dart';
+import 'package:shipping_inspection_app/sectors/communication/channel.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_help.dart';
 import 'package:shipping_inspection_app/shared/loading.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
@@ -188,31 +189,24 @@ showOptionsDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return const OptionsWidget();
+      return OptionsWidget(channels: getDisplayChannels());
     },
   );
 }
 
 class OptionsWidget extends StatelessWidget {
-  const OptionsWidget({Key? key}) : super(key: key);
+  const OptionsWidget({Key? key, required this.channels}) : super(key: key);
+
+  final List<Channel> channels;
 
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
         title: const Text('Select Channel To Paste'),
         children: <Widget>[
-          SimpleDialogOption(
-          onPressed: () { Navigator.pop(context); },
-          child: Text('1: ' + globals.savedChannels[0]),
-          ),
-          SimpleDialogOption(
-          onPressed: () { Navigator.pop(context); },
-          child: Text('2: ' + globals.savedChannels[1]),
-          ),
-          SimpleDialogOption(
-            onPressed: () { Navigator.pop(context); },
-            child: Text('3: ' + globals.savedChannels[2]),
-          ),
+          channelOption(context, channels[0]),
+          channelOption(context, channels[1]),
+          channelOption(context, channels[2]),
         ]
     );
   }
@@ -250,4 +244,55 @@ class SaveWidget extends StatelessWidget {
         ]
     );
   }
+}
+
+List<Channel> getDisplayChannels() {
+  List<Channel> displayChannels = [];
+
+  for(int i = 0; globals.savedChannels.length > i; i++) {
+    if (globals.savedChannels[i] != " ") {
+      displayChannels.add(
+        Channel(
+          i,
+          globals.savedChannels[i],
+          false,
+        )
+      );
+    } else {
+      displayChannels.add(
+        Channel(
+          i,
+          "Empty",
+          true,
+        )
+      );
+    }
+  }
+  return displayChannels;
+}
+
+SimpleDialogOption channelOption(BuildContext context, Channel channel) {
+  FontStyle emptyFont = FontStyle.normal;
+
+  if(channel.empty) { emptyFont = FontStyle.italic; }
+  else { emptyFont = FontStyle.normal; }
+
+  return SimpleDialogOption(
+    onPressed: () { Navigator.pop(context); },
+    child: Row(
+      children: [
+        Text(
+          channel.channelID.toString() + ": "
+        ),
+        Text(
+          channel.name,
+          style: TextStyle(
+            fontStyle: emptyFont
+          ),
+        ),
+      ]
+    ),
+
+
+  );
 }
