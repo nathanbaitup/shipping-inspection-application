@@ -56,7 +56,7 @@ class _SurveyHubState extends State<SurveyHub> {
                     width: screenWidth,
                     padding: const EdgeInsets.all(0.0),
                     decoration: const BoxDecoration(
-                        color: LightColors.sPurple,
+                        color: LightColors.sLavender,
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(30.0),
                           bottomLeft: Radius.circular(30.0),
@@ -66,7 +66,7 @@ class _SurveyHubState extends State<SurveyHub> {
                         "AR Hub",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontSize: 28,
                           fontWeight: FontWeight.w500,
                         ),
