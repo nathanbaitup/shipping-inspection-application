@@ -16,105 +16,145 @@ class _MenuHistoryState extends State<MenuHistory> {
     for (var i = 0; i < globals.records.length; i++) {
       var currentRecord = globals.records[i];
       List<String> currentRecordText = List<String>.filled(5, "");
+      var blockRecord = false;
 
       switch (currentRecord.type) {
+
+        // CATEGORY: Section Response Logging
         case "add":
           {
-            currentRecordText[0] = currentRecord.user;
-            currentRecordText[1] = " added a response to section ";
-            currentRecordText[2] = currentRecord.section;
-            currentRecordText[3] = " at ";
-            currentRecordText[4] =
-                DateFormat('kk:mm (yyyy-MM-dd)').format(currentRecord.dateTime);
+            if (globals.historyPrefs[1]) {
+              currentRecordText[0] = currentRecord.user;
+              currentRecordText[1] = " added a response to section ";
+              currentRecordText[2] = currentRecord.section;
+              currentRecordText[3] = " at ";
+              currentRecordText[4] =
+                  DateFormat('kk:mm (yyyy-MM-dd)').format(
+                      currentRecord.dateTime);
+            } else { blockRecord = true; }
           }
           break;
 
+        // CATEGORY: Section Entering Logging
         case "enter":
           {
-            currentRecordText[0] = currentRecord.user;
-            currentRecordText[1] = " visited the ";
-            currentRecordText[2] = currentRecord.section;
-            currentRecordText[3] = " section at ";
-            currentRecordText[4] =
-                DateFormat('kk:mm (yyyy-MM-dd)').format(currentRecord.dateTime);
+            if (globals.historyPrefs[0]) {
+              currentRecordText[0] = currentRecord.user;
+              currentRecordText[1] = " visited the ";
+              currentRecordText[2] = currentRecord.section;
+              currentRecordText[3] = " section at ";
+              currentRecordText[4] =
+                  DateFormat('kk:mm (yyyy-MM-dd)').format(
+                      currentRecord.dateTime);
+            } else { blockRecord = true; }
           }
           break;
 
+        // CATEGORY: Communications Logging
         case "call":
           {
-            currentRecordText[0] = currentRecord.user;
-            currentRecordText[1] = " joined a call channel called ";
-            currentRecordText[2] = currentRecord.section;
-            currentRecordText[3] = " at ";
-            currentRecordText[4] =
-                DateFormat('kk:mm (yyyy-MM-dd)').format(currentRecord.dateTime);
+            if (globals.historyPrefs[4]) {
+              currentRecordText[0] = currentRecord.user;
+              currentRecordText[1] = " joined a call channel called ";
+              currentRecordText[2] = currentRecord.section;
+              currentRecordText[3] = " at ";
+              currentRecordText[4] =
+                  DateFormat('kk:mm (yyyy-MM-dd)').format(
+                      currentRecord.dateTime);
+            } else { blockRecord = true; }
           }
           break;
 
+        // Unclear usage: For opening via QR
+        // CATEGORY: QR Usage Logging
         case "opened":
           {
-            currentRecordText[0] = currentRecord.user;
-            currentRecordText[1] = " opened ";
-            currentRecordText[2] = currentRecord.section;
-            currentRecordText[3] = " at ";
-            currentRecordText[4] =
-                DateFormat('kk:mm (yyyy-MM-dd)').format(currentRecord.dateTime);
+            if (globals.historyPrefs[3]) {
+              currentRecordText[0] = currentRecord.user;
+              currentRecordText[1] = " opened ";
+              currentRecordText[2] = currentRecord.section;
+              currentRecordText[3] = " at ";
+              currentRecordText[4] =
+                  DateFormat('kk:mm (yyyy-MM-dd)').format(
+                      currentRecord.dateTime);
+            } else { blockRecord = true; }
           }
           break;
 
+        // Unclear Usage: For leaving via QR
+        // CATEGORY: QR Usage Logging
         case "pressed":
           {
-            currentRecordText[0] = currentRecord.user;
-            currentRecordText[1] = " pressed ";
-            currentRecordText[2] = currentRecord.section;
-            currentRecordText[3] = " at ";
-            currentRecordText[4] =
-                DateFormat('kk:mm (yyyy-MM-dd)').format(currentRecord.dateTime);
+            if (globals.historyPrefs[3]) {
+              currentRecordText[0] = currentRecord.user;
+              currentRecordText[1] = " pressed ";
+              currentRecordText[2] = currentRecord.section;
+              currentRecordText[3] = " at ";
+              currentRecordText[4] =
+                  DateFormat('kk:mm (yyyy-MM-dd)').format(
+                      currentRecord.dateTime);
+            } else { blockRecord = true; }
           }
           break;
 
+        // CATEGORY: Settings Change Logging
         case "settings-permission-add":
           {
-            currentRecordText[0] = currentRecord.user;
-            currentRecordText[1] = " added device permissions for the ";
-            currentRecordText[2] = currentRecord.section;
-            currentRecordText[3] = " at ";
-            currentRecordText[4] =
-                DateFormat('kk:mm (yyyy-MM-dd)').format(currentRecord.dateTime);
+            if (globals.historyPrefs[2]) {
+              currentRecordText[0] = currentRecord.user;
+              currentRecordText[1] = " added device permissions for the ";
+              currentRecordText[2] = currentRecord.section;
+              currentRecordText[3] = " at ";
+              currentRecordText[4] =
+                  DateFormat('kk:mm (yyyy-MM-dd)').format(
+                      currentRecord.dateTime);
+            } else { blockRecord = true; }
           }
           break;
 
+        // CATEGORY: Settings Change Logging
         case "settings-username-change":
           {
-            currentRecordText[1] = "changed the device's username to ";
-            currentRecordText[2] = currentRecord.section;
-            currentRecordText[3] = " at ";
-            currentRecordText[4] =
-                DateFormat('kk:mm (yyyy-MM-dd)').format(currentRecord.dateTime);
+            if (globals.historyPrefs[2]) {
+              currentRecordText[1] = "changed the device's username to ";
+              currentRecordText[2] = currentRecord.section;
+              currentRecordText[3] = " at ";
+              currentRecordText[4] =
+                  DateFormat('kk:mm (yyyy-MM-dd)').format(
+                      currentRecord.dateTime);
+            } else { blockRecord = true; }
           }
           break;
 
+        // CATEGORY: Settings Change Logging
         case "settings-language-change":
           {
-            currentRecordText[0] = currentRecord.user;
-            currentRecordText[1] = "changed the device's language to ";
-            currentRecordText[2] = currentRecord.section;
-            currentRecordText[3] = " at ";
-            currentRecordText[4] =
-                DateFormat('kk:mm (yyyy-MM-dd)').format(currentRecord.dateTime);
+            if (globals.historyPrefs[2]) {
+              currentRecordText[0] = currentRecord.user;
+              currentRecordText[1] = "changed the device's language to ";
+              currentRecordText[2] = currentRecord.section;
+              currentRecordText[3] = " at ";
+              currentRecordText[4] =
+                  DateFormat('kk:mm (yyyy-MM-dd)').format(
+                      currentRecord.dateTime);
+            } else { blockRecord = true; }
           }
           break;
 
         default:
           {
             currentRecordText[0] = "NULL RECORD";
+            blockRecord = true;
           }
           break;
       }
 
-      recordListTiles.add(RecordWidget(
-        record: currentRecordText,
-      ));
+      if(!blockRecord) {
+        print("record added" + currentRecordText.toString());
+        recordListTiles.add(RecordWidget(
+          record: currentRecordText,
+        ));
+      }
     }
     return recordListTiles;
   }

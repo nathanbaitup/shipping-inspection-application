@@ -172,7 +172,10 @@ class _SurveySectionState extends State<SurveySection> {
                 style: ElevatedButton.styleFrom(primary: LightColors.sPurpleL),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  globals.addRecord("add", globals.getUsername(),
+                      DateTime.now(), pageTitle);
+                },
                 child: const Text('Save Responses'),
                 style: ElevatedButton.styleFrom(primary: LightColors.sPurpleLL),
               ),
