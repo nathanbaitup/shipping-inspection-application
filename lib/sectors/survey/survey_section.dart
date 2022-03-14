@@ -5,7 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/utils/camera_screen.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
-import '../ar/new_ar_plugin_hub.dart';
+import '../ar/new_ar_hub.dart';
 import '../drawer/drawer_globals.dart' as globals;
 
 QuestionBrain questionBrain = QuestionBrain();

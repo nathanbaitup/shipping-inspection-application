@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:shipping_inspection_app/shared/loading.dart';
 
-import '../sectors/ar/new_ar_plugin_hub.dart';
+import '../sectors/ar/new_ar_hub.dart';
 import '../sectors/drawer/drawer_globals.dart' as history_globals;
 import '../sectors/questions/question_brain.dart';
 import 'colours.dart';
