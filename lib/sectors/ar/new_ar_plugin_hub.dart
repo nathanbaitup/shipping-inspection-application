@@ -9,8 +9,6 @@ import 'package:ar_flutter_plugin/datatypes/config_planedetection.dart';
 import 'package:ar_flutter_plugin/datatypes/hittest_result_types.dart';
 import 'package:ar_flutter_plugin/datatypes/node_types.dart';
 import 'package:ar_flutter_plugin/managers/ar_location_manager.dart';
-import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
-import 'package:ar_flutter_plugin/managers/ar_object_manager.dart';
 import 'package:ar_flutter_plugin/managers/ar_anchor_manager.dart';
 import 'package:ar_flutter_plugin/models/ar_anchor.dart';
 import 'package:ar_flutter_plugin/models/ar_hittest_result.dart';
@@ -123,7 +121,7 @@ class _NewARHubState extends State<NewARHub> {
                       ),
                       const Spacer(),
                       RawMaterialButton(
-                        onPressed: () => _returnToSectionScreen(),
+                        onPressed: () => onReset(),
                         elevation: 5.0,
                         fillColor: LightColors.sPurpleLL,
                         shape: const CircleBorder(),
@@ -239,6 +237,18 @@ class _NewARHubState extends State<NewARHub> {
     } else {
       arSessionManager.onError("Failed to add anchor.");
     }
+  }
+
+  // Removes all nodes and anchors on the screen to return to a clean view.
+  Future<void> onReset() async {
+    for (var node in nodes) {
+      arObjectManager.removeNode(node);
+    }
+    for (var anchor in anchors) {
+      arAnchorManager.removeAnchor(anchor);
+    }
+    nodes = [];
+    anchors = [];
   }
   // END REFERENCE
 
