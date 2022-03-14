@@ -1,3 +1,7 @@
+import 'package:ar_flutter_plugin/managers/ar_location_manager.dart';
+import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
+import 'package:ar_flutter_plugin/managers/ar_object_manager.dart';
+import 'package:ar_flutter_plugin/managers/ar_anchor_manager.dart';
 import 'package:flutter/material.dart';
 // ---------- AR Plugins ----------
 import 'package:ar_flutter_plugin/ar_flutter_plugin.dart';
@@ -28,6 +32,7 @@ class NewARHub extends StatefulWidget {
 class _NewARHubState extends State<NewARHub> {
   late ARSessionManager arSessionManager;
   late ARObjectManager arObjectManager;
+  late ARAnchorManager arAnchorManager;
 
   @override
   void dispose() {
@@ -46,19 +51,49 @@ class _NewARHubState extends State<NewARHub> {
         appBar: AppBar(
           title: const Text('New AR'),
         ),
-        body: SafeArea(
-          child: Stack(
-        children: <Widget>[
-        ],
-      ),
+        body: Stack(
+          children: [
+            ARView(
+              onARViewCreated: onARViewCreated,
+            ),
+            Align(
+              alignment: FractionalOffset.bottomCenter,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () { print("Placeholder"); },
+                        child: const Text("Test Button")),
+                  ]),
+            )
+        ])
+      )
     );
+  }
+
+  void onARViewCreated(
+      ARSessionManager arSessionManager,
+      ARObjectManager arObjectManager,
+      ARAnchorManager arAnchorManager,
+      ARLocationManager arLocationManager) {
+    this.arSessionManager = arSessionManager;
+    this.arObjectManager = arObjectManager;
+    this.arAnchorManager = arAnchorManager;
+
+    this.arSessionManager.onInitialize(
+      showFeaturePoints: false,
+      showPlanes: true,
+      customPlaneTexturePath: "images/avatar.png",
+      showWorldOrigin: true,
+    );
+    this.arObjectManager.onInitialize();
   }
 
   // Returns the user to the survey_section screen, ensuring they are returned to the section they are currently surveying.
   void _returnToSectionScreen() async {
     // If the user opened a section through the QR scanner, then only one screen
     // needs to be removed from the stack.
-    if (openThroughQR) {
+    if (widget.openThroughQR) {
       Navigator.pop(context);
       Navigator.pushAndRemoveUntil(
         context,

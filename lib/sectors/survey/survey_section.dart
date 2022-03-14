@@ -5,6 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/utils/camera_screen.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
+import '../ar/new_ar_plugin_hub.dart';
 import '../drawer/drawer_globals.dart' as globals;
 
 import '../ar/ar_hub.dart';
@@ -56,7 +57,7 @@ class _SurveySectionState extends State<SurveySection> {
           final capturedImages = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ArHub(
+              builder: (context) => NewARHub(
                 questionID: widget.questionID,
                 arContent: arContentPush,
                 openThroughQR: false,
