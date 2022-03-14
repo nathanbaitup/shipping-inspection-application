@@ -1,13 +1,20 @@
-import 'package:ar_flutter_plugin/datatypes/config_planedetection.dart';
-import 'package:ar_flutter_plugin/managers/ar_location_manager.dart';
-import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
-import 'package:ar_flutter_plugin/managers/ar_object_manager.dart';
-import 'package:ar_flutter_plugin/managers/ar_anchor_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:vector_math/vector_math_64.dart' as vector_math;
+
 // ---------- AR Plugins ----------
 import 'package:ar_flutter_plugin/ar_flutter_plugin.dart';
 import 'package:ar_flutter_plugin/managers/ar_object_manager.dart';
 import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
+import 'package:ar_flutter_plugin/datatypes/config_planedetection.dart';
+import 'package:ar_flutter_plugin/datatypes/hittest_result_types.dart';
+import 'package:ar_flutter_plugin/datatypes/node_types.dart';
+import 'package:ar_flutter_plugin/managers/ar_location_manager.dart';
+import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
+import 'package:ar_flutter_plugin/managers/ar_object_manager.dart';
+import 'package:ar_flutter_plugin/managers/ar_anchor_manager.dart';
+import 'package:ar_flutter_plugin/models/ar_anchor.dart';
+import 'package:ar_flutter_plugin/models/ar_hittest_result.dart';
+import 'package:ar_flutter_plugin/models/ar_node.dart';
 
 import '../../utils/colours.dart';
 import '../questions/question_brain.dart';
@@ -36,106 +43,118 @@ class _NewARHubState extends State<NewARHub> {
   late ARObjectManager arObjectManager;
   late ARAnchorManager arAnchorManager;
 
+  // Nodes are the actual objects themselves shown within the AR view on device.
+  // These function by correlating to an anchor to display at a fixed point as decided by the user.
+  List<ARNode> nodes = [];
+
+  // Anchors are places where the user has tapped on the AR scene, where an object
+  // Should be displayed based on its plane and axis.
+  List<ARAnchor> anchors = [];
+
   @override
   void dispose() {
     super.dispose();
+    // Ensures the arSession is closed correctly when leaving the scene.
     arSessionManager.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        _returnToSectionScreen();
-        return false;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.arContent[0]),
-        ),
-        body: Stack(
-          children: [
-            ARView(
-              onARViewCreated: onARViewCreated,
-              planeDetectionConfig: PlaneDetectionConfig.horizontalAndVertical,
+        onWillPop: () async {
+          _returnToSectionScreen();
+          return false;
+        },
+        child: Scaffold(
+            appBar: AppBar(
+              title: Text(widget.arContent[0]),
             ),
-            Row(
-              children: [
-                ARQuestionWidget(
-                  arContent: widget.arContent,
-                ),
-                ARContentWidget(
-                  arContent: widget.arContent,
-                ),
-              ],
-            ),
-            Positioned.fill(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Row(
-                  children: [
-                    RawMaterialButton(
-                      onPressed: () {
-                        history_globals.addRecord(
-                            "pressed",
-                            history_globals.getUsername(),
-                            DateTime.now(),
-                            'take screenshot');
-                      },
-                      elevation: 5.0,
-                      fillColor: LightColors.sPurple,
-                      shape: const CircleBorder(),
-                      padding: const EdgeInsets.all(15.0),
-                      child: const Icon(
-                        Icons.photo_camera,
-                        size: 35.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const Spacer(),
-                    RawMaterialButton(
-                      onPressed: () async => _returnToSectionScreen(),
-                      elevation: 5.0,
-                      fillColor: LightColors.sPurpleL,
-                      shape: const CircleBorder(),
-                      padding: const EdgeInsets.all(10.0),
-                      child: const Icon(
-                        Icons.check,
-                        size: 35.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const Spacer(),
-                    RawMaterialButton(
-                      onPressed: () => _returnToSectionScreen(),
-                      elevation: 5.0,
-                      fillColor: LightColors.sPurpleLL,
-                      shape: const CircleBorder(),
-                      padding: const EdgeInsets.all(10.0),
-                      child: const Icon(
-                        Icons.close,
-                        size: 35.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 75.0,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: const [],
+            body: Stack(children: [
+              ARView(
+                onARViewCreated: onARViewCreated,
+                planeDetectionConfig:
+                    PlaneDetectionConfig.horizontalAndVertical,
+              ),
+              Row(
+                children: [
+                  ARQuestionWidget(
+                    arContent: widget.arContent,
+                  ),
+                  ARContentWidget(
+                    arContent: widget.arContent,
+                  ),
+                ],
+              ),
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Row(
+                    children: [
+                      RawMaterialButton(
+                        onPressed: () {
+                          history_globals.addRecord(
+                              "pressed",
+                              history_globals.getUsername(),
+                              DateTime.now(),
+                              'take screenshot');
+                        },
+                        elevation: 5.0,
+                        fillColor: LightColors.sPurple,
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(15.0),
+                        child: const Icon(
+                          Icons.photo_camera,
+                          size: 35.0,
+                          color: Colors.white,
                         ),
                       ),
-                    ),
-                  ],
+                      const Spacer(),
+                      RawMaterialButton(
+                        onPressed: () async => _returnToSectionScreen(),
+                        elevation: 5.0,
+                        fillColor: LightColors.sPurpleL,
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(10.0),
+                        child: const Icon(
+                          Icons.check,
+                          size: 35.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const Spacer(),
+                      RawMaterialButton(
+                        onPressed: () => _returnToSectionScreen(),
+                        elevation: 5.0,
+                        fillColor: LightColors.sPurpleLL,
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(10.0),
+                        child: const Icon(
+                          Icons.close,
+                          size: 35.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 75.0,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: const [],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-        ])
-      )
-    );
+            ])));
   }
 
+  // REFERENCE accessed 14/03/2022 https://github.com/CariusLars/ar_flutter_plugin
+  // Used the examples provided to create an AR view that can be interacted with
+  // and manipulated on the screen.
+
+  // Initialises the AR view.
   void onARViewCreated(
       ARSessionManager arSessionManager,
       ARObjectManager arObjectManager,
@@ -145,14 +164,83 @@ class _NewARHubState extends State<NewARHub> {
     this.arObjectManager = arObjectManager;
     this.arAnchorManager = arAnchorManager;
 
+    // Sets up the AR environment allowing for items to be added and moved around
+    // on the plane view.
     this.arSessionManager.onInitialize(
-      showFeaturePoints: false,
-      showPlanes: true,
-      customPlaneTexturePath: "images/avatar.png",
-      showWorldOrigin: true,
-    );
+          // Shows where a point has been detected within AR.
+          showFeaturePoints: false,
+          // Show where object can be placed and the texture for the object.
+          // TODO: set to false after testing is completed.
+          showPlanes: true,
+          customPlaneTexturePath: "images/triangle.png",
+          // Allow object to move
+          handlePans: true,
+          // Allow object to rotation
+          handleRotation: true,
+        );
+
+    // Sets up the AR object manager to manage an object being added or moved in
+    // the AR scene.
     this.arObjectManager.onInitialize();
+    // On each press adds a new object onto the AR session.
+    this.arSessionManager.onPlaneOrPointTap = onPlaneOrPointTap;
   }
+
+  // Function that handles adding an object to the AR scene.
+  // Currently adds a model of a duck following the example.
+  // TODO: update code to only allow for one item to be displayed.
+  // TODO: display the item automatically and not with a tap.
+  // TODO: allow for multiple items to be loaded dynamically based on the question ID.
+  Future<void> onPlaneOrPointTap(List<ARHitTestResult> userTapResults) async {
+    // Gets the users hit point and sets the first tap to a plane type.
+    var arObjectResult = userTapResults
+        .firstWhere((pointHit) => pointHit.type == ARHitTestResultType.plane);
+
+    // Makes the users tapped point a new anchor point ready to add the node object.
+    var newAnchor =
+        ARPlaneAnchor(transformation: arObjectResult.worldTransform);
+
+    // Adds the new anchor to the AnchorManager and returns true.
+    bool? didAddAnchor = await arAnchorManager.addAnchor(newAnchor);
+
+    // Checks if anchor has been added to add the object to the anchors list
+    // to ensure that the node object is displayed correctly on the screen.
+    if (didAddAnchor == true) {
+      anchors.add(newAnchor);
+
+      // ----- CREATING AN AR OBJECT -----
+      // The node is what is displayed to the user in the AR view, linked to an anchor point.
+      var newNode = ARNode(
+        // Sets the type of object
+        type: NodeType.webGLB,
+        // Where the object is rendered from.
+        // TODO: Change the object uri to dynamically load the correct model or image based on what is being surveyed.
+        uri:
+            "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb",
+        // Sets the overall size of the object on the device.
+        scale: vector_math.Vector3(0.2, 0.2, 0.2),
+        // Sets the position to the anchor point created when pressing on the plane.
+        position: vector_math.Vector3(0.0, 0.0, 0.0),
+        // Sets the rotation to follow the plane axis.
+        rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
+      );
+
+      // Takes the node just created and links it to the anchor as added by the
+      // user to display where pressed.
+      bool? didAddNodeToAnchor =
+          await arObjectManager.addNode(newNode, planeAnchor: newAnchor);
+      // Checks if the node could be added to the anchor then saves the node object
+      // to the nodes list.
+      if (didAddNodeToAnchor == true) {
+        nodes.add(newNode);
+      } else {
+        arSessionManager.onError("Failed to add node to anchor.");
+      }
+    } else {
+      arSessionManager.onError("Failed to add anchor.");
+    }
+  }
+  // END REFERENCE
 
   // Returns the user to the survey_section screen, ensuring they are returned to the section they are currently surveying.
   void _returnToSectionScreen() async {
