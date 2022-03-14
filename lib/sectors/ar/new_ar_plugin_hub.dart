@@ -1,3 +1,4 @@
+import 'package:ar_flutter_plugin/datatypes/config_planedetection.dart';
 import 'package:ar_flutter_plugin/managers/ar_location_manager.dart';
 import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
 import 'package:ar_flutter_plugin/managers/ar_object_manager.dart';
@@ -50,12 +51,13 @@ class _NewARHubState extends State<NewARHub> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('New AR'),
+          title: Text(widget.arContent[0]),
         ),
         body: Stack(
           children: [
             ARView(
               onARViewCreated: onARViewCreated,
+              planeDetectionConfig: PlaneDetectionConfig.horizontalAndVertical,
             ),
             Row(
               children: [
