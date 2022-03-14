@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
-import 'package:shipping_inspection_app/utils/homecontainer.dart';
 import 'package:shipping_inspection_app/utils/back_button.dart';
 import 'package:shipping_inspection_app/utils/textfield.dart';
-import 'package:shipping_inspection_app/home.dart';
 
 class AddTask extends StatelessWidget {
   @override
@@ -22,7 +20,10 @@ class AddTask extends StatelessWidget {
     ),
         child: Column(
           children: <Widget>[
-            MyBackButton(),
+            Padding(child: MyBackButton(),
+              padding: EdgeInsets.only(left: 20),
+
+            ),
             SizedBox(height: 30.0),
             Expanded(
                 child: SingleChildScrollView(
@@ -48,7 +49,7 @@ class AddTask extends StatelessWidget {
                         minLines: 3,
 
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 15),
                       Container(
                         alignment: Alignment.topLeft,
                         child: Column(
@@ -57,7 +58,7 @@ class AddTask extends StatelessWidget {
                             Text(
                               'Stage',
                               style: TextStyle(
-                                color: Colors.black54,
+                                color: Colors.black87,
                                 fontSize: 20,
                                   fontWeight:FontWeight.w500
 
