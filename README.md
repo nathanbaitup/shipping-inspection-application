@@ -36,6 +36,7 @@ Instructions on their use and documentation are provided below.
 | [permission_handler][permission_handler] | 8.0.0+1 | Used to request the permissions when initially launching th eapplication. |
 | [flutter_spinkit][flutter_spinkit] | 5.1.0 | Provides loading animations to the application |
 | [firebase_core][firebase_core] | 1.13.1 | Allows access to the tools that allow the use of firebase |
+| [cloud_firestore][cloud_firestore] | 3.1.10 | Allows access to the use of fire store so we can store that data in the database |
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. Place all links to documentation used here to keep README clean. Ref: http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
@@ -53,6 +54,7 @@ Instructions on their use and documentation are provided below.
 [permission_handler]: <https://pub.dev/packages/permission_handler>
 [flutter_spinkit]: <https://pub.dev/packages/flutter_spinkit>
 [firebase_core]: <https://pub.dev/packages/firebase_core>
+[cloud_firestore]: <https://pub.dev/packages/cloud_firestore>
 [dart_tech]: <https://dart.dev/>
 [flutter_tech]: <https://flutter.dev/>
 [agora_tech]: <https://www.agora.io/en/>
