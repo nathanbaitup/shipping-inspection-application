@@ -73,14 +73,14 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                             icon: const Icon(Icons.save),
                             onPressed: () {
                               setState(() {
-                                showSaveDialog(context);
+                                showOptionsDialog(context, "Select Channel to Save");
                               });
                             },
                           ),
                           IconButton(
                             onPressed: () {
                               setState(() {
-                                showOptionsDialog(context);
+                                showOptionsDialog(context, "Select Channel to Paste");
                               });
                             },
                             icon: const Icon(Icons.more_vert),
@@ -185,62 +185,29 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
   }
 }
 
-showOptionsDialog(BuildContext context) {
+showOptionsDialog(BuildContext context, String title) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return OptionsWidget(channels: getDisplayChannels());
+      return OptionsWidget(channels: getDisplayChannels(), title: title);
     },
   );
 }
 
 class OptionsWidget extends StatelessWidget {
-  const OptionsWidget({Key? key, required this.channels}) : super(key: key);
+  const OptionsWidget({Key? key, required this.channels, required this.title}) : super(key: key);
 
   final List<Channel> channels;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-        title: const Text('Select Channel To Paste'),
+        title: Text(title),
         children: <Widget>[
           channelOption(context, channels[0]),
           channelOption(context, channels[1]),
           channelOption(context, channels[2]),
-        ]
-    );
-  }
-}
-
-showSaveDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return const SaveWidget();
-    },
-  );
-}
-
-class SaveWidget extends StatelessWidget {
-  const SaveWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SimpleDialog(
-        title: const Text('Select Channel To Overwrite'),
-        children: <Widget>[
-          SimpleDialogOption(
-            onPressed: () { Navigator.pop(context); },
-            child: Text('1: ' + globals.savedChannels[0]),
-          ),
-          SimpleDialogOption(
-            onPressed: () { Navigator.pop(context); },
-            child: Text('2: ' + globals.savedChannels[1]),
-          ),
-          SimpleDialogOption(
-            onPressed: () { Navigator.pop(context); },
-            child: Text('3: ' + globals.savedChannels[2]),
-          ),
         ]
     );
   }
@@ -282,7 +249,7 @@ SimpleDialogOption channelOption(BuildContext context, Channel channel) {
     child: Row(
       children: [
         Text(
-          channel.channelID.toString() + ": "
+          (channel.channelID + 1).toString() + ": "
         ),
         Text(
           channel.name,
