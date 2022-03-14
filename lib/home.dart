@@ -133,7 +133,7 @@ class HomeState extends State<Home> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               const Text(
-                                'My Tasks',
+                                'My tasks',
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                   fontSize: 23.0,
