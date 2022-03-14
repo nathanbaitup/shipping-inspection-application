@@ -3,11 +3,9 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
 import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
-import 'package:vector_math/vector_math_64.dart' as vector;
 
 import '../questions/question_brain.dart';
 import '../survey/survey_section.dart';
@@ -41,7 +39,6 @@ class ArHub extends StatefulWidget {
 
 class _ArHubState extends State<ArHub> {
   final GlobalKey _key = GlobalKey();
-  late ArCoreController arCoreController;
   late bool openThroughQR;
   late String pageTitle;
   List<String> imagePaths = [];
@@ -104,10 +101,6 @@ class _ArHubState extends State<ArHub> {
             // Stack View is used to place widgets on top of the camera view to display questions to the user.
             child: Stack(
               children: <Widget>[
-                ArCoreView(
-                  onArCoreViewCreated: _onArCoreViewCreated,
-                  enableTapRecognizer: true,
-                ),
                 Row(
                   children: [
                     ARQuestionWidget(
@@ -187,73 +180,6 @@ class _ArHubState extends State<ArHub> {
         ),
       ),
     );
-  }
-
-  // ----------- THIS IS THE AR CREATOR -----------
-  // Use the controller to add items to the screen.
-  // eg: the surveyor scans a QR code, that opens this controller with the questions and item being inspected on the screen.
-  void _onArCoreViewCreated(ArCoreController controller) async {
-    arCoreController = controller;
-
-    _addSphere(arCoreController);
-    _addCylinder(arCoreController);
-    _addCube(arCoreController);
-  }
-
-  // Creates a sphere and adds to the creator view.
-  void _addSphere(ArCoreController controller) async {
-    final material =
-        ArCoreMaterial(color: const Color.fromARGB(120, 66, 134, 244));
-    final sphere = ArCoreSphere(
-      materials: [material],
-      radius: 0.1,
-    );
-    final node = ArCoreNode(
-      shape: sphere,
-      position: vector.Vector3(0, 0, -1.5),
-    );
-    controller.addArCoreNode(node);
-  }
-
-  // Creates a cylinder and adds to the creator view.
-  void _addCylinder(ArCoreController controller) async {
-    final material = ArCoreMaterial(
-      color: Colors.red,
-      reflectance: 1.0,
-    );
-    final cylinder = ArCoreCylinder(
-      materials: [material],
-      radius: 0.5,
-      height: 0.3,
-    );
-    final node = ArCoreNode(
-      shape: cylinder,
-      position: vector.Vector3(0.0, -0.5, -2.0),
-    );
-    controller.addArCoreNode(node);
-  }
-
-  // Creates a cube and adds to the creator view.
-  void _addCube(ArCoreController controller) async {
-    final material = ArCoreMaterial(
-      color: const Color.fromARGB(120, 66, 134, 244),
-      metallic: 1.0,
-    );
-    final cube = ArCoreCube(
-      materials: [material],
-      size: vector.Vector3(0.5, 0.5, 0.5),
-    );
-    final node = ArCoreNode(
-      shape: cube,
-      position: vector.Vector3(-0.5, 0.5, -3.5),
-    );
-    controller.addArCoreNode(node);
-  }
-
-  @override
-  void dispose() {
-    arCoreController.dispose();
-    super.dispose();
   }
 
   // REFERENCE ACCESSED 25/02/2022 https://www.kindacode.com/article/how-to-programmatically-take-screenshots-in-flutter/

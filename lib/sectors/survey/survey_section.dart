@@ -8,8 +8,6 @@ import 'package:shipping_inspection_app/utils/colours.dart';
 import '../ar/new_ar_plugin_hub.dart';
 import '../drawer/drawer_globals.dart' as globals;
 
-import '../ar/ar_hub.dart';
-
 QuestionBrain questionBrain = QuestionBrain();
 
 class SurveySection extends StatefulWidget {
