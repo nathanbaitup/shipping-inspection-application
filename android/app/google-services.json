@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "641842773769",
+    "project_id": "shipping-inspection-app",
+    "storage_bucket": "shipping-inspection-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641842773769:android:f9d1637ff76e2aaa209dd8",
+        "android_client_info": {
+          "package_name": "com.example.shipping_inspection_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "641842773769-ec4538tidosv4brb8aalvpu4m9scfjta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATShXTRsGmIccHH991ior76x0mPuQfayo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "641842773769-ec4538tidosv4brb8aalvpu4m9scfjta.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
