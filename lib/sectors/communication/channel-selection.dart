@@ -10,6 +10,8 @@ import 'package:shipping_inspection_app/shared/loading.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import '../drawer/drawer_globals.dart' as globals;
 
+final _channelNameController = TextEditingController();
+
 class ChannelNameSelection extends StatefulWidget {
   const ChannelNameSelection({Key? key}) : super(key: key);
 
@@ -20,7 +22,6 @@ class ChannelNameSelection extends StatefulWidget {
 class _ChannelNameSelectionState extends State<ChannelNameSelection> {
   // To store the channel name captured by the textfield.
   late String channelName;
-  final _channelNameController = TextEditingController();
   bool loading = false;
 
   @override
@@ -174,7 +175,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
       });
 
       Navigator.push(
-        this.context,
+        context,
         MaterialPageRoute(
             builder: (context) =>
                 VideoCallFragment(channelName: channelNameSelection)),
@@ -205,9 +206,9 @@ class OptionsWidget extends StatelessWidget {
     return SimpleDialog(
         title: Text(title),
         children: <Widget>[
-          channelOption(context, channels[0]),
-          channelOption(context, channels[1]),
-          channelOption(context, channels[2]),
+          channelOption(context, channels[0], title),
+          channelOption(context, channels[1], title),
+          channelOption(context, channels[2], title),
         ]
     );
   }
@@ -238,14 +239,38 @@ List<Channel> getDisplayChannels() {
   return displayChannels;
 }
 
-SimpleDialogOption channelOption(BuildContext context, Channel channel) {
+SimpleDialogOption channelOption(BuildContext context, Channel channel, String title) {
   FontStyle emptyFont = FontStyle.normal;
+  String mode = "";
 
   if(channel.empty) { emptyFont = FontStyle.italic; }
   else { emptyFont = FontStyle.normal; }
 
+  if(title == "Select Channel to Save") { mode = "save"; }
+  else if(title == "Select Channel to Paste") { mode = "paste"; }
+
   return SimpleDialogOption(
-    onPressed: () { Navigator.pop(context); },
+    onPressed: () {
+      switch(mode) {
+        case "save": {
+          print("SAVE");
+          if (_channelNameController.text.isNotEmpty) {
+            globals.savedChannels[channel.channelID] =
+            _channelNameController.text;
+          } else {
+            globals.savedChannels[channel.channelID] = " ";
+          }
+        }
+        break;
+        case "paste": {
+          print("PASTE");
+          _channelNameController.text =
+          globals.savedChannels[channel.channelID];
+        }
+        break;
+      }
+      Navigator.pop(context);
+      },
     child: Row(
       children: [
         Text(
