@@ -30,10 +30,12 @@ class _ShipAppState extends State<ShipApp> {
     return MaterialApp(
       title: 'Shipping Application',
       theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch().copyWith(
-        primary: LightColors.sPurple,
-        secondary: LightColors.sPurple,
-      )),
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: LightColors.sPurple,
+          secondary: LightColors.sPurple,
+        ),
+      ),
+      debugShowCheckedModeBanner: false,
       home: const MyHomePage(title: 'Idwal Vessel Inspection App'),
     );
   }
