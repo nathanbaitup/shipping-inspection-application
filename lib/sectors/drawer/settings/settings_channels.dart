@@ -32,7 +32,7 @@ class _SettingsChannelsState extends State<SettingsChannels> {
           ),
           IconButton(
             onPressed: () {
-              globals.savedChannels[channel.channelID] = " ";
+              deleteChannel(channel.channelID);
               setState(() {});
             },
             icon: const Icon(Icons.delete),
@@ -44,7 +44,9 @@ class _SettingsChannelsState extends State<SettingsChannels> {
       optionsRow = Row(children: <Widget>[
         IconButton(
           icon: const Icon(Icons.add),
-          onPressed: () {},
+          onPressed: () async {
+            createChannel(context, channel.channelID);
+          },
         ),
       ]);
     }
@@ -57,6 +59,45 @@ class _SettingsChannelsState extends State<SettingsChannels> {
       leading: const Icon(Icons.bookmark, color: LightColors.sPurple),
       trailing: optionsRow,
     );
+  }
+
+  void deleteChannel(int channelID) {
+    globals.savedChannels[channelID] = " ";
+  }
+
+  void createChannel(BuildContext context, int channelID) {
+    final dialogController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            title: const Text('New Channel'),
+            content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    onChanged: (value) { },
+                    controller: dialogController,
+                    decoration: const InputDecoration(hintText: "Enter Channel Here"),
+                  ),
+                ]
+            ),
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    globals.savedChannels[channelID] = dialogController.text;
+                    Navigator.pop(context);
+                    setState(() {});
+                  },
+                  child: Text('Submit')),
+            ]
+        );
+      },
+    );
+  }
+
+  void editChannel(Channel channel) {
+
   }
 
   @override
@@ -92,3 +133,4 @@ class _SettingsChannelsState extends State<SettingsChannels> {
   }
 
 }
+
