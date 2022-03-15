@@ -98,7 +98,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                 },
               ),
               SettingsTile.navigation(
-                title: const Text('Saved Channels'),
+                title: const Text('Channels'),
                 leading: const Icon(Icons.video_call,
                     color: LightColors.sPurple),
                 onPressed: (BuildContext context) {
@@ -183,15 +183,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                 }, initialValue: cameraSwitch,
 
               ),
-              SettingsTile.navigation(
-                title: const Text('Sound'),
-                leading: const Icon(Icons.volume_up,
-                    color: LightColors.sPurple),
-                onPressed: (BuildContext context) {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => const SettingsSound()));
-                },
-              ),
+
               SettingsTile.switchTile(
                 title: const Text('Microphone'),
                 activeSwitchColor: LightColors.sPurple,
@@ -217,6 +209,16 @@ class _MenuSettingsState extends State<MenuSettings> {
                     value = micSwitch;
                   });
                 }, initialValue: micSwitch,
+              ),
+
+              SettingsTile.navigation(
+                title: const Text('Sound'),
+                leading: const Icon(Icons.volume_up,
+                    color: LightColors.sPurple),
+                onPressed: (BuildContext context) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => const SettingsSound()));
+                },
               ),
             ]
           ),

@@ -253,7 +253,6 @@ SimpleDialogOption channelOption(BuildContext context, Channel channel, String t
     onPressed: () {
       switch(mode) {
         case "save": {
-          print("SAVE");
           if (_channelNameController.text.isNotEmpty) {
             globals.savedChannels[channel.channelID] =
             _channelNameController.text;
@@ -263,7 +262,6 @@ SimpleDialogOption channelOption(BuildContext context, Channel channel, String t
         }
         break;
         case "paste": {
-          print("PASTE");
           _channelNameController.text =
           globals.savedChannels[channel.channelID];
         }
