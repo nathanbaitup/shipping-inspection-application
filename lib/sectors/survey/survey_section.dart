@@ -12,7 +12,10 @@ QuestionBrain questionBrain = QuestionBrain();
 
 class SurveySection extends StatefulWidget {
   final String questionID;
-  const SurveySection({required this.questionID, Key? key}) : super(key: key);
+  final List<Image> capturedImages;
+  const SurveySection(
+      {required this.questionID, required this.capturedImages, Key? key})
+      : super(key: key);
 
   @override
   _SurveySectionState createState() => _SurveySectionState();
@@ -24,9 +27,18 @@ class _SurveySectionState extends State<SurveySection> {
   List<Text> displayQuestions = [];
   String pageTitle = '';
 
+  // Initializes the state and gets the questions, page title and record for the history feature.
+  @override
+  void initState() {
+    super.initState();
+    _addDisplayQuestions();
+    _addEnterRecord();
+    _initializeImageViewer();
+  }
+
   // Uses the question brain to get the page title and all the questions needed to display on the page
   // and then creates a text widget for each question to be displayed.
-  void addDisplayQuestions() {
+  void _addDisplayQuestions() {
     pageTitle = questionBrain.getPageTitle(widget.questionID);
     questionsToAsk = questionBrain.getQuestions(widget.questionID);
     for (var question in questionsToAsk) {
@@ -34,7 +46,16 @@ class _SurveySectionState extends State<SurveySection> {
     }
   }
 
-  void addEnterRecord() {
+  // Sets up the image viewer so if images have been taken within the AR view,
+  // they will be added to the image viewer.
+  void _initializeImageViewer() {
+    if (widget.capturedImages.isNotEmpty) {
+      imageViewer = imageViewer + widget.capturedImages;
+    }
+  }
+
+  // Adds what page has been accessed by the user to the history section.
+  void _addEnterRecord() {
     globals.addRecord(
         "enter", globals.getUsername(), DateTime.now(), pageTitle);
   }
@@ -42,7 +63,7 @@ class _SurveySectionState extends State<SurveySection> {
   // Checks if the camera permission has been granted and opens the AR hub for
   // the intended section loading the questions based on the current page to
   // display within the AR view.
-  void openARSection() async {
+  void _openARSection() async {
     if (await Permission.camera.status.isDenied) {
       await Permission.camera.request();
       debugPrint("Camera Permissions are required to access QR Scanner");
@@ -66,14 +87,6 @@ class _SurveySectionState extends State<SurveySection> {
         },
       );
     }
-  }
-
-  // Initializes the state and gets the questions, page title and record for the history feature.
-  @override
-  void initState() {
-    super.initState();
-    addDisplayQuestions();
-    addEnterRecord();
   }
 
   @override
@@ -167,14 +180,14 @@ class _SurveySectionState extends State<SurveySection> {
                 child: const Text('Add Images'),
               ),
               ElevatedButton(
-                onPressed: () async => openARSection(),
+                onPressed: () async => _openARSection(),
                 child: const Text('View in AR'),
                 style: ElevatedButton.styleFrom(primary: LightColors.sPurpleL),
               ),
               ElevatedButton(
                 onPressed: () {
-                  globals.addRecord("add", globals.getUsername(),
-                      DateTime.now(), pageTitle);
+                  globals.addRecord(
+                      "add", globals.getUsername(), DateTime.now(), pageTitle);
                 },
                 child: const Text('Save Responses'),
                 style: ElevatedButton.styleFrom(primary: LightColors.sPurpleLL),
