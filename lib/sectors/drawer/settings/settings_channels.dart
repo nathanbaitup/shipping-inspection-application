@@ -28,7 +28,10 @@ class _SettingsChannelsState extends State<SettingsChannels> {
         children: <Widget>[
           IconButton(
             icon: const Icon(Icons.edit),
-            onPressed: () {},
+            onPressed: () {
+              editChannel(channel, true);
+              setState(() {});
+            },
           ),
           IconButton(
             onPressed: () {
@@ -45,7 +48,7 @@ class _SettingsChannelsState extends State<SettingsChannels> {
         IconButton(
           icon: const Icon(Icons.add),
           onPressed: () async {
-            createChannel(context, channel.channelID);
+            editChannel(channel, false);
           },
         ),
       ]);
@@ -65,13 +68,22 @@ class _SettingsChannelsState extends State<SettingsChannels> {
     globals.savedChannels[channelID] = " ";
   }
 
-  void createChannel(BuildContext context, int channelID) {
+  void editChannel(Channel channel, bool edit) {
     final dialogController = TextEditingController();
+    String title = "";
+
+    if(edit) {
+      dialogController.text = channel.name;
+      title = "Edit Channel";
+    } else {
+      title = "New Channel";
+    }
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-            title: const Text('New Channel'),
+            title: Text(title),
             content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -85,7 +97,7 @@ class _SettingsChannelsState extends State<SettingsChannels> {
             actions: [
               ElevatedButton(
                   onPressed: () {
-                    globals.savedChannels[channelID] = dialogController.text;
+                    globals.savedChannels[channel.channelID] = dialogController.text;
                     Navigator.pop(context);
                     setState(() {});
                   },
@@ -94,10 +106,6 @@ class _SettingsChannelsState extends State<SettingsChannels> {
         );
       },
     );
-  }
-
-  void editChannel(Channel channel) {
-
   }
 
   @override

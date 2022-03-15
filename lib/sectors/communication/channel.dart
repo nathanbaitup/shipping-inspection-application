@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Channel {
   int channelID;
   String name;
@@ -9,7 +11,14 @@ class Channel {
 List<Channel> getDisplayChannels(List<String> savedChannels) {
   List<Channel> displayChannels = [];
 
+
   for(int i = 0; savedChannels.length > i; i++) {
+
+    //Ensure an empty string is recognised
+    if (savedChannels[i].trim() == "") {
+      savedChannels[i] = " ";
+    }
+
     if (savedChannels[i] != " ") {
       displayChannels.add(
           Channel(
