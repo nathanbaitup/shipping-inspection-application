@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as vector_math;
 
@@ -40,6 +41,7 @@ class _NewARHubState extends State<NewARHub> {
   late ARSessionManager arSessionManager;
   late ARObjectManager arObjectManager;
   late ARAnchorManager arAnchorManager;
+  List<Image> imageViewer = [];
 
   // Nodes are the actual objects themselves shown within the AR view on device.
   // These function by correlating to an anchor to display at a fixed point as decided by the user.
@@ -138,7 +140,7 @@ class _NewARHubState extends State<NewARHub> {
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
-                            children: const [],
+                            children: imageViewer,
                           ),
                         ),
                       ),
@@ -242,14 +244,28 @@ class _NewARHubState extends State<NewARHub> {
 
   // -- REFERENCE START https://github.com/CariusLars/ar_flutter_plugin
   Future<void> onTakeScreenshot() async {
-    var image = await arSessionManager.snapshot();
+    var imageProv = await arSessionManager.snapshot();
+    setState(() {});
+
+    imageViewer.add(Image(
+      image: imageProv,
+      width: 75.0,
+      height: 75.0,
+    ));
+
     await showDialog(
         context: context,
         builder: (_) => Dialog(
-          child: Container(
+          child: InkWell(
+            child: Container(
             decoration: BoxDecoration(
-                image: DecorationImage(image: image, fit: BoxFit.cover)),
-          ),
+                image: DecorationImage(image: imageProv, fit: BoxFit.cover)),
+            ),
+            onTap: () {
+              Navigator.of(context).pop();
+              setState(() {});
+            },
+          )
         ));
   }
   // REFERENCE END --
