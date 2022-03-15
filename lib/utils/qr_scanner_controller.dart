@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:shipping_inspection_app/shared/loading.dart';
 
-import '../sectors/ar/ar_hub.dart';
+import '../sectors/ar/new_ar_hub.dart';
 import '../sectors/drawer/drawer_globals.dart' as history_globals;
 import '../sectors/questions/question_brain.dart';
 import 'colours.dart';
@@ -32,7 +32,7 @@ class _QRScannerState extends State<QRScanner> {
   // The controller to access the QRView.
   QRViewController? _qrController;
 
-  // Loading bool statment
+  // Loading bool statement
   bool loading = false;
 
   // In order to get hot reload to work we need to pause the camera if the platform
@@ -112,13 +112,17 @@ class _QRScannerState extends State<QRScanner> {
       questionsToAsk = questionBrain.getQuestions('${_qrResult?.code}');
       String arTitle = questionBrain.getPageTitle('${_qrResult?.code}');
       List<String> arContentPush = [arTitle] + questionsToAsk;
-      // Loads the AR session based on the scanned result.
+
+      // Removes and disposes the QR camera.
       Navigator.pop(context);
+      _qrController?.dispose();
+
       loading = false;
+      // Loads the AR session based on the scanned result.
       await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ArHub(
+          builder: (context) => NewARHub(
               questionID: '${_qrResult?.code}',
               arContent: arContentPush,
               openThroughQR: true),
