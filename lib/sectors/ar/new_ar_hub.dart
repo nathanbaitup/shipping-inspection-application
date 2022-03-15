@@ -90,6 +90,7 @@ class _NewARHubState extends State<NewARHub> {
                     children: [
                       RawMaterialButton(
                         onPressed: () {
+                          onTakeScreenshot();
                           history_globals.addRecord(
                               "pressed",
                               history_globals.getUsername(),
@@ -238,6 +239,20 @@ class _NewARHubState extends State<NewARHub> {
       arSessionManager.onError("Failed to add anchor.");
     }
   }
+
+  // -- REFERENCE START https://github.com/CariusLars/ar_flutter_plugin
+  Future<void> onTakeScreenshot() async {
+    var image = await arSessionManager.snapshot();
+    await showDialog(
+        context: context,
+        builder: (_) => Dialog(
+          child: Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(image: image, fit: BoxFit.cover)),
+          ),
+        ));
+  }
+  // REFERENCE END --
 
   // Removes all nodes and anchors on the screen to return to a clean view.
   Future<void> onReset() async {
