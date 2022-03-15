@@ -3,6 +3,7 @@ import 'package:settings_ui/settings_ui.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
 import 'package:shipping_inspection_app/utils/colours.dart';
 
+import '../../communication/channel-selection.dart';
 import '../../communication/channel.dart';
 
 class SettingsChannels extends StatefulWidget {
@@ -38,9 +39,9 @@ class _SettingsChannelsState extends State<SettingsChannels> {
                   decoration: TextDecoration.underline),
             ),
             tiles: [
-              ChannelTile(channels[0]),
-              ChannelTile(channels[1]),
-              ChannelTile(channels[2]),
+              channelTile(channels[0]),
+              channelTile(channels[1]),
+              channelTile(channels[2]),
             ],
           )
         ]));
@@ -48,11 +49,46 @@ class _SettingsChannelsState extends State<SettingsChannels> {
 
 }
 
-SettingsTile ChannelTile(Channel channel) {
+SettingsTile channelTile(Channel channel) {
+
+  FontStyle emptyFont = FontStyle.normal;
+  Row optionsRow = Row();
+
+  if(channel.empty == false) {
+    emptyFont = FontStyle.normal;
+    optionsRow = Row(
+      children: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: () {},
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.delete),
+        ),
+      ],
+    );
+  } else {
+    emptyFont = FontStyle.italic;
+    optionsRow = Row(
+      children: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () {},
+        ),
+      ]
+    );
+  }
 
   return SettingsTile(
-    title: Text(channel.name),
+    title: Text(
+      channel.name,
+      style: TextStyle(
+        fontStyle: emptyFont
+      ),
+    ),
     leading: const Icon(Icons.bookmark,
         color: LightColors.sPurple),
+    trailing: optionsRow,
   );
 }
