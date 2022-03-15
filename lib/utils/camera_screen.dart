@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-import '../sectors/ar/ar_hub.dart';
-
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
   // The name of the button that was pressed on the questionnaire section page.
@@ -83,10 +81,7 @@ class _CameraScreenState extends State<CameraScreen> {
         child: Center(child: CircularProgressIndicator()),
       );
     }
-    // If the AR button is pressed, then display the AR camera to the user.
-    if (widget.buttonID == 'ar') {
-      return ArHub(questionID: widget.questionID, arContent: [" "], openThroughQR: false);
-    }
+
     // Default camera viewer.
     return SafeArea(
       child: Container(

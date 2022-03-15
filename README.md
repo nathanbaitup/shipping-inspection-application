@@ -78,10 +78,10 @@ Instructions on their use and documentation are provided below.
 | [flutter_test][flutter_test] | - | Used as the testing library for application testing.|
 | [percent_indicator][percent_indicator] | - | Used to allow the inclusion of more aesthetically pleasing percentage indicators in the application.|
 | [agora_rtc_engine][agora_rtc_engine] | 5.0.0 | Used to bring [Agora](https://www.agora.io/en/) Video calling functionality to the application.|
-| [permission_handler][permission_handler] | 9.2.0 | Handles permissions on all platforms with one command (Android, iOS, Web).|
+| [permission_handler][permission_handler] | 8.1.6 | Handles permissions on all platforms with one command (Android, iOS, Web).|
 | [intl][intl] | 0.17.0 | Used to appropriately format date and time values.  |
 | [settings_ui][settings_ui] | 2.0.2 | Used to display the settings menu found within the drawer menu.  |
-| [arcore_flutter_plugin][arcore_flutter_plugin] | 0.1.0-null-safety.3 | Used to implement Google ARCore within flutter to provide an AR experience when answering the survey. |
+| [ar_flutter_plugin][ar_flutter_plugin] | 0.6.2 | Used to implement Google ARCore within flutter to provide an AR experience when answering the survey. |
 | [qr_code_scanner][qr_code_scanner]| 0.7.0 | Used to scan and interpret QR code data to open the AR scene in the application. |
 | [permission_handler][permission_handler] | 8.0.0+1 | Used to request the permissions when initially launching th eapplication. |
 | [flutter_spinkit][flutter_spinkit] | 5.1.0 | Provides loading animations to the application |
@@ -97,7 +97,7 @@ Instructions on their use and documentation are provided below.
 [permission_handler]: <https://pub.dev/packages/permission_handler>
 [intl]: <https://pub.dev/packages/intl>
 [settings_ui]: <https://pub.dev/packages/settings_ui>
-[arcore_flutter_plugin]: <https://pub.dev/packages/arcore_flutter_plugin>
+[ar_flutter_plugin]: <https://pub.dev/packages/ar_flutter_plugin>
 [qr_code_scanner]: <https://pub.dev/packages/qr_code_scanner>
 [permission_handler]: <https://pub.dev/packages/permission_handler>
 [flutter_spinkit]: <https://pub.dev/packages/flutter_spinkit>
