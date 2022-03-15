@@ -24,7 +24,7 @@ class SurveySection extends StatefulWidget {
 class _SurveySectionState extends State<SurveySection> {
   List<Image> imageViewer = [];
   List<String> questionsToAsk = [];
-  List<Text> displayQuestions = [];
+  List<Widget> displayQuestions = [];
   String pageTitle = '';
 
   // Initializes the state and gets the questions, page title and record for the history feature.
@@ -100,6 +100,8 @@ class _SurveySectionState extends State<SurveySection> {
                 ),
               ),
 
+              const SizedBox(height: 10),
+
               // Opens the survey section in an AR view.
               ElevatedButton(
                 onPressed: () async => openARSection(),
@@ -113,7 +115,7 @@ class _SurveySectionState extends State<SurveySection> {
               // Allows rest of the display to be scrollable to be able to see and answer the questions,
               // add and save images.
               Container(
-                height: screenHeight * 0.7,
+                height: screenHeight * 0.6,
                 padding: const EdgeInsets.only(
                   left: 20,
                   right: 20,
@@ -215,8 +217,46 @@ class _SurveySectionState extends State<SurveySection> {
   void addDisplayQuestions() {
     pageTitle = questionBrain.getPageTitle(widget.questionID);
     questionsToAsk = questionBrain.getQuestions(widget.questionID);
+
     for (var question in questionsToAsk) {
-      displayQuestions.add(Text(question));
+      displayQuestions.add(
+        Column(
+          children: <Widget>[
+            // Creates a container for each question and the space to answer
+            // a question.
+            Container(
+              margin: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                border: Border.all(color: LightColors.sPurple),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(20),
+                ),
+              ),
+              child: Column(
+                children: <Widget>[
+                  // The question pulled from the question bank.
+                  Text(
+                    question,
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  // The text field to allow a question to be answered.
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: UnderlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
     }
   }
 
