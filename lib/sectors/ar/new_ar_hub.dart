@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as vector_math;
 
@@ -26,6 +25,7 @@ class NewARHub extends StatefulWidget {
   final String questionID;
   final List<String> arContent;
   final bool openThroughQR;
+
   const NewARHub({
     Key? key,
     required this.questionID,
@@ -71,7 +71,7 @@ class _NewARHubState extends State<NewARHub> {
             ),
             body: Stack(children: [
               ARView(
-                onARViewCreated: onARViewCreated,
+                onARViewCreated: _onARViewCreated,
                 planeDetectionConfig:
                     PlaneDetectionConfig.horizontalAndVertical,
               ),
@@ -91,14 +91,7 @@ class _NewARHubState extends State<NewARHub> {
                   child: Row(
                     children: [
                       RawMaterialButton(
-                        onPressed: () {
-                          onTakeScreenshot();
-                          history_globals.addRecord(
-                              "pressed",
-                              history_globals.getUsername(),
-                              DateTime.now(),
-                              'take screenshot');
-                        },
+                        onPressed: () => _takeScreenshot(),
                         elevation: 5.0,
                         fillColor: LightColors.sPurple,
                         shape: const CircleBorder(),
@@ -124,7 +117,7 @@ class _NewARHubState extends State<NewARHub> {
                       ),
                       const Spacer(),
                       RawMaterialButton(
-                        onPressed: () => onReset(),
+                        onPressed: () => _onReset(),
                         elevation: 5.0,
                         fillColor: LightColors.sPurpleLL,
                         shape: const CircleBorder(),
@@ -156,7 +149,7 @@ class _NewARHubState extends State<NewARHub> {
   // and manipulated on the screen.
 
   // Initialises the AR view.
-  void onARViewCreated(
+  void _onARViewCreated(
       ARSessionManager arSessionManager,
       ARObjectManager arObjectManager,
       ARAnchorManager arAnchorManager,
@@ -184,7 +177,7 @@ class _NewARHubState extends State<NewARHub> {
     // the AR scene.
     this.arObjectManager.onInitialize();
     // On each press adds a new object onto the AR session.
-    this.arSessionManager.onPlaneOrPointTap = onPlaneOrPointTap;
+    this.arSessionManager.onPlaneOrPointTap = _onPlaneOrPointTap;
   }
 
   // Function that handles adding an object to the AR scene.
@@ -192,7 +185,7 @@ class _NewARHubState extends State<NewARHub> {
   // TODO: update code to only allow for one item to be displayed.
   // TODO: display the item automatically and not with a tap.
   // TODO: allow for multiple items to be loaded dynamically based on the question ID.
-  Future<void> onPlaneOrPointTap(List<ARHitTestResult> userTapResults) async {
+  Future<void> _onPlaneOrPointTap(List<ARHitTestResult> userTapResults) async {
     // Gets the users hit point and sets the first tap to a plane type.
     var arObjectResult = userTapResults
         .firstWhere((pointHit) => pointHit.type == ARHitTestResultType.plane);
@@ -254,24 +247,34 @@ class _NewARHubState extends State<NewARHub> {
     ));
 
     await showDialog(
-        context: context,
-        builder: (_) => Dialog(
+      context: context,
+      builder: (_) {
+        // After 1 second the preview image is closed.
+        Future.delayed(
+          const Duration(seconds: 1),
+          () {
+            Navigator.of(context).pop();
+          },
+        );
+        return Dialog(
           child: InkWell(
             child: Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(image: imageProv, fit: BoxFit.cover)),
+              decoration: BoxDecoration(
+                  image: DecorationImage(image: imageProv, fit: BoxFit.cover)),
             ),
             onTap: () {
               Navigator.of(context).pop();
               setState(() {});
             },
-          )
-        ));
+          ),
+        );
+      },
+    );
   }
   // REFERENCE END --
 
   // Removes all nodes and anchors on the screen to return to a clean view.
-  Future<void> onReset() async {
+  Future<void> _onReset() async {
     for (var node in nodes) {
       arObjectManager.removeNode(node);
     }
@@ -283,6 +286,12 @@ class _NewARHubState extends State<NewARHub> {
   }
   // END REFERENCE
 
+  void _takeScreenshot() async {
+    onTakeScreenshot();
+    history_globals.addRecord("pressed", history_globals.getUsername(),
+        DateTime.now(), 'take screenshot');
+  }
+
   // Returns the user to the survey_section screen, ensuring they are returned to the section they are currently surveying.
   void _returnToSectionScreen() async {
     // If the user opened a section through the QR scanner, then only one screen
@@ -292,7 +301,8 @@ class _NewARHubState extends State<NewARHub> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => SurveySection(questionID: widget.questionID),
+          builder: (context) => SurveySection(
+              questionID: widget.questionID, capturedImages: imageViewer),
         ),
         (Route<dynamic> route) => true,
       );
@@ -304,7 +314,8 @@ class _NewARHubState extends State<NewARHub> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => SurveySection(questionID: widget.questionID),
+          builder: (context) => SurveySection(
+              questionID: widget.questionID, capturedImages: imageViewer),
         ),
         (Route<dynamic> route) => true,
       );

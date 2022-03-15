@@ -23,7 +23,10 @@ class HomeState extends State<Home> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SurveySection(questionID: questionID),
+        builder: (context) => SurveySection(
+          questionID: questionID,
+          capturedImages: const [],
+        ),
       ),
     );
   }
