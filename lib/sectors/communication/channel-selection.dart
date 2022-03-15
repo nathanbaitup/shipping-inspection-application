@@ -190,7 +190,7 @@ showOptionsDialog(BuildContext context, String title) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return OptionsWidget(channels: getDisplayChannels(), title: title);
+      return OptionsWidget(channels: getDisplayChannels(globals.savedChannels), title: title);
     },
   );
 }
@@ -212,31 +212,6 @@ class OptionsWidget extends StatelessWidget {
         ]
     );
   }
-}
-
-List<Channel> getDisplayChannels() {
-  List<Channel> displayChannels = [];
-
-  for(int i = 0; globals.savedChannels.length > i; i++) {
-    if (globals.savedChannels[i] != " ") {
-      displayChannels.add(
-        Channel(
-          i,
-          globals.savedChannels[i],
-          false,
-        )
-      );
-    } else {
-      displayChannels.add(
-        Channel(
-          i,
-          "Empty",
-          true,
-        )
-      );
-    }
-  }
-  return displayChannels;
 }
 
 SimpleDialogOption channelOption(BuildContext context, Channel channel, String title) {
