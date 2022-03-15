@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:shipping_inspection_app/sectors/drawer/settings/settings_channels.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_sound.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_username.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
@@ -96,6 +97,15 @@ class _MenuSettingsState extends State<MenuSettings> {
                       builder: (BuildContext context) => const SettingsHistory()));
                 },
               ),
+              SettingsTile.navigation(
+                title: const Text('Channels'),
+                leading: const Icon(Icons.video_call,
+                    color: LightColors.sPurple),
+                onPressed: (BuildContext context) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => const SettingsChannels()));
+                },
+              ),
               SettingsTile.switchTile(
                 title: const Text('Night Mode'),
                 activeSwitchColor: LightColors.sPurple,
@@ -173,15 +183,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                 }, initialValue: cameraSwitch,
 
               ),
-              SettingsTile.navigation(
-                title: const Text('Sound'),
-                leading: const Icon(Icons.volume_up,
-                    color: LightColors.sPurple),
-                onPressed: (BuildContext context) {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => const SettingsSound()));
-                },
-              ),
+
               SettingsTile.switchTile(
                 title: const Text('Microphone'),
                 activeSwitchColor: LightColors.sPurple,
@@ -207,6 +209,16 @@ class _MenuSettingsState extends State<MenuSettings> {
                     value = micSwitch;
                   });
                 }, initialValue: micSwitch,
+              ),
+
+              SettingsTile.navigation(
+                title: const Text('Sound'),
+                leading: const Icon(Icons.volume_up,
+                    color: LightColors.sPurple),
+                onPressed: (BuildContext context) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => const SettingsSound()));
+                },
               ),
             ]
           ),
