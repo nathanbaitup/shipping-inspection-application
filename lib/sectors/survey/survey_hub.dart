@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shipping_inspection_app/sectors/drawer/drawer_help.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
@@ -104,7 +105,14 @@ class _SurveyHubState extends State<SurveyHub> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MenuHelp(),
+                              ),
+                            );
+                          },
                         ),
                         const Spacer(),
                         SizedBox(
@@ -169,7 +177,14 @@ class _SurveyHubState extends State<SurveyHub> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MenuHelp(),
+                              ),
+                            );
+                          },
                         ),
                         Expanded(
                             child: SizedBox(
