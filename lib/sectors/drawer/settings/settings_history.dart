@@ -27,34 +27,11 @@ class _SettingsHistoryState extends State<SettingsHistory> {
         ),
 
       body: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
 
-          Container(
-            color: const Color(0xFFF0F0F0),
-            padding: const EdgeInsets.only(
-              top: 20,
-            ),
-            child: Center(
-              child: TextButton (
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: LightColors.sPurpleL,
-                  elevation: 2,
-                  padding: const EdgeInsets.all(15.0),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0)),
-                ),
-                child: const Text("Check History Logs"),
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => const MenuHistory()));
-                },
-              )
-            ),
-          ),
-
-          Expanded(
-            child: SettingsList(
+          SettingsList(
+              shrinkWrap: true,
               sections: [
                 SettingsSection(
                   title: const Text(
@@ -125,7 +102,38 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                   ],
                 ),
               ]
+          ),
+
+          Container(
+            color: const Color(0xFFF0F0F0),
+            padding: const EdgeInsets.only(
+              top: 10,
+              bottom: 10,
             ),
+            child: Center(
+                child: TextButton (
+                  style: TextButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: LightColors.sPurpleL,
+                    elevation: 2,
+                    padding: const EdgeInsets.all(15.0),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0)),
+                  ),
+                  child: const Text("Check History Logs"),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => const MenuHistory()));
+                  },
+                )
+            ),
+          ),
+
+
+          Expanded(
+            child: Container(
+              color: const Color(0xFFF0F0F0),
+            )
           )
 
         ]
