@@ -76,11 +76,12 @@ void savePrefs() async {
 
 void loadPrefs() async {
   final prefs = await SharedPreferences.getInstance();
-  username = prefs.getString('username')!;
-  savedChannels = prefs.getStringList("channels")!;
-  historyPrefs[0] = prefs.getBool("history-entering")!;
-  historyPrefs[1] = prefs.getBool("history-response")!;
-  historyPrefs[2] = prefs.getBool("history-settings")!;
-  historyPrefs[3] = prefs.getBool("history-qr")!;
-  historyPrefs[4] = prefs.getBool("history-communications")!;
+  username = prefs.getString('username')?? "Current User";
+  savedChannels = prefs.getStringList("channels")??
+      List<String>.filled(3, " ", growable: false);
+  historyPrefs[0] = prefs.getBool("history-entering")?? true;
+  historyPrefs[1] = prefs.getBool("history-response")?? true;
+  historyPrefs[2] = prefs.getBool("history-settings")?? true;
+  historyPrefs[3] = prefs.getBool("history-qr")?? true;
+  historyPrefs[4] = prefs.getBool("history-communications")?? true;
 }

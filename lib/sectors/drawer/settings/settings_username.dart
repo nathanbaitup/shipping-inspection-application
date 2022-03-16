@@ -94,6 +94,7 @@ class _SettingsUsernameState extends State<SettingsUsername> {
                             globals.addRecord("settings-username-change", globals.getUsername(), DateTime.now(), username);
                             globals.setUsername(username);
                             updateCurrentUsername();
+                            globals.savePrefs();
                           }
                         },
                       ),

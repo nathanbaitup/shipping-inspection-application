@@ -53,6 +53,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                       onToggle: (bool value) {
                         globals.changeHistoryPref("Section Entering", !globals.historyPrefs[0]);
                         setState(() { value = globals.historyPrefs[0]; });
+                        globals.savePrefs();
                       },
                     ),
                     SettingsTile.switchTile(
@@ -75,6 +76,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                       onToggle: (bool value) {
                         globals.changeHistoryPref("Settings Change", !globals.historyPrefs[2]);
                         setState(() { value = globals.historyPrefs[2]; });
+                        globals.savePrefs();
                       },
                     ),
                     SettingsTile.switchTile(
@@ -86,6 +88,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                       onToggle: (bool value) {
                         globals.changeHistoryPref("QR Usage", !globals.historyPrefs[3]);
                         setState(() { value = globals.historyPrefs[3]; });
+                        globals.savePrefs();
                       },
                     ),
                     SettingsTile.switchTile(
@@ -97,6 +100,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                       onToggle: (bool value) {
                         globals.changeHistoryPref("Communications", !globals.historyPrefs[4]);
                         setState(() { value = globals.historyPrefs[4]; });
+                        globals.savePrefs();
                       },
                     ),
                   ],

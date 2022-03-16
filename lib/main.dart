@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:shipping_inspection_app/userdashboard.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +22,7 @@ class _ShipAppState extends State<ShipApp> {
   @override
   void initState() {
     super.initState();
+    globals.loadPrefs();
     // Requests camera and microphone permissions on app load.
     _requestPermissions();
   }
