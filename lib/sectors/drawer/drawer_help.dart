@@ -103,7 +103,7 @@ List questionContent(int id) {
       content[0] = "How to change your history preferences?";
       content[1] =
           "If you go onto the settings page and tap on the history button, you can completely "
-              "edit what appears on the history page.";
+          "edit what appears on the history page.";
       break;
   }
   return content;
