@@ -35,7 +35,7 @@ class _MenuHelpState extends State<MenuHelp> {
               thickness: dividerThickness,
             ),
             QuestionWidget(
-              title: "Question 2",
+              title: "How do I join a call with the expert?",
               id: 2,
             ),
             Divider(
@@ -64,8 +64,12 @@ List questionContent(int id) {
           " and if they are stuck on any of the questions they can call the expert for help. ";
       break;
     case 2:
-      content[0] = "Question 2 Answer";
-      content[1] = "Here is the answer to the question you selected (2).";
+      content[0] = "How do I join a call with the expert?";
+      content[1] =
+          "When you go onto the calls page you will be greeted by the channel entry page."
+          " Once you are there, you can generate a channel with the generate channel button."
+          " Then once you have clicked that, just match the channel name with the expert "
+          "and the call will work as expected.";
       break;
     case 3:
       content[0] = "Question 3 Answer";
