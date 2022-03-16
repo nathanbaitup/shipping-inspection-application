@@ -11,7 +11,8 @@ import 'package:shipping_inspection_app/sectors/survey/survey_hub.dart';
 QuestionBrain questionBrain = QuestionBrain();
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  final String vesselID;
+  const Home({Key? key, required this.vesselID}) : super(key: key);
 
   @override
   HomeState createState() => HomeState();
@@ -94,8 +95,8 @@ class HomeState extends State<Home> {
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const <Widget>[
-                              Text(
+                            children: <Widget>[
+                              const Text(
                                 'Ms. Ships',
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
@@ -105,9 +106,9 @@ class HomeState extends State<Home> {
                                 ),
                               ),
                               Text(
-                                'Vessel Surveyor',
+                                'Surveying: ${widget.vesselID}',
                                 textAlign: TextAlign.start,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20.0,
                                   color: Colors.black45,
                                   fontWeight: FontWeight.w400,
