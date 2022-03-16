@@ -43,7 +43,7 @@ class _MenuHelpState extends State<MenuHelp> {
               thickness: dividerThickness,
             ),
             QuestionWidget(
-              title: "Question 3",
+              title: "How to activate AR?",
               id: 3,
             ),
             Divider(
@@ -68,12 +68,15 @@ List questionContent(int id) {
       content[1] =
           "When you go onto the calls page you will be greeted by the channel entry page."
           " Once you are there, you can generate a channel with the generate channel button."
-          " Then once you have clicked that, just match the channel name with the expert "
+          " Then once you have tapped that, just match the channel name with the expert "
           "and the call will work as expected.";
       break;
     case 3:
-      content[0] = "Question 3 Answer";
-      content[1] = "Here is the answer to the question you selected (3).";
+      content[0] = "How to activate AR?";
+      content[1] =
+          "When you go to the AR section of the app you can tap on open next to the sections."
+          " Then you can click the AR button to activate the button, then you tap on the questions"
+          " at the top you can cycle through the questions.";
       break;
   }
   return content;
