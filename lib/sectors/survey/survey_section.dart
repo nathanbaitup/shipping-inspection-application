@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:camera/camera.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -370,10 +371,22 @@ class _SurveySectionState extends State<SurveySection> {
   // Saves the images, and survey responses to the database.
   void _saveSurvey() async {
     globals.addRecord("add", globals.getUsername(), DateTime.now(), pageTitle);
-    // TODO: implement save functionality to save images and responses to database.
+    // TODO: implement save functionality to save images to cloud storage.
+    _saveResultsToFirestore();
+  }
+
+  // Awaits for the Survey Responses collection and if it doesn't exist,
+  // it creates the collection then adds the survey ID, questions and answers to
+  // be stored and used in future app instances.
+  void _saveResultsToFirestore() async {
     for (var i = 0; i < _answers.length; i++) {
-      debugPrint(
-          'Question: ${_answers[i].question}, Answer: ${_answers[i].answer}');
+      await FirebaseFirestore.instance.collection('Survey_Responses').add({
+        'sectionID': widget.questionID,
+        'numberOfQuestions': questionBrain.getQuestionAmount(widget.questionID),
+        'answeredQuestions': _answers.length,
+        'question': _answers[i].question,
+        'answer': _answers[i].answer,
+      });
     }
   }
 }
