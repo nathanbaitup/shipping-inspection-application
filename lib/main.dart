@@ -88,9 +88,6 @@ class _WelcomePageState extends State<WelcomePage> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    // Stores the user input value of the vessel ID.
-    String tempVesselID = '';
-
     return Scaffold(
       body: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
@@ -163,11 +160,8 @@ class _WelcomePageState extends State<WelcomePage> {
                       padding: const EdgeInsets.all(15.0),
                       child: TextField(
                         controller: _vesselController,
-                        onChanged: (value) {
-                          tempVesselID = value;
-                        },
                         decoration: InputDecoration(
-                          labelText: 'enter the vessel name',
+                          labelText: 'enter the vessel name ',
                           errorText: _validation
                               ? 'Please enter a vessel name or id'
                               : null,
@@ -192,7 +186,8 @@ class _WelcomePageState extends State<WelcomePage> {
                           setState(() {
                             _validation = false;
                           });
-                          vesselID = tempVesselID;
+                          vesselID = _vesselController.text;
+                          runApp(const ShipApp());
                         }
                       },
                       style:
