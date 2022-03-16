@@ -1,7 +1,6 @@
 
 import 'package:shipping_inspection_app/sectors/history/record.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // --- CALLS GLOBALS
 // -- For usage in Calls + Channels Settings
@@ -64,30 +63,24 @@ void changeHistoryPref(String type, bool value) {
 // For saving global variables locally for cross-session usage.
 
 
-// ---> REFERENCE START: https://programmingwithswift.com/how-to-save-a-file-locally-with-flutter/
-Future<String> getFilePath() async {
-  Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
-  String appDocumentsPath = appDocumentsDirectory.path; // 2
-  String filePath = '$appDocumentsPath/idwal_settings.txt'; // 3
-
-  return filePath;
-}
-// <--- REFERENCE END
-
-void saveFile() async {
-  File file = File(await getFilePath());
-  file.writeAsString(
-    username + "////" +
-    savedChannels.toString() + "////" +
-    historyPrefs.toString() + "////"
-  );
-
-  //CHECK THIS ---> https://stackoverflow.com/questions/43810508/dart-convert-string-representation-of-list-of-lists-to-list-of-list
+void savePrefs() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('username', username);
+  await prefs.setStringList("channels", savedChannels);
+  await prefs.setBool("history-entering", historyPrefs[0]);
+  await prefs.setBool("history-response", historyPrefs[1]);
+  await prefs.setBool("history-settings", historyPrefs[2]);
+  await prefs.setBool("history-qr", historyPrefs[3]);
+  await prefs.setBool("history-communications", historyPrefs[4]);
 }
 
-void readFile() async {
-  File file = File(await getFilePath()); // 1
-  String fileContent = await file.readAsString(); // 2
-
-  print('File Content: $fileContent');
+void loadPrefs() async {
+  final prefs = await SharedPreferences.getInstance();
+  username = prefs.getString('username')!;
+  savedChannels = prefs.getStringList("channels")!;
+  historyPrefs[0] = prefs.getBool("history-entering")!;
+  historyPrefs[1] = prefs.getBool("history-response")!;
+  historyPrefs[2] = prefs.getBool("history-settings")!;
+  historyPrefs[3] = prefs.getBool("history-qr")!;
+  historyPrefs[4] = prefs.getBool("history-communications")!;
 }
