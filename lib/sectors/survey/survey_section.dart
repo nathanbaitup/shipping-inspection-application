@@ -10,6 +10,8 @@ import 'package:shipping_inspection_app/utils/colours.dart';
 import '../ar/new_ar_hub.dart';
 import '../drawer/drawer_globals.dart' as globals;
 
+import '../questions/answers.dart';
+
 QuestionBrain questionBrain = QuestionBrain();
 
 class SurveySection extends StatefulWidget {
@@ -29,6 +31,12 @@ class _SurveySectionState extends State<SurveySection> {
   List<Widget> displayQuestions = [];
   String pageTitle = '';
 
+  // Retrieve the user input for answering a question.
+  FocusNode focusNode = FocusNode();
+  String questionText = '';
+  String answer = '';
+  final List<Answer> _answers = [];
+
   // Initializes the state and gets the questions, page title and record for the history feature.
   @override
   void initState() {
@@ -36,59 +44,13 @@ class _SurveySectionState extends State<SurveySection> {
     _addDisplayQuestions();
     _addEnterRecord();
     _initializeImageViewer();
+    _setupFocusNode();
   }
 
-  // Uses the question brain to get the page title and all the questions needed to display on the page
-  // and then creates a text widget for each question to be displayed.
-  void _addDisplayQuestions() {
-    pageTitle = questionBrain.getPageTitle(widget.questionID);
-    questionsToAsk = questionBrain.getQuestions(widget.questionID);
-    for (var question in questionsToAsk) {
-      displayQuestions.add(Text(question));
-    }
-  }
-
-  // Sets up the image viewer so if images have been taken within the AR view,
-  // they will be added to the image viewer.
-  void _initializeImageViewer() {
-    if (widget.capturedImages.isNotEmpty) {
-      imageViewer = imageViewer + widget.capturedImages;
-    }
-  }
-
-  // Adds what page has been accessed by the user to the history section.
-  void _addEnterRecord() {
-    globals.addRecord(
-        "enter", globals.getUsername(), DateTime.now(), pageTitle);
-  }
-
-  // Checks if the camera permission has been granted and opens the AR hub for
-  // the intended section loading the questions based on the current page to
-  // display within the AR view.
-  void _openARSection() async {
-    if (await Permission.camera.status.isDenied) {
-      await Permission.camera.request();
-      debugPrint("Camera Permissions are required to access QR Scanner");
-    } else {
-      globals.addRecord("opened", globals.getUsername(), DateTime.now(),
-          '$pageTitle AR session through button press');
-      await availableCameras().then(
-        (value) async {
-          List<String> arContentPush = [pageTitle] + questionsToAsk;
-          final capturedImages = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => NewARHub(
-                questionID: widget.questionID,
-                arContent: arContentPush,
-                openThroughQR: false,
-              ),
-            ),
-          );
-          setState(() => imageViewer = imageViewer + capturedImages);
-        },
-      );
-    }
+  @override
+  void dispose() {
+    super.dispose();
+    focusNode.dispose();
   }
 
   @override
@@ -245,12 +207,12 @@ class _SurveySectionState extends State<SurveySection> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           ElevatedButton(
-                            onPressed: () async => openCamera(),
+                            onPressed: () async => _openCamera(),
                             child: const Text('Add Images'),
                           ),
                           const SizedBox(width: 20),
                           ElevatedButton(
-                            onPressed: () async => saveSurvey(),
+                            onPressed: () async => _saveSurvey(),
                             child: const Text('Save Responses'),
                             style: ElevatedButton.styleFrom(
                                 primary: Colors.lightGreen),
@@ -270,7 +232,7 @@ class _SurveySectionState extends State<SurveySection> {
 
   // Uses the question brain to get the page title and all the questions needed to display on the page
   // and then creates a text widget for each question to be displayed.
-  void addDisplayQuestions() {
+  void _addDisplayQuestions() {
     pageTitle = questionBrain.getPageTitle(widget.questionID);
     questionsToAsk = questionBrain.getQuestions(widget.questionID);
 
@@ -299,10 +261,17 @@ class _SurveySectionState extends State<SurveySection> {
                     ),
                   ),
                   // The text field to allow a question to be answered.
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: TextField(
-                      decoration: InputDecoration(
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      focusNode: focusNode,
+                      onChanged: (String value) {
+                        setState(() {
+                          questionText = question;
+                          answer = value;
+                        });
+                      },
+                      decoration: const InputDecoration(
                         border: UnderlineInputBorder(),
                       ),
                     ),
@@ -316,15 +285,35 @@ class _SurveySectionState extends State<SurveySection> {
     }
   }
 
+  // Sets up the image viewer so if images have been taken within the AR view,
+  // they will be added to the image viewer.
+  void _initializeImageViewer() {
+    if (widget.capturedImages.isNotEmpty) {
+      imageViewer = imageViewer + widget.capturedImages;
+    }
+  }
+
   // Function that adds a record of what a user has pressed onto the history page.
-  void addEnterRecord() {
+  void _addEnterRecord() {
     globals.addRecord(
         "enter", globals.getUsername(), DateTime.now(), pageTitle);
   }
 
+  // Creates a focus node that checks if focus has been lost on a text field to
+  // add the user value to the answers list.
+  void _setupFocusNode() {
+    focusNode.addListener(() {
+      if (!focusNode.hasFocus) {
+        setState(() {
+          _answers.add(Answer(questionText, answer));
+        });
+      }
+    });
+  }
+
   // Checks if the camera permission has been granted and opens the camera
   // capturing the images taken to show in the image viewer on return.
-  void openCamera() async {
+  void _openCamera() async {
     if (await Permission.camera.status.isDenied) {
       await Permission.camera.request();
       debugPrint("Camera Permissions are required to access Camera.");
@@ -352,7 +341,7 @@ class _SurveySectionState extends State<SurveySection> {
   // Checks if the camera permission has been granted and opens the AR hub for
   // the intended section loading the questions based on the current page to
   // display within the AR view.
-  void openARSection() async {
+  void _openARSection() async {
     if (await Permission.camera.status.isDenied) {
       await Permission.camera.request();
       debugPrint("Camera Permissions are required to access QR Scanner");
@@ -365,7 +354,7 @@ class _SurveySectionState extends State<SurveySection> {
           final capturedImages = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => NewArHub(
+              builder: (context) => NewARHub(
                 questionID: widget.questionID,
                 arContent: arContentPush,
                 openThroughQR: false,
@@ -379,9 +368,12 @@ class _SurveySectionState extends State<SurveySection> {
   }
 
   // Saves the images, and survey responses to the database.
-  void saveSurvey() async {
+  void _saveSurvey() async {
     globals.addRecord("add", globals.getUsername(), DateTime.now(), pageTitle);
-
     // TODO: implement save functionality to save images and responses to database.
+    for (var i = 0; i < _answers.length; i++) {
+      debugPrint(
+          'Question: ${_answers[i].question}, Answer: ${_answers[i].answer}');
+    }
   }
 }
