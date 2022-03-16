@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
+// TODO: cleanup this dart file in a separate branch for code quality.
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
+  final String vesselID;
   // The name of the button that was pressed on the questionnaire section page.
   // Used to decide what screen is shown to the user on each button press.
   final String buttonID;
@@ -12,6 +15,7 @@ class CameraScreen extends StatefulWidget {
       {required this.cameras,
       required this.buttonID,
       required this.questionID,
+      required this.vesselID,
       Key? key})
       : super(key: key);
 
@@ -21,6 +25,8 @@ class CameraScreen extends StatefulWidget {
 
 class _CameraScreenState extends State<CameraScreen> {
   List<Image> imageViewer = [];
+  List<String> imagePaths = [];
+  late File _imageFile;
 
   void captureImage() async {
     try {
@@ -32,6 +38,8 @@ class _CameraScreenState extends State<CameraScreen> {
       // Displays the image within a preview window to allow a surveyor to take multiple images
       // if required.
       setState(() {
+        imagePaths.add(image.path);
+        _imageFile = File(image.path);
         imageViewer.add(Image.file(
           File(image.path),
           width: 75.0,
@@ -42,6 +50,21 @@ class _CameraScreenState extends State<CameraScreen> {
       const AlertDialog(title: Text("Error capturing image"));
     }
   }
+
+  // REFERENCE accessed 16/03/2022 https://stackoverflow.com/a/64764390
+  // Used to save a file to firebase.
+  // Saves the images taken into a folder with the ID of the vessel being inspected on firebase storage.
+  void saveImagesToFirebaseStorage() async {
+    for (var i = 0; i < imageViewer.length; i++) {
+      String filename = 'image-$i-${DateTime.now().toString()}';
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference firebaseStorageRef =
+          storage.ref().child('images/${widget.vesselID}/$filename');
+      UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
+      await uploadTask.then((value) => value.ref.getDownloadURL());
+    }
+  }
+  //END REFERENCE
 
   // REFERENCE ACCESSED 14/02/2022 https://www.youtube.com/watch?v=GpV5sPHEHGs
   // Used to implement camera functionality that displays a camera capture to the user.
@@ -123,7 +146,14 @@ class _CameraScreenState extends State<CameraScreen> {
                   ),
                 ),
                 RawMaterialButton(
-                  onPressed: () => Navigator.pop(context, imageViewer),
+                  onPressed: () async {
+                    try {
+                      saveImagesToFirebaseStorage();
+                    } catch (e) {
+                      debugPrint("Error: $e");
+                    }
+                    Navigator.pop(context, imageViewer);
+                  },
                   elevation: 5.0,
                   fillColor: Colors.grey,
                   shape: const CircleBorder(),

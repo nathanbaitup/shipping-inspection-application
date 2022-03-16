@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -334,6 +336,7 @@ class _SurveySectionState extends State<SurveySection> {
                 cameras: value,
                 buttonID: 'addImage',
                 questionID: widget.questionID,
+                vesselID: widget.vesselID,
               ),
             ),
           );
@@ -387,6 +390,7 @@ class _SurveySectionState extends State<SurveySection> {
     for (var i = 0; i < _answers.length; i++) {
       await FirebaseFirestore.instance.collection('Survey_Responses').add({
         'sectionID': widget.questionID,
+        'vesselID': widget.vesselID,
         'numberOfQuestions': questionBrain.getQuestionAmount(widget.questionID),
         'answeredQuestions': _answers.length,
         'question': _answers[i].question,
