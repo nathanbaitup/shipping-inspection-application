@@ -11,9 +11,11 @@ import 'package:shipping_inspection_app/utils/colours.dart';
 import 'home.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key, required this.title, required this.vesselID})
+      : super(key: key);
 
   final String title;
+  final String vesselID;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
