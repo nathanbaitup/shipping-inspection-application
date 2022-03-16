@@ -231,6 +231,7 @@ SimpleDialogOption channelOption(BuildContext context, Channel channel, String t
           if (_channelNameController.text.isNotEmpty) {
             globals.savedChannels[channel.channelID] =
             _channelNameController.text;
+            globals.savePrefs();
           } else {
             globals.savedChannels[channel.channelID] = " ";
           }

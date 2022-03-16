@@ -75,6 +75,7 @@ dependencies:
   #Cloud Firestore Link:
   #https://pub.dev/packages/cloud_firestore
   cloud_firestore: ^3.1.10
+  shared_preferences: ^2.0.13
 
 dev_dependencies:
   flutter_test:

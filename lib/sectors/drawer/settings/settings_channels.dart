@@ -36,6 +36,7 @@ class _SettingsChannelsState extends State<SettingsChannels> {
           IconButton(
             onPressed: () {
               deleteChannel(channel.channelID);
+              globals.savePrefs();
               setState(() {});
             },
             icon: const Icon(Icons.delete),
@@ -98,6 +99,7 @@ class _SettingsChannelsState extends State<SettingsChannels> {
               ElevatedButton(
                   onPressed: () {
                     globals.savedChannels[channel.channelID] = dialogController.text;
+                    globals.savePrefs();
                     Navigator.pop(context);
                     setState(() {});
                   },
