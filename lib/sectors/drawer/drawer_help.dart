@@ -57,6 +57,14 @@ class _MenuHelpState extends State<MenuHelp> {
               color: Colors.grey,
               thickness: dividerThickness,
             ),
+            QuestionWidget(
+              title: "How to change your history preferences?",
+              id: 5,
+            ),
+            Divider(
+              color: Colors.grey,
+              thickness: dividerThickness,
+            ),
           ],
         ));
   }
@@ -90,6 +98,12 @@ List questionContent(int id) {
       content[1] =
           "If you go to the settings page, and if you tap on username, you will get taken "
           "to a screen that will allow the user to change their username.";
+      break;
+    case 5:
+      content[0] = "How to change your history preferences?";
+      content[1] =
+          "If you go onto the settings page and tap on the history button, you can completely "
+              "edit what appears on the history page.";
       break;
   }
   return content;
