@@ -1,5 +1,7 @@
 // ignore_for_file: file_names
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
@@ -7,6 +9,7 @@ import 'package:shipping_inspection_app/sectors/communication/active-video-call.
 import 'package:shipping_inspection_app/shared/loading.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import '../drawer/drawer_globals.dart' as globals;
+import 'package:http/http.dart' as http;
 
 class ChannelNameSelection extends StatefulWidget {
   const ChannelNameSelection({Key? key}) : super(key: key);
@@ -16,10 +19,53 @@ class ChannelNameSelection extends StatefulWidget {
 }
 
 class _ChannelNameSelectionState extends State<ChannelNameSelection> {
-  // To store the channel name captured by the textfield.
+  // To store the channel name captured by the text field.
   late String channelName;
   final _channelNameController = TextEditingController();
   bool loading = false;
+
+  Future getTokenData() async {
+    var response = await http
+        // IPV4, EMULATOR DOES NOT UNDERSTAND LOCALHOST
+        // REFERENCE https://stackoverflow.com/a/63109424
+        .get(Uri.http('192.168.68.112:8080', 'access_token?channelName=test'));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      var jsonData = jsonDecode(response.body);
+
+      // Storing the token response within a list
+      List<Token> tokens = [];
+
+      for (var u in jsonData) {
+        Token token = Token(u["token"]);
+        tokens.add(token);
+      }
+      print(tokens.length);
+      return tokens;
+      // Returning a 404 error, possibility that we cannot access localhost on emulator
+    } else if (response.statusCode == 400) {
+      print('400 error');
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load token');
+    } else if (response.statusCode == 401) {
+      print('401 error');
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load token');
+    } else if (response.statusCode == 403) {
+      print('403 error');
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load token');
+    } else if (response.statusCode == 404) {
+      print('404 error');
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load token');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,43 +115,41 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                 Container(
                   alignment: Alignment.bottomCenter,
                   padding: const EdgeInsets.only(top: 15),
-                  child: Column(
-                    children: [
-                      MaterialButton(
+                  child: Column(children: [
+                    MaterialButton(
                       onPressed: () {
-                        addChannelRecord();
-                        _performChannelNameConnection();
+                        // addChannelRecord();
+                        // _performChannelNameConnection();
+                        getTokenData();
+                        // Method called here with a button press, bring back functionality by uncommenting two lines above
                       },
                       color: LightColors.sPurple,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15)),
                       child: const Text('Join/Create Channel'),
                       textColor: Colors.white,
-                      ),
-
-                      MaterialButton(
-                        onPressed: () {
-                          channelClipboard(context);
-                        },
-                        color: LightColors.sPurpleL,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        child: const Text('Copy to Clipboard'),
-                        textColor: Colors.white,
-                      ),
-
-                      MaterialButton(
-                        onPressed: () {
-                          channelGenerate();
-                        },
-                        color: LightColors.sPurpleLL,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        child: const Text('Generate Channel'),
-                        textColor: Colors.white,
-                      ),
-                  ]
-                  ),
+                    ),
+                    MaterialButton(
+                      onPressed: () {
+                        channelClipboard(context);
+                      },
+                      color: LightColors.sPurpleL,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      child: const Text('Copy to Clipboard'),
+                      textColor: Colors.white,
+                    ),
+                    MaterialButton(
+                      onPressed: () {
+                        channelGenerate();
+                      },
+                      color: LightColors.sPurpleLL,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      child: const Text('Generate Channel'),
+                      textColor: Colors.white,
+                    ),
+                  ]),
                 )
               ]));
   }
@@ -124,8 +168,11 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
     const _capitalChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const _numChars = '1234567890';
     output = ("IDWAL-" +
-        List.generate(3, (index) => _capitalChars[r.nextInt(_capitalChars.length)]).join() +
-        List.generate(3, (index) => _numChars[r.nextInt(_numChars.length)]).join());
+        List.generate(
+                3, (index) => _capitalChars[r.nextInt(_capitalChars.length)])
+            .join() +
+        List.generate(3, (index) => _numChars[r.nextInt(_numChars.length)])
+            .join());
     _channelNameController.text = output;
   }
 
@@ -159,4 +206,10 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
 
     print('channel name selected: $channelNameSelection');
   }
+}
+
+// Simple class for Token to be used within the Future method
+class Token {
+  final String token;
+  Token(this.token);
 }
