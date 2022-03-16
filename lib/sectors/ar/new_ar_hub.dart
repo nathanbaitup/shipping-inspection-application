@@ -22,12 +22,14 @@ import '../drawer/drawer_globals.dart' as history_globals;
 QuestionBrain questionBrain = QuestionBrain();
 
 class NewARHub extends StatefulWidget {
+  final String vesselID;
   final String questionID;
   final List<String> arContent;
   final bool openThroughQR;
 
   const NewARHub({
     Key? key,
+    required this.vesselID,
     required this.questionID,
     required this.openThroughQR,
     required this.arContent,
@@ -302,7 +304,9 @@ class _NewARHubState extends State<NewARHub> {
         context,
         MaterialPageRoute(
           builder: (context) => SurveySection(
-              questionID: widget.questionID, capturedImages: imageViewer),
+              vesselID: widget.vesselID,
+              questionID: widget.questionID,
+              capturedImages: imageViewer),
         ),
         (Route<dynamic> route) => true,
       );
@@ -315,7 +319,9 @@ class _NewARHubState extends State<NewARHub> {
         context,
         MaterialPageRoute(
           builder: (context) => SurveySection(
-              questionID: widget.questionID, capturedImages: imageViewer),
+              vesselID: widget.vesselID,
+              questionID: widget.questionID,
+              capturedImages: imageViewer),
         ),
         (Route<dynamic> route) => true,
       );

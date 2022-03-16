@@ -17,8 +17,11 @@ const agoraToken = tokenAgora;
 
 class VideoCallFragment extends StatefulWidget {
   String channelName;
+  final String vesselID;
 
-  VideoCallFragment({Key? key, required this.channelName}) : super(key: key);
+  VideoCallFragment(
+      {Key? key, required this.channelName, required this.vesselID})
+      : super(key: key);
 
   @override
   _VideoCallFragmentState createState() => _VideoCallFragmentState();
@@ -192,7 +195,7 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const SurveyHub(),
+                  builder: (context) => SurveyHub(vesselID: widget.vesselID),
                 ),
               );
             },

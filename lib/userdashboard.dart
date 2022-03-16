@@ -36,9 +36,9 @@ class _MyHomePageState extends State<MyHomePage> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
     Home(vesselID: vesselID),
-    SurveyHub(),
-    ChannelNameSelection(),
-    Text(
+    SurveyHub(vesselID: vesselID),
+    ChannelNameSelection(vesselID: vesselID),
+    const Text(
       'Calls',
       style: optionStyle,
     ),
@@ -141,14 +141,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => const MenuFeedback()));
+                      builder: (BuildContext context) =>
+                          MenuFeedback(vesselID: vesselID)));
                 },
                 icon: const Icon(Icons.question_answer),
               ),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => const MenuFeedback()));
+                    builder: (BuildContext context) =>
+                        MenuFeedback(vesselID: vesselID)));
               }),
           const Divider(
             color: Colors.grey,

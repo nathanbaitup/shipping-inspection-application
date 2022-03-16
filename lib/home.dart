@@ -25,6 +25,7 @@ class HomeState extends State<Home> {
       context,
       MaterialPageRoute(
         builder: (context) => SurveySection(
+          vesselID: widget.vesselID,
           questionID: questionID,
           capturedImages: const [],
         ),
@@ -149,8 +150,8 @@ class HomeState extends State<Home> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SurveyHub()),
+                                        builder: (context) => SurveyHub(
+                                            vesselID: widget.vesselID)),
                                   );
                                 },
                                 child: calendarIcon(),
@@ -258,8 +259,8 @@ class HomeState extends State<Home> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SurveyHub()),
+                                        builder: (context) => SurveyHub(
+                                            vesselID: widget.vesselID)),
                                   );
                                 },
                               ),

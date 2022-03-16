@@ -8,15 +8,23 @@ import '../drawer/drawer_globals.dart' as history_global;
 import '../../utils/qr_scanner_controller.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
+late String vesselID;
 
 class SurveyHub extends StatefulWidget {
-  const SurveyHub({Key? key}) : super(key: key);
+  final String vesselID;
+  const SurveyHub({Key? key, required this.vesselID}) : super(key: key);
 
   @override
   _SurveyHubState createState() => _SurveyHubState();
 }
 
 class _SurveyHubState extends State<SurveyHub> {
+  @override
+  void initState() {
+    super.initState();
+    vesselID = widget.vesselID;
+  }
+
   // Checks if camera permissions have been granted and takes the user to the QR
   // camera, updating the history page to allow for tracking.
   void openCamera() async {
@@ -27,7 +35,9 @@ class _SurveyHubState extends State<SurveyHub> {
       await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const QRScanner(),
+          builder: (context) => QRScanner(
+            vesselID: vesselID,
+          ),
         ),
       );
       // Adds a record of the QR camera being opened to the history page.
@@ -243,6 +253,7 @@ void loadQuestion(BuildContext context, String questionID) {
     context,
     MaterialPageRoute(
       builder: (context) => SurveySection(
+        vesselID: vesselID,
         questionID: questionID,
         capturedImages: const [],
       ),

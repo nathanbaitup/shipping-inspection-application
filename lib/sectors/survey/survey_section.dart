@@ -16,10 +16,14 @@ import '../questions/answers.dart';
 QuestionBrain questionBrain = QuestionBrain();
 
 class SurveySection extends StatefulWidget {
+  final String vesselID;
   final String questionID;
   final List<Image> capturedImages;
   const SurveySection(
-      {required this.questionID, required this.capturedImages, Key? key})
+      {required this.questionID,
+      required this.capturedImages,
+      required this.vesselID,
+      Key? key})
       : super(key: key);
 
   @override
@@ -356,6 +360,7 @@ class _SurveySectionState extends State<SurveySection> {
             context,
             MaterialPageRoute(
               builder: (context) => NewARHub(
+                vesselID: widget.vesselID,
                 questionID: widget.questionID,
                 arContent: arContentPush,
                 openThroughQR: false,
