@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 
 var content = List.filled(2, "", growable: false);
@@ -50,6 +49,14 @@ class _MenuHelpState extends State<MenuHelp> {
               color: Colors.grey,
               thickness: dividerThickness,
             ),
+            QuestionWidget(
+              title: "How to change your username?",
+              id: 4,
+            ),
+            Divider(
+              color: Colors.grey,
+              thickness: dividerThickness,
+            ),
           ],
         ));
   }
@@ -77,6 +84,12 @@ List questionContent(int id) {
           "When you go to the AR section of the app you can tap on open next to the sections."
           " Then you can click the AR button to activate the button, then you tap on the questions"
           " at the top you can cycle through the questions.";
+      break;
+    case 4:
+      content[0] = "How to change your username?";
+      content[1] =
+          "If you go to the settings page, and if you tap on username, you will get taken "
+          "to a screen that will allow the user to change their username.";
       break;
   }
   return content;
