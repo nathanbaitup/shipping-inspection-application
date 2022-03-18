@@ -3,11 +3,60 @@ import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:shipping_inspection_app/utils/back_button.dart';
 import 'package:shipping_inspection_app/utils/textfield.dart';
 
-class AddTask extends StatelessWidget {
+class AddTask extends StatefulWidget {
+  @override
+  State<AddTask> createState() => _AddTaskState();
+}
+
+class StageChip
+{
+  String label;
+  Color color;
+  StageChip(this.label, this.color);
+}
+
+
+
+class _AddTaskState extends State<AddTask> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
+    int? selectedIndex;
+    List<StageChip> _chipsList = [
+      StageChip("To Do", LightColors.sRed),
+      StageChip("In Progress", LightColors.sDarkYellow),
+      StageChip("Done", LightColors.sBlue),
+
+    ];
+
+
+    List<Widget> stageChips () {
+      List<Widget> chips = [];
+      for (int i=0; i< _chipsList.length; i++) {
+        Widget item = Padding(
+          padding: const EdgeInsets.only(right: 3),
+          child: ChoiceChip(
+            labelStyle: TextStyle(color: Colors.white),
+            padding: EdgeInsets.all(7),
+            label: Text(_chipsList[i].label),
+            backgroundColor: _chipsList[i].color,
+            selected: i == selectedIndex,
+            onSelected: (bool value)
+            {
+              setState(() {
+                selectedIndex = i;
+              });
+            },
+          ),
+        );
+        chips.add(item);
+      }
+      return chips;
+    }
+
+
 
     return Scaffold(
       body: SafeArea(
@@ -76,37 +125,55 @@ class AddTask extends StatelessWidget {
 
                               //textDirection: TextDirection.rtl,
                               spacing: 10.0,
-                              children: <Widget>[
-                                Chip(
-                                  labelStyle: TextStyle(color: Colors.white),
-                                  backgroundColor: LightColors.sRed,
-                                    label: Container(
-                                      padding: EdgeInsets.all(7),
+                              children: stageChips(),
 
-                                      child: Text("To-Do"),
-                                    )
 
-                                ),
-                                Chip(
-                                  backgroundColor: LightColors.sDarkYellow,
-                                  label: Container(
-                                    padding: EdgeInsets.all(7),
-                                    child: Text("In Progress"),
-                                  )
 
-                                ),
-                                Chip(
-                                    labelStyle: TextStyle(color: Colors.white),
-                                    backgroundColor: LightColors.sBlue,
-                                    label: Container(
-                                      padding: EdgeInsets.all(7),
+                              //   ChoiceChip(
+                              //     labelStyle: TextStyle(color: Colors.white),
+                              //     backgroundColor: LightColors.sRed,
+                              //       selected: false,
+                              //       selectedColor: Colors.blue,
+                              //       onSelected: (bool selected) {
+                              //         setState(() {
+                              //           if (selected) {
+                              //             _selectedIndex = i;
+                              //           }
+                              //         });
+                              //       },
+                              //       label: Container(
+                              //         padding: EdgeInsets.all(7),
+                              //
+                              //         child: Text("To-Do"),
+                              //       )
+                              //
+                              //   ),
+                              //   ChoiceChip(
+                              //     backgroundColor: LightColors.sDarkYellow,
+                              //       selected: false,
+                              //
+                              //       label: Container(
+                              //       padding: EdgeInsets.all(7),
+                              //       child: Text("In Progress"),
+                              //     )
+                              //
+                              //   ),
+                              //   ChoiceChip(
+                              //       labelStyle: TextStyle(color: Colors.white),
+                              //       backgroundColor: LightColors.sBlue,
+                              //       selected: false,
+                              //
+                              //       label: Container(
+                              //         padding: EdgeInsets.all(7),
+                              //
+                              //         child: Text("Done"),
+                              //   )
+                              //
+                              //   ),
+                              //
 
-                                      child: Text("Done"),
-                                )
 
-                                ),
 
-                              ],
                             ),
                           ],
                         ),
