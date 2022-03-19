@@ -1,7 +1,4 @@
 // ignore_for_file: file_names
-
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
@@ -9,7 +6,7 @@ import 'package:shipping_inspection_app/sectors/communication/active-video-call.
 import 'package:shipping_inspection_app/shared/loading.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import '../drawer/drawer_globals.dart' as globals;
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 class ChannelNameSelection extends StatefulWidget {
   const ChannelNameSelection({Key? key}) : super(key: key);
@@ -24,47 +21,23 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
   final _channelNameController = TextEditingController();
   bool loading = false;
 
-  Future getTokenData() async {
-    var response = await http
-        // IPV4, EMULATOR DOES NOT UNDERSTAND LOCALHOST
-        // REFERENCE https://stackoverflow.com/a/63109424
-        .get(Uri.http('192.168.68.112:8080', 'access_token?channelName=test'));
+// Using Dio, HTTP alternative, smarter package with more flexibility and ease of use.
+// Function calls to the URL provided, and gets a token which can then be used within the application.
+// TODO Update URL link to take in parameters, mentioned within Dio Pub.Dev page.
 
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      var jsonData = jsonDecode(response.body);
+// EXAMPLE SHOWN
+// response = await dio.get('/test?id=12&name=wendu');
+// print(response.data.toString());
+// response = await dio.get('/test', queryParameters: {'id': 12, 'name': 'wendu'});
+// print(response.data.toString());
 
-      // Storing the token response within a list
-      List<Token> tokens = [];
-
-      for (var u in jsonData) {
-        Token token = Token(u["token"]);
-        tokens.add(token);
-      }
-      print(tokens.length);
-      return tokens;
-      // Returning a 404 error, possibility that we cannot access localhost on emulator
-    } else if (response.statusCode == 400) {
-      print('400 error');
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load token');
-    } else if (response.statusCode == 401) {
-      print('401 error');
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load token');
-    } else if (response.statusCode == 403) {
-      print('403 error');
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load token');
-    } else if (response.statusCode == 404) {
-      print('404 error');
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load token');
-    }
+  Future<String> getTokenDio() async {
+    Response response = await Dio().get(
+        "https://agoratokencardiffuniversity.azurewebsites.net/access_token?channelName=test");
+    Map result = response.data;
+    var tokenDataFromJson = result['token'];
+    print(tokenDataFromJson);
+    return tokenDataFromJson;
   }
 
   @override
@@ -120,7 +93,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                       onPressed: () {
                         // addChannelRecord();
                         // _performChannelNameConnection();
-                        getTokenData();
+                        getTokenDio();
                         // Method called here with a button press, bring back functionality by uncommenting two lines above
                       },
                       color: LightColors.sPurple,
@@ -206,10 +179,4 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
 
     print('channel name selected: $channelNameSelection');
   }
-}
-
-// Simple class for Token to be used within the Future method
-class Token {
-  final String token;
-  Token(this.token);
 }
