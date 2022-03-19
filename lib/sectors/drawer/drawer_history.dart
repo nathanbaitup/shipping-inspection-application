@@ -163,7 +163,7 @@ class _MenuHistoryState extends State<MenuHistory> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          
           iconTheme: const IconThemeData(
             color: LightColors.sPurple,
           ),

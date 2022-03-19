@@ -54,7 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         titleTextStyle: const TextStyle(color: LightColors.sPurple),
         centerTitle: true,
-        backgroundColor: Colors.white,
         leading: Transform.scale(
           scale: 0.7,
           child: FloatingActionButton(
@@ -152,7 +151,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) => const MenuSettings()));
                 },
-
                 icon: const Icon(Icons.settings),
               ),
               onTap: () {
