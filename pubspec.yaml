@@ -80,6 +80,8 @@ dependencies:
   # Used to read token data from the internet.
   dio: ^4.0.4
 
+  intl: ^0.17.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
