@@ -66,7 +66,9 @@ dependencies:
 
   # Brings loading animations to the application
   flutter_spinkit: ^5.1.0
-  http: ^0.13.4
+
+  # Used to read token data from the internet.
+  dio: ^4.0.4
 
 dev_dependencies:
   flutter_test:
