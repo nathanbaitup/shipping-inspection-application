@@ -72,9 +72,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                   child: Column(children: [
                     MaterialButton(
                       onPressed: () {
-                        // addChannelRecord();
-
-                        // getTokenDio(_channelNameController.text);
+                        addChannelRecord();
                         _performChannelNameConnection(
                             _channelNameController.text);
                       },
