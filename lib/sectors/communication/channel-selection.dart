@@ -6,6 +6,7 @@ import 'package:shipping_inspection_app/sectors/communication/active-video-call.
 import 'package:shipping_inspection_app/shared/loading.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import '../drawer/drawer_globals.dart' as globals;
+import 'keys/token-gen.dart';
 import 'package:dio/dio.dart';
 
 class ChannelNameSelection extends StatefulWidget {
@@ -20,25 +21,6 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
   late String channelName;
   final _channelNameController = TextEditingController();
   bool loading = false;
-
-// Using Dio, HTTP alternative, smarter package with more flexibility and ease of use.
-// Function calls to the URL provided, and gets a token which can then be used within the application.
-// TODO Update URL link to take in parameters, mentioned within Dio Pub.Dev page.
-
-// EXAMPLE SHOWN
-// response = await dio.get('/test?id=12&name=wendu');
-// print(response.data.toString());
-// response = await dio.get('/test', queryParameters: {'id': 12, 'name': 'wendu'});
-// print(response.data.toString());
-
-  Future<String> getTokenDio() async {
-    Response response = await Dio().get(
-        "https://agoratokencardiffuniversity.azurewebsites.net/access_token?channelName=test");
-    Map result = response.data;
-    var tokenDataFromJson = result['token'];
-    print(tokenDataFromJson);
-    return tokenDataFromJson;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +37,6 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                       'https://www.idwalmarine.com/hs-fs/hubfs/IDWAL-Logo-CMYK-Blue+White.png?width=2000&name=IDWAL-Logo-CMYK-Blue+White.png'),
                 ),
                 const Padding(padding: EdgeInsets.only(top: 15)),
-                // TODO Capture TextResult into variable allowing it to be passed to another screen
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: TextFormField(
@@ -92,9 +73,10 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                     MaterialButton(
                       onPressed: () {
                         // addChannelRecord();
-                        // _performChannelNameConnection();
-                        getTokenDio();
-                        // Method called here with a button press, bring back functionality by uncommenting two lines above
+
+                        // getTokenDio(_channelNameController.text);
+                        _performChannelNameConnection(
+                            _channelNameController.text);
                       },
                       color: LightColors.sPurple,
                       shape: RoundedRectangleBorder(
@@ -154,29 +136,59 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
         _channelNameController.text);
   }
 
-  void _performChannelNameConnection() async {
+  void _performChannelNameConnection(String strDioToken) async {
+    print('The string passed into getTokenDio is ' + strDioToken);
+    Response response = await Dio().get(
+        "https://agoratokencardiffuniversity.azurewebsites.net/access_token",
+        queryParameters: {'channelName': strDioToken});
+    Map result = response.data;
+    var tokenDataFromJson = result['token'];
+    print('getTokenDio response ' + tokenDataFromJson);
+    String tokenDataFromJsonToString = tokenDataFromJson.toString();
+    print('tokenDataFromJsonToString ' + tokenDataFromJsonToString);
+
+    String agoraTokenInsideFunction = tokenDataFromJsonToString;
+
     String channelNameSelection = _channelNameController.text;
 
     setState(() {
       loading = true;
-      print('loading animation triggered TRUE, _performChannlNameConnection');
+      print('loading animation triggered TRUE, _performChannelNameConnection');
     });
 
     Future.delayed(const Duration(seconds: 5), () {
       setState(() {
         loading = false;
         print(
-            'loading animation triggered FALSE, _performChannlNameConnection');
+            'loading animation triggered FALSE, _performChannelNameConnection');
       });
 
       Navigator.push(
         this.context,
         MaterialPageRoute(
-            builder: (context) =>
-                VideoCallFragment(channelName: channelNameSelection)),
+            builder: (context) => VideoCallFragment(
+                  channelName: channelNameSelection,
+                  agoraToken: agoraTokenInsideFunction,
+                )),
       );
     });
 
     print('channel name selected: $channelNameSelection');
+    print('agora token being passed across: $agoraTokenInsideFunction');
   }
+
+// Using Dio, HTTP alternative, smarter package with more flexibility and ease of use.
+// Function calls to the URL provided, and gets a token which can then be used within the application.
+  // Future<String> getTokenDio(String strDioToken) async {
+  //   print('The string passed into getTokenDio is ' + strDioToken);
+  //   Response response = await Dio().get(
+  //       "https://agoratokencardiffuniversity.azurewebsites.net/access_token",
+  //       queryParameters: {'channelName': strDioToken});
+  //   Map result = response.data;
+  //   var tokenDataFromJson = result['token'];
+  //   print('getTokenDio response ' + tokenDataFromJson);
+  //   String tokenDataFromJsonToString = tokenDataFromJson.toString();
+  //   tokenDataFromJsonToString = agoraToken;
+  //   return tokenDataFromJson;
+  // }
 }
