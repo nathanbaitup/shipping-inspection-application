@@ -78,6 +78,7 @@ dependencies:
   # Firebase Storage
   # https://pub.dev/packages/firebase_storage
   firebase_storage: ^10.2.9
+  shared_preferences: ^2.0.13
 
 dev_dependencies:
   flutter_test:
