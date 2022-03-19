@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -383,7 +381,6 @@ class _SurveySectionState extends State<SurveySection> {
     globals.addRecord("add", globals.getUsername(), DateTime.now(), pageTitle);
     _saveResultsToFirestore();
     // TODO: implement save functionality to save AR images to cloud storage.
-    // TODO: display a toast popup to say data has been saved.
     // TODO: display the loading symbol whilst data is being saved.
   }
 
@@ -391,16 +388,24 @@ class _SurveySectionState extends State<SurveySection> {
   // it creates the collection then adds the survey ID, questions and answers to
   // be stored and used in future app instances.
   void _saveResultsToFirestore() async {
-    for (var i = 0; i < _answers.length; i++) {
-      await FirebaseFirestore.instance.collection('Survey_Responses').add({
-        'sectionID': widget.questionID,
-        'vesselID': widget.vesselID,
-        'numberOfQuestions': questionBrain.getQuestionAmount(widget.questionID),
-        'answeredQuestions': _answers.length,
-        'question': _answers[i].question,
-        'answer': _answers[i].answer,
-        'timestamp': FieldValue.serverTimestamp()
-      });
+    try {
+      for (var i = 0; i < _answers.length; i++) {
+        await FirebaseFirestore.instance.collection('Survey_Responses').add({
+          'sectionID': widget.questionID,
+          'vesselID': widget.vesselID,
+          'numberOfQuestions':
+              questionBrain.getQuestionAmount(widget.questionID),
+          'answeredQuestions': _answers.length,
+          'question': _answers[i].question,
+          'answer': _answers[i].answer,
+          'timestamp': FieldValue.serverTimestamp()
+        });
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Data successfully saved.")));
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Unable to save data, please try again.")));
     }
   }
 
