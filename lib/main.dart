@@ -44,6 +44,8 @@ class _ShipAppState extends State<ShipApp> {
         /* dark theme settings */
       ),
       themeMode: ThemeMode.system,
+      // Dark mode now follows system settings
+      // Requires Android 10 (API level 29) or above to switch to dark mode
       debugShowCheckedModeBanner: false,
       home: const MyHomePage(
         title: 'Idwal Vessel Inspection App',
