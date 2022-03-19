@@ -151,8 +151,7 @@ class HomeState extends State<Home> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                             TasksPage()),
+                                        builder: (context) => TasksPage()),
                                   );
                                 },
                                 child: calendarIcon(),
