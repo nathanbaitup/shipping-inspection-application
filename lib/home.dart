@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_totals.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
+import 'package:shipping_inspection_app/shared/loading.dart';
 import 'package:shipping_inspection_app/tasks.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -12,6 +15,10 @@ import 'package:shipping_inspection_app/utils/homecontainer.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_hub.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
+late String vesselID;
+// Sets the active surveys to display a loading icon whilst waiting for
+// firebase retrieval.
+bool loading = true;
 
 class Home extends StatefulWidget {
   final String vesselID;
@@ -22,6 +29,12 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
+  @override
+  void initState() {
+    super.initState();
+    vesselID = widget.vesselID;
+  }
+
   // Takes the user to the required survey section when pressing on an active survey.
   void loadQuestion(String questionID) {
     Navigator.push(
@@ -203,27 +216,32 @@ class HomeState extends State<Home> {
                             ),
                           ),
                           const SizedBox(height: 5.0),
-                          Row(
-                            children: const <Widget>[
-                              ActiveSurveysWidget(
-                                sectionName: 'Fire and Safety',
-                                sectionID: 'f&s',
+                          // The active survey sections.
+                          Column(
+                            children: [
+                              Row(
+                                children: const <Widget>[
+                                  ActiveSurveysWidget(
+                                    sectionName: 'Fire and Safety',
+                                    sectionID: 'f&s',
+                                  ),
+                                  ActiveSurveysWidget(
+                                    sectionName: 'Lifesaving',
+                                    sectionID: 'lifesaving',
+                                  ),
+                                ],
                               ),
-                              ActiveSurveysWidget(
-                                sectionName: 'Lifesaving',
-                                sectionID: 'lifesaving',
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: const <Widget>[
-                              ActiveSurveysWidget(
-                                sectionName: 'Engine Room',
-                                sectionID: 'engine',
-                              ),
-                              ActiveSurveysWidget(
-                                sectionName: 'Pollution Control',
-                                sectionID: 'engine',
+                              Row(
+                                children: const <Widget>[
+                                  ActiveSurveysWidget(
+                                    sectionName: 'Engine Room',
+                                    sectionID: 'engine',
+                                  ),
+                                  ActiveSurveysWidget(
+                                    sectionName: 'Placholder',
+                                    sectionID: 'engine',
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -268,23 +286,54 @@ class _ActiveSurveysWidgetState extends State<ActiveSurveysWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        GestureDetector(
-          child: ActiveQuestionnairesCard(
-            cardColor: LightColors.sPurple,
-            loadingPercent: answeredQuestions / numberOfQuestions,
-            title: widget.sectionName,
-            subtitle:
-                '$answeredQuestions of $numberOfQuestions questions answered',
+    // Gets the width of the current device.
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    if (loading) {
+      return Row(
+        children: <Widget>[
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 10.0),
+            padding: const EdgeInsets.all(15.0),
+            height: 200,
+            width: screenWidth * 0.42,
+            decoration: BoxDecoration(
+              color: LightColors.sPurple,
+              borderRadius: BorderRadius.circular(40.0),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Loading(),
+                ),
+              ],
+            ),
           ),
-          onTap: () {
-            loadQuestion(context, widget.sectionID);
-          },
-        ),
-        const SizedBox(width: 10.0),
-      ],
-    );
+          const SizedBox(width: 11.0),
+        ],
+      );
+    } else {
+      return Row(
+        children: <Widget>[
+          GestureDetector(
+            child: ActiveQuestionnairesCard(
+              cardColor: LightColors.sPurple,
+              loadingPercent: answeredQuestions / numberOfQuestions,
+              title: widget.sectionName,
+              subtitle:
+                  '$answeredQuestions of $numberOfQuestions questions answered',
+            ),
+            onTap: () {
+              loadQuestion(context, widget.sectionID);
+            },
+          ),
+          const SizedBox(width: 10.0),
+        ],
+      );
+    }
   }
 
   // Loads a list of all the answered questions from firebase to see the total
@@ -330,6 +379,9 @@ class _ActiveSurveysWidgetState extends State<ActiveSurveysWidget> {
     } catch (error) {
       debugPrint("Error: $error");
     }
+    setState(() {
+      loading = false;
+    });
     return questionTotals;
   }
 }
