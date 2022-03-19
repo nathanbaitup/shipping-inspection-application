@@ -1,5 +1,4 @@
 // ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
@@ -9,6 +8,7 @@ import 'package:shipping_inspection_app/sectors/drawer/drawer_help.dart';
 import 'package:shipping_inspection_app/shared/loading.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import '../drawer/drawer_globals.dart' as globals;
+import 'package:dio/dio.dart';
 
 final _channelNameController = TextEditingController();
 
@@ -20,7 +20,7 @@ class ChannelNameSelection extends StatefulWidget {
 }
 
 class _ChannelNameSelectionState extends State<ChannelNameSelection> {
-  // To store the channel name captured by the textfield.
+  // To store the channel name captured by the text field.
   late String channelName;
   bool loading = false;
 
@@ -39,7 +39,6 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                       'https://www.idwalmarine.com/hs-fs/hubfs/IDWAL-Logo-CMYK-Blue+White.png?width=2000&name=IDWAL-Logo-CMYK-Blue+White.png'),
                 ),
                 const Padding(padding: EdgeInsets.only(top: 15)),
-                // TODO Capture TextResult into variable allowing it to be passed to another screen
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: TextFormField(
@@ -94,43 +93,40 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                 Container(
                   alignment: Alignment.bottomCenter,
                   padding: const EdgeInsets.only(top: 15),
-                  child: Column(
-                    children: [
-                      MaterialButton(
+                  child: Column(children: [
+                    MaterialButton(
                       onPressed: () {
                         addChannelRecord();
-                        _performChannelNameConnection();
+                        _performChannelNameConnection(
+                            _channelNameController.text);
                       },
                       color: LightColors.sPurple,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15)),
                       child: const Text('Join/Create Channel'),
                       textColor: Colors.white,
-                      ),
-
-                      MaterialButton(
-                        onPressed: () {
-                          channelClipboard(context);
-                        },
-                        color: LightColors.sPurpleL,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        child: const Text('Copy to Clipboard'),
-                        textColor: Colors.white,
-                      ),
-
-                      MaterialButton(
-                        onPressed: () {
-                          channelGenerate();
-                        },
-                        color: LightColors.sPurpleLL,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        child: const Text('Generate Channel'),
-                        textColor: Colors.white,
-                      ),
-                  ]
-                  ),
+                    ),
+                    MaterialButton(
+                      onPressed: () {
+                        channelClipboard(context);
+                      },
+                      color: LightColors.sPurpleL,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      child: const Text('Copy to Clipboard'),
+                      textColor: Colors.white,
+                    ),
+                    MaterialButton(
+                      onPressed: () {
+                        channelGenerate();
+                      },
+                      color: LightColors.sPurpleLL,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      child: const Text('Generate Channel'),
+                      textColor: Colors.white,
+                    ),
+                  ]),
                 )
               ]));
   }
@@ -149,8 +145,11 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
     const _capitalChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const _numChars = '1234567890';
     output = ("IDWAL-" +
-        List.generate(3, (index) => _capitalChars[r.nextInt(_capitalChars.length)]).join() +
-        List.generate(3, (index) => _numChars[r.nextInt(_numChars.length)]).join());
+        List.generate(
+                3, (index) => _capitalChars[r.nextInt(_capitalChars.length)])
+            .join() +
+        List.generate(3, (index) => _numChars[r.nextInt(_numChars.length)])
+            .join());
     _channelNameController.text = output;
   }
 
@@ -159,31 +158,61 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
         _channelNameController.text);
   }
 
-  void _performChannelNameConnection() async {
+  void _performChannelNameConnection(String strDioToken) async {
+    print('The string passed into getTokenDio is ' + strDioToken);
+    Response response = await Dio().get(
+        "https://agoratokencardiffuniversity.azurewebsites.net/access_token",
+        queryParameters: {'channelName': strDioToken});
+    Map result = response.data;
+    var tokenDataFromJson = result['token'];
+    print('getTokenDio response ' + tokenDataFromJson);
+    String tokenDataFromJsonToString = tokenDataFromJson.toString();
+    print('tokenDataFromJsonToString ' + tokenDataFromJsonToString);
+
+    String agoraTokenInsideFunction = tokenDataFromJsonToString;
+
     String channelNameSelection = _channelNameController.text;
 
     setState(() {
       loading = true;
-      print('loading animation triggered TRUE, _performChannlNameConnection');
+      print('loading animation triggered TRUE, _performChannelNameConnection');
     });
 
     Future.delayed(const Duration(seconds: 5), () {
       setState(() {
         loading = false;
         print(
-            'loading animation triggered FALSE, _performChannlNameConnection');
+            'loading animation triggered FALSE, _performChannelNameConnection');
       });
 
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                VideoCallFragment(channelName: channelNameSelection)),
+            builder: (context) => VideoCallFragment(
+                  channelName: channelNameSelection,
+                  agoraToken: agoraTokenInsideFunction,
+                )),
       );
     });
 
     print('channel name selected: $channelNameSelection');
+    print('agora token being passed across: $agoraTokenInsideFunction');
   }
+
+// Using Dio, HTTP alternative, smarter package with more flexibility and ease of use.
+// Function calls to the URL provided, and gets a token which can then be used within the application.
+  // Future<String> getTokenDio(String strDioToken) async {
+  //   print('The string passed into getTokenDio is ' + strDioToken);
+  //   Response response = await Dio().get(
+  //       "https://agoratokencardiffuniversity.azurewebsites.net/access_token",
+  //       queryParameters: {'channelName': strDioToken});
+  //   Map result = response.data;
+  //   var tokenDataFromJson = result['token'];
+  //   print('getTokenDio response ' + tokenDataFromJson);
+  //   String tokenDataFromJsonToString = tokenDataFromJson.toString();
+  //   tokenDataFromJsonToString = agoraToken;
+  //   return tokenDataFromJson;
+  // }
 }
 
 showOptionsDialog(BuildContext context, String title) {
