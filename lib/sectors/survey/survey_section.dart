@@ -1,9 +1,7 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -52,6 +50,10 @@ class _SurveySectionState extends State<SurveySection> {
     _addEnterRecord();
     _initializeImageViewer();
     _setupFocusNode();
+
+    // pulls all results from firebase if there are any.
+    //TODO: change this so that it also adds the text to the inputs when pulling information.
+    _getResultsFromFirestore();
   }
 
   @override
@@ -379,8 +381,10 @@ class _SurveySectionState extends State<SurveySection> {
   // Saves the images, and survey responses to the database.
   void _saveSurvey() async {
     globals.addRecord("add", globals.getUsername(), DateTime.now(), pageTitle);
-    // TODO: implement save functionality to save images to cloud storage.
     _saveResultsToFirestore();
+    // TODO: implement save functionality to save AR images to cloud storage.
+    // TODO: display a toast popup to say data has been saved.
+    // TODO: display the loading symbol whilst data is being saved.
   }
 
   // Awaits for the Survey Responses collection and if it doesn't exist,
@@ -395,7 +399,37 @@ class _SurveySectionState extends State<SurveySection> {
         'answeredQuestions': _answers.length,
         'question': _answers[i].question,
         'answer': _answers[i].answer,
+        'timestamp': FieldValue.serverTimestamp()
       });
     }
   }
+
+  // TODO: Check how many answers there are per question and only take the latest response from timestamp.
+  // TODO: load images from firebase storage (another function required).
+  Future<List<Answer>> _getResultsFromFirestore() async {
+    // The list to store all questions and answers.
+    List<Answer> answerList = [];
+    try {
+      // Creates a instance reference to the Survey_Responses collection.
+      CollectionReference reference =
+          FirebaseFirestore.instance.collection('Survey_Responses');
+      // Pulls all data where the vesselID and sectionID match.
+      QuerySnapshot querySnapshot = await reference
+          .where('vesselID', isEqualTo: widget.vesselID)
+          .where('sectionID', isEqualTo: widget.questionID)
+          .get();
+      // Queries the snapshot to retrieve all questions and answers stored and
+      // add them to answerList.
+      for (var document in querySnapshot.docs) {
+        answerList.add(Answer(document['question'], document['answer']));
+      }
+      // prints the answerList for now. TODO: Display correct question in input box and make read only.
+      debugPrint('q1: ${answerList[0].answer} q2: ${answerList[1].answer}');
+    } catch (error) {
+      debugPrint("Error: $error");
+    }
+    return answerList;
+  }
+
+  // TODO: update all references of questions answered throughout application.
 }
