@@ -302,52 +302,6 @@ class _SurveySectionWidgetState extends State<SurveySectionWidget> {
     _getResultsFromFirestore(widget.sectionMethod);
   }
 
-  // Loads a list of all the answered questions from firebase to see the total
-  // amount of questions answered per section and saves them in a list.
-  Future<List<QuestionTotals>> _getResultsFromFirestore(
-      String sectionID) async {
-    // The list to store all the total amount of questions and answered questions.
-    List<QuestionTotals> questionTotals = [];
-    try {
-      // Creates a instance reference to the Survey_Responses collection.
-      CollectionReference reference =
-          FirebaseFirestore.instance.collection('Survey_Responses');
-      // Pulls all data where the vesselID and sectionID match.
-      QuerySnapshot querySnapshot =
-          await reference.where('vesselID', isEqualTo: vesselID).get();
-      // Queries the snapshot to retrieve the section ID, the number of questions,
-      // in the section and the number of answered questions and saves to
-      // questionTotals.
-      for (var document in querySnapshot.docs) {
-        questionTotals.add(QuestionTotals(document['sectionID'],
-            document['numberOfQuestions'], document['answeredQuestions']));
-      }
-
-      // Sets the total number of questions.
-      setState(() {
-        numberOfQuestions = questionBrain.getQuestionAmount(sectionID);
-      });
-
-      // Sets the total amount of questions questions from Firebase.
-      for (var i = 0; i < questionTotals.length; i++) {
-        if (questionTotals[i].sectionID == sectionID) {
-          setState(() {
-            answeredQuestions = questionTotals[i].answeredQuestions;
-          });
-        }
-      }
-      // Checks if the number of answered questions is greater than the total
-      // number of questions and sets the answered questions to the total
-      // number of questions.
-      if (answeredQuestions > numberOfQuestions) {
-        answeredQuestions = numberOfQuestions;
-      }
-    } catch (error) {
-      debugPrint("Error: $error");
-    }
-    return questionTotals;
-  }
-
   @override
   Widget build(BuildContext context) {
     final double screenSize = MediaQuery.of(context).size.width;
@@ -416,5 +370,51 @@ class _SurveySectionWidgetState extends State<SurveySectionWidget> {
         ),
       )
     ]);
+  }
+
+  // Loads a list of all the answered questions from firebase to see the total
+  // amount of questions answered per section and saves them in a list.
+  Future<List<QuestionTotals>> _getResultsFromFirestore(
+      String sectionID) async {
+    // The list to store all the total amount of questions and answered questions.
+    List<QuestionTotals> questionTotals = [];
+    try {
+      // Creates a instance reference to the Survey_Responses collection.
+      CollectionReference reference =
+          FirebaseFirestore.instance.collection('Survey_Responses');
+      // Pulls all data where the vesselID and sectionID match.
+      QuerySnapshot querySnapshot =
+          await reference.where('vesselID', isEqualTo: vesselID).get();
+      // Queries the snapshot to retrieve the section ID, the number of questions,
+      // in the section and the number of answered questions and saves to
+      // questionTotals.
+      for (var document in querySnapshot.docs) {
+        questionTotals.add(QuestionTotals(document['sectionID'],
+            document['numberOfQuestions'], document['answeredQuestions']));
+      }
+
+      // Sets the total number of questions.
+      setState(() {
+        numberOfQuestions = questionBrain.getQuestionAmount(sectionID);
+      });
+
+      // Sets the total amount of questions questions from Firebase.
+      for (var i = 0; i < questionTotals.length; i++) {
+        if (questionTotals[i].sectionID == sectionID) {
+          setState(() {
+            answeredQuestions = questionTotals[i].answeredQuestions;
+          });
+        }
+      }
+      // Checks if the number of answered questions is greater than the total
+      // number of questions and sets the answered questions to the total
+      // number of questions.
+      if (answeredQuestions > numberOfQuestions) {
+        answeredQuestions = numberOfQuestions;
+      }
+    } catch (error) {
+      debugPrint("Error: $error");
+    }
+    return questionTotals;
   }
 }

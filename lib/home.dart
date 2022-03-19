@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
+import 'package:shipping_inspection_app/sectors/questions/question_totals.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
 import 'package:shipping_inspection_app/tasks.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
@@ -202,67 +204,26 @@ class HomeState extends State<Home> {
                           ),
                           const SizedBox(height: 5.0),
                           Row(
-                            children: <Widget>[
-                              GestureDetector(
-                                child: ActiveQuestionnairesCard(
-                                  cardColor: LightColors.sPurple,
-                                  loadingPercent:
-                                      questionBrain.questionPercentage('f&s'),
-                                  title: 'Fire & Safety',
-                                  subtitle:
-                                      '${questionBrain.getAnswerAmount('f&s')} of ${questionBrain.getQuestionAmount('f&s')} questions answered',
-                                ),
-                                onTap: () {
-                                  loadQuestion('f&s');
-                                },
+                            children: const <Widget>[
+                              ActiveSurveysWidget(
+                                sectionName: 'Fire and Safety',
+                                sectionID: 'f&s',
                               ),
-                              const SizedBox(width: 20.0),
-                              GestureDetector(
-                                child: ActiveQuestionnairesCard(
-                                  cardColor: LightColors.sPurple,
-                                  loadingPercent: questionBrain
-                                      .questionPercentage('lifesaving'),
-                                  title: 'Lifesaving',
-                                  subtitle:
-                                      '${questionBrain.getAnswerAmount('lifesaving')} of ${questionBrain.getQuestionAmount('lifesaving')} questions answered',
-                                ),
-                                onTap: () {
-                                  loadQuestion('lifesaving');
-                                },
+                              ActiveSurveysWidget(
+                                sectionName: 'Lifesaving',
+                                sectionID: 'lifesaving',
                               ),
                             ],
                           ),
                           Row(
-                            children: <Widget>[
-                              GestureDetector(
-                                child: ActiveQuestionnairesCard(
-                                  cardColor: LightColors.sPurple,
-                                  loadingPercent: questionBrain
-                                      .questionPercentage('engine'),
-                                  title: 'Engine Room',
-                                  subtitle:
-                                      '${questionBrain.getAnswerAmount('engine')} of ${questionBrain.getQuestionAmount('engine')} questions answered',
-                                ),
-                                onTap: () {
-                                  loadQuestion('engine');
-                                },
+                            children: const <Widget>[
+                              ActiveSurveysWidget(
+                                sectionName: 'Engine Room',
+                                sectionID: 'engine',
                               ),
-                              const SizedBox(width: 20.0),
-                              GestureDetector(
-                                child: ActiveQuestionnairesCard(
-                                  cardColor: LightColors.sPurple,
-                                  loadingPercent: 0.9,
-                                  title: 'Pollution Control',
-                                  subtitle: 'X of Y questions answered',
-                                ),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SurveyHub(
-                                            vesselID: widget.vesselID)),
-                                  );
-                                },
+                              ActiveSurveysWidget(
+                                sectionName: 'Pollution Control',
+                                sectionID: 'engine',
                               ),
                             ],
                           ),
@@ -277,5 +238,98 @@ class HomeState extends State<Home> {
         ),
       ),
     );
+  }
+}
+
+// Widget specifically for creating an active surveys box to be displayed in the state.
+class ActiveSurveysWidget extends StatefulWidget {
+  final String sectionName;
+  final String sectionID;
+
+  const ActiveSurveysWidget(
+      {Key? key, required this.sectionName, required this.sectionID})
+      : super(key: key);
+
+  @override
+  _ActiveSurveysWidgetState createState() => _ActiveSurveysWidgetState();
+}
+
+class _ActiveSurveysWidgetState extends State<ActiveSurveysWidget> {
+  // A list to store the total amount and answered amount of questions.
+  List<QuestionTotals> questionTotals = [];
+  int numberOfQuestions = 0;
+  int answeredQuestions = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _getResultsFromFirestore(widget.sectionID);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        GestureDetector(
+          child: ActiveQuestionnairesCard(
+            cardColor: LightColors.sPurple,
+            loadingPercent: answeredQuestions / numberOfQuestions,
+            title: widget.sectionName,
+            subtitle:
+                '$answeredQuestions of $numberOfQuestions questions answered',
+          ),
+          onTap: () {
+            loadQuestion(context, widget.sectionID);
+          },
+        ),
+        const SizedBox(width: 10.0),
+      ],
+    );
+  }
+
+  // Loads a list of all the answered questions from firebase to see the total
+  // amount of questions answered per section and saves them in a list.
+  Future<List<QuestionTotals>> _getResultsFromFirestore(
+      String sectionID) async {
+    // The list to store all the total amount of questions and answered questions.
+    List<QuestionTotals> questionTotals = [];
+    try {
+      // Creates a instance reference to the Survey_Responses collection.
+      CollectionReference reference =
+          FirebaseFirestore.instance.collection('Survey_Responses');
+      // Pulls all data where the vesselID and sectionID match.
+      QuerySnapshot querySnapshot =
+          await reference.where('vesselID', isEqualTo: vesselID).get();
+      // Queries the snapshot to retrieve the section ID, the number of questions,
+      // in the section and the number of answered questions and saves to
+      // questionTotals.
+      for (var document in querySnapshot.docs) {
+        questionTotals.add(QuestionTotals(document['sectionID'],
+            document['numberOfQuestions'], document['answeredQuestions']));
+      }
+
+      // Sets the total number of questions.
+      setState(() {
+        numberOfQuestions = questionBrain.getQuestionAmount(sectionID);
+      });
+
+      // Sets the total amount of questions questions from Firebase.
+      for (var i = 0; i < questionTotals.length; i++) {
+        if (questionTotals[i].sectionID == sectionID) {
+          setState(() {
+            answeredQuestions = questionTotals[i].answeredQuestions;
+          });
+        }
+      }
+      // Checks if the number of answered questions is greater than the total
+      // number of questions and sets the answered questions to the total
+      // number of questions.
+      if (answeredQuestions > numberOfQuestions) {
+        answeredQuestions = numberOfQuestions;
+      }
+    } catch (error) {
+      debugPrint("Error: $error");
+    }
+    return questionTotals;
   }
 }
