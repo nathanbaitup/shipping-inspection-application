@@ -1,8 +1,10 @@
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shipping_inspection_app/shared/loading.dart';
 import 'package:shipping_inspection_app/utils/camera_screen.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
@@ -11,7 +13,14 @@ import '../drawer/drawer_globals.dart' as globals;
 
 import '../questions/answers.dart';
 
+// The question brain to load all the questions.
 QuestionBrain questionBrain = QuestionBrain();
+bool loading = false;
+
+late String questionID;
+List<String> questionsToAsk = [];
+final List<Answer> answersList = [];
+final List<Answer> _answers = [];
 
 class SurveySection extends StatefulWidget {
   final String vesselID;
@@ -30,34 +39,21 @@ class SurveySection extends StatefulWidget {
 
 class _SurveySectionState extends State<SurveySection> {
   List<Image> imageViewer = [];
-  List<String> questionsToAsk = [];
   List<Widget> displayQuestions = [];
   String pageTitle = '';
-
-  // Retrieve the user input for answering a question.
-  FocusNode focusNode = FocusNode();
-  String questionText = '';
-  String answer = '';
-  final List<Answer> _answers = [];
 
   // Initializes the state and gets the questions, page title and record for the history feature.
   @override
   void initState() {
-    super.initState();
-    _addDisplayQuestions();
+    _initializeSection();
+    _getResultsFromFirestore();
     _addEnterRecord();
     _initializeImageViewer();
-    _setupFocusNode();
+    super.initState();
 
     // pulls all results from firebase if there are any.
     //TODO: change this so that it also adds the text to the inputs when pulling information.
-    _getResultsFromFirestore();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    focusNode.dispose();
+    // _getImagesFromFirebase();
   }
 
   @override
@@ -66,6 +62,7 @@ class _SurveySectionState extends State<SurveySection> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
+    if (loading) return const Loading();
     return Scaffold(
       // Sets up the app bar to take the user back to the previous page
       appBar: AppBar(
@@ -170,8 +167,16 @@ class _SurveySectionState extends State<SurveySection> {
                         ],
                       ),
 
-                      // Displays the questions into the view.
-                      Column(children: displayQuestions),
+                      // For each question in the list of questions to ask, it
+                      // adds the question to the view and if answered, adds the
+                      // answer too.
+                      Column(
+                        children: [
+                          for (var i = 0; i < questionsToAsk.length; i++)
+                            DisplayQuestions(
+                                question: questionsToAsk[i], counter: i)
+                        ],
+                      ),
                       const SizedBox(
                         height: 70,
                         width: 350,
@@ -237,59 +242,11 @@ class _SurveySectionState extends State<SurveySection> {
     );
   }
 
-  // Uses the question brain to get the page title and all the questions needed to display on the page
-  // and then creates a text widget for each question to be displayed.
-  void _addDisplayQuestions() {
-    pageTitle = questionBrain.getPageTitle(widget.questionID);
-    questionsToAsk = questionBrain.getQuestions(widget.questionID);
-
-    for (var question in questionsToAsk) {
-      displayQuestions.add(
-        Column(
-          children: <Widget>[
-            // Creates a container for each question and the space to answer
-            // a question.
-            Container(
-              margin: const EdgeInsets.all(10.0),
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                border: Border.all(color: LightColors.sPurple),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(20),
-                ),
-              ),
-              child: Column(
-                children: <Widget>[
-                  // The question pulled from the question bank.
-                  Text(
-                    question,
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  // The text field to allow a question to be answered.
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      focusNode: focusNode,
-                      onChanged: (String value) {
-                        setState(() {
-                          questionText = question;
-                          answer = value;
-                        });
-                      },
-                      decoration: const InputDecoration(
-                        border: UnderlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+  // Sets the section ID, page title and the questions relating to the section.
+  void _initializeSection() {
+    questionID = widget.questionID;
+    pageTitle = questionBrain.getPageTitle(questionID);
+    questionsToAsk = questionBrain.getQuestions(questionID);
   }
 
   // Sets up the image viewer so if images have been taken within the AR view,
@@ -304,18 +261,6 @@ class _SurveySectionState extends State<SurveySection> {
   void _addEnterRecord() {
     globals.addRecord(
         "enter", globals.getUsername(), DateTime.now(), pageTitle);
-  }
-
-  // Creates a focus node that checks if focus has been lost on a text field to
-  // add the user value to the answers list.
-  void _setupFocusNode() {
-    focusNode.addListener(() {
-      if (!focusNode.hasFocus) {
-        setState(() {
-          _answers.add(Answer(questionText, answer));
-        });
-      }
-    });
   }
 
   // Checks if the camera permission has been granted and opens the camera
@@ -381,13 +326,17 @@ class _SurveySectionState extends State<SurveySection> {
     globals.addRecord("add", globals.getUsername(), DateTime.now(), pageTitle);
     _saveResultsToFirestore();
     // TODO: implement save functionality to save AR images to cloud storage.
-    // TODO: display the loading symbol whilst data is being saved.
   }
 
   // Awaits for the Survey Responses collection and if it doesn't exist,
   // it creates the collection then adds the survey ID, questions and answers to
   // be stored and used in future app instances.
   void _saveResultsToFirestore() async {
+    // TODO: update the loading screen so its not just a black screen.
+    // TODO: reload the whole page once saved to display the data.
+    setState(() {
+      loading = true;
+    });
     try {
       for (var i = 0; i < _answers.length; i++) {
         await FirebaseFirestore.instance.collection('Survey_Responses').add({
@@ -401,19 +350,26 @@ class _SurveySectionState extends State<SurveySection> {
           'timestamp': FieldValue.serverTimestamp()
         });
       }
+      setState(() {
+        loading = false;
+      });
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Data successfully saved.")));
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Unable to save data, please try again.")));
     }
+    setState(() {
+      loading = false;
+    });
   }
 
   // TODO: Check how many answers there are per question and only take the latest response from timestamp.
   // TODO: load images from firebase storage (another function required).
   Future<List<Answer>> _getResultsFromFirestore() async {
-    // The list to store all questions and answers.
-    List<Answer> answerList = [];
+    setState(() {
+      loading = true;
+    });
     try {
       // Creates a instance reference to the Survey_Responses collection.
       CollectionReference reference =
@@ -424,17 +380,140 @@ class _SurveySectionState extends State<SurveySection> {
           .where('sectionID', isEqualTo: widget.questionID)
           .get();
       // Queries the snapshot to retrieve all questions and answers stored and
-      // add them to answerList.
-      for (var document in querySnapshot.docs) {
-        answerList.add(Answer(document['question'], document['answer']));
-      }
-      // prints the answerList for now. TODO: Display correct question in input box and make read only.
-      debugPrint('q1: ${answerList[0].answer} q2: ${answerList[1].answer}');
+      // add them to answersList.
+      setState(() {
+        for (var document in querySnapshot.docs) {
+          answersList.add(Answer(
+            document['question'],
+            document['answer'],
+            document['sectionID'],
+          ));
+        }
+      });
+
+      debugPrint('q1: ${answersList[0].answer} q2: ${answersList[1].answer}');
     } catch (error) {
       debugPrint("Error: $error");
     }
-    return answerList;
+    setState(() {
+      loading = false;
+    });
+    return answersList;
   }
 
-  // TODO: update all references of questions answered throughout application.
+  // Future<List<Image>> _getImagesFromFirebase() async {
+  //   List<Image> imageViewer = [];
+  //   try {
+  //     final Reference storageRef =
+  //         FirebaseStorage.instance.ref().child('images').child(widget.vesselID);
+  //     storageRef.listAll().then((result) => {print('')});
+  //   } catch (error) {
+  //     debugPrint("Error: $error");
+  //   }
+  //   return imageViewer;
+  // }
+}
+
+// Uses the question brain to get the page title and all the questions needed to display on the page
+// and then creates a text widget for each question to be displayed.
+class DisplayQuestions extends StatefulWidget {
+  final String question;
+  final int counter;
+  const DisplayQuestions(
+      {Key? key, required this.question, required this.counter})
+      : super(key: key);
+
+  @override
+  _DisplayQuestionsState createState() => _DisplayQuestionsState();
+}
+
+class _DisplayQuestionsState extends State<DisplayQuestions> {
+  @override
+  void initState() {
+    super.initState();
+    _setupFocusNode();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    focusNode.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        // Creates a container for each question and the space to answer
+        // a question.
+        Container(
+          margin: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            border: Border.all(color: LightColors.sPurple),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(20),
+            ),
+          ),
+          child: Column(
+            children: <Widget>[
+              // The question pulled from the question bank.
+              Text(
+                widget.question,
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              // The text field to allow a question to be answered.
+
+              answersList.isNotEmpty &&
+                      answersList[widget.counter].sectionID == questionID
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        readOnly: true,
+                        initialValue: answersList[widget.counter].answer,
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        focusNode: focusNode,
+                        onChanged: (String value) {
+                          setState(() {
+                            questionText = widget.question;
+                            answer = value;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                        ),
+                      ),
+                    ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Retrieve the user input for answering a question.
+  FocusNode focusNode = FocusNode();
+  String questionText = '';
+  String answer = '';
+
+  // Creates a focus node that checks if focus has been lost on a text field to
+  // add the user value to the answers list.
+  void _setupFocusNode() {
+    focusNode.addListener(() {
+      if (!focusNode.hasFocus) {
+        setState(() {
+          _answers.add(Answer(questionText, answer, questionID));
+        });
+      }
+    });
+  }
 }
