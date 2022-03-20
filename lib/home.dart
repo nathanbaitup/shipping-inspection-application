@@ -59,7 +59,6 @@ class HomeState extends State<Home> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -140,7 +139,6 @@ class HomeState extends State<Home> {
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                   fontSize: 23.0,
-                                  color: Colors.black,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -149,8 +147,7 @@ class HomeState extends State<Home> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                             TasksPage()),
+                                        builder: (context) => TasksPage()),
                                   );
                                 },
                                 child: calendarIcon(),
@@ -195,7 +192,6 @@ class HomeState extends State<Home> {
                             textAlign: TextAlign.start,
                             style: TextStyle(
                               fontSize: 23.0,
-                              color: Colors.black,
                               fontWeight: FontWeight.w700,
                             ),
                           ),

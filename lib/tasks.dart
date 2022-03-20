@@ -4,12 +4,10 @@ import 'package:shipping_inspection_app/utils/taskcontainer.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:shipping_inspection_app/add_task.dart';
 
-
 class TasksPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(
@@ -38,13 +36,14 @@ class TasksPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: TextButton(
-
-                        onPressed: () {  Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddTask(),
-                          ),
-                        ); },
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddTask(),
+                            ),
+                          );
+                        },
                         child: Center(
                           child: Text(
                             'Add task',
@@ -52,7 +51,6 @@ class TasksPage extends StatelessWidget {
                                 color: Colors.white,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 16),
-
                           ),
                         ),
                       ),
@@ -72,45 +70,46 @@ class TasksPage extends StatelessWidget {
                   ),
                 ],
               ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Expanded(
-                          flex: 5,
-                          child: ListView(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            children: <Widget>[
-                              TaskContainer(
-                                title: 'IMO Guidelines review',
-                                subtitle:
-                                'Review the inspection conventions given by International Maritime Organization (IMO) to keep on top of my duties',
-                                boxColor: LightColors.sLightYellow2,
-                              ),
-                              TaskContainer(
-                                title: 'Engine Bay',
-                                subtitle: 'Complete engine bay inspection for the SS Milwaukee',
-                                boxColor: LightColors.sLavender,
-                              ),
-                              TaskContainer(
-                                title: 'Call HQ',
-                                subtitle: 'Contact HQ to request a revision of my duties for this week',
-                                boxColor: LightColors.sPalePink,
-                              ),
-                              TaskContainer(
-                                title: 'Collaborate with surveyor X',
-                                subtitle:
-                                'Meet up with surveyor X to ask about lifeboat inspection safety guidelines, as I have little experience in this field',
-                                boxColor: LightColors.sLightGreen,
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
+              SizedBox(
+                width: 20,
+              ),
+              Expanded(
+                flex: 5,
+                child: ListView(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  children: <Widget>[
+                    TaskContainer(
+                      title: 'IMO Guidelines review',
+                      subtitle:
+                          'Review the inspection conventions given by International Maritime Organization (IMO) to keep on top of my duties',
+                      boxColor: LightColors.sLightYellow2,
                     ),
-                  ),
+                    TaskContainer(
+                      title: 'Engine Bay',
+                      subtitle:
+                          'Complete engine bay inspection for the SS Milwaukee',
+                      boxColor: LightColors.sLavender,
+                    ),
+                    TaskContainer(
+                      title: 'Call HQ',
+                      subtitle:
+                          'Contact HQ to request a revision of my duties for this week',
+                      boxColor: LightColors.sPalePink,
+                    ),
+                    TaskContainer(
+                      title: 'Collaborate with surveyor X',
+                      subtitle:
+                          'Meet up with surveyor X to ask about lifeboat inspection safety guidelines, as I have little experience in this field',
+                      boxColor: LightColors.sLightGreen,
+                    ),
+                  ],
                 ),
-              );
-
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
