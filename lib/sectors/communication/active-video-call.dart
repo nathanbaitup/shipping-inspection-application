@@ -21,7 +21,10 @@ class VideoCallFragment extends StatefulWidget {
   final String vesselID;
 
   VideoCallFragment(
-      {Key? key, required this.channelName, required this.agoraToken, required this.vesselID})
+      {Key? key,
+      required this.channelName,
+      required this.agoraToken,
+      required this.vesselID})
       : super(key: key);
 
   @override

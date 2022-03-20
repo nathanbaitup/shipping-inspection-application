@@ -34,28 +34,28 @@ class _ShipAppState extends State<ShipApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Shipping Application',
-      theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch().copyWith(
-        primary: Colors.white,
-        secondary: LightColors.sPurple,
-        brightness: Brightness.light,
-        /* light theme settings */
-      )),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        /* dark theme settings */
-      ),
-      themeMode: ThemeMode.system,
-      // Dark mode now follows system settings
-      // Requires Android 10 (API level 29) or above to switch to dark mode
-      debugShowCheckedModeBanner: false,
+        title: 'Shipping Application',
+        theme: ThemeData(
+            colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: Colors.white,
+          secondary: LightColors.sPurple,
+          brightness: Brightness.light,
+          /* light theme settings */
+        )),
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          /* dark theme settings */
+        ),
+        themeMode: ThemeMode.system,
+        // Dark mode now follows system settings
+        // Requires Android 10 (API level 29) or above to switch to dark mode
+        debugShowCheckedModeBanner: false,
         // Checks if vesselID is empty, if true opens the welcome screen
         // else opens the application with the vesselID parsed in.
         home: vesselID.isEmpty
             ? const WelcomePage()
             : MyHomePage(
-            title: 'Idwal Vessel Inspection App', vesselID: vesselID));
+                title: 'Idwal Vessel Inspection App', vesselID: vesselID));
   }
 
   // Checks if permissions have been granted and asks the user for permission if not.
