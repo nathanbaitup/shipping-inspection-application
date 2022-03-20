@@ -62,184 +62,188 @@ class _SurveySectionState extends State<SurveySection> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    if (loading) return const Loading();
-    return Scaffold(
-      // Sets up the app bar to take the user back to the previous page
-      appBar: AppBar(
-        title: const Text('Idwal Vessel Inspection'),
-        titleTextStyle: const TextStyle(color: LightColors.sPurple),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        leading: Transform.scale(
-          scale: 0.7,
-          child: FloatingActionButton(
-            heroTag: 'on_back',
-            onPressed: () => Navigator.pop(context),
-            child: const Icon(Icons.arrow_back),
+    if (loading) {
+      return const Scaffold(body: Loading());
+    } else {
+      return Scaffold(
+        // Sets up the app bar to take the user back to the previous page
+        appBar: AppBar(
+          title: const Text('Idwal Vessel Inspection'),
+          titleTextStyle: const TextStyle(color: LightColors.sPurple),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          leading: Transform.scale(
+            scale: 0.7,
+            child: FloatingActionButton(
+              heroTag: 'on_back',
+              onPressed: () => Navigator.pop(context),
+              child: const Icon(Icons.arrow_back),
+            ),
           ),
         ),
-      ),
-      body: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        child: SafeArea(
-          child: Column(
-            children: <Widget>[
-              // Creates a header with the page title.
-              Container(
-                height: screenHeight * 0.12,
-                width: screenWidth,
-                padding: const EdgeInsets.all(0.0),
-                decoration: const BoxDecoration(
-                  color: LightColors.sLavender,
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(30.0),
-                    bottomLeft: Radius.circular(30.0),
+        body: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: SafeArea(
+            child: Column(
+              children: <Widget>[
+                // Creates a header with the page title.
+                Container(
+                  height: screenHeight * 0.12,
+                  width: screenWidth,
+                  padding: const EdgeInsets.all(0.0),
+                  decoration: const BoxDecoration(
+                    color: LightColors.sLavender,
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(30.0),
+                      bottomLeft: Radius.circular(30.0),
+                    ),
                   ),
-                ),
-                // The page title.
-                child: Center(
-                  child: Text(
-                    pageTitle,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 28,
-                      fontWeight: FontWeight.w500,
+                  // The page title.
+                  child: Center(
+                    child: Text(
+                      pageTitle,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 28,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-              // Gives a description on the survey section.
-              Center(
-                child: Text(
-                  "This section relates to the inspection of $pageTitle.",
-                  style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic),
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              // Opens the survey section in an AR view.
-              ElevatedButton(
-                onPressed: () async => _openARSection(),
-                style:
-                    ElevatedButton.styleFrom(primary: LightColors.sDarkYellow),
-                child: const Text('Open section in AR'),
-              ),
-
-              const SizedBox(height: 20),
-
-              // Allows rest of the display to be scrollable to be able to see and answer the questions,
-              // add and save images.
-              Container(
-                height: screenHeight * 0.6,
-                padding: const EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      // Displays the survey title and adds divided the title from the questions.
-                      Column(
-                        children: const <Widget>[
-                          Text(
-                            "Survey:",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                            width: 100,
-                            child: Divider(
-                              thickness: 1.5,
-                              color: LightColors.sGreen,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                        ],
-                      ),
-
-                      // For each question in the list of questions to ask, it
-                      // adds the question to the view and if answered, adds the
-                      // answer too.
-                      Column(
-                        children: [
-                          for (var i = 0; i < questionsToAsk.length; i++)
-                            DisplayQuestions(
-                                question: questionsToAsk[i], counter: i)
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 70,
-                        width: 350,
-                        child: Divider(color: Colors.grey),
-                      ),
-
-                      // Sets a rounded box as default if there are no images taken
-                      // else displays the image viewer.
-                      if (imageViewer.isEmpty)
-                        Container(
-                          decoration: const BoxDecoration(
-                            color: LightColors.sGrey,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: const SizedBox(
-                            width: double.infinity,
-                            height: 150,
-                            child: Center(
-                              child: Text(
-                                "No images to display. Take an image to display here.",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FontStyle.italic),
-                              ),
-                            ),
-                          ),
-                        )
-                      else
-                        // REFERENCE accessed 13/02/2022
-                        // Used for the flutter image slideshow widget.
-                        ImageSlideshow(
-                          children: imageViewer,
-                        ),
-                      // END REFERENCE
-                      const SizedBox(height: 20),
-                      //The buttons to take an image, view the question within AR and to save a surveyors answers.
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          ElevatedButton(
-                            onPressed: () async => _openCamera(),
-                            child: const Text('Add Images'),
-                          ),
-                          const SizedBox(width: 20),
-                          ElevatedButton(
-                            onPressed: () async => _saveSurvey(),
-                            child: const Text('Save Responses'),
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.lightGreen),
-                          ),
-                        ],
-                      ),
-                    ],
+                // Gives a description on the survey section.
+                Center(
+                  child: Text(
+                    "This section relates to the inspection of $pageTitle.",
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
                   ),
                 ),
-              ),
-            ],
+
+                const SizedBox(height: 10),
+
+                // Opens the survey section in an AR view.
+                ElevatedButton(
+                  onPressed: () async => _openARSection(),
+                  style: ElevatedButton.styleFrom(
+                      primary: LightColors.sDarkYellow),
+                  child: const Text('Open section in AR'),
+                ),
+
+                const SizedBox(height: 20),
+
+                // Allows rest of the display to be scrollable to be able to see and answer the questions,
+                // add and save images.
+                Container(
+                  height: screenHeight * 0.6,
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        // Displays the survey title and adds divided the title from the questions.
+                        Column(
+                          children: const <Widget>[
+                            Text(
+                              "Survey:",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                              width: 100,
+                              child: Divider(
+                                thickness: 1.5,
+                                color: LightColors.sGreen,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        ),
+
+                        // For each question in the list of questions to ask, it
+                        // adds the question to the view and if answered, adds the
+                        // answer too.
+                        Column(
+                          children: [
+                            for (var i = 0; i < questionsToAsk.length; i++)
+                              DisplayQuestions(
+                                  question: questionsToAsk[i], counter: i)
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 70,
+                          width: 350,
+                          child: Divider(color: Colors.grey),
+                        ),
+
+                        // Sets a rounded box as default if there are no images taken
+                        // else displays the image viewer.
+                        if (imageViewer.isEmpty)
+                          Container(
+                            decoration: const BoxDecoration(
+                              color: LightColors.sGrey,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: const SizedBox(
+                              width: double.infinity,
+                              height: 150,
+                              child: Center(
+                                child: Text(
+                                  "No images to display. Take an image to display here.",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ),
+                          )
+                        else
+                          // REFERENCE accessed 13/02/2022
+                          // Used for the flutter image slideshow widget.
+                          ImageSlideshow(
+                            children: imageViewer,
+                          ),
+                        // END REFERENCE
+                        const SizedBox(height: 20),
+                        //The buttons to take an image, view the question within AR and to save a surveyors answers.
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            ElevatedButton(
+                              onPressed: () async => _openCamera(),
+                              child: const Text('Add Images'),
+                            ),
+                            const SizedBox(width: 20),
+                            ElevatedButton(
+                              onPressed: () async => _saveSurvey(),
+                              child: const Text('Save Responses'),
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.lightGreen),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   // Sets the section ID, page title and the questions relating to the section.
@@ -333,8 +337,6 @@ class _SurveySectionState extends State<SurveySection> {
   // it creates the collection then adds the survey ID, questions and answers to
   // be stored and used in future app instances.
   void _saveResultsToFirestore() async {
-    // TODO: update the loading screen so its not just a black screen.
-    // TODO: reload the whole page once saved to display the data.
     setState(() {
       loading = true;
     });
