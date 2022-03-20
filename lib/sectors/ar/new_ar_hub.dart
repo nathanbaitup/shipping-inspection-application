@@ -294,8 +294,18 @@ class _NewARHubState extends State<NewARHub> {
         DateTime.now(), 'take screenshot');
   }
 
+  // TODO: implement save functionality to save AR images to cloud storage.
+  // Not fully implemented, needs to save image to firebase but currently not sure
+  // how to do so from an image provider.
+  void _saveImagesToFirebase() async {
+    // test to see what kind of output is created from the image provider.
+    var image = imageViewer[0].image;
+    debugPrint('IMAGE: $image');
+  }
+
   // Returns the user to the survey_section screen, ensuring they are returned to the section they are currently surveying.
   void _returnToSectionScreen() async {
+    _saveImagesToFirebase();
     // If the user opened a section through the QR scanner, then only one screen
     // needs to be removed from the stack.
     if (widget.openThroughQR) {

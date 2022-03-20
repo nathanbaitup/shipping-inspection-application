@@ -7,13 +7,9 @@ import 'package:flutter/material.dart';
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
   final String vesselID;
-  // The name of the button that was pressed on the questionnaire section page.
-  // Used to decide what screen is shown to the user on each button press.
-  final String buttonID;
   final String questionID;
   const CameraScreen(
       {required this.cameras,
-      required this.buttonID,
       required this.questionID,
       required this.vesselID,
       Key? key})
@@ -152,7 +148,7 @@ class _CameraScreenState extends State<CameraScreen> {
                     } catch (e) {
                       debugPrint("Error: $e");
                     }
-                    Navigator.pop(context, imageViewer);
+                    Navigator.pop(context);
                   },
                   elevation: 5.0,
                   fillColor: Colors.grey,

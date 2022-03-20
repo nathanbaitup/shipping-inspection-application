@@ -1,33 +1,39 @@
-import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
+
+// Third Party dependencies.
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:camera/camera.dart';
+
+// Package dependencies.
 import 'package:shipping_inspection_app/shared/loading.dart';
 import 'package:shipping_inspection_app/utils/camera_screen.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
-import '../ar/new_ar_hub.dart';
+import 'package:shipping_inspection_app/sectors/ar/new_ar_hub.dart';
+import 'package:shipping_inspection_app/sectors/questions/answers.dart';
 import '../drawer/drawer_globals.dart' as globals;
-
-import '../questions/answers.dart';
-
-// TODO: code quality check-up.
 
 // The question brain to load all the questions.
 QuestionBrain questionBrain = QuestionBrain();
+// Updates the state to a loading indicator if set to true.
 bool loading = false;
-
+// The section ID.
 late String questionID;
-List<String> questionsToAsk = [];
+// The questions relating to a specific section.
+List<String> _questionsToAnswer = [];
+// The answer responses from the survey containing the question and answer.
 List<Answer> _answers = [];
-List<Answer> answersList = [];
+// The retrieved answers from firebase to be displayed if there are responses.
+List<Answer> _answersList = [];
 
 class SurveySection extends StatefulWidget {
   final String vesselID;
-  final String questionID;
+  // Images that have been taken within the AR view. This can be removed once AR screenshots can be saved to firebase.
   final List<Image> capturedImages;
+  final String questionID;
   const SurveySection(
       {required this.questionID,
       required this.capturedImages,
@@ -40,21 +46,22 @@ class SurveySection extends StatefulWidget {
 }
 
 class _SurveySectionState extends State<SurveySection> {
+  // List of all images to display.
   List<Image> imageViewer = [];
-  List<Widget> displayQuestions = [];
   String pageTitle = '';
 
   // Initializes the state and gets the questions, page title and record for the history feature.
   @override
   void initState() {
+    super.initState();
     _initializeSection();
     // Pulls both text and images from Firebase.
     _getResultsFromFirestore();
     _getImagesFromFirebase();
-
+    // Adds a record of the user history.
     _addEnterRecord();
+    // Sets up the image viewer. Can be removed one images can be saved from AR into firebase.
     _initializeImageViewer();
-    super.initState();
   }
 
   @override
@@ -63,6 +70,7 @@ class _SurveySectionState extends State<SurveySection> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
+    // If loading is required, then return the loading page.
     if (loading) {
       return const Scaffold(body: Loading());
     } else {
@@ -124,7 +132,6 @@ class _SurveySectionState extends State<SurveySection> {
                         fontStyle: FontStyle.italic),
                   ),
                 ),
-
                 const SizedBox(height: 10),
 
                 // Opens the survey section in an AR view.
@@ -134,7 +141,6 @@ class _SurveySectionState extends State<SurveySection> {
                       primary: LightColors.sDarkYellow),
                   child: const Text('Open section in AR'),
                 ),
-
                 const SizedBox(height: 20),
 
                 // Allows rest of the display to be scrollable to be able to see and answer the questions,
@@ -148,7 +154,7 @@ class _SurveySectionState extends State<SurveySection> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: <Widget>[
-                        // Displays the survey title and adds divided the title from the questions.
+                        // Displays the survey title and adds a divider to the title from the questions.
                         Column(
                           children: const <Widget>[
                             Text(
@@ -170,14 +176,14 @@ class _SurveySectionState extends State<SurveySection> {
                           ],
                         ),
 
-                        // For each question in the list of questions to ask, it
+                        // For each question in the list of questions to answer, it
                         // adds the question to the view and if answered, adds the
                         // answer too.
                         Column(
                           children: [
-                            for (var i = 0; i < questionsToAsk.length; i++)
+                            for (var i = 0; i < _questionsToAnswer.length; i++)
                               DisplayQuestions(
-                                  question: questionsToAsk[i], counter: i)
+                                  question: _questionsToAnswer[i], counter: i)
                           ],
                         ),
                         const SizedBox(
@@ -218,6 +224,7 @@ class _SurveySectionState extends State<SurveySection> {
                           ),
                         // END REFERENCE
                         const SizedBox(height: 20),
+
                         //The buttons to take an image, view the question within AR and to save a surveyors answers.
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -251,12 +258,14 @@ class _SurveySectionState extends State<SurveySection> {
   void _initializeSection() {
     questionID = widget.questionID;
     pageTitle = questionBrain.getPageTitle(questionID);
-    questionsToAsk = questionBrain.getQuestions(questionID);
-    answersList = [];
+    _questionsToAnswer = questionBrain.getQuestions(questionID);
+    // Resets the answers list to empty.
+    _answersList = [];
   }
 
   // Sets up the image viewer so if images have been taken within the AR view,
   // they will be added to the image viewer.
+  // Can be removed once AR images save to firebase.
   void _initializeImageViewer() {
     if (widget.capturedImages.isNotEmpty) {
       imageViewer = imageViewer + widget.capturedImages;
@@ -280,18 +289,16 @@ class _SurveySectionState extends State<SurveySection> {
           "opened", globals.getUsername(), DateTime.now(), 'camera');
       await availableCameras().then(
         (value) async {
-          final capturedImages = await Navigator.push(
+          await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => CameraScreen(
                 cameras: value,
-                buttonID: 'addImage',
                 questionID: widget.questionID,
                 vesselID: widget.vesselID,
               ),
             ),
           );
-          setState(() => imageViewer = imageViewer + capturedImages);
         },
       );
     }
@@ -309,7 +316,7 @@ class _SurveySectionState extends State<SurveySection> {
           '$pageTitle AR session through button press');
       await availableCameras().then(
         (value) async {
-          List<String> arContentPush = [pageTitle] + questionsToAsk;
+          List<String> arContentPush = [pageTitle] + _questionsToAnswer;
           final capturedImages = await Navigator.push(
             context,
             MaterialPageRoute(
@@ -331,7 +338,6 @@ class _SurveySectionState extends State<SurveySection> {
   void _saveSurvey() async {
     globals.addRecord("add", globals.getUsername(), DateTime.now(), pageTitle);
     _saveResultsToFirestore();
-    // TODO: implement save functionality to save AR images to cloud storage.
   }
 
   // Awaits for the Survey Responses collection and if it doesn't exist,
@@ -358,12 +364,15 @@ class _SurveySectionState extends State<SurveySection> {
       setState(() {
         loading = false;
       });
+      // Creates a toast to say save successful.
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Data successfully saved.")));
     } catch (error) {
+      // Creates a toast to say that data cannot be saved.
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Unable to save data, please try again.")));
     }
+
     // Reloads the page by popping the current page from the navigator and
     // pushing it back into the context with the updated data.
     Navigator.pop(context);
@@ -381,6 +390,8 @@ class _SurveySectionState extends State<SurveySection> {
     });
   }
 
+  // Gets results of a survey based on the current vesselID and sectionID to
+  // display the answer to the question within the survey section.
   Future<List<Answer>> _getResultsFromFirestore() async {
     setState(() {
       loading = true;
@@ -394,11 +405,11 @@ class _SurveySectionState extends State<SurveySection> {
           .where('vesselID', isEqualTo: widget.vesselID)
           .where('sectionID', isEqualTo: widget.questionID)
           .get();
+
       // Queries the snapshot to retrieve all questions and answers stored and
       // add them to answersList.
-
       for (var document in querySnapshot.docs) {
-        answersList.add(Answer(
+        _answersList.add(Answer(
           document['question'],
           document['answer'],
           document['sectionID'],
@@ -409,7 +420,7 @@ class _SurveySectionState extends State<SurveySection> {
         // REFERENCE accessed 20/03/2022 https://stackoverflow.com/a/53549197
         // Used to sort the list by the question number to ensure questions and
         // answers are displayed in order.
-        answersList
+        _answersList
             .sort((a, b) => a.questionNumber.compareTo(b.questionNumber));
         // END REFERENCE
       });
@@ -419,7 +430,8 @@ class _SurveySectionState extends State<SurveySection> {
     setState(() {
       loading = false;
     });
-    return answersList;
+    // returns the answer list.
+    return _answersList;
   }
 
   // Creates a reference to firebase storage using the current vesselID and sectionID
@@ -449,6 +461,7 @@ class _SurveySectionState extends State<SurveySection> {
   }
 
   // Gets the URL of an image from Firebase and then adds the image to the imageViewer list.
+  // Is called in _getImagesFromFirebase().
   Future<List<Image>> _addToImageViewer(imageRef) async {
     imageRef.getDownloadURL().then((url) {
       setState(() {
@@ -464,7 +477,9 @@ class _SurveySectionState extends State<SurveySection> {
 // Uses the question brain to get the page title and all the questions needed to display on the page
 // and then creates a text widget for each question to be displayed.
 class DisplayQuestions extends StatefulWidget {
+  // The question to be displayed in a widget.
   final String question;
+  // A counter to increment over what question to display.
   final int counter;
   const DisplayQuestions(
       {Key? key, required this.question, required this.counter})
@@ -479,8 +494,8 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
   void initState() {
     super.initState();
     _setupFocusNode();
+    // Resets the answers list.
     _answers = [];
-    debugPrint('$answersList');
   }
 
   @override
@@ -513,15 +528,17 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
                   fontSize: 16,
                 ),
               ),
-              // The text field to allow a question to be answered.
 
-              answersList.length > widget.counter &&
-                      answersList[widget.counter].sectionID == questionID
+              // Checks if the answersList is greater than the counter and
+              // if the sectionID's match to display the stored answer within the
+              // text field and set it to read only, else displays an empty text field.
+              _answersList.length > widget.counter &&
+                      _answersList[widget.counter].sectionID == questionID
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         readOnly: true,
-                        initialValue: answersList[widget.counter].answer,
+                        initialValue: _answersList[widget.counter].answer,
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
                         ),
@@ -534,9 +551,10 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
                         onChanged: (String value) {
                           setState(() {
                             questionText = widget.question;
+                            answer = value;
+                            // Gets the question number from the question.
                             questionNumber =
                                 int.parse(widget.question.split('.')[0]);
-                            answer = value;
                           });
                         },
                         decoration: const InputDecoration(
@@ -563,6 +581,8 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
     focusNode.addListener(() {
       if (!focusNode.hasFocus) {
         setState(() {
+          // Removes the answer from the answer list if a user updates the value
+          // and adds the new value.
           _answers.removeWhere((value) => value.question == questionText);
           _answers
               .add(Answer(questionText, answer, questionID, questionNumber));
