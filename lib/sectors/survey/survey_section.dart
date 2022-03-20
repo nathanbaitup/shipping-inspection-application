@@ -13,6 +13,8 @@ import '../drawer/drawer_globals.dart' as globals;
 
 import '../questions/answers.dart';
 
+// TODO: code quality check-up.
+
 // The question brain to load all the questions.
 QuestionBrain questionBrain = QuestionBrain();
 bool loading = false;
@@ -46,14 +48,13 @@ class _SurveySectionState extends State<SurveySection> {
   @override
   void initState() {
     _initializeSection();
+    // Pulls both text and images from Firebase.
     _getResultsFromFirestore();
+    _getImagesFromFirebase();
+
     _addEnterRecord();
     _initializeImageViewer();
     super.initState();
-
-    // pulls all results from firebase if there are any.
-    //TODO: change this so that it also adds the text to the inputs when pulling information.
-    // _getImagesFromFirebase();
   }
 
   @override
@@ -380,7 +381,6 @@ class _SurveySectionState extends State<SurveySection> {
     });
   }
 
-  // TODO: load images from firebase storage (another function required).
   Future<List<Answer>> _getResultsFromFirestore() async {
     setState(() {
       loading = true;
@@ -422,20 +422,44 @@ class _SurveySectionState extends State<SurveySection> {
     return answersList;
   }
 
-  // Future<List<Image>> _getImagesFromFirebase() async {
-  //   List<Image> imageViewer = [];
-  //   try {
-  //     final Reference storageRef =
-  //         FirebaseStorage.instance.ref().child('images').child(widget.vesselID);
-  //     storageRef.listAll().then((result) => {print('')});
-  //   } catch (error) {
-  //     debugPrint("Error: $error");
-  //   }
-  //   return imageViewer;
-  // }
-}
+  // Creates a reference to firebase storage using the current vesselID and sectionID
+  // and gets a list of all the images stored. Calls function _addToImageViewer
+  // to add all stored images to the image viewer.
+  void _getImagesFromFirebase() async {
+    setState(() {
+      loading = true;
+    });
+    try {
+      final Reference storageRef = FirebaseStorage.instance
+          .ref('images/${widget.vesselID}/${widget.questionID}');
+      // REFERENCE accessed 20/03/2022 https://stackoverflow.com/a/56402109
+      // Used to list all the images within the correct folder.
+      storageRef.listAll().then((result) => {
+            result.items.forEach((imageRef) {
+              _addToImageViewer(imageRef);
+            })
+          });
+      // END REFERENCE
+    } catch (error) {
+      debugPrint("Error: $error");
+    }
+    setState(() {
+      loading = false;
+    });
+  }
 
-//TODO: update on back press so the AR hub refreshes.
+  // Gets the URL of an image from Firebase and then adds the image to the imageViewer list.
+  Future<List<Image>> _addToImageViewer(imageRef) async {
+    imageRef.getDownloadURL().then((url) {
+      setState(() {
+        imageViewer.add(
+          Image.network(url),
+        );
+      });
+    });
+    return imageViewer;
+  }
+}
 
 // Uses the question brain to get the page title and all the questions needed to display on the page
 // and then creates a text widget for each question to be displayed.

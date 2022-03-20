@@ -340,6 +340,7 @@ class _ActiveSurveysWidgetState extends State<ActiveSurveysWidget> {
   // amount of questions answered per section and saves them in a list.
   Future<List<QuestionTotals>> _getResultsFromFirestore(
       String sectionID) async {
+    loading = true;
     // The list to store all the total amount of questions and answered questions.
     List<QuestionTotals> questionTotals = [];
     try {

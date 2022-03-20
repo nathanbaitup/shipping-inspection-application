@@ -58,8 +58,8 @@ class _CameraScreenState extends State<CameraScreen> {
     for (var i = 0; i < imageViewer.length; i++) {
       String filename = 'image-$i-${DateTime.now().toString()}';
       FirebaseStorage storage = FirebaseStorage.instance;
-      Reference firebaseStorageRef =
-          storage.ref().child('images/${widget.vesselID}/$filename');
+      Reference firebaseStorageRef = storage.ref().child(
+          'images/${widget.vesselID}/${widget.questionID}/$filename.jpeg');
       UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
       await uploadTask.then((value) => value.ref.getDownloadURL());
     }
