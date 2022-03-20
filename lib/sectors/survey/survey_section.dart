@@ -350,6 +350,7 @@ class _SurveySectionState extends State<SurveySection> {
           'answeredQuestions': _answers.length,
           'question': _answers[i].question,
           'answer': _answers[i].answer,
+          'questionNumber': _answers[i].questionNumber,
           'timestamp': FieldValue.serverTimestamp()
         });
       }
@@ -366,18 +367,19 @@ class _SurveySectionState extends State<SurveySection> {
     // pushing it back into the context with the updated data.
     Navigator.pop(context);
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => SurveySection(
-                questionID: questionID,
-                capturedImages: imageViewer,
-                vesselID: widget.vesselID)));
+      context,
+      MaterialPageRoute(
+        builder: (context) => SurveySection(
+            questionID: questionID,
+            capturedImages: imageViewer,
+            vesselID: widget.vesselID),
+      ),
+    );
     setState(() {
       loading = false;
     });
   }
 
-  // TODO: Check how many answers there are per question and only take the latest response from timestamp.
   // TODO: load images from firebase storage (another function required).
   Future<List<Answer>> _getResultsFromFirestore() async {
     setState(() {
@@ -394,14 +396,22 @@ class _SurveySectionState extends State<SurveySection> {
           .get();
       // Queries the snapshot to retrieve all questions and answers stored and
       // add them to answersList.
+
+      for (var document in querySnapshot.docs) {
+        answersList.add(Answer(
+          document['question'],
+          document['answer'],
+          document['sectionID'],
+          document['questionNumber'],
+        ));
+      }
       setState(() {
-        for (var document in querySnapshot.docs) {
-          answersList.add(Answer(
-            document['question'],
-            document['answer'],
-            document['sectionID'],
-          ));
-        }
+        // REFERENCE accessed 20/03/2022 https://stackoverflow.com/a/53549197
+        // Used to sort the list by the question number to ensure questions and
+        // answers are displayed in order.
+        answersList
+            .sort((a, b) => a.questionNumber.compareTo(b.questionNumber));
+        // END REFERENCE
       });
     } catch (error) {
       debugPrint("Error: $error");
@@ -425,7 +435,8 @@ class _SurveySectionState extends State<SurveySection> {
   // }
 }
 
-// TODO: update the order in which things are displayed so the question order is correct.
+//TODO: update on back press so the AR hub refreshes.
+
 // Uses the question brain to get the page title and all the questions needed to display on the page
 // and then creates a text widget for each question to be displayed.
 class DisplayQuestions extends StatefulWidget {
@@ -499,6 +510,8 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
                         onChanged: (String value) {
                           setState(() {
                             questionText = widget.question;
+                            questionNumber =
+                                int.parse(widget.question.split('.')[0]);
                             answer = value;
                           });
                         },
@@ -518,6 +531,7 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
   FocusNode focusNode = FocusNode();
   String questionText = '';
   String answer = '';
+  int questionNumber = 0;
 
   // Creates a focus node that checks if focus has been lost on a text field to
   // add the user value to the answers list.
@@ -526,7 +540,8 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
       if (!focusNode.hasFocus) {
         setState(() {
           _answers.removeWhere((value) => value.question == questionText);
-          _answers.add(Answer(questionText, answer, questionID));
+          _answers
+              .add(Answer(questionText, answer, questionID, questionNumber));
         });
       }
     });
