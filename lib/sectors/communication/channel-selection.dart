@@ -1,14 +1,16 @@
 // ignore_for_file: file_names
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
 import 'package:shipping_inspection_app/sectors/communication/active-video-call.dart';
 import 'package:shipping_inspection_app/sectors/communication/channel.dart';
-import 'package:shipping_inspection_app/sectors/drawer/drawer_help.dart';
 import 'package:shipping_inspection_app/shared/loading.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import '../drawer/drawer_globals.dart' as globals;
 import 'package:dio/dio.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 final _channelNameController = TextEditingController();
 
@@ -23,6 +25,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
   // To store the channel name captured by the text field.
   late String channelName;
   bool loading = false;
+  bool hasInternet = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +33,9 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
         ? const Loading()
         : Form(
             child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.5,
                   child: Image.network(
@@ -66,21 +69,24 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                       prefixIcon: const Icon(Icons.video_call),
                       hintText: 'Channel Name',
                       suffixIcon: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween, // added line
+                        mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween, // added line
                         mainAxisSize: MainAxisSize.min, // added line
                         children: <Widget>[
                           IconButton(
                             icon: const Icon(Icons.save),
                             onPressed: () {
                               setState(() {
-                                showOptionsDialog(context, "Select Channel to Save");
+                                showOptionsDialog(
+                                    context, "Select Channel to Save");
                               });
                             },
                           ),
                           IconButton(
                             onPressed: () {
                               setState(() {
-                                showOptionsDialog(context, "Select Channel to Paste");
+                                showOptionsDialog(
+                                    context, "Select Channel to Paste");
                               });
                             },
                             icon: const Icon(Icons.more_vert),
@@ -93,42 +99,72 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                 Container(
                   alignment: Alignment.bottomCenter,
                   padding: const EdgeInsets.only(top: 15),
-                  child: Column(children: [
-                    MaterialButton(
-                      onPressed: () {
-                        addChannelRecord();
-                        _performChannelNameConnection(
-                            _channelNameController.text);
-                      },
-                      color: LightColors.sPurple,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      child: const Text('Join/Create Channel'),
-                      textColor: Colors.white,
-                    ),
-                    MaterialButton(
-                      onPressed: () {
-                        channelClipboard(context);
-                      },
-                      color: LightColors.sPurpleL,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      child: const Text('Copy to Clipboard'),
-                      textColor: Colors.white,
-                    ),
-                    MaterialButton(
-                      onPressed: () {
-                        channelGenerate();
-                      },
-                      color: LightColors.sPurpleLL,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      child: const Text('Generate Channel'),
-                      textColor: Colors.white,
-                    ),
-                  ]),
+                  child: Column(
+                    children: [
+                      MaterialButton(
+                        onPressed: () {
+                          final StreamSubscription<InternetConnectionStatus>
+                              listener =
+                              InternetConnectionChecker().onStatusChange.listen(
+                            (InternetConnectionStatus status) {
+                              switch (status) {
+                                case InternetConnectionStatus.connected:
+                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                  //   const SnackBar(
+                                  //     content: Text('testing internet works'),
+                                  //   ),
+                                  // );
+                                  addChannelRecord();
+                                  _performChannelNameConnection(
+                                      _channelNameController.text);
+                                  break;
+                                case InternetConnectionStatus.disconnected:
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Please connect to the internet before joining a call!'),
+                                    ),
+                                  );
+                                  break;
+                              }
+                            },
+                          );
+                          // addChannelRecord();
+                          // _performChannelNameConnection(
+                          //     _channelNameController.text);
+                        },
+                        color: LightColors.sPurple,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        child: const Text('Join/Create Channel'),
+                        textColor: Colors.white,
+                      ),
+                      MaterialButton(
+                        onPressed: () {
+                          channelClipboard(context);
+                        },
+                        color: LightColors.sPurpleL,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        child: const Text('Copy to Clipboard'),
+                        textColor: Colors.white,
+                      ),
+                      MaterialButton(
+                        onPressed: () {
+                          channelGenerate();
+                        },
+                        color: LightColors.sPurpleLL,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        child: const Text('Generate Channel'),
+                        textColor: Colors.white,
+                      ),
+                    ],
+                  ),
                 )
-              ]));
+              ],
+            ),
+          );
   }
 
   void channelClipboard(BuildContext context) {
@@ -219,75 +255,75 @@ showOptionsDialog(BuildContext context, String title) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return OptionsWidget(channels: getDisplayChannels(globals.savedChannels), title: title);
+      return OptionsWidget(
+          channels: getDisplayChannels(globals.savedChannels), title: title);
     },
   );
 }
 
 class OptionsWidget extends StatelessWidget {
-  const OptionsWidget({Key? key, required this.channels, required this.title}) : super(key: key);
+  const OptionsWidget({Key? key, required this.channels, required this.title})
+      : super(key: key);
 
   final List<Channel> channels;
   final String title;
 
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog(
-        title: Text(title),
-        children: <Widget>[
-          channelOption(context, channels[0], title),
-          channelOption(context, channels[1], title),
-          channelOption(context, channels[2], title),
-        ]
-    );
+    return SimpleDialog(title: Text(title), children: <Widget>[
+      channelOption(context, channels[0], title),
+      channelOption(context, channels[1], title),
+      channelOption(context, channels[2], title),
+    ]);
   }
 }
 
-SimpleDialogOption channelOption(BuildContext context, Channel channel, String title) {
+SimpleDialogOption channelOption(
+    BuildContext context, Channel channel, String title) {
   FontStyle emptyFont = FontStyle.normal;
   String mode = "";
 
-  if(channel.empty) { emptyFont = FontStyle.italic; }
-  else { emptyFont = FontStyle.normal; }
+  if (channel.empty) {
+    emptyFont = FontStyle.italic;
+  } else {
+    emptyFont = FontStyle.normal;
+  }
 
-  if(title == "Select Channel to Save") { mode = "save"; }
-  else if(title == "Select Channel to Paste") { mode = "paste"; }
+  if (title == "Select Channel to Save") {
+    mode = "save";
+  } else if (title == "Select Channel to Paste") {
+    mode = "paste";
+  }
 
   return SimpleDialogOption(
     onPressed: () {
-      switch(mode) {
-        case "save": {
-          if (_channelNameController.text.isNotEmpty) {
-            globals.savedChannels[channel.channelID] =
-            _channelNameController.text;
-            globals.savePrefs();
-          } else {
-            globals.savedChannels[channel.channelID] = " ";
+      switch (mode) {
+        case "save":
+          {
+            if (_channelNameController.text.isNotEmpty) {
+              globals.savedChannels[channel.channelID] =
+                  _channelNameController.text;
+              globals.savePrefs();
+            } else {
+              globals.savedChannels[channel.channelID] = " ";
+            }
           }
-        }
-        break;
-        case "paste": {
-          _channelNameController.text =
-          globals.savedChannels[channel.channelID];
-        }
-        break;
+          break;
+        case "paste":
+          {
+            _channelNameController.text =
+                globals.savedChannels[channel.channelID];
+          }
+          break;
       }
       Navigator.pop(context);
-      },
-    child: Row(
-      children: [
-        Text(
-          (channel.channelID + 1).toString() + ": "
-        ),
-        Text(
-          channel.name,
-          style: TextStyle(
-            fontStyle: emptyFont
-          ),
-        ),
-      ]
-    ),
-
-
+    },
+    child: Row(children: [
+      Text((channel.channelID + 1).toString() + ": "),
+      Text(
+        channel.name,
+        style: TextStyle(fontStyle: emptyFont),
+      ),
+    ]),
   );
 }
