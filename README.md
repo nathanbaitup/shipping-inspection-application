@@ -85,6 +85,7 @@ Instructions on their use and documentation are provided below.
 | [qr_code_scanner][qr_code_scanner]| 0.7.0 | Used to scan and interpret QR code data to open the AR scene in the application. |
 | [permission_handler][permission_handler] | 8.0.0+1 | Used to request the permissions when initially launching th eapplication. |
 | [flutter_spinkit][flutter_spinkit] | 5.1.0 | Provides loading animations to the application |
+| [internet_connection_checker][internet_connection_checker] | 0.0.1+3 | Provides the ability to check of the user is connected to the internet or not |
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. Place all links to documentation used here to keep README clean. Ref: http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
@@ -106,4 +107,5 @@ Instructions on their use and documentation are provided below.
 [agora_tech]: <https://www.agora.io/en/>
 [arcore_tech]: <https://developers.google.com/ar>
 [flutter_install]: <https://docs.flutter.dev/get-started/install>
+[internet_connection_checker]: <https://pub.dev/packages/internet_connection_checker>
 

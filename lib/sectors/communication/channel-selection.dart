@@ -103,22 +103,26 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                     children: [
                       MaterialButton(
                         onPressed: () async {
+                          //Here is the bool that checks if the application has internet
                           final bool isConnected =
                               await InternetConnectionChecker().hasConnection;
+                          //If the application does have a internet connection it will go through this if statement
+                          //and allow the user to access the video call.
                           if (isConnected) {
                             addChannelRecord();
                             _performChannelNameConnection(
                                 _channelNameController.text);
-                          } else {
+                          } else
+                          //Then if the user doesn't have any internet connection they will get a snack bar that will
+                          //tell them to turn on their internet.
+                          {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                  content: Text(
-                                      'You have no internet please check to see if you are connected to wifi!')),
+                                content: Text(
+                                    'You have no internet connection please check to see if you are connected to wifi!'),
+                              ),
                             );
                           }
-                          // addChannelRecord();
-                          // _performChannelNameConnection(
-                          //     _channelNameController.text);
                         },
                         color: LightColors.sPurple,
                         shape: RoundedRectangleBorder(
