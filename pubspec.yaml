@@ -82,6 +82,8 @@ dependencies:
 
   intl: ^0.17.0
 
+  check_inet: ^1.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
