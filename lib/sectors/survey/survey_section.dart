@@ -19,8 +19,8 @@ bool loading = false;
 
 late String questionID;
 List<String> questionsToAsk = [];
-final List<Answer> answersList = [];
-final List<Answer> _answers = [];
+List<Answer> _answers = [];
+List<Answer> answersList = [];
 
 class SurveySection extends StatefulWidget {
   final String vesselID;
@@ -247,6 +247,7 @@ class _SurveySectionState extends State<SurveySection> {
     questionID = widget.questionID;
     pageTitle = questionBrain.getPageTitle(questionID);
     questionsToAsk = questionBrain.getQuestions(questionID);
+    answersList = [];
   }
 
   // Sets up the image viewer so if images have been taken within the AR view,
@@ -359,6 +360,16 @@ class _SurveySectionState extends State<SurveySection> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Unable to save data, please try again.")));
     }
+    // Reloads the page by popping the current page from the navigator and
+    // pushing it back into the context with the updated data.
+    Navigator.pop(context);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => SurveySection(
+                questionID: questionID,
+                capturedImages: imageViewer,
+                vesselID: widget.vesselID)));
     setState(() {
       loading = false;
     });
@@ -390,8 +401,6 @@ class _SurveySectionState extends State<SurveySection> {
           ));
         }
       });
-
-      debugPrint('q1: ${answersList[0].answer} q2: ${answersList[1].answer}');
     } catch (error) {
       debugPrint("Error: $error");
     }
@@ -414,6 +423,7 @@ class _SurveySectionState extends State<SurveySection> {
   // }
 }
 
+// TODO: update the order in which things are displayed so the question order is correct.
 // Uses the question brain to get the page title and all the questions needed to display on the page
 // and then creates a text widget for each question to be displayed.
 class DisplayQuestions extends StatefulWidget {
@@ -432,6 +442,8 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
   void initState() {
     super.initState();
     _setupFocusNode();
+    _answers = [];
+    debugPrint('$answersList');
   }
 
   @override
@@ -466,7 +478,7 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
               ),
               // The text field to allow a question to be answered.
 
-              answersList.isNotEmpty &&
+              answersList.length > widget.counter &&
                       answersList[widget.counter].sectionID == questionID
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -511,6 +523,7 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
     focusNode.addListener(() {
       if (!focusNode.hasFocus) {
         setState(() {
+          _answers.removeWhere((value) => value.question == questionText);
           _answers.add(Answer(questionText, answer, questionID));
         });
       }
