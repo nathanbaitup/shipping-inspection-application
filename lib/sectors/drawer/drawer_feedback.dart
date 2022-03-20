@@ -27,7 +27,7 @@ class _MenuFeedbackState extends State<MenuFeedback> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          
           iconTheme: const IconThemeData(
             color: LightColors.sPurple,
           ),

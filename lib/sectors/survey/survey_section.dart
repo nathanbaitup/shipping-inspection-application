@@ -80,7 +80,6 @@ class _SurveySectionState extends State<SurveySection> {
           title: const Text('Idwal Vessel Inspection'),
           titleTextStyle: const TextStyle(color: LightColors.sPurple),
           centerTitle: true,
-          backgroundColor: Colors.white,
           leading: Transform.scale(
             scale: 0.7,
             child: FloatingActionButton(

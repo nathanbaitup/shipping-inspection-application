@@ -76,7 +76,6 @@ class HomeState extends State<Home> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -157,7 +156,6 @@ class HomeState extends State<Home> {
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                   fontSize: 23.0,
-                                  color: Colors.black,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -211,7 +209,6 @@ class HomeState extends State<Home> {
                             textAlign: TextAlign.start,
                             style: TextStyle(
                               fontSize: 23.0,
-                              color: Colors.black,
                               fontWeight: FontWeight.w700,
                             ),
                           ),

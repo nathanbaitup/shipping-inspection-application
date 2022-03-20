@@ -41,7 +41,7 @@ class ActiveQuestionnairesCard extends StatelessWidget {
               percent: loadingPercent,
               lineWidth: 7.5,
               circularStrokeCap: CircularStrokeCap.round,
-              backgroundColor: Colors.white10,
+
               progressColor: Colors.white,
               center: Text(
                 '${(loadingPercent * 100).round()}%',
