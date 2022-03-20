@@ -102,33 +102,20 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                   child: Column(
                     children: [
                       MaterialButton(
-                        onPressed: () {
-                          final StreamSubscription<InternetConnectionStatus>
-                              listener =
-                              InternetConnectionChecker().onStatusChange.listen(
-                            (InternetConnectionStatus status) {
-                              switch (status) {
-                                case InternetConnectionStatus.connected:
-                                  // ScaffoldMessenger.of(context).showSnackBar(
-                                  //   const SnackBar(
-                                  //     content: Text('testing internet works'),
-                                  //   ),
-                                  // );
-                                  addChannelRecord();
-                                  _performChannelNameConnection(
-                                      _channelNameController.text);
-                                  break;
-                                case InternetConnectionStatus.disconnected:
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'Please connect to the internet before joining a call!'),
-                                    ),
-                                  );
-                                  break;
-                              }
-                            },
-                          );
+                        onPressed: () async {
+                          final bool isConnected =
+                              await InternetConnectionChecker().hasConnection;
+                          if (isConnected) {
+                            addChannelRecord();
+                            _performChannelNameConnection(
+                                _channelNameController.text);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      'You have no internet please check to see if you are connected to wifi!')),
+                            );
+                          }
                           // addChannelRecord();
                           // _performChannelNameConnection(
                           //     _channelNameController.text);
