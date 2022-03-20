@@ -3,6 +3,8 @@ import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
+import '../sectors/survey/survey_section.dart';
+
 // TODO: cleanup this dart file in a separate branch for code quality.
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -149,6 +151,16 @@ class _CameraScreenState extends State<CameraScreen> {
                       debugPrint("Error: $e");
                     }
                     Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SurveySection(
+                            questionID: widget.questionID,
+                            capturedImages: imageViewer,
+                            vesselID: widget.vesselID),
+                      ),
+                    );
                   },
                   elevation: 5.0,
                   fillColor: Colors.grey,

@@ -378,6 +378,7 @@ class _SurveySectionWidgetState extends State<SurveySectionWidget> {
       String sectionID) async {
     // The list to store all the total amount of questions and answered questions.
     List<QuestionTotals> questionTotals = [];
+    int totalAnswered = 0;
     try {
       // Creates a instance reference to the Survey_Responses collection.
       CollectionReference reference =
@@ -393,19 +394,18 @@ class _SurveySectionWidgetState extends State<SurveySectionWidget> {
             document['numberOfQuestions'], document['answeredQuestions']));
       }
 
-      // Sets the total number of questions.
-      setState(() {
-        numberOfQuestions = questionBrain.getQuestionAmount(sectionID);
-      });
-
       // Sets the total amount of questions questions from Firebase.
       for (var i = 0; i < questionTotals.length; i++) {
         if (questionTotals[i].sectionID == sectionID) {
-          setState(() {
-            answeredQuestions = questionTotals[i].answeredQuestions;
-          });
+          totalAnswered++;
         }
       }
+      // Sets the total number of questions and answered amount.
+      setState(() {
+        numberOfQuestions = questionBrain.getQuestionAmount(sectionID);
+        answeredQuestions = totalAnswered;
+      });
+
       // Checks if the number of answered questions is greater than the total
       // number of questions and sets the answered questions to the total
       // number of questions.

@@ -27,7 +27,7 @@ List<String> _questionsToAnswer = [];
 // The answer responses from the survey containing the question and answer.
 List<Answer> _answers = [];
 // The retrieved answers from firebase to be displayed if there are responses.
-List<Answer> _answersList = [];
+List<Answer> answersList = [];
 
 class SurveySection extends StatefulWidget {
   final String vesselID;
@@ -53,15 +53,15 @@ class _SurveySectionState extends State<SurveySection> {
   // Initializes the state and gets the questions, page title and record for the history feature.
   @override
   void initState() {
-    super.initState();
     _initializeSection();
     // Pulls both text and images from Firebase.
-    _getResultsFromFirestore();
     _getImagesFromFirebase();
+    _getResultsFromFirestore();
     // Adds a record of the user history.
     _addEnterRecord();
     // Sets up the image viewer. Can be removed one images can be saved from AR into firebase.
     _initializeImageViewer();
+    super.initState();
   }
 
   @override
@@ -260,7 +260,7 @@ class _SurveySectionState extends State<SurveySection> {
     pageTitle = questionBrain.getPageTitle(questionID);
     _questionsToAnswer = questionBrain.getQuestions(questionID);
     // Resets the answers list to empty.
-    _answersList = [];
+    answersList = [];
   }
 
   // Sets up the image viewer so if images have been taken within the AR view,
@@ -409,7 +409,7 @@ class _SurveySectionState extends State<SurveySection> {
       // Queries the snapshot to retrieve all questions and answers stored and
       // add them to answersList.
       for (var document in querySnapshot.docs) {
-        _answersList.add(Answer(
+        answersList.add(Answer(
           document['question'],
           document['answer'],
           document['sectionID'],
@@ -420,7 +420,7 @@ class _SurveySectionState extends State<SurveySection> {
         // REFERENCE accessed 20/03/2022 https://stackoverflow.com/a/53549197
         // Used to sort the list by the question number to ensure questions and
         // answers are displayed in order.
-        _answersList
+        answersList
             .sort((a, b) => a.questionNumber.compareTo(b.questionNumber));
         // END REFERENCE
       });
@@ -431,7 +431,7 @@ class _SurveySectionState extends State<SurveySection> {
       loading = false;
     });
     // returns the answer list.
-    return _answersList;
+    return answersList;
   }
 
   // Creates a reference to firebase storage using the current vesselID and sectionID
@@ -454,6 +454,9 @@ class _SurveySectionState extends State<SurveySection> {
       // END REFERENCE
     } catch (error) {
       debugPrint("Error: $error");
+      setState(() {
+        loading = false;
+      });
     }
     setState(() {
       loading = false;
@@ -532,13 +535,13 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
               // Checks if the answersList is greater than the counter and
               // if the sectionID's match to display the stored answer within the
               // text field and set it to read only, else displays an empty text field.
-              _answersList.length > widget.counter &&
-                      _answersList[widget.counter].sectionID == questionID
+              answersList.length > widget.counter &&
+                      answersList[widget.counter].sectionID == questionID
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         readOnly: true,
-                        initialValue: _answersList[widget.counter].answer,
+                        initialValue: answersList[widget.counter].answer,
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
                         ),
@@ -551,10 +554,10 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
                         onChanged: (String value) {
                           setState(() {
                             questionText = widget.question;
-                            answer = value;
                             // Gets the question number from the question.
                             questionNumber =
                                 int.parse(widget.question.split('.')[0]);
+                            answer = value;
                           });
                         },
                         decoration: const InputDecoration(
