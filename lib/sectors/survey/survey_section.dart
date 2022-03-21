@@ -231,6 +231,8 @@ class _SurveySectionState extends State<SurveySection> {
                             ElevatedButton(
                               onPressed: () async => _openCamera(),
                               child: const Text('Add Images'),
+                              style: ElevatedButton.styleFrom(
+                                  primary: LightColors.sPurpleL),
                             ),
                             const SizedBox(width: 20),
                             ElevatedButton(
