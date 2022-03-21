@@ -35,11 +35,11 @@ test:
   script:
     - flutter test --machine | tojunit > testreport.xml
     # - flutter pub global run dart_dot_reporter machine.log
-  artifacts:
-    when: always
-    reports:
-      junit:
-        - testreport.xml
+  # artifacts:
+  #   when: always
+  #   reports:
+  #     junit:
+  #       - testreport.xml
 
 
 release:
