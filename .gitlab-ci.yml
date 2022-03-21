@@ -1,7 +1,7 @@
 # This file is a template, and might need editing before it works on your project.
 # https://medium.com/version-1/flutter-continuous-integration-using-gitlab-80f3d896704a
 # https://hub.docker.com/r/google/dart
-image: mobiledevops/flutter-sdk-image:2.0.1
+image: cirrusci/flutter:stable
 
 variables:
 
