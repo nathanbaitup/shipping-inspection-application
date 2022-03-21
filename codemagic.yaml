@@ -1,5 +1,48 @@
+# Automatically generated on 2022-03-21 UTC from https://codemagic.io/app/6238b868854b7237ec0bc63f/settings
+# Note that this configuration is not an exact match to UI settings. Review and adjust as necessary.
+
 workflows:
-  workflow-name:
+  62-branch:
+    name: 62 branch
+    max_build_duration: 60
     environment:
       groups:
         - discord
+      vars:
+        WEBHOOK_URL: Encrypted(Z0FBQUFBQmlPT0lYblJsd0R6eWtJVjhQQmZ6NllxVURKbzgyaUpGVlprWjhUTS1ZWWVLVXh0WnRGaWVrcVNuVW5iTXdUN29xTVlOQVZPOGdaU1BvZW53U0pPZ080c3hPTlZHX19DM0dnTDdpOEpfSjk5RzUxUFNVNkhKV1ZkeWFaNTdmSnR2VEFwN1JNMjlXbllQM3o0SXVOUHl4X1g0WGJqYjgzaFFzQ2NyWlg1ZnU1OEhMaWFtMi0ya1ZIQ1E1Sm5UeEZGd21YdEREZ01mNDVCM0VKSUpfaDczRTEyTTEwSnBNeHJFWXJNWV9yWTM2ek5GVkdkZz0=)
+
+
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - |
+        # set up debug keystore
+        rm -f ~/.android/debug.keystore
+        keytool -genkeypair \
+          -alias androiddebugkey \
+          -keypass android \
+          -keystore ~/.android/debug.keystore \
+          -storepass android \
+          -dname 'CN=Android Debug,O=Android,C=US' \
+          -keyalg 'RSA' \
+          -keysize 2048 \
+          -validity 10000
+      - |
+        # set up local properties
+        echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
+      - flutter packages pub get
+      - flutter test
+      - flutter build apk --debug
+    artifacts:
+      - build/**/outputs/apk/**/*.apk
+      - build/**/outputs/bundle/**/*.aab
+      - build/**/outputs/**/mapping.txt
+      - '*.snap'
+      - build/windows/**/*.msix
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - iqbalha@cardiff.ac.uk
+
