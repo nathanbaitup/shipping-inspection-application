@@ -32,6 +32,8 @@ before_script:
 
 test:
   stage: test
+  tags:
+    - general-docker
   script:
     - flutter test 
     # --machine > machine.log
