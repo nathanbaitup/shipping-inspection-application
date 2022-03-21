@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_help.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
+import 'package:shipping_inspection_app/sectors/questions/question_totals.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import '../drawer/drawer_globals.dart' as history_global;
@@ -9,32 +11,21 @@ import '../drawer/drawer_globals.dart' as history_global;
 import '../../utils/qr_scanner_controller.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
+late String vesselID;
 
 class SurveyHub extends StatefulWidget {
-  const SurveyHub({Key? key}) : super(key: key);
+  final String vesselID;
+  const SurveyHub({Key? key, required this.vesselID}) : super(key: key);
 
   @override
   _SurveyHubState createState() => _SurveyHubState();
 }
 
 class _SurveyHubState extends State<SurveyHub> {
-  // Checks if camera permissions have been granted and takes the user to the QR
-  // camera, updating the history page to allow for tracking.
-  void openCamera() async {
-    if (await Permission.camera.status.isDenied) {
-      await Permission.camera.request();
-      debugPrint("Camera Permissions are required to access QR Scanner");
-    } else {
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const QRScanner(),
-        ),
-      );
-      // Adds a record of the QR camera being opened to the history page.
-      history_global.addRecord(
-          'opened', history_global.getUsername(), DateTime.now(), 'QR camera');
-    }
+  @override
+  void initState() {
+    super.initState();
+    vesselID = widget.vesselID;
   }
 
   @override
@@ -250,6 +241,27 @@ class _SurveyHubState extends State<SurveyHub> {
           ),
         ));
   }
+
+  // Checks if camera permissions have been granted and takes the user to the QR
+  // camera, updating the history page to allow for tracking.
+  void openCamera() async {
+    if (await Permission.camera.status.isDenied) {
+      await Permission.camera.request();
+      debugPrint("Camera Permissions are required to access QR Scanner");
+    } else {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => QRScanner(
+            vesselID: vesselID,
+          ),
+        ),
+      );
+      // Adds a record of the QR camera being opened to the history page.
+      history_global.addRecord(
+          'opened', history_global.getUsername(), DateTime.now(), 'QR camera');
+    }
+  }
 }
 
 // Takes the user to the required survey section when pressing on an active survey.
@@ -258,6 +270,7 @@ void loadQuestion(BuildContext context, String questionID) {
     context,
     MaterialPageRoute(
       builder: (context) => SurveySection(
+        vesselID: vesselID,
         questionID: questionID,
         capturedImages: const [],
       ),
@@ -265,13 +278,29 @@ void loadQuestion(BuildContext context, String questionID) {
   );
 }
 
-class SurveySectionWidget extends StatelessWidget {
+class SurveySectionWidget extends StatefulWidget {
+  final String sectionName;
+  final String sectionMethod;
+
   const SurveySectionWidget(
       {Key? key, required this.sectionName, required this.sectionMethod})
       : super(key: key);
 
-  final String sectionName;
-  final String sectionMethod;
+  @override
+  _SurveySectionWidgetState createState() => _SurveySectionWidgetState();
+}
+
+class _SurveySectionWidgetState extends State<SurveySectionWidget> {
+  // A list to store the total amount and answered amount of questions.
+  List<QuestionTotals> questionTotals = [];
+  int numberOfQuestions = 0;
+  int answeredQuestions = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _getResultsFromFirestore(widget.sectionMethod);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -293,7 +322,7 @@ class SurveySectionWidget extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              sectionName,
+              widget.sectionName,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -317,7 +346,7 @@ class SurveySectionWidget extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              "${questionBrain.getAnswerAmount(sectionMethod)} of ${questionBrain.getQuestionAmount(sectionMethod)}",
+              "$answeredQuestions of $numberOfQuestions",
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 14,
@@ -325,7 +354,7 @@ class SurveySectionWidget extends StatelessWidget {
             ),
           )),
       SizedBox(
-        width: screenSize * 0.3,
+        width: screenSize * 0.275,
         child: TextButton(
           style: TextButton.styleFrom(
             primary: Colors.white,
@@ -335,11 +364,57 @@ class SurveySectionWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20.0)),
           ),
           onPressed: () {
-            loadQuestion(context, sectionMethod);
+            loadQuestion(context, widget.sectionMethod);
           },
           child: const Text("Open"),
         ),
       )
     ]);
+  }
+
+  // Loads a list of all the answered questions from firebase to see the total
+  // amount of questions answered per section and saves them in a list.
+  Future<List<QuestionTotals>> _getResultsFromFirestore(
+      String sectionID) async {
+    // The list to store all the total amount of questions and answered questions.
+    List<QuestionTotals> questionTotals = [];
+    int totalAnswered = 0;
+    try {
+      // Creates a instance reference to the Survey_Responses collection.
+      CollectionReference reference =
+          FirebaseFirestore.instance.collection('Survey_Responses');
+      // Pulls all data where the vesselID and sectionID match.
+      QuerySnapshot querySnapshot =
+          await reference.where('vesselID', isEqualTo: vesselID).get();
+      // Queries the snapshot to retrieve the section ID, the number of questions,
+      // in the section and the number of answered questions and saves to
+      // questionTotals.
+      for (var document in querySnapshot.docs) {
+        questionTotals.add(QuestionTotals(document['sectionID'],
+            document['numberOfQuestions'], document['answeredQuestions']));
+      }
+
+      // Sets the total amount of questions questions from Firebase.
+      for (var i = 0; i < questionTotals.length; i++) {
+        if (questionTotals[i].sectionID == sectionID) {
+          totalAnswered++;
+        }
+      }
+      // Sets the total number of questions and answered amount.
+      setState(() {
+        numberOfQuestions = questionBrain.getQuestionAmount(sectionID);
+        answeredQuestions = totalAnswered;
+      });
+
+      // Checks if the number of answered questions is greater than the total
+      // number of questions and sets the answered questions to the total
+      // number of questions.
+      if (answeredQuestions > numberOfQuestions) {
+        answeredQuestions = numberOfQuestions;
+      }
+    } catch (error) {
+      debugPrint("Error: $error");
+    }
+    return questionTotals;
   }
 }

@@ -11,7 +11,8 @@ import 'colours.dart';
 QuestionBrain questionBrain = QuestionBrain();
 
 class QRScanner extends StatefulWidget {
-  const QRScanner({Key? key}) : super(key: key);
+  final String vesselID;
+  const QRScanner({Key? key, required this.vesselID}) : super(key: key);
 
   @override
   _QRScannerState createState() => _QRScannerState();
@@ -123,6 +124,7 @@ class _QRScannerState extends State<QRScanner> {
         context,
         MaterialPageRoute(
           builder: (context) => NewARHub(
+              vesselID: widget.vesselID,
               questionID: '${_qrResult?.code}',
               arContent: arContentPush,
               openThroughQR: true),

@@ -22,12 +22,14 @@ import '../drawer/drawer_globals.dart' as history_globals;
 QuestionBrain questionBrain = QuestionBrain();
 
 class NewARHub extends StatefulWidget {
+  final String vesselID;
   final String questionID;
   final List<String> arContent;
   final bool openThroughQR;
 
   const NewARHub({
     Key? key,
+    required this.vesselID,
     required this.questionID,
     required this.openThroughQR,
     required this.arContent,
@@ -292,8 +294,18 @@ class _NewARHubState extends State<NewARHub> {
         DateTime.now(), 'take screenshot');
   }
 
+  // TODO: implement save functionality to save AR images to cloud storage.
+  // Not fully implemented, needs to save image to firebase but currently not sure
+  // how to do so from an image provider.
+  void _saveImagesToFirebase() async {
+    // test to see what kind of output is created from the image provider.
+    var image = imageViewer[0].image;
+    debugPrint('IMAGE: $image');
+  }
+
   // Returns the user to the survey_section screen, ensuring they are returned to the section they are currently surveying.
   void _returnToSectionScreen() async {
+    _saveImagesToFirebase();
     // If the user opened a section through the QR scanner, then only one screen
     // needs to be removed from the stack.
     if (widget.openThroughQR) {
@@ -302,7 +314,9 @@ class _NewARHubState extends State<NewARHub> {
         context,
         MaterialPageRoute(
           builder: (context) => SurveySection(
-              questionID: widget.questionID, capturedImages: imageViewer),
+              vesselID: widget.vesselID,
+              questionID: widget.questionID,
+              capturedImages: imageViewer),
         ),
         (Route<dynamic> route) => true,
       );
@@ -315,7 +329,9 @@ class _NewARHubState extends State<NewARHub> {
         context,
         MaterialPageRoute(
           builder: (context) => SurveySection(
-              questionID: widget.questionID, capturedImages: imageViewer),
+              vesselID: widget.vesselID,
+              questionID: widget.questionID,
+              capturedImages: imageViewer),
         ),
         (Route<dynamic> route) => true,
       );

@@ -12,6 +12,9 @@ Future<void> main() async {
   runApp(const ShipApp());
 }
 
+// The vesselID used to differentiate surveys saved in the database.
+String vesselID = '';
+
 class ShipApp extends StatefulWidget {
   const ShipApp({Key? key}) : super(key: key);
 
@@ -31,26 +34,28 @@ class _ShipAppState extends State<ShipApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Shipping Application',
-      theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch().copyWith(
-        primary: Colors.white,
-        secondary: LightColors.sPurple,
-        brightness: Brightness.light,
-        /* light theme settings */
-      )),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        /* dark theme settings */
-      ),
-      themeMode: ThemeMode.system,
-      // Dark mode now follows system settings
-      // Requires Android 10 (API level 29) or above to switch to dark mode
-      debugShowCheckedModeBanner: false,
-      home: const MyHomePage(
-        title: 'Idwal Vessel Inspection App',
-      ),
-    );
+        title: 'Shipping Application',
+        theme: ThemeData(
+            colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: Colors.white,
+          secondary: LightColors.sPurple,
+          brightness: Brightness.light,
+          /* light theme settings */
+        )),
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          /* dark theme settings */
+        ),
+        themeMode: ThemeMode.system,
+        // Dark mode now follows system settings
+        // Requires Android 10 (API level 29) or above to switch to dark mode
+        debugShowCheckedModeBanner: false,
+        // Checks if vesselID is empty, if true opens the welcome screen
+        // else opens the application with the vesselID parsed in.
+        home: vesselID.isEmpty
+            ? const WelcomePage()
+            : MyHomePage(
+                title: 'Idwal Vessel Inspection App', vesselID: vesselID));
   }
 
   // Checks if permissions have been granted and asks the user for permission if not.
@@ -66,5 +71,149 @@ class _ShipAppState extends State<ShipApp> {
       await openAppSettings();
     }
     // END REFERENCE
+  }
+}
+
+class WelcomePage extends StatefulWidget {
+  const WelcomePage({Key? key}) : super(key: key);
+
+  @override
+  _WelcomePageState createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
+  // Stores the text value from the Text field.
+  final _vesselController = TextEditingController();
+  // Used to set if the vessel input field is empty or not to display an error.
+  bool _validation = false;
+
+  @override
+  void dispose() {
+    _vesselController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Gets the height and width of the current device.
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    return Scaffold(
+      body: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              // Creates a header with the page title.
+              Container(
+                height: screenHeight * 0.12,
+                width: screenWidth,
+                padding: const EdgeInsets.all(0.0),
+                decoration: const BoxDecoration(
+                  color: LightColors.sLavender,
+                  borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(30.0),
+                    bottomLeft: Radius.circular(30.0),
+                  ),
+                ),
+                // The page title.
+                child: const Center(
+                  child: Text(
+                    'Idwal Vessel Inspector',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    // Idwal logo.
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      child: Image.network(
+                          'https://www.idwalmarine.com/hs-fs/hubfs/IDWAL-Logo-CMYK-Blue+White.png?width=2000&name=IDWAL-Logo-CMYK-Blue+White.png'),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Gives a description on the welcome page.
+                    const Text(
+                      "Hello! Welcome to the Idwal Vessel Inspection application.",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      "To get started, please enter the vessel name/id you are inspecting below and press continue.",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w300,
+                          fontStyle: FontStyle.italic),
+                    ),
+                    const SizedBox(height: 10),
+
+                    // The text field to enter a vessel ID.
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: TextField(
+                        controller: _vesselController,
+                        decoration: InputDecoration(
+                          labelText: 'enter the vessel name ',
+                          errorText: _validation
+                              ? 'Please enter a vessel name or id'
+                              : null,
+                          border: const OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    // Sets the vessel ID for use throughout the application and redirects
+                    // to the home page.
+                    ElevatedButton(
+                      onPressed: () {
+                        // Checks if the text controller is empty and displays a
+                        // validation error, else sets the vesselID to be parsed
+                        // into all pages of the application.
+                        if (_vesselController.text.isEmpty) {
+                          setState(() {
+                            _validation = true;
+                          });
+                        } else {
+                          setState(() {
+                            _validation = false;
+                          });
+                          vesselID = _vesselController.text;
+                          runApp(const ShipApp());
+                        }
+                      },
+                      style:
+                          ElevatedButton.styleFrom(primary: LightColors.sGreen),
+                      child: const Text('Continue to Application'),
+                    ),
+
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

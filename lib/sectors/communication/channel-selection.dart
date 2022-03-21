@@ -13,7 +13,9 @@ import 'package:dio/dio.dart';
 final _channelNameController = TextEditingController();
 
 class ChannelNameSelection extends StatefulWidget {
-  const ChannelNameSelection({Key? key}) : super(key: key);
+  final String vesselID;
+  const ChannelNameSelection({Key? key, required this.vesselID})
+      : super(key: key);
 
   @override
   State<ChannelNameSelection> createState() => _ChannelNameSelectionState();
@@ -66,21 +68,24 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                       prefixIcon: const Icon(Icons.video_call),
                       hintText: 'Channel Name',
                       suffixIcon: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween, // added line
+                        mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween, // added line
                         mainAxisSize: MainAxisSize.min, // added line
                         children: <Widget>[
                           IconButton(
                             icon: const Icon(Icons.save),
                             onPressed: () {
                               setState(() {
-                                showOptionsDialog(context, "Select Channel to Save");
+                                showOptionsDialog(
+                                    context, "Select Channel to Save");
                               });
                             },
                           ),
                           IconButton(
                             onPressed: () {
                               setState(() {
-                                showOptionsDialog(context, "Select Channel to Paste");
+                                showOptionsDialog(
+                                    context, "Select Channel to Paste");
                               });
                             },
                             icon: const Icon(Icons.more_vert),
@@ -191,6 +196,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
             builder: (context) => VideoCallFragment(
                   channelName: channelNameSelection,
                   agoraToken: agoraTokenInsideFunction,
+                  vesselID: widget.vesselID,
                 )),
       );
     });
@@ -219,75 +225,75 @@ showOptionsDialog(BuildContext context, String title) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return OptionsWidget(channels: getDisplayChannels(globals.savedChannels), title: title);
+      return OptionsWidget(
+          channels: getDisplayChannels(globals.savedChannels), title: title);
     },
   );
 }
 
 class OptionsWidget extends StatelessWidget {
-  const OptionsWidget({Key? key, required this.channels, required this.title}) : super(key: key);
+  const OptionsWidget({Key? key, required this.channels, required this.title})
+      : super(key: key);
 
   final List<Channel> channels;
   final String title;
 
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog(
-        title: Text(title),
-        children: <Widget>[
-          channelOption(context, channels[0], title),
-          channelOption(context, channels[1], title),
-          channelOption(context, channels[2], title),
-        ]
-    );
+    return SimpleDialog(title: Text(title), children: <Widget>[
+      channelOption(context, channels[0], title),
+      channelOption(context, channels[1], title),
+      channelOption(context, channels[2], title),
+    ]);
   }
 }
 
-SimpleDialogOption channelOption(BuildContext context, Channel channel, String title) {
+SimpleDialogOption channelOption(
+    BuildContext context, Channel channel, String title) {
   FontStyle emptyFont = FontStyle.normal;
   String mode = "";
 
-  if(channel.empty) { emptyFont = FontStyle.italic; }
-  else { emptyFont = FontStyle.normal; }
+  if (channel.empty) {
+    emptyFont = FontStyle.italic;
+  } else {
+    emptyFont = FontStyle.normal;
+  }
 
-  if(title == "Select Channel to Save") { mode = "save"; }
-  else if(title == "Select Channel to Paste") { mode = "paste"; }
+  if (title == "Select Channel to Save") {
+    mode = "save";
+  } else if (title == "Select Channel to Paste") {
+    mode = "paste";
+  }
 
   return SimpleDialogOption(
     onPressed: () {
-      switch(mode) {
-        case "save": {
-          if (_channelNameController.text.isNotEmpty) {
-            globals.savedChannels[channel.channelID] =
-            _channelNameController.text;
-            globals.savePrefs();
-          } else {
-            globals.savedChannels[channel.channelID] = " ";
+      switch (mode) {
+        case "save":
+          {
+            if (_channelNameController.text.isNotEmpty) {
+              globals.savedChannels[channel.channelID] =
+                  _channelNameController.text;
+              globals.savePrefs();
+            } else {
+              globals.savedChannels[channel.channelID] = " ";
+            }
           }
-        }
-        break;
-        case "paste": {
-          _channelNameController.text =
-          globals.savedChannels[channel.channelID];
-        }
-        break;
+          break;
+        case "paste":
+          {
+            _channelNameController.text =
+                globals.savedChannels[channel.channelID];
+          }
+          break;
       }
       Navigator.pop(context);
-      },
-    child: Row(
-      children: [
-        Text(
-          (channel.channelID + 1).toString() + ": "
-        ),
-        Text(
-          channel.name,
-          style: TextStyle(
-            fontStyle: emptyFont
-          ),
-        ),
-      ]
-    ),
-
-
+    },
+    child: Row(children: [
+      Text((channel.channelID + 1).toString() + ": "),
+      Text(
+        channel.name,
+        style: TextStyle(fontStyle: emptyFont),
+      ),
+    ]),
   );
 }

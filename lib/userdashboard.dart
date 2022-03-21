@@ -10,10 +10,14 @@ import 'package:shipping_inspection_app/utils/colours.dart';
 
 import 'home.dart';
 
+String vesselID = '';
+
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key, required this.title, required this.vesselID})
+      : super(key: key);
 
   final String title;
+  final String vesselID;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -22,13 +26,19 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    vesselID = widget.vesselID;
+  }
+
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Home(),
-    SurveyHub(),
-    ChannelNameSelection(),
-    Text(
+  static final List<Widget> _widgetOptions = <Widget>[
+    Home(vesselID: vesselID),
+    SurveyHub(vesselID: vesselID),
+    ChannelNameSelection(vesselID: vesselID),
+    const Text(
       'Calls',
       style: optionStyle,
     ),
@@ -130,14 +140,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => const MenuFeedback()));
+                      builder: (BuildContext context) =>
+                          MenuFeedback(vesselID: vesselID)));
                 },
                 icon: const Icon(Icons.question_answer),
               ),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => const MenuFeedback()));
+                    builder: (BuildContext context) =>
+                        MenuFeedback(vesselID: vesselID)));
               }),
           const Divider(
             color: Colors.grey,
