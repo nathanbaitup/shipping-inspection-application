@@ -70,12 +70,22 @@ class _QRScannerState extends State<QRScanner> {
             theme: ThemeData(
               colorScheme: ColorScheme.fromSwatch().copyWith(
                 primary: LightColors.sPurple,
-                secondary: LightColors.sPurple,
+                secondary: LightColors.sPurpleLL,
               ),
             ),
+            debugShowCheckedModeBanner: false,
             home: Scaffold(
               appBar: AppBar(
                 title: const Text("Surveyor Camera"),
+                leading: Transform.scale(
+                  scale: 0.7,
+                  child: FloatingActionButton(
+                    heroTag: 'on_back',
+                    onPressed: () => Navigator.pop(context),
+                    backgroundColor: LightColors.sPurpleLL,
+                    child: const Icon(Icons.arrow_back),
+                  ),
+                ),
               ),
               body: Column(
                 children: <Widget>[

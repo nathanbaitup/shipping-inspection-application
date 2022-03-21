@@ -4,12 +4,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import '../sectors/survey/survey_section.dart';
+import 'colours.dart';
 
 // TODO: cleanup this dart file in a separate branch for code quality.
 class CameraScreen extends StatefulWidget {
+  // A list of all available cameras on the phone.
   final List<CameraDescription> cameras;
   final String vesselID;
   final String questionID;
+
   const CameraScreen(
       {required this.cameras,
       required this.questionID,
@@ -22,55 +25,138 @@ class CameraScreen extends StatefulWidget {
 }
 
 class _CameraScreenState extends State<CameraScreen> {
+  // Displays images in a small scrollable view finder on the camera screen.
   List<Image> imageViewer = [];
+  // Saves a list of all image paths to be uploaded to firebase.
   List<String> imagePaths = [];
-  late File _imageFile;
-
-  void captureImage() async {
-    try {
-      // REFERENCE ACCESSED 14/02/2022 https://docs.flutter.dev/cookbook/plugins/picture-using-camera
-      // Used to capture the image displayed on screen.
-      final image = await _controller.takePicture();
-      //END REFERENCE
-
-      // Displays the image within a preview window to allow a surveyor to take multiple images
-      // if required.
-      setState(() {
-        imagePaths.add(image.path);
-        _imageFile = File(image.path);
-        imageViewer.add(Image.file(
-          File(image.path),
-          width: 75.0,
-          height: 75.0,
-        ));
-      });
-    } catch (error) {
-      const AlertDialog(title: Text("Error capturing image"));
-    }
-  }
-
-  // REFERENCE accessed 16/03/2022 https://stackoverflow.com/a/64764390
-  // Used to save a file to firebase.
-  // Saves the images taken into a folder with the ID of the vessel being inspected on firebase storage.
-  void saveImagesToFirebaseStorage() async {
-    for (var i = 0; i < imageViewer.length; i++) {
-      String filename = 'image-$i-${DateTime.now().toString()}';
-      FirebaseStorage storage = FirebaseStorage.instance;
-      Reference firebaseStorageRef = storage.ref().child(
-          'images/${widget.vesselID}/${widget.questionID}/$filename.jpeg');
-      UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
-      await uploadTask.then((value) => value.ref.getDownloadURL());
-    }
-  }
-  //END REFERENCE
-
-  // REFERENCE ACCESSED 14/02/2022 https://www.youtube.com/watch?v=GpV5sPHEHGs
-  // Used to implement camera functionality that displays a camera capture to the user.
+  // The camera controller.
   late CameraController _controller;
+  // Accessed in the camera controller to set the image file to. Saves the individual
+  // image to firebase.
+  late File _imageFile;
+  // Displays a loading indicator if needed.
+  bool loading = false;
 
   @override
   void initState() {
     super.initState();
+    _initializeCameraController();
+  }
+
+  // Unmounts the controller from the state after use.
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // If the camera permissions have not been requested a loading indicator is displayed.
+    // and permissions are requested.
+    if (!_controller.value.isInitialized || loading == true) {
+      return const SizedBox(
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+    // Creates an material design app following the applications theme.
+    return MaterialApp(
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: LightColors.sPurple,
+          secondary: LightColors.sPurpleLL,
+        ),
+      ),
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text("Surveyor Camera"),
+          leading: Transform.scale(
+            scale: 0.7,
+            child: FloatingActionButton(
+              heroTag: 'on_back',
+              onPressed: () => Navigator.pop(context),
+              backgroundColor: LightColors.sPurpleLL,
+              child: const Icon(Icons.arrow_back),
+            ),
+          ),
+        ),
+        body: SafeArea(
+          child: Stack(
+            children: <Widget>[
+              // Contains the camera view.
+              SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: CameraPreview(_controller),
+              ),
+
+              // Contains buttons to capture an image and go back to the survey section,
+              // and an image viewer to see previews of images.
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      // The image preview window displayed at the bottom left of the screen.
+                      Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        child: SizedBox(
+                          width: 80.0,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: imageViewer,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      // Button that captures an image.
+                      RawMaterialButton(
+                        onPressed: () async => _captureImage(),
+                        elevation: 5.0,
+                        fillColor: LightColors.sPurple,
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(15.0),
+                        child: const Icon(
+                          Icons.photo_camera,
+                          size: 35.0,
+                          color: Colors.white,
+                        ),
+                      ),
+
+                      // Button that saves the images and returns to the survey.
+                      RawMaterialButton(
+                        onPressed: () async => _saveAndReturnToSurvey(),
+                        elevation: 5.0,
+                        fillColor: LightColors.sPurpleLL,
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(10.0),
+                        child: const Icon(
+                          Icons.check,
+                          size: 35.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // REFERENCE accessed 14/02/2022 https://www.youtube.com/watch?v=GpV5sPHEHGs
+  // Used to implement camera functionality that displays a camera capture to the user.
+  void _initializeCameraController() {
     // Initializes the camera to automatically open the rear camera and set the resolution to its maximum.
     _controller = CameraController(
       widget.cameras[0],
@@ -84,99 +170,75 @@ class _CameraScreenState extends State<CameraScreen> {
       setState(() {});
     });
   }
-
-  // Unmounts the controller from the state after use.
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
-  }
   // END REFERENCE
 
-  @override
-  Widget build(BuildContext context) {
-    // If the camera permissions have not been requested a loading indicator is displayed.
-    // and permissions are requested.
-    if (!_controller.value.isInitialized) {
-      return const SizedBox(
-        child: Center(child: CircularProgressIndicator()),
-      );
-    }
+  // Captures the camera image and displays the image within a preview window
+  // allowing for multiple images to be captured.
+  void _captureImage() async {
+    try {
+      // REFERENCE accessed 14/02/2022 https://docs.flutter.dev/cookbook/plugins/picture-using-camera
+      // Used to capture the image displayed on screen.
+      final image = await _controller.takePicture();
+      //END REFERENCE
 
-    // Default camera viewer.
-    return SafeArea(
-      child: Container(
-        color: Colors.white,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Center(
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height / 1.27,
-                  width: MediaQuery.of(context).size.width - 10,
-                  child: CameraPreview(_controller),
-                ),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                SizedBox(
-                  width: 75.0,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: imageViewer,
-                    ),
-                  ),
-                ),
-                RawMaterialButton(
-                  onPressed: () async => captureImage(),
-                  elevation: 5.0,
-                  fillColor: Colors.purple,
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(15.0),
-                  child: const Icon(
-                    Icons.photo_camera,
-                    size: 35.0,
-                    color: Colors.white,
-                  ),
-                ),
-                RawMaterialButton(
-                  onPressed: () async {
-                    try {
-                      saveImagesToFirebaseStorage();
-                    } catch (e) {
-                      debugPrint("Error: $e");
-                    }
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SurveySection(
-                            questionID: widget.questionID,
-                            capturedImages: imageViewer,
-                            vesselID: widget.vesselID),
-                      ),
-                    );
-                  },
-                  elevation: 5.0,
-                  fillColor: Colors.grey,
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(10.0),
-                  child: const Icon(
-                    Icons.check,
-                    size: 35.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+      // Updates the image viewer with the captured image.
+      setState(() {
+        imagePaths.add(image.path);
+        _imageFile = File(image.path);
+        imageViewer.add(
+          Image.file(
+            File(image.path),
+            width: 75.0,
+            height: 75.0,
+          ),
+        );
+      });
+    } catch (error) {
+      const AlertDialog(title: Text("Error capturing image"));
+    }
+  }
+
+  // Tries to save captured images to firebase and returns the surveyor to the survey.
+  void _saveAndReturnToSurvey() async {
+    try {
+      _saveImagesToFirebaseStorage();
+    } catch (e) {
+      // Creates a toast to say that data cannot be saved.
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Unable to save data, please try again later.")));
+    }
+    // Deletes the camera from the navigation stack and reloads the survey section.
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SurveySection(
+            questionID: widget.questionID,
+            capturedImages: imageViewer,
+            vesselID: widget.vesselID),
       ),
     );
   }
+
+  // REFERENCE accessed 16/03/2022 https://stackoverflow.com/a/64764390
+  // Used to save a file to firebase.
+  void _saveImagesToFirebaseStorage() async {
+    // Sets loading to true to save images to firebase.
+    loading = true;
+    for (var i = 0; i < imageViewer.length; i++) {
+      // Creates a filename for the image to save.
+      String filename = 'image-$i-${DateTime.now().toString()}.jpeg';
+      // Creates a firebase storage reference to save an image in a survey section
+      // sub folder under the vessel ID.
+      Reference firebaseStorageRef = FirebaseStorage.instance
+          .ref()
+          .child('images/${widget.vesselID}/${widget.questionID}/$filename');
+      // Uploads the images to the firebase storage.
+      UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
+      await uploadTask.then((value) => value.ref.getDownloadURL());
+    }
+    loading = false;
+  }
+//END REFERENCE
 }
