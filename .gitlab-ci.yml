@@ -13,6 +13,7 @@ cache:
 
 stages:
   - analyze_and_test
+  - release
 
 before_script:
   - export PATH="$PATH":"$HOME/.flutter-sdk/.pub-cache/bin"
@@ -24,5 +25,12 @@ before_script:
 analyze_and_test:
   stage: analyze_and_test
   script:
-    - flutter analyze
-    - flutter test --machine
+    # - flutter analyze
+    - flutter test --machine > machine.log
+    - flutter pub global run dart_dot_reporter machine.log
+
+
+release:
+  stage: release
+  script:
+    - curl -H "Content-Type:application/json" -H "x-auth-token:WIT5U4VFjsg_z6xQNgsAn04brfDpgaqnvSnytd1uP80" https://api.codemagic.io/builds --data '{"appId":"6238b868854b7237ec0bc63f", "workflowId":"6238b868854b7237ec0bc63e","branch":"staging"}'
