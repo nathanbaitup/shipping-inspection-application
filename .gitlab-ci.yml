@@ -39,7 +39,7 @@ test:
   script:
     - export PATH="$PATH":"$HOME/.flutter-sdk/.pub-cache/bin"
     # USING JUNIT:
-  #   - flutter test --machine | tojunit > testreport.xml
+    - flutter test --machine | tojunit > testreport.xml
   # artifacts:
   #   when: always
   #   reports:
