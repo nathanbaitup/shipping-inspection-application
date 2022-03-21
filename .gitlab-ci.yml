@@ -35,6 +35,7 @@ test:
   script:
     - flutter test --machine > machine.log
     - flutter pub global run dart_dot_reporter machine.log --show-sucess
+    - ls
   artifacts:
     when: always
     paths:
