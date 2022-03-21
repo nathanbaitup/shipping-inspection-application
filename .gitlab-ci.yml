@@ -13,7 +13,7 @@ cache:
 
 stages:
   - analyze_and_test
-   - release
+  - release
 
 before_script:
   - export PATH="$PATH":"$HOME/.flutter-sdk/.pub-cache/bin"
