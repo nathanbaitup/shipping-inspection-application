@@ -23,10 +23,12 @@ before_script:
   - flutter clean
   - flutter --version
   - flutter pub global activate dart_dot_reporter
-  # - flutter pub global activate junitreport
+  - flutter pub global activate junitreport
 
 #analyze:
 #  stage: analyze
+#  tags:
+#     - general-docker
 #  script:
 #     - flutter analyze
 
@@ -35,8 +37,15 @@ test:
   tags:
     - general-docker
   script:
-    - flutter test 
-    # --machine > machine.log
+    - flutter test --machine | tojunit > testreport.xml
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - testreport.xml
+
+    # TESTING WIHT DOT REPORTER
+    # - flutter test --machine > machine.log
     # - flutter pub global run dart_dot_reporter machine.log --show-sucess
     # - mv machine.log ${CI_PROJECT_DIR}
   # artifacts:
@@ -47,6 +56,8 @@ test:
 
 release:
   stage: release
+  tags:
+    - general-docker
   script:
     - curl -H "Content-Type:application/json" -H "x-auth-token:WIT5U4VFjsg_z6xQNgsAn04brfDpgaqnvSnytd1uP80" https://api.codemagic.io/builds --data '{"appId":"6238b868854b7237ec0bc63f", "workflowId":"6238b868854b7237ec0bc63e","branch":"main"}'
   only:
