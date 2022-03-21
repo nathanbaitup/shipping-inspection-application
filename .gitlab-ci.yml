@@ -37,9 +37,8 @@ test:
     - flutter pub global run dart_dot_reporter --show-sucess machine.log
   artifacts:
     when: always
-    reports:
-      junit:
-        - testreport.xml
+    paths:
+      - machine.log
 
 
 release:
