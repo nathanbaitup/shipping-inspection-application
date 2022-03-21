@@ -12,7 +12,8 @@ cache:
     - .pub-cache/global_packages
 
 stages:
-  - analyze_and_test
+  - analyze
+  - test
   - release
 
 before_script:
@@ -22,10 +23,14 @@ before_script:
   - flutter --version
   - flutter pub global activate dart_dot_reporter
 
-analyze_and_test:
-  stage: analyze_and_test
+#analyze:
+#  stage: analyze
+#  script:
+#     - flutter analyze
+
+test:
+  stage: test
   script:
-    # - flutter analyze
     - flutter test --machine > machine.log
     - flutter pub global run dart_dot_reporter machine.log
 
