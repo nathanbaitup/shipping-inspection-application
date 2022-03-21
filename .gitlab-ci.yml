@@ -34,7 +34,7 @@ test:
   stage: test
   script:
     - flutter test --machine > machine.log
-    - flutter pub global run dart_dot_reporter --show-sucess machine.log
+    - flutter pub global run dart_dot_reporter machine.log --show-sucess
   artifacts:
     when: always
     paths:
