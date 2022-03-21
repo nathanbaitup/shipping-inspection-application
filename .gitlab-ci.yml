@@ -1,13 +1,11 @@
-# This file is a template, and might need editing before it works on your project.
+# This file has used the template provided below as a basis of its design. accessed 21/03/2022
 # https://medium.com/version-1/flutter-continuous-integration-using-gitlab-80f3d896704a
+
+# TODO: before final push, uncomment to only run analysis and tests on merge request. 
 
 # https://hub.docker.com/r/google/dart
 image: cirrusci/flutter:stable
 
-variables:
-
-# Cache downloaded dependencies and plugins between builds.
-# To keep cache across branches add 'key: "$CI_JOB_NAME"'
 cache:
   paths:
     - .pub-cache/global_packages
@@ -18,48 +16,64 @@ stages:
   - release
 
 before_script:
+  # Sets the paths for both flutter and pub-cache to run both flutter and junit.
   - export PATH="$PATH":"$HOME/.flutter-sdk/.pub-cache/bin"
+  - export PATH="$PATH":"$HOME/.pub-cache/bin"
+
+  # Gets all flutter dependencies and cleans the project, displays the version.
   - flutter pub get
   - flutter clean
   - flutter --version
+
+  # Activates both junit and th dart dot reporter to display a report in terminal and product a .xml report.
   - flutter pub global activate dart_dot_reporter
   - flutter pub global activate junitreport
 
-#analyze:
-#  stage: analyze
-#  tags:
-#     - general-docker
-#  script:
-#     - flutter analyze
+# Analyses the flutter file to check if it meets flutter lint rules before running the tests.
+analyze:
+  stage: analyze
+  tags:
+    - general-docker
+  script:
+    - flutter analyze | tojunit --output analysis_report.xml
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - analysis_report.xml
+  # only:
+  #   - merge_requests
 
+# Runs a flutter test testing all written tests and generating a report of the outcome.
 test:
   stage: test
   tags:
     - general-docker
   script:
-    - export PATH="$PATH":"$HOME/.flutter-sdk/.pub-cache/bin"
-    - export PATH="$PATH":"$HOME/.pub-cache/bin"
-    # USING JUNIT:
-    - flutter test --machine | tojunit --output testreport.xml
+    # Runs the tests and generates an xml report.
+    - flutter test --machine | tojunit --output test_report.xml
 
-    # TESTING WIHT DOT REPORTER
-    - flutter test --machine > machine.log
-    - flutter pub global run dart_dot_reporter machine.log --show-sucess
+    # Runs the tests and displays the outcome within the terminal.
+    - flutter test --machine > test_report.log
+    - flutter pub global run dart_dot_reporter test_report.log --show-sucess
     - ls
   artifacts:
     when: always
-    paths:
-      - machine.log
     reports:
+      # Only takes the junit report as it can be displayed within GitLab in a user friendly view.
       junit:
         - testreport.xml
+  # only:
+  #   - merge_requests
 
-
+# Only runs on main branch, connects to codemagic pipeline that then runs through the pipeline again, but also assembles and builds the flutter project, creating an APK available to download, alerting both the Teams channel and Discord server upon a successful build.
+# TODO: tag the application on push to main and make a release automatically.
 release:
   stage: release
   tags:
     - general-docker
   script:
+    # The script that calls the codemagic api and runs the pipeline.
     - curl -H "Content-Type:application/json" -H "x-auth-token:WIT5U4VFjsg_z6xQNgsAn04brfDpgaqnvSnytd1uP80" https://api.codemagic.io/builds --data '{"appId":"6238b868854b7237ec0bc63f", "workflowId":"6238b868854b7237ec0bc63e","branch":"main"}'
   only:
     - main
