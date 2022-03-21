@@ -1,5 +1,6 @@
 # This file is a template, and might need editing before it works on your project.
 # https://medium.com/version-1/flutter-continuous-integration-using-gitlab-80f3d896704a
+
 # https://hub.docker.com/r/google/dart
 image: cirrusci/flutter:stable
 
@@ -38,4 +39,6 @@ test:
 release:
   stage: release
   script:
-    - curl -H "Content-Type:application/json" -H "x-auth-token:WIT5U4VFjsg_z6xQNgsAn04brfDpgaqnvSnytd1uP80" https://api.codemagic.io/builds --data '{"appId":"6238b868854b7237ec0bc63f", "workflowId":"6238b868854b7237ec0bc63e","branch":"62-as-a-developer-i-would-like-a-way-for-the-repository-to-test-code-automatically-with-a-ci-cd"}'
+    - curl -H "Content-Type:application/json" -H "x-auth-token:WIT5U4VFjsg_z6xQNgsAn04brfDpgaqnvSnytd1uP80" https://api.codemagic.io/builds --data '{"appId":"6238b868854b7237ec0bc63f", "workflowId":"6238b868854b7237ec0bc63e","branch":"main"}'
+  only:
+    - main
