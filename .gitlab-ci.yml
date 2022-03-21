@@ -19,19 +19,10 @@ before_script:
   - flutter pub get
   - flutter clean
   - flutter --version
-  # - flutter pub global activate junitreport
   - flutter pub global activate dart_dot_reporter
 
 analyze_and_test:
   stage: analyze_and_test
   script:
     - flutter analyze
-    # - flutter test --machine | tojunit -o report.xml
-    - flutter test --machine > machine.log || echo 'Tests failed'
-    - flutter pub global run dart_dot_reporter machine.log
-
-  artifacts:
-    when: always
-    reports:
-      junit:
-        - report.xml
+    - flutter test --machine
