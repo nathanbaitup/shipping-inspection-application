@@ -50,7 +50,8 @@ test:
     when: always
     paths:
       - machine.log
-    junit:
+    reports:
+      junit:
         - testreport.xml
 
 
