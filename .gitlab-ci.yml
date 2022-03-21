@@ -38,21 +38,22 @@ test:
     - general-docker
   script:
     - export PATH="$PATH":"$HOME/.flutter-sdk/.pub-cache/bin"
-    - flutter test --machine | tojunit > testreport.xml
-  artifacts:
-    when: always
-    reports:
-      junit:
-        - testreport.xml
+    # USING JUNIT:
+  #   - flutter test --machine | tojunit > testreport.xml
+  # artifacts:
+  #   when: always
+  #   reports:
+  #     junit:
+  #       - testreport.xml
 
     # TESTING WIHT DOT REPORTER
-    # - flutter test --machine > machine.log
-    # - flutter pub global run dart_dot_reporter machine.log --show-sucess
-    # - mv machine.log ${CI_PROJECT_DIR}
+    - flutter test --machine > machine.log
+    - flutter pub global run dart_dot_reporter machine.log --show-sucess
+    - ls
   # artifacts:
-    # when: always
-    # paths:
-      # - machine.log
+  #   when: always
+  #   paths:
+  #     - machine.log
 
 
 release:
