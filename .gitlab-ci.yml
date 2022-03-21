@@ -38,7 +38,7 @@ test:
   artifacts:
     when: always
     paths:
-      - machine.log
+      - /machine.log
 
 
 release:
