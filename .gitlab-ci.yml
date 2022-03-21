@@ -35,11 +35,11 @@ test:
   script:
     - flutter test --machine > machine.log
     - flutter pub global run dart_dot_reporter machine.log --show-sucess
-    - ls
+    - mv machine.log ${CI_PROJECT_DIR}
   artifacts:
     when: always
     paths:
-      - /machine.log
+      - machine.log
 
 
 release:
