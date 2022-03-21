@@ -23,6 +23,7 @@ before_script:
   - flutter clean
   - flutter --version
   - flutter pub global activate dart_dot_reporter
+#  - flutter pub global activate junitreport
 
 #analyze:
 #  stage: analyze
@@ -32,8 +33,13 @@ before_script:
 test:
   stage: test
   script:
-    - flutter test 
+    - flutter test --machine | tojunit > testreport.xml
     # - flutter pub global run dart_dot_reporter machine.log
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - testreport.xml
 
 
 release:
