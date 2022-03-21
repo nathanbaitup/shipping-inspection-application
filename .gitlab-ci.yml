@@ -19,7 +19,7 @@ before_script:
   - flutter pub get
   - flutter clean
   - flutter --version
-  - flutter pub global activate junitreport
+  # - flutter pub global activate junitreport
   - flutter pub global activate dart_dot_reporter
 
 analyze_and_test:
