@@ -17,8 +17,15 @@ const agoraToken = tokenAgora;
 
 class VideoCallFragment extends StatefulWidget {
   String channelName;
+  String agoraToken;
+  final String vesselID;
 
-  VideoCallFragment({Key? key, required this.channelName}) : super(key: key);
+  VideoCallFragment(
+      {Key? key,
+      required this.channelName,
+      required this.agoraToken,
+      required this.vesselID})
+      : super(key: key);
 
   @override
   _VideoCallFragmentState createState() => _VideoCallFragmentState();
@@ -64,8 +71,8 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
     }));
     // Enabling video within the engine with the permissions granted before hand.
     await engine.enableVideo();
-    // CHANNEL CONNECTION INFOMATION
-    await engine.joinChannel(agoraToken, 'test', null, 0);
+    // CHANNEL CONNECTION INFORMATION
+    await engine.joinChannel(widget.agoraToken, widget.channelName, null, 0);
     // add 'widget.channelName' to pass channel name across from selection screen beforehand
     // print('HELLO THIS IS FROM THE CALLING SCREEN ' + widget.channelName);
   }
@@ -192,7 +199,7 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const SurveyHub(),
+                  builder: (context) => SurveyHub(vesselID: widget.vesselID),
                 ),
               );
             },

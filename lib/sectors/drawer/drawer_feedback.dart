@@ -4,7 +4,8 @@ import 'package:shipping_inspection_app/sectors/userfeedback/feedback.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 
 class MenuFeedback extends StatefulWidget {
-  const MenuFeedback({Key? key}) : super(key: key);
+  final String vesselID;
+  const MenuFeedback({Key? key, required this.vesselID}) : super(key: key);
 
   @override
   State<MenuFeedback> createState() => _MenuFeedbackState();
@@ -26,7 +27,7 @@ class _MenuFeedbackState extends State<MenuFeedback> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          
           iconTheme: const IconThemeData(
             color: LightColors.sPurple,
           ),
