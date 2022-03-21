@@ -31,8 +31,8 @@ before_script:
 test:
   stage: test
   script:
-    - flutter test --machine > machine.log
-    - flutter pub global run dart_dot_reporter machine.log
+    - flutter test 
+    # - flutter pub global run dart_dot_reporter machine.log
 
 
 release:
