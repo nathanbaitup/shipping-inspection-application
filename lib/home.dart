@@ -10,7 +10,6 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shipping_inspection_app/utils/task_list.dart';
 import 'package:shipping_inspection_app/utils/active_questionnaire_card.dart';
 import 'package:shipping_inspection_app/utils/homecontainer.dart';
-import 'package:shipping_inspection_app/sectors/survey/survey_hub.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
 late String vesselID;
@@ -31,20 +30,6 @@ class HomeState extends State<Home> {
   void initState() {
     super.initState();
     vesselID = widget.vesselID;
-  }
-
-  // Takes the user to the required survey section when pressing on an active survey.
-  void loadQuestion(String questionID) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SurveySection(
-          vesselID: widget.vesselID,
-          questionID: questionID,
-          capturedImages: const [],
-        ),
-      ),
-    );
   }
 
   Text subheading(String title) {
@@ -109,8 +94,8 @@ class HomeState extends State<Home> {
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const <Widget>[
-                              Text(
+                            children: <Widget>[
+                              const Text(
                                 'Ms. Ships',
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
@@ -120,9 +105,9 @@ class HomeState extends State<Home> {
                                 ),
                               ),
                               Text(
-                                'Vessel Surveyor',
+                                'Surveying: $vesselID',
                                 textAlign: TextAlign.start,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 18.0,
                                   color: Colors.black45,
                                   fontWeight: FontWeight.w400,
@@ -162,7 +147,8 @@ class HomeState extends State<Home> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => TasksPage()),
+                                        builder: (context) =>
+                                            const TasksPage()),
                                   );
                                 },
                                 child: calendarIcon(),
@@ -170,7 +156,7 @@ class HomeState extends State<Home> {
                             ],
                           ),
                           const SizedBox(height: 15.0),
-                          TaskList(
+                          const TaskList(
                             icon: Icons.alarm,
                             iconBackgroundColor: LightColors.sRed,
                             title: 'To Do',
@@ -179,14 +165,14 @@ class HomeState extends State<Home> {
                           const SizedBox(
                             height: 15.0,
                           ),
-                          TaskList(
+                          const TaskList(
                             icon: Icons.blur_circular,
                             iconBackgroundColor: LightColors.sDarkYellow,
                             title: 'In Progress',
                             subtitle: '2 task(s) in progress',
                           ),
                           const SizedBox(height: 15.0),
-                          TaskList(
+                          const TaskList(
                             icon: Icons.check_circle_outline,
                             iconBackgroundColor: LightColors.sBlue,
                             title: 'Done',
@@ -322,13 +308,27 @@ class _ActiveSurveysWidgetState extends State<ActiveSurveysWidget> {
                   '$answeredQuestions of $numberOfQuestions questions answered',
             ),
             onTap: () {
-              loadQuestion(context, widget.sectionID);
+              _loadQuestion(widget.sectionID);
             },
           ),
           const SizedBox(width: 10.0),
         ],
       );
     }
+  }
+
+  // Takes the user to the required survey section when pressing on an active survey.
+  void _loadQuestion(String questionID) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SurveySection(
+          vesselID: vesselID,
+          questionID: questionID,
+          capturedImages: const [],
+        ),
+      ),
+    );
   }
 
   // Loads a list of all the answered questions from firebase to see the total
