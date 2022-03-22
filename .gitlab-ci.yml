@@ -54,10 +54,13 @@ test:
     - ls
   artifacts:
     when: always
+    paths:
+      - test_report.xml
     reports:
       # Only takes the junit report as it can be displayed within GitLab in a user friendly view.
       junit:
-        - testreport.xml
+        - test_report.xml
+    
   # only:
   #   - merge_requests
 
