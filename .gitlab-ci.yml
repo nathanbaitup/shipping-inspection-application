@@ -1,7 +1,6 @@
 # This file has used the template provided below as a basis of its design. accessed 21/03/2022
 # https://medium.com/version-1/flutter-continuous-integration-using-gitlab-80f3d896704a
 
-# TODO: before final push, uncomment to only run analysis and tests on merge request. 
 stages:
   - analyze_and_test
   - codemagic_generate
@@ -53,8 +52,8 @@ Analyze and Test:
       junit:
         - test_report.xml
     expire_in: 2 weeks
-  # only:
-  #   - merge_requests
+  only:
+    - merge_requests
 
 
 # Only runs on main branch, connects to codemagic pipeline that then runs through the pipeline again, but also assembles and builds the flutter project, creating an APK available to download, alerting both the Teams channel and Discord server upon a successful build.
@@ -65,8 +64,8 @@ Build using Codemagic:
   script:
     # The script that calls the codemagic api and runs the pipeline.
     - curl -H "Content-Type:application/json" -H "x-auth-token:WIT5U4VFjsg_z6xQNgsAn04brfDpgaqnvSnytd1uP80" https://api.codemagic.io/builds --data '{"appId":"6238b868854b7237ec0bc63f", "workflowId":"6238b868854b7237ec0bc63e","branch":"main"}'
-  # only:
-  #   - main
+  only:
+    - main
 
 
 # https://gitlab.com/gitlab-org/release-cli
