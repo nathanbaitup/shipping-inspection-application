@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/home.dart';
-import 'package:shipping_inspection_app/sectors/communication/channel-selection.dart';
+import 'package:shipping_inspection_app/sectors/communication/channel_selection.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_feedback.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_history.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_hub.dart';

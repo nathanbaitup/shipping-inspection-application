@@ -16,11 +16,11 @@ const appID = appIDAgora;
 const agoraToken = tokenAgora;
 
 class VideoCallFragment extends StatefulWidget {
-  String channelName;
-  String agoraToken;
+  final String channelName;
+  final String agoraToken;
   final String vesselID;
 
-  VideoCallFragment(
+  const VideoCallFragment(
       {Key? key,
       required this.channelName,
       required this.agoraToken,
@@ -120,7 +120,7 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
   // Local device viewfinder.
   Widget _renderLocalPreview() {
     if (_joined) {
-      return rtc_local_view.SurfaceView();
+      return const rtc_local_view.SurfaceView();
     } else {
       return const Text(
         'Please join channel first',

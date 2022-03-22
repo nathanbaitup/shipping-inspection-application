@@ -2,9 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
-import 'package:shipping_inspection_app/sectors/communication/active-video-call.dart';
+import 'package:shipping_inspection_app/sectors/communication/active_video_call.dart';
 import 'package:shipping_inspection_app/sectors/communication/channel.dart';
-import 'package:shipping_inspection_app/sectors/drawer/drawer_help.dart';
 import 'package:shipping_inspection_app/shared/loading.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import '../drawer/drawer_globals.dart' as globals;
@@ -164,15 +163,15 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
   }
 
   void _performChannelNameConnection(String strDioToken) async {
-    print('The string passed into getTokenDio is ' + strDioToken);
+    debugPrint('The string passed into getTokenDio is ' + strDioToken);
     Response response = await Dio().get(
         "https://agoratokencardiffuniversity.azurewebsites.net/access_token",
         queryParameters: {'channelName': strDioToken});
     Map result = response.data;
     var tokenDataFromJson = result['token'];
-    print('getTokenDio response ' + tokenDataFromJson);
+    debugPrint('getTokenDio response ' + tokenDataFromJson);
     String tokenDataFromJsonToString = tokenDataFromJson.toString();
-    print('tokenDataFromJsonToString ' + tokenDataFromJsonToString);
+    debugPrint('tokenDataFromJsonToString ' + tokenDataFromJsonToString);
 
     String agoraTokenInsideFunction = tokenDataFromJsonToString;
 
@@ -180,13 +179,14 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
 
     setState(() {
       loading = true;
-      print('loading animation triggered TRUE, _performChannelNameConnection');
+      debugPrint(
+          'loading animation triggered TRUE, _performChannelNameConnection');
     });
 
     Future.delayed(const Duration(seconds: 5), () {
       setState(() {
         loading = false;
-        print(
+        debugPrint(
             'loading animation triggered FALSE, _performChannelNameConnection');
       });
 
@@ -201,8 +201,8 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
       );
     });
 
-    print('channel name selected: $channelNameSelection');
-    print('agora token being passed across: $agoraTokenInsideFunction');
+    debugPrint('channel name selected: $channelNameSelection');
+    debugPrint('agora token being passed across: $agoraTokenInsideFunction');
   }
 
 // Using Dio, HTTP alternative, smarter package with more flexibility and ease of use.

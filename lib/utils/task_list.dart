@@ -5,12 +5,13 @@ class TaskList extends StatelessWidget {
   final Color iconBackgroundColor;
   final String title;
   final String subtitle;
-  TaskList({
-    required this.icon,
-    required this.iconBackgroundColor,
-    required this.title,
-    required this.subtitle,
-  });
+  const TaskList(
+      {Key? key,
+      required this.icon,
+      required this.iconBackgroundColor,
+      required this.title,
+      required this.subtitle})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -25,20 +26,20 @@ class TaskList extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        SizedBox(width: 10.0),
+        const SizedBox(width: 10.0),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.w700,
               ),
             ),
             Text(
               subtitle,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.w500,
                   color: Colors.black45),
