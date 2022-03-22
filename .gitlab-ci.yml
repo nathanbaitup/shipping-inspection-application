@@ -35,12 +35,7 @@ analyze:
   tags:
     - general-docker
   script:
-    - flutter analyze | tojunit --output analysis_report.xml
-  artifacts:
-    when: always
-    reports:
-      junit:
-        - analysis_report.xml
+    - flutter analyze
   # only:
   #   - merge_requests
 
