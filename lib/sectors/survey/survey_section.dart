@@ -9,7 +9,7 @@ import 'package:camera/camera.dart';
 
 // Package dependencies.
 import 'package:shipping_inspection_app/shared/loading.dart';
-import 'package:shipping_inspection_app/utils/camera_screen.dart';
+import 'package:shipping_inspection_app/sectors/camera/camera_screen.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:shipping_inspection_app/sectors/ar/new_ar_hub.dart';
