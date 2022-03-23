@@ -34,6 +34,29 @@ class _SettingsHistoryState extends State<SettingsHistory> {
               shrinkWrap: true,
               sections: [
                 SettingsSection(
+                    title: const Text(
+                      'Toggle History',
+                      style: TextStyle(
+                          color: Colors.black,
+                          decorationColor: LightColors.sPurple,
+                          decorationThickness: 2,
+                          decoration: TextDecoration.underline
+                      ),
+                    ),
+                  tiles: [
+                    SettingsTile.switchTile(
+                      title: const Text("History Logging"),
+                      leading: const Icon(Icons.history,
+                          color: LightColors.sPurple),
+                      initialValue: true,
+                      activeSwitchColor: LightColors.sPurple,
+                      onToggle: (bool value) {
+
+                      },
+                    )
+                  ]
+                ),
+                SettingsSection(
                   title: const Text(
                     'Log Preferences',
                     style: TextStyle(
@@ -114,8 +137,10 @@ class _SettingsHistoryState extends State<SettingsHistory> {
               top: 10,
               bottom: 10,
             ),
-            child: Center(
-                child: TextButton (
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
                   style: TextButton.styleFrom(
                     primary: Colors.white,
                     backgroundColor: LightColors.sPurpleL,
@@ -124,12 +149,31 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0)),
                   ),
-                  child: const Text("Check History Logs"),
+                  child: const Text("Check History"),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => const MenuHistory()));
                   },
+                ),
+
+                const SizedBox(
+                  width: 20,
+                ),
+
+                TextButton(
+                  style: TextButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: LightColors.sRed,
+                    elevation: 2,
+                    padding: const EdgeInsets.all(15.0),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0)),
+                  ),
+                  child: const Text("Clear History"),
+                  onPressed: () {
+                  },
                 )
+              ]
             ),
           ),
 
