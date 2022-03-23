@@ -32,6 +32,16 @@ Color initButtonColourCheck() {
   return newColor;
 }
 
+Color initPrefsColourCheck() {
+  Color newColor;
+  if(globals.historyEnabled) {
+    newColor = LightColors.sPurple;
+  } else {
+    newColor = Colors.grey;
+  }
+  return newColor;
+}
+
 class _SettingsHistoryState extends State<SettingsHistory> {
 
   @override
@@ -39,7 +49,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
             color: LightColors.sPurple,
           ),
@@ -62,19 +72,19 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                           decoration: TextDecoration.underline
                       ),
                     ),
-                  tiles: [
-                    SettingsTile.switchTile(
-                      title: const Text("History Logging"),
-                      leading: const Icon(Icons.history,
-                          color: LightColors.sPurple),
-                      initialValue: globals.historyEnabled,
-                      activeSwitchColor: LightColors.sPurple,
-                      onToggle: (bool value) {
-                        globals.historyEnabled = !globals.historyEnabled;
-                        setState(() {  value = globals.historyEnabled; });
-                      },
-                    )
-                  ]
+                    tiles: [
+                      SettingsTile.switchTile(
+                        title: const Text("History Logging"),
+                        leading: const Icon(Icons.history,
+                            color: LightColors.sPurple),
+                        initialValue: globals.historyEnabled,
+                        activeSwitchColor: LightColors.sPurple,
+                        onToggle: (bool value) {
+                          globals.historyEnabled = !globals.historyEnabled;
+                          setState(() {  value = globals.historyEnabled; });
+                        },
+                      )
+                    ]
                 ),
                 SettingsSection(
                   title: const Text(
@@ -89,8 +99,8 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                   tiles: [
                     SettingsTile.switchTile(
                       title: const Text("Section Entering"),
-                      leading: const Icon(Icons.door_back_door_outlined,
-                          color: LightColors.sPurple),
+                      leading: Icon(Icons.door_back_door_outlined,
+                          color: initPrefsColourCheck()),
                       initialValue: globals.historyPrefs[0],
                       activeSwitchColor: LightColors.sPurple,
                       enabled: globals.historyEnabled,
@@ -102,8 +112,8 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                     ),
                     SettingsTile.switchTile(
                       title: const Text("Section Response"),
-                      leading: const Icon(Icons.newspaper,
-                          color: LightColors.sPurple),
+                      leading: Icon(Icons.newspaper,
+                          color: initPrefsColourCheck()),
                       initialValue: globals.historyPrefs[1],
                       activeSwitchColor: LightColors.sPurple,
                       enabled: globals.historyEnabled,
@@ -114,8 +124,8 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                     ),
                     SettingsTile.switchTile(
                       title: const Text("Settings Change"),
-                      leading: const Icon(Icons.settings,
-                          color: LightColors.sPurple),
+                      leading: Icon(Icons.settings,
+                          color: initPrefsColourCheck()),
                       initialValue: globals.historyPrefs[2],
                       activeSwitchColor: LightColors.sPurple,
                       enabled: globals.historyEnabled,
@@ -127,8 +137,8 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                     ),
                     SettingsTile.switchTile(
                       title: const Text("QR Usage"),
-                      leading: const Icon(Icons.qr_code,
-                          color: LightColors.sPurple),
+                      leading: Icon(Icons.qr_code,
+                          color: initPrefsColourCheck()),
                       initialValue: globals.historyPrefs[3],
                       activeSwitchColor: LightColors.sPurple,
                       enabled: globals.historyEnabled,
@@ -140,8 +150,8 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                     ),
                     SettingsTile.switchTile(
                       title: const Text("Communications"),
-                      leading: const Icon(Icons.phone,
-                          color: LightColors.sPurple),
+                      leading: Icon(Icons.phone,
+                          color: initPrefsColourCheck()),
                       initialValue: globals.historyPrefs[4],
                       activeSwitchColor: LightColors.sPurple,
                       enabled: globals.historyEnabled,

@@ -77,7 +77,8 @@ class _SurveySectionState extends State<SurveySection> {
       return Scaffold(
         // Sets up the app bar to take the user back to the previous page
         appBar: AppBar(
-          title: const Text('Idwal Vessel Inspection'),
+          title: const Text(''),
+          backgroundColor: globals.getAppbarColour(),
           titleTextStyle: const TextStyle(color: LightColors.sPurple),
           centerTitle: true,
           leading: Transform.scale(
