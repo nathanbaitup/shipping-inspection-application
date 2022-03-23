@@ -5,6 +5,8 @@ import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:shipping_inspection_app/add_task.dart';
 
 class TasksPage extends StatelessWidget {
+  const TasksPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,12 +20,12 @@ class TasksPage extends StatelessWidget {
           ),
           child: Column(
             children: <Widget>[
-              MyBackButton(),
-              SizedBox(height: 30.0),
+              const MyBackButton(),
+              const SizedBox(height: 30.0),
               Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(
+                    const Text(
                       'To-Do',
                       style: TextStyle(
                           fontSize: 30.0, fontWeight: FontWeight.w700),
@@ -40,11 +42,11 @@ class TasksPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => AddTask(),
+                              builder: (context) => const AddTask(),
                             ),
                           );
                         },
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             'Add task',
                             style: TextStyle(
@@ -56,10 +58,10 @@ class TasksPage extends StatelessWidget {
                       ),
                     ),
                   ]),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
+                children: const <Widget>[
                   Text(
                     'My task list',
                     style: TextStyle(
@@ -70,15 +72,15 @@ class TasksPage extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 width: 20,
               ),
               Expanded(
                 flex: 5,
                 child: ListView(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: <Widget>[
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: const <Widget>[
                     TaskContainer(
                       title: 'IMO Guidelines review',
                       subtitle:
