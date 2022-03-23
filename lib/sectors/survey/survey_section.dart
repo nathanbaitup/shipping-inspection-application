@@ -14,6 +14,7 @@ import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:shipping_inspection_app/sectors/ar/new_ar_hub.dart';
 import 'package:shipping_inspection_app/sectors/questions/answers.dart';
+import '../ar/ar_onboarding_screen.dart';
 import '../drawer/drawer_globals.dart' as globals;
 
 // The question brain to load all the questions.
@@ -78,6 +79,7 @@ class _SurveySectionState extends State<SurveySection> {
         // Sets up the app bar to take the user back to the previous page
         appBar: AppBar(
           title: const Text('Idwal Vessel Inspection'),
+          backgroundColor: Colors.white,
           titleTextStyle: const TextStyle(color: LightColors.sPurple),
           centerTitle: true,
           leading: Transform.scale(
@@ -134,8 +136,16 @@ class _SurveySectionState extends State<SurveySection> {
                 const SizedBox(height: 10),
 
                 // Opens the survey section in an AR view.
+                //TODO: changed for testing the onboarding screen, revert back to _openARSection() function.
                 ElevatedButton(
-                  onPressed: () async => _openARSection(),
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ARIntroduction(),
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                       primary: LightColors.sDarkYellow),
                   child: const Text('Open section in AR'),
