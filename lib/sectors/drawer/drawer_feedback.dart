@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/userfeedback/feedback.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
+import 'drawer_globals.dart' as globals;
 
 class MenuFeedback extends StatefulWidget {
   final String vesselID;
@@ -27,7 +28,7 @@ class _MenuFeedbackState extends State<MenuFeedback> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          
+          backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
             color: LightColors.sPurple,
           ),

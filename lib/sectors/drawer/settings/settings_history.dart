@@ -12,15 +12,44 @@ class SettingsHistory extends StatefulWidget {
   State<SettingsHistory> createState() => _SettingsHistoryState();
 }
 
-class _SettingsHistoryState extends State<SettingsHistory> {
+Color initButtonColourClear() {
+  Color newColor;
+  if(globals.historyEnabled) {
+    newColor = LightColors.sRed;
+  } else {
+    newColor = Colors.grey;
+  }
+  return newColor;
+}
 
+Color initButtonColourCheck() {
+  Color newColor;
+  if(globals.historyEnabled) {
+    newColor = LightColors.sPurpleL;
+  } else {
+    newColor = Colors.grey;
+  }
+  return newColor;
+}
+
+Color initPrefsColourCheck() {
+  Color newColor;
+  if(globals.historyEnabled) {
+    newColor = LightColors.sPurple;
+  } else {
+    newColor = Colors.grey;
+  }
+  return newColor;
+}
+
+class _SettingsHistoryState extends State<SettingsHistory> {
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
             color: LightColors.sPurple,
           ),
@@ -34,6 +63,30 @@ class _SettingsHistoryState extends State<SettingsHistory> {
               shrinkWrap: true,
               sections: [
                 SettingsSection(
+                    title: const Text(
+                      'Logs',
+                      style: TextStyle(
+                          color: Colors.black,
+                          decorationColor: LightColors.sPurple,
+                          decorationThickness: 2,
+                          decoration: TextDecoration.underline
+                      ),
+                    ),
+                    tiles: [
+                      SettingsTile.switchTile(
+                        title: const Text("History Logging"),
+                        leading: const Icon(Icons.history,
+                            color: LightColors.sPurple),
+                        initialValue: globals.historyEnabled,
+                        activeSwitchColor: LightColors.sPurple,
+                        onToggle: (bool value) {
+                          globals.historyEnabled = !globals.historyEnabled;
+                          setState(() {  value = globals.historyEnabled; });
+                        },
+                      )
+                    ]
+                ),
+                SettingsSection(
                   title: const Text(
                     'Log Preferences',
                     style: TextStyle(
@@ -46,10 +99,11 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                   tiles: [
                     SettingsTile.switchTile(
                       title: const Text("Section Entering"),
-                      leading: const Icon(Icons.door_back_door_outlined,
-                          color: LightColors.sPurple),
+                      leading: Icon(Icons.door_back_door_outlined,
+                          color: initPrefsColourCheck()),
                       initialValue: globals.historyPrefs[0],
                       activeSwitchColor: LightColors.sPurple,
+                      enabled: globals.historyEnabled,
                       onToggle: (bool value) {
                         globals.changeHistoryPref("Section Entering", !globals.historyPrefs[0]);
                         setState(() { value = globals.historyPrefs[0]; });
@@ -58,10 +112,11 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                     ),
                     SettingsTile.switchTile(
                       title: const Text("Section Response"),
-                      leading: const Icon(Icons.newspaper,
-                          color: LightColors.sPurple),
+                      leading: Icon(Icons.newspaper,
+                          color: initPrefsColourCheck()),
                       initialValue: globals.historyPrefs[1],
                       activeSwitchColor: LightColors.sPurple,
+                      enabled: globals.historyEnabled,
                       onToggle: (bool value) {
                         globals.changeHistoryPref("Section Response", !globals.historyPrefs[1]);
                         setState(() { value = globals.historyPrefs[1]; });
@@ -69,10 +124,11 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                     ),
                     SettingsTile.switchTile(
                       title: const Text("Settings Change"),
-                      leading: const Icon(Icons.settings,
-                          color: LightColors.sPurple),
+                      leading: Icon(Icons.settings,
+                          color: initPrefsColourCheck()),
                       initialValue: globals.historyPrefs[2],
                       activeSwitchColor: LightColors.sPurple,
+                      enabled: globals.historyEnabled,
                       onToggle: (bool value) {
                         globals.changeHistoryPref("Settings Change", !globals.historyPrefs[2]);
                         setState(() { value = globals.historyPrefs[2]; });
@@ -81,10 +137,11 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                     ),
                     SettingsTile.switchTile(
                       title: const Text("QR Usage"),
-                      leading: const Icon(Icons.qr_code,
-                          color: LightColors.sPurple),
+                      leading: Icon(Icons.qr_code,
+                          color: initPrefsColourCheck()),
                       initialValue: globals.historyPrefs[3],
                       activeSwitchColor: LightColors.sPurple,
+                      enabled: globals.historyEnabled,
                       onToggle: (bool value) {
                         globals.changeHistoryPref("QR Usage", !globals.historyPrefs[3]);
                         setState(() { value = globals.historyPrefs[3]; });
@@ -93,10 +150,11 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                     ),
                     SettingsTile.switchTile(
                       title: const Text("Communications"),
-                      leading: const Icon(Icons.phone,
-                          color: LightColors.sPurple),
+                      leading: Icon(Icons.phone,
+                          color: initPrefsColourCheck()),
                       initialValue: globals.historyPrefs[4],
                       activeSwitchColor: LightColors.sPurple,
+                      enabled: globals.historyEnabled,
                       onToggle: (bool value) {
                         globals.changeHistoryPref("Communications", !globals.historyPrefs[4]);
                         setState(() { value = globals.historyPrefs[4]; });
@@ -114,22 +172,77 @@ class _SettingsHistoryState extends State<SettingsHistory> {
               top: 10,
               bottom: 10,
             ),
-            child: Center(
-                child: TextButton (
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
                   style: TextButton.styleFrom(
                     primary: Colors.white,
-                    backgroundColor: LightColors.sPurpleL,
+                    backgroundColor: initButtonColourCheck(),
                     elevation: 2,
                     padding: const EdgeInsets.all(15.0),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0)),
                   ),
-                  child: const Text("Check History Logs"),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => const MenuHistory()));
-                  },
+                  child: const Text("Check History"),
+                  onPressed: globals.historyEnabled
+                      ? () => {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context) => const MenuHistory()))
+                      }
+                      : null
+                ),
+
+                const SizedBox(
+                  width: 20,
+                ),
+
+                TextButton(
+                  style: TextButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: initButtonColourClear(),
+                    elevation: 2,
+                    padding: const EdgeInsets.all(15.0),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0)),
+                  ),
+                  child: const Text("Clear History"),
+                  onPressed: globals.historyEnabled
+                      ? () => {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Clear History"),
+                              content: const Text("Are you sure you want to clear all history?"),
+                              actions: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    globals.records = [];
+                                    Navigator.pop(context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: LightColors.sRed,
+                                  ),
+                                  child: const Text('Clear')
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: LightColors.sPurpleL,
+                                  ),
+                                  child: const Text('Cancel')
+                                ),
+                              ]
+                            );
+                          },
+                        )
+                      }
+                      : null
                 )
+              ]
             ),
           ),
 

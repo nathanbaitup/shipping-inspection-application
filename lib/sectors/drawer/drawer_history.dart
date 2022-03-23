@@ -157,8 +157,7 @@ class _MenuHistoryState extends State<MenuHistory> {
           break;
       }
 
-      if (!blockRecord) {
-        debugPrint("record added" + currentRecordText.toString());
+      if(!blockRecord) {
         recordListTiles.add(RecordWidget(
           record: currentRecordText,
         ));
@@ -167,16 +166,42 @@ class _MenuHistoryState extends State<MenuHistory> {
     return recordListTiles;
   }
 
+  Widget getBody() {
+    if (globals.historyEnabled) {
+      return ListView(
+          padding: const EdgeInsets.all(8), children: formatRecords());
+    } else {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text("History logging has been disabled.",
+              style: TextStyle(
+                  fontSize: 15,
+                  fontStyle: FontStyle.italic),),
+            SizedBox(
+              height: 15,
+            ),
+            Text("Navigate to Settings to renable this feature.",
+              style: TextStyle(
+                  fontSize: 15,
+                  fontStyle: FontStyle.italic),),
+          ],
+        )
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
             color: LightColors.sPurple,
           ),
         ),
-        body: ListView(
-            padding: const EdgeInsets.all(8), children: formatRecords()));
+        body: getBody());
   }
 }
 

@@ -58,7 +58,7 @@ class _ShipAppState extends State<ShipApp> {
         home: vesselID.isEmpty
             ? const WelcomePage()
             : MyHomePage(
-                title: 'Idwal Vessel Inspection App', vesselID: vesselID));
+                title: 'Idwal Vessel Inspection', vesselID: vesselID));
   }
 
   // Checks if permissions have been granted and asks the user for permission if not.
