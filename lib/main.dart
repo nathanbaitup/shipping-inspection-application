@@ -36,16 +36,19 @@ class _ShipAppState extends State<ShipApp> {
     return MaterialApp(
         title: 'Shipping Application',
         theme: ThemeData(
-            colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: Colors.white,
-          secondary: LightColors.sPurple,
-          brightness: Brightness.light,
-          /* light theme settings */
+          colorScheme: ColorScheme.fromSwatch().copyWith(
+            primary: LightColors.sPurple,
+            secondary: LightColors.sPurple,
+            brightness: Brightness.light,
+            /* light theme settings */
         )),
         darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          /* dark theme settings */
-        ),
+            colorScheme: ColorScheme.fromSwatch().copyWith(
+              primary: Colors.white,
+              secondary: LightColors.sPurple,
+              brightness: Brightness.dark,
+              /* dark theme settings */
+        )),
         themeMode: ThemeMode.system,
         // Dark mode now follows system settings
         // Requires Android 10 (API level 29) or above to switch to dark mode
