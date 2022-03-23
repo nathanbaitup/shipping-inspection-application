@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 
-class appTextField extends StatelessWidget {
+class AppTextField extends StatelessWidget {
   final String label;
   final int maxLines;
   final int minLines;
-  appTextField({required this.label, this.maxLines = 1, this.minLines = 1});
+  const AppTextField(
+      {Key? key, required this.label, this.maxLines = 1, this.minLines = 1})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-
-      style: TextStyle(color: Colors.black),
-      minLines: minLines,
-      maxLines: maxLines,
-      decoration: InputDecoration(
+        style: const TextStyle(color: Colors.black),
+        minLines: minLines,
+        maxLines: maxLines,
+        decoration: InputDecoration(
           labelText: label,
-          labelStyle: TextStyle(color: Colors.black54, fontSize: 20, fontWeight:FontWeight.w500),
+          labelStyle: const TextStyle(
+              color: Colors.black54, fontSize: 20, fontWeight: FontWeight.w500),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: const BorderSide(color: Colors.grey, width: 2),
@@ -24,12 +26,8 @@ class appTextField extends StatelessWidget {
             borderSide: const BorderSide(color: Colors.grey, width: 2),
             borderRadius: BorderRadius.circular(15),
           ),
-
           hintText: "Your text here",
-          contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-
-
-    )
-      );
+          contentPadding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+        ));
   }
 }

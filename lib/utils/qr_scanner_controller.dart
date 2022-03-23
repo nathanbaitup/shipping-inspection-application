@@ -113,7 +113,8 @@ class _QRScannerState extends State<QRScanner> {
   _launchARSection(String qrResult) async {
     setState(() {
       loading = true;
-      print('loading animation triggered TRUE, _performChannlNameConnection');
+      debugPrint(
+          'loading animation triggered TRUE, _performChannlNameConnection');
     });
 
     if (_qrResult?.code == "f&s" ||

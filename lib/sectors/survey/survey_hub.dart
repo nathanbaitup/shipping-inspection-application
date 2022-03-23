@@ -265,7 +265,7 @@ class _SurveyHubState extends State<SurveyHub> {
 }
 
 // Takes the user to the required survey section when pressing on an active survey.
-void loadQuestion(BuildContext context, String questionID) {
+void _loadQuestion(BuildContext context, String questionID) {
   Navigator.push(
     context,
     MaterialPageRoute(
@@ -364,7 +364,7 @@ class _SurveySectionWidgetState extends State<SurveySectionWidget> {
                 borderRadius: BorderRadius.circular(20.0)),
           ),
           onPressed: () {
-            loadQuestion(context, widget.sectionMethod);
+            _loadQuestion(context, widget.sectionMethod);
           },
           child: const Text("Open"),
         ),

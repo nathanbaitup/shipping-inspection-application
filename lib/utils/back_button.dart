@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 
-
 class MyBackButton extends StatelessWidget {
-
+  const MyBackButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Hero(
       tag: 'backButton',
       child: GestureDetector(
-        onTap: (){
+        onTap: () {
           Navigator.pop(context);
         },
-        child: Align(
+        child: const Align(
           alignment: Alignment.centerLeft,
           child: Icon(
             Icons.arrow_back_ios,
