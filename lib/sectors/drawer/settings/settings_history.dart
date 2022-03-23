@@ -12,8 +12,27 @@ class SettingsHistory extends StatefulWidget {
   State<SettingsHistory> createState() => _SettingsHistoryState();
 }
 
-class _SettingsHistoryState extends State<SettingsHistory> {
+Color initButtonColourClear() {
+  Color newColor;
+  if(globals.historyEnabled) {
+    newColor = LightColors.sRed;
+  } else {
+    newColor = Colors.grey;
+  }
+  return newColor;
+}
 
+Color initButtonColourCheck() {
+  Color newColor;
+  if(globals.historyEnabled) {
+    newColor = LightColors.sPurpleL;
+  } else {
+    newColor = Colors.grey;
+  }
+  return newColor;
+}
+
+class _SettingsHistoryState extends State<SettingsHistory> {
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +54,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
               sections: [
                 SettingsSection(
                     title: const Text(
-                      'Toggle History',
+                      'Logs',
                       style: TextStyle(
                           color: Colors.black,
                           decorationColor: LightColors.sPurple,
@@ -48,10 +67,11 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                       title: const Text("History Logging"),
                       leading: const Icon(Icons.history,
                           color: LightColors.sPurple),
-                      initialValue: true,
+                      initialValue: globals.historyEnabled,
                       activeSwitchColor: LightColors.sPurple,
                       onToggle: (bool value) {
-
+                        globals.historyEnabled = !globals.historyEnabled;
+                        setState(() {  value = globals.historyEnabled; });
                       },
                     )
                   ]
@@ -73,6 +93,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                           color: LightColors.sPurple),
                       initialValue: globals.historyPrefs[0],
                       activeSwitchColor: LightColors.sPurple,
+                      enabled: globals.historyEnabled,
                       onToggle: (bool value) {
                         globals.changeHistoryPref("Section Entering", !globals.historyPrefs[0]);
                         setState(() { value = globals.historyPrefs[0]; });
@@ -85,6 +106,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                           color: LightColors.sPurple),
                       initialValue: globals.historyPrefs[1],
                       activeSwitchColor: LightColors.sPurple,
+                      enabled: globals.historyEnabled,
                       onToggle: (bool value) {
                         globals.changeHistoryPref("Section Response", !globals.historyPrefs[1]);
                         setState(() { value = globals.historyPrefs[1]; });
@@ -96,6 +118,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                           color: LightColors.sPurple),
                       initialValue: globals.historyPrefs[2],
                       activeSwitchColor: LightColors.sPurple,
+                      enabled: globals.historyEnabled,
                       onToggle: (bool value) {
                         globals.changeHistoryPref("Settings Change", !globals.historyPrefs[2]);
                         setState(() { value = globals.historyPrefs[2]; });
@@ -108,6 +131,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                           color: LightColors.sPurple),
                       initialValue: globals.historyPrefs[3],
                       activeSwitchColor: LightColors.sPurple,
+                      enabled: globals.historyEnabled,
                       onToggle: (bool value) {
                         globals.changeHistoryPref("QR Usage", !globals.historyPrefs[3]);
                         setState(() { value = globals.historyPrefs[3]; });
@@ -120,6 +144,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                           color: LightColors.sPurple),
                       initialValue: globals.historyPrefs[4],
                       activeSwitchColor: LightColors.sPurple,
+                      enabled: globals.historyEnabled,
                       onToggle: (bool value) {
                         globals.changeHistoryPref("Communications", !globals.historyPrefs[4]);
                         setState(() { value = globals.historyPrefs[4]; });
@@ -143,17 +168,19 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                 TextButton(
                   style: TextButton.styleFrom(
                     primary: Colors.white,
-                    backgroundColor: LightColors.sPurpleL,
+                    backgroundColor: initButtonColourCheck(),
                     elevation: 2,
                     padding: const EdgeInsets.all(15.0),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0)),
                   ),
                   child: const Text("Check History"),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => const MenuHistory()));
-                  },
+                  onPressed: globals.historyEnabled
+                      ? () => {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context) => const MenuHistory()))
+                      }
+                      : null
                 ),
 
                 const SizedBox(
@@ -163,15 +190,18 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                 TextButton(
                   style: TextButton.styleFrom(
                     primary: Colors.white,
-                    backgroundColor: LightColors.sRed,
+                    backgroundColor: initButtonColourClear(),
                     elevation: 2,
                     padding: const EdgeInsets.all(15.0),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0)),
                   ),
                   child: const Text("Clear History"),
-                  onPressed: () {
-                  },
+                  onPressed: globals.historyEnabled
+                      ? () => {
+                        print("test")
+                      }
+                      : null
                 )
               ]
             ),

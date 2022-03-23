@@ -32,6 +32,8 @@ String getUsername() {
 
 // --- HISTORY GLOBALS
 // -- For usage in History Logs + History Settings
+bool historyEnabled = true;
+
 List<bool> historyPrefs = List<bool>.filled(5, true, growable: false);
 
 void changeHistoryPref(String type, bool value) {
