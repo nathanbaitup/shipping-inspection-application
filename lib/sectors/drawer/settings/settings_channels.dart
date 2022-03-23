@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
+import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
+    as globals;
 import 'package:shipping_inspection_app/utils/colours.dart';
 
-import '../../communication/channel-selection.dart';
 import '../../communication/channel.dart';
-
 
 class SettingsChannels extends StatefulWidget {
   const SettingsChannels({Key? key}) : super(key: key);
@@ -16,9 +14,7 @@ class SettingsChannels extends StatefulWidget {
 }
 
 class _SettingsChannelsState extends State<SettingsChannels> {
-
   SettingsTile channelTile(Channel channel) {
-
     FontStyle emptyFont = FontStyle.normal;
     Row optionsRow = Row();
 
@@ -73,7 +69,7 @@ class _SettingsChannelsState extends State<SettingsChannels> {
     final dialogController = TextEditingController();
     String title = "";
 
-    if(edit) {
+    if (edit) {
       dialogController.text = channel.name;
       title = "Edit Channel";
     } else {
@@ -85,27 +81,25 @@ class _SettingsChannelsState extends State<SettingsChannels> {
       builder: (BuildContext context) {
         return AlertDialog(
             title: Text(title),
-            content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField(
-                    onChanged: (value) { },
-                    controller: dialogController,
-                    decoration: const InputDecoration(hintText: "Enter Channel Here"),
-                  ),
-                ]
-            ),
+            content: Column(mainAxisSize: MainAxisSize.min, children: [
+              TextField(
+                onChanged: (value) {},
+                controller: dialogController,
+                decoration:
+                    const InputDecoration(hintText: "Enter Channel Here"),
+              ),
+            ]),
             actions: [
               ElevatedButton(
                   onPressed: () {
-                    globals.savedChannels[channel.channelID] = dialogController.text;
+                    globals.savedChannels[channel.channelID] =
+                        dialogController.text;
                     globals.savePrefs();
                     Navigator.pop(context);
                     setState(() {});
                   },
-                  child: Text('Submit')),
-            ]
-        );
+                  child: const Text('Submit')),
+            ]);
       },
     );
   }
@@ -122,7 +116,6 @@ class _SettingsChannelsState extends State<SettingsChannels> {
             color: LightColors.sPurple,
           ),
         ),
-
         body: SettingsList(sections: [
           SettingsSection(
             title: const Text(
@@ -141,6 +134,4 @@ class _SettingsChannelsState extends State<SettingsChannels> {
           )
         ]));
   }
-
 }
-

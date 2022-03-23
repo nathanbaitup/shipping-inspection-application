@@ -449,9 +449,7 @@ class _SurveySectionState extends State<SurveySection> {
       // REFERENCE accessed 20/03/2022 https://stackoverflow.com/a/56402109
       // Used to list all the images within the correct folder.
       storageRef.listAll().then((result) => {
-            result.items.forEach((imageRef) {
-              _addToImageViewer(imageRef);
-            })
+            for (var imageRef in result.items) {_addToImageViewer(imageRef)}
           });
       // END REFERENCE
     } catch (error) {

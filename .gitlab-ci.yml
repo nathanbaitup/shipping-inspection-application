@@ -1,0 +1,85 @@
+# This file has used the template provided below as a basis of its design. accessed 21/03/2022
+# https://medium.com/version-1/flutter-continuous-integration-using-gitlab-80f3d896704a
+
+stages:
+  - analyze_and_test
+  - codemagic_generate
+  - release
+
+# Analyses and tests the flutter file to check if it meets lint rules before running the tests and producing a JUnit report.
+Analyze and Test:
+  stage: analyze_and_test
+  # https://hub.docker.com/r/google/dart
+  image: cirrusci/flutter:stable
+
+  cache:
+    paths:
+      - .pub-cache/global_packages
+
+  tags:
+    - general-docker
+
+  before_script:
+  # Sets the paths for both flutter and pub-cache to run both flutter and junit.
+  - export PATH="$PATH":"$HOME/.flutter-sdk/.pub-cache/bin"
+  - export PATH="$PATH":"$HOME/.pub-cache/bin"
+
+  # Gets all flutter dependencies and cleans the project, displays the version.
+  - flutter pub get
+  - flutter clean
+  - flutter --version
+
+  # Activates both junit and th dart dot reporter to display a report in terminal and product a .xml report.
+  - flutter pub global activate dart_dot_reporter
+  - flutter pub global activate junitreport
+
+  script:
+    # Runs flutter analysis.
+    - flutter analyze    
+    
+    # Runs the tests and generates an xml report.
+    - flutter test --machine | tojunit --output test_report.xml
+
+    # Runs the tests and displays the outcome within the terminal.
+    - flutter test --machine > test_report.log
+    - flutter pub global run dart_dot_reporter test_report.log --show-sucess
+  artifacts:
+    when: always
+    paths:
+      - test_report.xml
+    reports:
+      # Only takes the junit report as it can be displayed within GitLab in a user friendly view.
+      junit:
+        - test_report.xml
+    expire_in: 2 weeks
+  only:
+    - merge_requests
+
+
+# Only runs on main branch, connects to codemagic pipeline that then runs through the pipeline again, but also assembles and builds the flutter project, creating an APK available to download, alerting both the Teams channel and Discord server upon a successful build.
+Build using Codemagic:
+  stage: codemagic_generate
+  tags:
+    - general-docker
+  script:
+    # The script that calls the codemagic api and runs the pipeline.
+    - curl -H "Content-Type:application/json" -H "x-auth-token:WIT5U4VFjsg_z6xQNgsAn04brfDpgaqnvSnytd1uP80" https://api.codemagic.io/builds --data '{"appId":"6238b868854b7237ec0bc63f", "workflowId":"6238b868854b7237ec0bc63e","branch":"main"}'
+  only:
+    - main
+
+
+# https://gitlab.com/gitlab-org/release-cli
+# Creates an automatic release using the job ID as a title and tag version and sets the description to the newest commit message: aka the merge request into main.
+Release:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli
+  when: on_success
+  tags:
+    - general-docker
+  except:
+    - tags
+  script: 
+    - release-cli create --name "Idwal Shipping v$CI_JOB_ID" --description "$CI_COMMIT_MESSAGE" --tag-name "v$CI_JOB_ID" --ref $CI_COMMIT_SHA
+  only: 
+    - main
+
