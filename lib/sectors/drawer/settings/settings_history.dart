@@ -209,7 +209,36 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                   child: const Text("Clear History"),
                   onPressed: globals.historyEnabled
                       ? () => {
-                        print("test")
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Clear History"),
+                              content: const Text("Are you sure you want to clear all history?"),
+                              actions: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    globals.records = [];
+                                    Navigator.pop(context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: LightColors.sRed,
+                                  ),
+                                  child: const Text('Clear')
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: LightColors.sPurpleL,
+                                  ),
+                                  child: const Text('Cancel')
+                                ),
+                              ]
+                            );
+                          },
+                        )
                       }
                       : null
                 )
