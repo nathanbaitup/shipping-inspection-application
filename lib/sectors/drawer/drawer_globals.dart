@@ -1,4 +1,8 @@
 
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:shipping_inspection_app/sectors/history/record.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -84,4 +88,20 @@ void loadPrefs() async {
   historyPrefs[2] = prefs.getBool("history-settings")?? true;
   historyPrefs[3] = prefs.getBool("history-qr")?? true;
   historyPrefs[4] = prefs.getBool("history-communications")?? true;
+}
+
+Color getAppbarColour() {
+
+  Color appbarColour;
+
+  var brightness = SchedulerBinding.instance!.window.platformBrightness;
+  bool isDarkMode = brightness == Brightness.dark;
+
+  if (isDarkMode) {
+    appbarColour = Colors.black38;
+  } else {
+    appbarColour = Colors.white;
+  }
+
+  return appbarColour;
 }

@@ -61,6 +61,7 @@ class _MenuSettingsState extends State<MenuSettings> {
     updateText();
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
             color: LightColors.sPurple,
           ),

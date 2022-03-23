@@ -7,6 +7,7 @@ import 'package:shipping_inspection_app/sectors/survey/survey_hub.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_settings.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_help.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
+import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
 
 import 'home.dart';
 
@@ -64,6 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         titleTextStyle: const TextStyle(color: LightColors.sPurple),
         centerTitle: true,
+        backgroundColor: globals.getAppbarColour(),
         leading: Transform.scale(
           scale: 0.7,
           child: FloatingActionButton(
