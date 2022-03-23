@@ -102,6 +102,18 @@ class _MenuSettingsState extends State<MenuSettings> {
                           const SettingsChannels()));
                 },
               ),
+              SettingsTile.switchTile(
+                title: const Text('Dark Mode'),
+                leading:
+                const Icon(Icons.dark_mode, color: LightColors.sPurple),
+                onPressed: (BuildContext context) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                      const SettingsChannels()));
+                },
+                initialValue: null,
+                onToggle: (bool value) {  },
+              ),
             ],
           ),
           SettingsSection(

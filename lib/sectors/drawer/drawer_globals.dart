@@ -16,6 +16,10 @@ void addRecord(type, user, dateTime, section) {
   records.add(Record(type, user, dateTime, section));
 }
 
+// --- Theme GLOBALS
+// -- For usage in Dark Mode
+bool darkModeEnabled = false;
+
 // --- USERNAME GLOBALS
 // -- For usage in Username Settings + History Logs + Calls
 String username = "Current User";
@@ -76,6 +80,8 @@ void savePrefs() async {
   await prefs.setBool("history-settings", historyPrefs[2]);
   await prefs.setBool("history-qr", historyPrefs[3]);
   await prefs.setBool("history-communications", historyPrefs[4]);
+  await prefs.setBool("history-enabled", historyEnabled);
+  await prefs.setBool("dark-mode", darkModeEnabled)
 }
 
 void loadPrefs() async {
@@ -88,6 +94,8 @@ void loadPrefs() async {
   historyPrefs[2] = prefs.getBool("history-settings")?? true;
   historyPrefs[3] = prefs.getBool("history-qr")?? true;
   historyPrefs[4] = prefs.getBool("history-communications")?? true;
+  historyEnabled = prefs.getBool("history-enabled")?? true;
+  darkModeEnabled = prefs.getBool("dark-mode")?? false;
 }
 
 Color getAppbarColour() {
