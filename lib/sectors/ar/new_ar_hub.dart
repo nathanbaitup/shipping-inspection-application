@@ -185,7 +185,6 @@ class _NewARHubState extends State<NewARHub> {
 
   // Function that handles adding an object to the AR scene.
   // Currently adds a model of a duck following the example.
-  // TODO: update code to only allow for one item to be displayed.
   // TODO: display the item automatically and not with a tap.
   // TODO: allow for multiple items to be loaded dynamically based on the question ID.
   Future<void> _onPlaneOrPointTap(List<ARHitTestResult> userTapResults) async {
