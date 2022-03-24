@@ -16,6 +16,7 @@
 | Stage | Date |  
 | ------ | ------ |  
 | Entered Open at | 00-00-0000 00:00 |  
+| Entered Ready at | 00-00-0000 00:00 |  
 | Entered Development at | 00-00-0000 00:00 |  
 | Entered Testing at | 00-00-0000 00:00 |  
 | Entered Review at | 00-00-0000 00:00 |  
