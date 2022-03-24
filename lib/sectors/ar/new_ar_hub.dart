@@ -211,8 +211,7 @@ class _NewARHubState extends State<NewARHub> {
         type: NodeType.fileSystemAppFolderGLB,
         // Where the object is rendered from.
         // TODO: Change the object uri to dynamically load the correct model or image based on what is being surveyed.
-        uri:
-            "images/lifeboat.glb",
+        uri: "images/lifeboat.glb",
         // Sets the overall size of the object on the device.
         scale: vector_math.Vector3(0.2, 0.2, 0.2),
         // Sets the position to the anchor point created when pressing on the plane.
