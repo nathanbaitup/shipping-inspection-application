@@ -142,7 +142,11 @@ class _SurveySectionState extends State<SurveySection> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ARIntroduction(),
+                        builder: (context) => ARIntroduction(
+                          vesselID: widget.vesselID,
+                          openThroughQR: false,
+                          questionID: widget.questionID,
+                        ),
                       ),
                     );
                   },

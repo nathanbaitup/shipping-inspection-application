@@ -2,18 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:onboarding/onboarding.dart';
 
 import 'package:shipping_inspection_app/utils/colours.dart';
+import '../drawer/drawer_globals.dart' as globals;
+import '../questions/question_brain.dart';
+import 'new_ar_hub.dart';
 
 class ARIntroduction extends StatefulWidget {
-  const ARIntroduction({Key? key}) : super(key: key);
+  final String vesselID;
+  final String questionID;
+  final bool openThroughQR;
+
+  const ARIntroduction(
+      {Key? key,
+      required this.vesselID,
+      required this.questionID,
+      required this.openThroughQR})
+      : super(key: key);
 
   @override
   _ARIntroductionState createState() => _ARIntroductionState();
 }
 
 class _ARIntroductionState extends State<ARIntroduction> {
+  bool hasSeenTutorial = false;
+  // The questions relating to a specific section.
+  List<String> _questionsToAnswer = [];
+  String pageTitle = '';
+
   @override
   void initState() {
     super.initState();
+    _questionsToAnswer = questionBrain.getQuestions(widget.questionID);
+    pageTitle = questionBrain.getPageTitle(widget.questionID);
     materialButton = _nextButton;
   }
 
@@ -108,11 +127,11 @@ class _ARIntroductionState extends State<ARIntroduction> {
       color: defaultProceedButtonColor,
       child: InkWell(
         borderRadius: defaultProceedButtonBorderRadius,
-        onTap: () {},
+        onTap: () async => _openARSection(),
         child: const Padding(
           padding: defaultProceedButtonPadding,
           child: Text(
-            'Finish and Enter AR view',
+            'Finish',
             style: defaultProceedButtonTextStyle,
           ),
         ),
@@ -351,4 +370,29 @@ class _ARIntroductionState extends State<ARIntroduction> {
     ),
   ];
   // END REFERENCE
+
+  void _openARSection() async {
+    globals.addRecord("opened", globals.getUsername(), DateTime.now(),
+        '${pageTitle} AR session through button press');
+    List<String> arContentPush = [pageTitle] + _questionsToAnswer;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NewARHub(
+          vesselID: widget.vesselID,
+          questionID: widget.questionID,
+          arContent: arContentPush,
+          openThroughQR: false,
+        ),
+      ),
+    );
+  }
+
+  void _addEnterRecord() {
+    globals.addRecord(
+        "enter", globals.getUsername(), DateTime.now(), pageTitle);
+  }
 }
+
+// The question brain to load all the questions.
+QuestionBrain questionBrain = QuestionBrain();

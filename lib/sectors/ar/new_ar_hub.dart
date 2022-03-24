@@ -310,6 +310,7 @@ class _NewARHubState extends State<NewARHub> {
     // needs to be removed from the stack.
     if (widget.openThroughQR) {
       Navigator.pop(context);
+      Navigator.pop(context);
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -323,6 +324,7 @@ class _NewARHubState extends State<NewARHub> {
       // If opened manually, two screens need to be removed otherwise there
       // will be two section screens open with the user needing to close both screens.
     } else {
+      Navigator.pop(context);
       Navigator.pop(context);
       Navigator.pop(context);
       Navigator.pushAndRemoveUntil(
