@@ -1,14 +1,16 @@
 // ignore_for_file: file_names
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
-import 'package:shipping_inspection_app/sectors/communication/active-video-call.dart';
+import 'package:shipping_inspection_app/sectors/communication/active_video_call.dart';
 import 'package:shipping_inspection_app/sectors/communication/channel.dart';
-import 'package:shipping_inspection_app/sectors/drawer/drawer_help.dart';
 import 'package:shipping_inspection_app/shared/loading.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import '../drawer/drawer_globals.dart' as globals;
 import 'package:dio/dio.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 final _channelNameController = TextEditingController();
 
@@ -25,6 +27,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
   // To store the channel name captured by the text field.
   late String channelName;
   bool loading = false;
+  bool hasInternet = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +35,9 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
         ? const Loading()
         : Form(
             child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.5,
                   child: Image.network(
@@ -98,42 +101,63 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                 Container(
                   alignment: Alignment.bottomCenter,
                   padding: const EdgeInsets.only(top: 15),
-                  child: Column(children: [
-                    MaterialButton(
-                      onPressed: () {
-                        addChannelRecord();
-                        _performChannelNameConnection(
-                            _channelNameController.text);
-                      },
-                      color: LightColors.sPurple,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      child: const Text('Join/Create Channel'),
-                      textColor: Colors.white,
-                    ),
-                    MaterialButton(
-                      onPressed: () {
-                        channelClipboard(context);
-                      },
-                      color: LightColors.sPurpleL,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      child: const Text('Copy to Clipboard'),
-                      textColor: Colors.white,
-                    ),
-                    MaterialButton(
-                      onPressed: () {
-                        channelGenerate();
-                      },
-                      color: LightColors.sPurpleLL,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      child: const Text('Generate Channel'),
-                      textColor: Colors.white,
-                    ),
-                  ]),
+                  child: Column(
+                    children: [
+                      MaterialButton(
+                        onPressed: () async {
+                          //Here is the bool that checks if the application has internet
+                          final bool isConnected =
+                              await InternetConnectionChecker().hasConnection;
+                          //If the application does have a internet connection it will go through this if statement
+                          //and allow the user to access the video call.
+                          if (isConnected) {
+                            addChannelRecord();
+                            _performChannelNameConnection(
+                                _channelNameController.text);
+                          } else
+                          //Then if the user doesn't have any internet connection they will get a snack bar that will
+                          //tell them to turn on their internet.
+                          {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'You have no internet connection please check to see if you are connected to wifi!'),
+                              ),
+                            );
+                          }
+                        },
+                        color: LightColors.sPurple,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        child: const Text('Join/Create Channel'),
+                        textColor: Colors.white,
+                      ),
+                      MaterialButton(
+                        onPressed: () {
+                          channelClipboard(context);
+                        },
+                        color: LightColors.sPurpleL,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        child: const Text('Copy to Clipboard'),
+                        textColor: Colors.white,
+                      ),
+                      MaterialButton(
+                        onPressed: () {
+                          channelGenerate();
+                        },
+                        color: LightColors.sPurpleLL,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        child: const Text('Generate Channel'),
+                        textColor: Colors.white,
+                      ),
+                    ],
+                  ),
                 )
-              ]));
+              ],
+            ),
+          );
   }
 
   void channelClipboard(BuildContext context) {
@@ -164,15 +188,15 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
   }
 
   void _performChannelNameConnection(String strDioToken) async {
-    print('The string passed into getTokenDio is ' + strDioToken);
+    debugPrint('The string passed into getTokenDio is ' + strDioToken);
     Response response = await Dio().get(
         "https://agoratokencardiffuniversity.azurewebsites.net/access_token",
         queryParameters: {'channelName': strDioToken});
     Map result = response.data;
     var tokenDataFromJson = result['token'];
-    print('getTokenDio response ' + tokenDataFromJson);
+    debugPrint('getTokenDio response ' + tokenDataFromJson);
     String tokenDataFromJsonToString = tokenDataFromJson.toString();
-    print('tokenDataFromJsonToString ' + tokenDataFromJsonToString);
+    debugPrint('tokenDataFromJsonToString ' + tokenDataFromJsonToString);
 
     String agoraTokenInsideFunction = tokenDataFromJsonToString;
 
@@ -180,13 +204,14 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
 
     setState(() {
       loading = true;
-      print('loading animation triggered TRUE, _performChannelNameConnection');
+      debugPrint(
+          'loading animation triggered TRUE, _performChannelNameConnection');
     });
 
     Future.delayed(const Duration(seconds: 5), () {
       setState(() {
         loading = false;
-        print(
+        debugPrint(
             'loading animation triggered FALSE, _performChannelNameConnection');
       });
 
@@ -201,8 +226,8 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
       );
     });
 
-    print('channel name selected: $channelNameSelection');
-    print('agora token being passed across: $agoraTokenInsideFunction');
+    debugPrint('channel name selected: $channelNameSelection');
+    debugPrint('agora token being passed across: $agoraTokenInsideFunction');
   }
 
 // Using Dio, HTTP alternative, smarter package with more flexibility and ease of use.

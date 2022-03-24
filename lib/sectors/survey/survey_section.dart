@@ -77,7 +77,8 @@ class _SurveySectionState extends State<SurveySection> {
       return Scaffold(
         // Sets up the app bar to take the user back to the previous page
         appBar: AppBar(
-          title: const Text('Idwal Vessel Inspection'),
+          title: const Text(''),
+          backgroundColor: globals.getAppbarColour(),
           titleTextStyle: const TextStyle(color: LightColors.sPurple),
           centerTitle: true,
           leading: Transform.scale(
@@ -231,6 +232,8 @@ class _SurveySectionState extends State<SurveySection> {
                             ElevatedButton(
                               onPressed: () async => _openCamera(),
                               child: const Text('Add Images'),
+                              style: ElevatedButton.styleFrom(
+                                  primary: LightColors.sPurpleL),
                             ),
                             const SizedBox(width: 20),
                             ElevatedButton(
@@ -446,9 +449,7 @@ class _SurveySectionState extends State<SurveySection> {
       // REFERENCE accessed 20/03/2022 https://stackoverflow.com/a/56402109
       // Used to list all the images within the correct folder.
       storageRef.listAll().then((result) => {
-            result.items.forEach((imageRef) {
-              _addToImageViewer(imageRef);
-            })
+            for (var imageRef in result.items) {_addToImageViewer(imageRef)}
           });
       // END REFERENCE
     } catch (error) {

@@ -28,10 +28,11 @@ class _MenuHistoryState extends State<MenuHistory> {
               currentRecordText[1] = " added a response to section ";
               currentRecordText[2] = currentRecord.section;
               currentRecordText[3] = " at ";
-              currentRecordText[4] =
-                  DateFormat('kk:mm (yyyy-MM-dd)').format(
-                      currentRecord.dateTime);
-            } else { blockRecord = true; }
+              currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)')
+                  .format(currentRecord.dateTime);
+            } else {
+              blockRecord = true;
+            }
           }
           break;
 
@@ -43,10 +44,11 @@ class _MenuHistoryState extends State<MenuHistory> {
               currentRecordText[1] = " visited the ";
               currentRecordText[2] = currentRecord.section;
               currentRecordText[3] = " section at ";
-              currentRecordText[4] =
-                  DateFormat('kk:mm (yyyy-MM-dd)').format(
-                      currentRecord.dateTime);
-            } else { blockRecord = true; }
+              currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)')
+                  .format(currentRecord.dateTime);
+            } else {
+              blockRecord = true;
+            }
           }
           break;
 
@@ -58,10 +60,11 @@ class _MenuHistoryState extends State<MenuHistory> {
               currentRecordText[1] = " joined a call channel called ";
               currentRecordText[2] = currentRecord.section;
               currentRecordText[3] = " at ";
-              currentRecordText[4] =
-                  DateFormat('kk:mm (yyyy-MM-dd)').format(
-                      currentRecord.dateTime);
-            } else { blockRecord = true; }
+              currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)')
+                  .format(currentRecord.dateTime);
+            } else {
+              blockRecord = true;
+            }
           }
           break;
 
@@ -74,10 +77,11 @@ class _MenuHistoryState extends State<MenuHistory> {
               currentRecordText[1] = " opened ";
               currentRecordText[2] = currentRecord.section;
               currentRecordText[3] = " at ";
-              currentRecordText[4] =
-                  DateFormat('kk:mm (yyyy-MM-dd)').format(
-                      currentRecord.dateTime);
-            } else { blockRecord = true; }
+              currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)')
+                  .format(currentRecord.dateTime);
+            } else {
+              blockRecord = true;
+            }
           }
           break;
 
@@ -90,10 +94,11 @@ class _MenuHistoryState extends State<MenuHistory> {
               currentRecordText[1] = " pressed ";
               currentRecordText[2] = currentRecord.section;
               currentRecordText[3] = " at ";
-              currentRecordText[4] =
-                  DateFormat('kk:mm (yyyy-MM-dd)').format(
-                      currentRecord.dateTime);
-            } else { blockRecord = true; }
+              currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)')
+                  .format(currentRecord.dateTime);
+            } else {
+              blockRecord = true;
+            }
           }
           break;
 
@@ -105,10 +110,11 @@ class _MenuHistoryState extends State<MenuHistory> {
               currentRecordText[1] = " added device permissions for the ";
               currentRecordText[2] = currentRecord.section;
               currentRecordText[3] = " at ";
-              currentRecordText[4] =
-                  DateFormat('kk:mm (yyyy-MM-dd)').format(
-                      currentRecord.dateTime);
-            } else { blockRecord = true; }
+              currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)')
+                  .format(currentRecord.dateTime);
+            } else {
+              blockRecord = true;
+            }
           }
           break;
 
@@ -119,10 +125,11 @@ class _MenuHistoryState extends State<MenuHistory> {
               currentRecordText[1] = "changed the device's username to ";
               currentRecordText[2] = currentRecord.section;
               currentRecordText[3] = " at ";
-              currentRecordText[4] =
-                  DateFormat('kk:mm (yyyy-MM-dd)').format(
-                      currentRecord.dateTime);
-            } else { blockRecord = true; }
+              currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)')
+                  .format(currentRecord.dateTime);
+            } else {
+              blockRecord = true;
+            }
           }
           break;
 
@@ -134,10 +141,11 @@ class _MenuHistoryState extends State<MenuHistory> {
               currentRecordText[1] = "changed the device's language to ";
               currentRecordText[2] = currentRecord.section;
               currentRecordText[3] = " at ";
-              currentRecordText[4] =
-                  DateFormat('kk:mm (yyyy-MM-dd)').format(
-                      currentRecord.dateTime);
-            } else { blockRecord = true; }
+              currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)')
+                  .format(currentRecord.dateTime);
+            } else {
+              blockRecord = true;
+            }
           }
           break;
 
@@ -150,7 +158,6 @@ class _MenuHistoryState extends State<MenuHistory> {
       }
 
       if(!blockRecord) {
-        print("record added" + currentRecordText.toString());
         recordListTiles.add(RecordWidget(
           record: currentRecordText,
         ));
@@ -159,27 +166,52 @@ class _MenuHistoryState extends State<MenuHistory> {
     return recordListTiles;
   }
 
+  Widget getBody() {
+    if (globals.historyEnabled) {
+      return ListView(
+          padding: const EdgeInsets.all(8), children: formatRecords());
+    } else {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text("History logging has been disabled.",
+              style: TextStyle(
+                  fontSize: 15,
+                  fontStyle: FontStyle.italic),),
+            SizedBox(
+              height: 15,
+            ),
+            Text("Navigate to Settings to renable this feature.",
+              style: TextStyle(
+                  fontSize: 15,
+                  fontStyle: FontStyle.italic),),
+          ],
+        )
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          
+          backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
             color: LightColors.sPurple,
           ),
         ),
-        body: ListView(
-            padding: const EdgeInsets.all(8), children: formatRecords()));
+        body: getBody());
   }
 }
 
 class RecordWidget extends StatelessWidget {
-  RecordWidget({Key? key, required this.record}) : super(key: key);
+  const RecordWidget({Key? key, required this.record}) : super(key: key);
 
   final List<String> record;
 
-  TextStyle bold = const TextStyle(fontWeight: FontWeight.bold);
-  String formattedDate = "";
+  final TextStyle bold = const TextStyle(fontWeight: FontWeight.bold);
+  final String formattedDate = "";
 
   @override
   Widget build(BuildContext context) {
