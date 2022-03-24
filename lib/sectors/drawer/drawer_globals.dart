@@ -1,8 +1,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:shipping_inspection_app/sectors/history/record.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../utils/colours.dart';
 
 // --- CALLS GLOBALS
 // -- For usage in Calls + Channels Settings
@@ -16,9 +19,12 @@ void addRecord(type, user, dateTime, section) {
   records.add(Record(type, user, dateTime, section));
 }
 
-// --- Theme GLOBALS
+// --- THEME GLOBALS
 // -- For usage in Dark Mode
-bool darkModeEnabled = false;
+var appBrightness = SchedulerBinding.instance!.window.platformBrightness;
+bool darkModeEnabled = appBrightness == Brightness.dark;
+
+//theme: _light ? _lightTheme : _darkTheme,
 
 // --- USERNAME GLOBALS
 // -- For usage in Username Settings + History Logs + Calls
@@ -81,7 +87,7 @@ void savePrefs() async {
   await prefs.setBool("history-qr", historyPrefs[3]);
   await prefs.setBool("history-communications", historyPrefs[4]);
   await prefs.setBool("history-enabled", historyEnabled);
-  await prefs.setBool("dark-mode", darkModeEnabled)
+  await prefs.setBool("dark-mode", darkModeEnabled);
 }
 
 void loadPrefs() async {

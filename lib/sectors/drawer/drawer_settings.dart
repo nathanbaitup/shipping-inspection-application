@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:shipping_inspection_app/main.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_channels.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_sound.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_username.dart';
@@ -107,12 +108,18 @@ class _MenuSettingsState extends State<MenuSettings> {
                 leading:
                 const Icon(Icons.dark_mode, color: LightColors.sPurple),
                 onPressed: (BuildContext context) {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                      const SettingsChannels()));
                 },
-                initialValue: null,
-                onToggle: (bool value) {  },
+                initialValue: globals.darkModeEnabled,
+                onToggle: (bool value) {
+                  globals.darkModeEnabled = !globals.darkModeEnabled;
+                  if(globals.darkModeEnabled) {
+                    themeNotifier.value = ThemeMode.dark;
+                  } else {
+                    themeNotifier.value = ThemeMode.light;
+                  }
+                  setState(() {});
+                  value = globals.darkModeEnabled;
+                },
               ),
             ],
           ),

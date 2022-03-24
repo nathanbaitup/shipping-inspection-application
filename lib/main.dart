@@ -9,14 +9,17 @@ import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const ShipApp());
+  runApp(ShipApp());
 }
+
+final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 
 // The vesselID used to differentiate surveys saved in the database.
 String vesselID = '';
 
 class ShipApp extends StatefulWidget {
-  const ShipApp({Key? key}) : super(key: key);
+
+  ShipApp({Key? key}) : super(key: key);
 
   @override
   _ShipAppState createState() => _ShipAppState();
@@ -33,32 +36,36 @@ class _ShipAppState extends State<ShipApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Shipping Application',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch().copyWith(
-            primary: LightColors.sPurple,
-            secondary: LightColors.sPurple,
-            brightness: Brightness.light,
-            /* light theme settings */
-        )),
-        darkTheme: ThemeData(
-            colorScheme: ColorScheme.fromSwatch().copyWith(
-              primary: Colors.white,
-              secondary: LightColors.sPurple,
-              brightness: Brightness.dark,
-              /* dark theme settings */
-        )),
-        themeMode: ThemeMode.system,
-        // Dark mode now follows system settings
-        // Requires Android 10 (API level 29) or above to switch to dark mode
-        debugShowCheckedModeBanner: false,
-        // Checks if vesselID is empty, if true opens the welcome screen
-        // else opens the application with the vesselID parsed in.
-        home: vesselID.isEmpty
-            ? const WelcomePage()
-            : MyHomePage(
-                title: 'Idwal Vessel Inspection', vesselID: vesselID));
+    return ValueListenableBuilder<ThemeMode>(
+        valueListenable: themeNotifier,
+        builder: (_, mode, __) {
+          return MaterialApp(
+              title: 'Shipping Application',
+              theme: ThemeData(
+                  colorScheme: ColorScheme.fromSwatch().copyWith(
+                    primary: LightColors.sPurple,
+                    secondary: LightColors.sPurple,
+                    brightness: Brightness.light,
+                    /* light theme settings */
+                  )),
+              darkTheme: ThemeData(
+                  colorScheme: ColorScheme.fromSwatch().copyWith(
+                    primary: Colors.white,
+                    secondary: LightColors.sPurple,
+                    brightness: Brightness.dark,
+                    /* dark theme settings */
+                  )),
+              themeMode: mode,
+              // Dark mode now follows system settings
+              // Requires Android 10 (API level 29) or above to switch to dark mode
+              debugShowCheckedModeBanner: false,
+              // Checks if vesselID is empty, if true opens the welcome screen
+              // else opens the application with the vesselID parsed in.
+              home: vesselID.isEmpty
+                  ? const WelcomePage()
+                  : MyHomePage(
+                  title: 'Idwal Vessel Inspection', vesselID: vesselID));
+        });
   }
 
   // Checks if permissions have been granted and asks the user for permission if not.
@@ -201,7 +208,7 @@ class _WelcomePageState extends State<WelcomePage> {
                             _validation = false;
                           });
                           vesselID = _vesselController.text;
-                          runApp(const ShipApp());
+                          runApp(ShipApp());
                         }
                       },
                       style:
