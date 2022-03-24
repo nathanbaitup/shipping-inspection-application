@@ -208,11 +208,11 @@ class _NewARHubState extends State<NewARHub> {
       // The node is what is displayed to the user in the AR view, linked to an anchor point.
       var newNode = ARNode(
         // Sets the type of object
-        type: NodeType.webGLB,
+        type: NodeType.fileSystemAppFolderGLB,
         // Where the object is rendered from.
         // TODO: Change the object uri to dynamically load the correct model or image based on what is being surveyed.
         uri:
-            "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb",
+            "images/lifeboat.glb",
         // Sets the overall size of the object on the device.
         scale: vector_math.Vector3(0.2, 0.2, 0.2),
         // Sets the position to the anchor point created when pressing on the plane.
