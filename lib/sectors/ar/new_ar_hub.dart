@@ -207,13 +207,33 @@ class _NewARHubState extends State<NewARHub> {
       if (didAddAnchor == true) {
         anchors.add(newAnchor);
 
-        // ----- CREATING AN AR OBJECT -----
-        // The node is what is displayed to the user in the AR view, linked to an anchor point.
-        var newNode = ARNode(
+      ARNode newNode;
+
+      // ----- CREATING AN AR OBJECT -----
+      // The node is what is displayed to the user in the AR view, linked to an anchor point.
+      // If fire and safety show the fire extinguisher else show the duck.
+      // TODO: Change the object uri to dynamically load the correct model or image based on what is being surveyed.
+      if (widget.questionID == 'f&s') {
+        newNode = ARNode(
+          // Sets the type of object
+          type: NodeType.localGLTF2,
+          // Where the object is rendered from.
+
+          // This work is based on "Fire Extinguisher" (https://sketchfab.com/3d-models/fire-extinguisher-5288f12eb87f4826a73ebedb60a1c82d) by oooFFFFEDDMODELS (https://sketchfab.com/pierre.marcos.19) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+          uri:
+              "Models/fire_extinguisher_3/fire_extinguisher_model_with_render.gltf",
+          // Sets the overall size of the object on the device.
+          scale: vector_math.Vector3(0.2, 0.2, 0.2),
+          // Sets the position to the anchor point created when pressing on the plane.
+          position: vector_math.Vector3(0.0, 0.0, 0.0),
+          // Sets the rotation to follow the plane axis.
+          rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
+        );
+      } else {
+        newNode = ARNode(
           // Sets the type of object
           type: NodeType.webGLB,
           // Where the object is rendered from.
-          // TODO: Change the object uri to dynamically load the correct model or image based on what is being surveyed.
           uri:
               "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb",
           // Sets the overall size of the object on the device.
@@ -223,6 +243,7 @@ class _NewARHubState extends State<NewARHub> {
           // Sets the rotation to follow the plane axis.
           rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
         );
+      }
 
         // Takes the node just created and links it to the anchor as added by the
         // user to display where pressed.
