@@ -108,11 +108,8 @@ Color getAppbarColour() {
 
   Color appbarColour;
 
-  var brightness = SchedulerBinding.instance!.window.platformBrightness;
-  bool isDarkMode = brightness == Brightness.dark;
-
-  if (isDarkMode) {
-    appbarColour = Colors.black38;
+  if (darkModeEnabled) {
+    appbarColour = Colors.black12;
   } else {
     appbarColour = Colors.white;
   }

@@ -118,6 +118,8 @@ class _MenuSettingsState extends State<MenuSettings> {
                     themeNotifier.value = ThemeMode.light;
                   }
                   setState(() {});
+                  print("test");
+                  print(globals.getAppbarColour().toString());
                   value = globals.darkModeEnabled;
                 },
               ),
