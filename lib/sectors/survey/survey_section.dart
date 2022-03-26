@@ -275,9 +275,18 @@ class _SurveySectionState extends State<SurveySection> {
   }
 
   // Function that adds a record of what a user has pressed onto the history page.
-  void _addEnterRecord() {
+  Future<void> _addEnterRecord() async {
     globals.addRecord(
         "enter", globals.getUsername(), DateTime.now(), pageTitle);
+    await FirebaseFirestore.instance
+        .collection("History_Logging")
+        .add({
+          'title': "Opening " + pageTitle,
+          'username': globals.getUsername(),
+          'time': DateTime.now(),
+        })
+        .then((value) => debugPrint("Record has been added"))
+        .catchError((error) => debugPrint("Failed to add record: $error"));
   }
 
   // Checks if the camera permission has been granted and opens the camera

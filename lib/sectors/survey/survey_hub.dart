@@ -268,8 +268,8 @@ class _SurveyHubState extends State<SurveyHub> {
             'time': DateTime.now(),
             'permission': "QR camera",
           })
-          .then((value) => print("Record has been added"))
-          .catchError((error) => print("Failed to add record: $error"));
+          .then((value) => debugPrint("Record has been added"))
+          .catchError((error) => debugPrint("Failed to add record: $error"));
     }
   }
 }
