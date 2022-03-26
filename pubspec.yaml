@@ -112,6 +112,7 @@ flutter:
      - Models/fire_extinguisher/
      - Models/fire_extinguisher_3/
      - Models/ship/
+     - Models/life_boat_small/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
