@@ -8,12 +8,20 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/sectors/communication/keys/credentials.dart';
 
 import '../../utils/colours.dart';
+import '../questions/question_brain.dart';
 import '../survey/survey_hub.dart';
 
 /// APP ID AND TOKEN
 /// TOKEN MUST BE CHANGED EVERY 24HRS, IF NOT WORKING GENERATE NEW TOKEN
 const appID = appIDAgora;
 const agoraToken = tokenAgora;
+
+// Uses the question brain to load questions to display to the surveyor / technical expert.
+QuestionBrain questionBrain = QuestionBrain();
+// Creates the default selection for the drop down list and automatically changes
+// based on the user selection to update the questions being displayed.
+String surveySection = 'noSelection';
+List<String> displayQuestions = ['No items to display'];
 
 class VideoCallFragment extends StatefulWidget {
   final String channelName;
@@ -44,14 +52,14 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
-  // Requesting permissions if not already granted from the PermissionHandler dependecy
+  // Requesting permissions if not already granted from the PermissionHandler dependency
   Future<void> initPlatformState() async {
     await [Permission.camera, Permission.microphone].request();
 
     // Creating an instance of the Agora Engine.
     RtcEngineContext context = RtcEngineContext(appID);
     var engine = await RtcEngine.createWithContext(context);
-    // Event Handeling of memebers joining and leaving.
+    // Event Handling of members joining and leaving.
     engine.setEventHandler(RtcEngineEventHandler(
         joinChannelSuccess: (String channel, int uid, int elapsed) {
       // print('joinChannelSuccess $channel $uid');
@@ -122,29 +130,12 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
             ),
             _videoCallToolbar(),
 
-            // Displays the option to view questions based on a section.
-            // TODO: add drop down list to select what section to survey and automatically display the questions for it.
+            // Displays a drop down list to view survey questions and cycle through them.
             Column(
               children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    DisplaySurveyQuestions(
-                      surveyQuestions: ['0', 'View questions for section: '],
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    DisplaySurveyQuestions(
-                      surveyQuestions: [
-                        'question 1',
-                        'question 2',
-                        'question 3',
-                      ],
-                    ),
-                  ],
+                  children: const [ChooseSurveySection()],
                 ),
               ],
             ),
@@ -287,55 +278,129 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
   }
 }
 
-class DisplaySurveyQuestions extends StatefulWidget {
-  final List<String> surveyQuestions;
-
-  const DisplaySurveyQuestions({Key? key, required this.surveyQuestions})
-      : super(key: key);
+// Creates a widget that displays a dropdown list of all survey sections currently
+// within the application, and displays the related questions to the sections for the
+// technical expert and surveyor to see.
+class ChooseSurveySection extends StatefulWidget {
+  const ChooseSurveySection({Key? key}) : super(key: key);
 
   @override
-  _MyARContentState createState() => _MyARContentState();
+  _ChooseSurveySectionState createState() => _ChooseSurveySectionState();
 }
 
-class _MyARContentState extends State<DisplaySurveyQuestions> {
-  int widgetQuestionID = 1;
-
-  void _updateWidgetQuestion() {
-    setState(() {
-      int newQuestion = widgetQuestionID + 1;
-      if (newQuestion > (widget.surveyQuestions.length - 1)) {
-        newQuestion = 1;
-      }
-      widgetQuestionID = newQuestion;
-    });
-  }
+class _ChooseSurveySectionState extends State<ChooseSurveySection> {
+  int widgetQuestionID = 0;
 
   @override
   Widget build(BuildContext context) {
     final double cWidth = MediaQuery.of(context).size.width * 0.58;
-    return Column(children: [
-      InkWell(
-        child: Container(
+    return Column(
+      children: <Widget>[
+        // The container with the drop down list to select a survey section.
+        Container(
           width: cWidth,
           margin: const EdgeInsets.all(10.0),
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(2.0),
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(
                 color: LightColors.sPurple,
               ),
               borderRadius: const BorderRadius.all(Radius.circular(20))),
-          child: Text(
-            "Question: " + widget.surveyQuestions[widgetQuestionID],
-            style: const TextStyle(
-              color: LightColors.sPurple,
+          child: Center(
+            // The dropdown list taking the surveySection variable as the value
+            // to update the list of questions shown.
+            child: DropdownButton(
+              value: surveySection,
+              items: _dropdownItems(),
+              style: const TextStyle(
+                color: LightColors.sPurple,
+              ),
+              onChanged: (String? newSelection) {
+                setState(
+                  () {
+                    surveySection = newSelection!;
+                    _displaySurveyQuestions(newSelection);
+                  },
+                );
+              },
             ),
           ),
         ),
-        onTap: () {
-          _updateWidgetQuestion();
-        },
-      )
-    ]);
+        // Creates a container widget below the dropdown list to display the area specific questions.
+        Column(
+          children: <Widget>[
+            InkWell(
+              child: Container(
+                width: cWidth,
+                margin: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: LightColors.sPurple,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(20))),
+                child: Text(
+                  "Question: " + displayQuestions[widgetQuestionID],
+                  style: const TextStyle(
+                    color: LightColors.sPurple,
+                  ),
+                ),
+              ),
+              onTap: () {
+                _updateWidgetQuestion();
+              },
+            )
+          ],
+        )
+      ],
+    );
+  }
+
+  // Checks if the dropdown value is set to noSelection and sets the displayQuestions
+  // list to the default text, else updates the list to include the questions for
+  // a section.
+  void _displaySurveyQuestions(String questionID) {
+    setState(() {
+      if (questionID == 'noSelection' || questionID == '') {
+        displayQuestions = ['No items to display'];
+      } else {
+        displayQuestions = questionBrain.getQuestions(questionID);
+      }
+    });
+  }
+
+  // Returns a DropdownMenuItem of all questions within the Question Bank, with a
+  // text value of the question title, and a value of the question ID.
+  List<DropdownMenuItem<String>> _dropdownItems() {
+    List<DropdownMenuItem<String>> surveySections = [];
+    List<String> surveyIDs = questionBrain.getAllQuestionIDs();
+    // Adds the default no selection to the list.
+    surveySections.add(
+      const DropdownMenuItem(
+          child: Text("- Select a Survey -"), value: 'noSelection'),
+    );
+    // Iterates through the retrieval of all questions to get the question title
+    // and ID to display in the dropdown menu.
+    for (var questionID in surveyIDs) {
+      surveySections.add(
+        DropdownMenuItem(
+            child: Text(questionBrain.getPageTitle(questionID)),
+            value: questionID),
+      );
+    }
+    return surveySections;
+  }
+
+  // Allows for questions to be cycled through when interacted with.
+  void _updateWidgetQuestion() {
+    setState(() {
+      int newQuestion = widgetQuestionID + 1;
+      if (newQuestion > (displayQuestions.length - 1)) {
+        newQuestion = 0;
+      }
+      widgetQuestionID = newQuestion;
+    });
   }
 }
