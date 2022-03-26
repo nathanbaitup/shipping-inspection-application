@@ -10,6 +10,7 @@ import 'package:shipping_inspection_app/sectors/communication/keys/credentials.d
 import '../../utils/colours.dart';
 import '../questions/question_brain.dart';
 import '../survey/survey_hub.dart';
+import '../survey/survey_section.dart';
 
 /// APP ID AND TOKEN
 /// TOKEN MUST BE CHANGED EVERY 24HRS, IF NOT WORKING GENERATE NEW TOKEN
@@ -228,7 +229,9 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
             fillColor: Colors.white,
             padding: const EdgeInsets.all(12.0),
           ),
-          //This button takes the user to the survey hub page.
+
+          // Takes the user to the survey hub page if no selection has been made
+          // or takes the user to a specific survey section page to leave a response.
           RawMaterialButton(
             onPressed: () {
               SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
@@ -236,7 +239,12 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SurveyHub(vesselID: widget.vesselID),
+                  builder: (context) => surveySection == 'noSelection'
+                      ? SurveyHub(vesselID: widget.vesselID)
+                      : SurveySection(
+                          vesselID: widget.vesselID,
+                          questionID: surveySection,
+                          capturedImages: const []),
                 ),
               );
             },
