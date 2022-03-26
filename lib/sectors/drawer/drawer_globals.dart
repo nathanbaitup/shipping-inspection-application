@@ -21,7 +21,45 @@ void addRecord(type, user, dateTime, section) {
 var appBrightness = SchedulerBinding.instance!.window.platformBrightness;
 bool darkModeEnabled = appBrightness == Brightness.dark;
 
-//theme: _light ? _lightTheme : _darkTheme,
+Color getAppbarColour() {
+  Color appbarColour;
+  if (darkModeEnabled) {
+    appbarColour = Colors.black12;
+  } else {
+    appbarColour = Colors.white;
+  }
+  return appbarColour;
+}
+
+Color getTextColour() {
+  Color appbarColour;
+  if (darkModeEnabled) {
+    appbarColour = Colors.white;
+  } else {
+    appbarColour = Colors.black;
+  }
+  return appbarColour;
+}
+
+Color getSubtextColour() {
+  Color appbarColour;
+  if (darkModeEnabled) {
+    appbarColour = Colors.white54;
+  } else {
+    appbarColour = Colors.black45;
+  }
+  return appbarColour;
+}
+
+Color getSettingsBgColour() {
+  Color settingsBgColour;
+  if (darkModeEnabled) {
+    settingsBgColour = const Color(0xFF1B1B1B);
+  } else {
+    settingsBgColour =  const Color(0xFFF0F0F0);
+  }
+  return settingsBgColour;
+}
 
 // --- USERNAME GLOBALS
 // -- For usage in Username Settings + History Logs + Calls
@@ -99,24 +137,4 @@ void loadPrefs() async {
   historyPrefs[4] = prefs.getBool("history-communications")?? true;
   historyEnabled = prefs.getBool("history-enabled")?? true;
   darkModeEnabled = prefs.getBool("dark-mode")?? false;
-}
-
-Color getAppbarColour() {
-  Color appbarColour;
-  if (darkModeEnabled) {
-    appbarColour = Colors.black12;
-  } else {
-    appbarColour = Colors.white;
-  }
-  return appbarColour;
-}
-
-Color getTextColour() {
-  Color appbarColour;
-  if (darkModeEnabled) {
-    appbarColour = Colors.white;
-  } else {
-    appbarColour = Colors.black;
-  }
-  return appbarColour;
 }

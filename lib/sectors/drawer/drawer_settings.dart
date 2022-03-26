@@ -8,6 +8,7 @@ import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
     as globals;
+import 'package:shipping_inspection_app/utils/task_list.dart';
 
 import 'settings/settings_history.dart';
 
@@ -105,6 +106,7 @@ class _MenuSettingsState extends State<MenuSettings> {
               ),
               SettingsTile.switchTile(
                 title: const Text('Dark Mode'),
+                activeSwitchColor: LightColors.sPurple,
                 leading:
                 const Icon(Icons.dark_mode, color: LightColors.sPurple),
                 onPressed: (BuildContext context) {
@@ -117,6 +119,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                   } else {
                     themeNotifier.value = ThemeMode.light;
                   }
+                  subtextColourNotifier.value = globals.getSubtextColour();
                   setState(() {});
                   value = globals.darkModeEnabled;
                 },

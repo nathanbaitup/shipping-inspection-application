@@ -23,7 +23,7 @@ final ValueNotifier<String> usernameNotifier = ValueNotifier(globals.username);
 
 class Home extends StatefulWidget {
   final String vesselID;
-  Home({Key? key, required this.vesselID}) : super(key: key);
+  const Home({Key? key, required this.vesselID}) : super(key: key);
 
   @override
   HomeState createState() => HomeState();

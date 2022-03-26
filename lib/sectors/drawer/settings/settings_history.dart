@@ -63,10 +63,10 @@ class _SettingsHistoryState extends State<SettingsHistory> {
               shrinkWrap: true,
               sections: [
                 SettingsSection(
-                    title: const Text(
+                    title: Text(
                       'Logs',
                       style: TextStyle(
-                          color: Colors.black,
+                          color: globals.getTextColour(),
                           decorationColor: LightColors.sPurple,
                           decorationThickness: 2,
                           decoration: TextDecoration.underline
@@ -87,10 +87,10 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                     ]
                 ),
                 SettingsSection(
-                  title: const Text(
+                  title: Text(
                     'Log Preferences',
                     style: TextStyle(
-                        color: Colors.black,
+                        color: globals.getTextColour(),
                         decorationColor: LightColors.sPurple,
                         decorationThickness: 2,
                         decoration: TextDecoration.underline
@@ -167,7 +167,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
           ),
 
           Container(
-            color: const Color(0xFFF0F0F0),
+            color: globals.getSettingsBgColour(),
             padding: const EdgeInsets.only(
               top: 10,
               bottom: 10,
@@ -249,7 +249,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
 
           Expanded(
             child: Container(
-              color: const Color(0xFFF0F0F0),
+              color: globals.getSettingsBgColour(),
             )
           )
 

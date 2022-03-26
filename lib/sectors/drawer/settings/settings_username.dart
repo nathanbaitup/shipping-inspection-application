@@ -32,13 +32,14 @@ class _SettingsUsernameState extends State<SettingsUsername> {
         resizeToAvoidBottomInset : false,
 
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
             color: LightColors.sPurple,
           ),
         ),
 
         body: Container(
+            color: globals.getSettingsBgColour(),
             padding: const EdgeInsets.all(20.0),
             child: Form (
                 key: _formKey,
@@ -76,7 +77,10 @@ class _SettingsUsernameState extends State<SettingsUsername> {
                           }
                           return null;
                         },
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: globals.getTextColour(), width: 0.5),
+                            ),
                             hintText: 'Sarah',
                             labelText: 'Username'
                         )
