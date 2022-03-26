@@ -4,6 +4,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:shipping_inspection_app/sectors/history/record.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../utils/colours.dart';
+
 // --- CALLS GLOBALS
 // -- For usage in Calls + Channels Settings
 List<String> savedChannels = List<String>.filled(3, " ", growable: false);
@@ -19,6 +21,8 @@ void addRecord(type, user, dateTime, section) {
 // --- THEME GLOBALS
 // -- For usage in Dark Mode
 var appBrightness = SchedulerBinding.instance!.window.platformBrightness;
+
+bool systemThemeEnabled = false;
 bool darkModeEnabled = appBrightness == Brightness.dark;
 
 Color getAppbarColour() {
@@ -59,6 +63,19 @@ Color getSettingsBgColour() {
     settingsBgColour =  const Color(0xFFF0F0F0);
   }
   return settingsBgColour;
+}
+
+// --- DISABLED GLOBALS
+// -- For usage in History Settings and the Dark Mode Switch
+
+Color getIconColourCheck(bool enableValue) {
+  Color newColor;
+  if(enableValue) {
+    newColor = LightColors.sPurple;
+  } else {
+    newColor = Colors.grey;
+  }
+  return newColor;
 }
 
 // --- USERNAME GLOBALS

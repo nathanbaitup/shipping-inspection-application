@@ -105,10 +105,36 @@ class _MenuSettingsState extends State<MenuSettings> {
                 },
               ),
               SettingsTile.switchTile(
-                title: const Text('Dark Mode'),
+                title: const Text('Use System Theme'),
                 activeSwitchColor: LightColors.sPurple,
                 leading:
-                const Icon(Icons.dark_mode, color: LightColors.sPurple),
+                const Icon(Icons.phone_android, color: LightColors.sPurple),
+                onPressed: (BuildContext context) {
+                },
+                initialValue: globals.systemThemeEnabled,
+                onToggle: (bool value) {
+                  globals.systemThemeEnabled = !globals.systemThemeEnabled;
+                  if(globals.systemThemeEnabled) {
+                    themeNotifier.value = ThemeMode.system;
+                    if(ThemeMode.system == ThemeMode.dark) {
+                      globals.darkModeEnabled = true;
+                    } else {
+                      globals.darkModeEnabled = false;
+                    }
+                  } else {
+                  }
+                  subtextColourNotifier.value = globals.getSubtextColour(); //Changes subtext colour on home page
+                  setState(() {});
+                  value = globals.systemThemeEnabled;
+                },
+              ),
+              SettingsTile.switchTile(
+                title: const Text('Dark Mode'),
+                activeSwitchColor: LightColors.sPurple,
+                enabled: !globals.systemThemeEnabled,
+                leading:
+                Icon(Icons.dark_mode,
+                    color: globals.getIconColourCheck(!globals.systemThemeEnabled)),
                 onPressed: (BuildContext context) {
                 },
                 initialValue: globals.darkModeEnabled,
@@ -119,7 +145,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                   } else {
                     themeNotifier.value = ThemeMode.light;
                   }
-                  subtextColourNotifier.value = globals.getSubtextColour();
+                  subtextColourNotifier.value = globals.getSubtextColour(); //Changes subtext colour on home page
                   setState(() {});
                   value = globals.darkModeEnabled;
                 },
