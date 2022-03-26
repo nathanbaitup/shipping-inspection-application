@@ -70,6 +70,7 @@ class _NewARHubState extends State<NewARHub> {
         child: Scaffold(
             appBar: AppBar(
               title: Text(widget.arContent[0]),
+              backgroundColor: LightColors.sPurple,
             ),
             body: Stack(children: [
               ARView(
@@ -184,56 +185,80 @@ class _NewARHubState extends State<NewARHub> {
 
   // Function that handles adding an object to the AR scene.
   // Currently adds a model of a duck following the example.
-  // TODO: update code to only allow for one item to be displayed.
   // TODO: display the item automatically and not with a tap.
   // TODO: allow for multiple items to be loaded dynamically based on the question ID.
   Future<void> _onPlaneOrPointTap(List<ARHitTestResult> userTapResults) async {
-    // Gets the users hit point and sets the first tap to a plane type.
-    var arObjectResult = userTapResults
-        .firstWhere((pointHit) => pointHit.type == ARHitTestResultType.plane);
+    if (anchors.length == 1 && nodes.length == 1) {
+      debugPrint("Already displaying a model.");
+    } else {
+      // Gets the users hit point and sets the first tap to a plane type.
+      var arObjectResult = userTapResults
+          .firstWhere((pointHit) => pointHit.type == ARHitTestResultType.plane);
 
-    // Makes the users tapped point a new anchor point ready to add the node object.
-    var newAnchor =
-        ARPlaneAnchor(transformation: arObjectResult.worldTransform);
+      // Makes the users tapped point a new anchor point ready to add the node object.
+      var newAnchor =
+          ARPlaneAnchor(transformation: arObjectResult.worldTransform);
 
-    // Adds the new anchor to the AnchorManager and returns true.
-    bool? didAddAnchor = await arAnchorManager.addAnchor(newAnchor);
+      // Adds the new anchor to the AnchorManager and returns true.
+      bool? didAddAnchor = await arAnchorManager.addAnchor(newAnchor);
 
-    // Checks if anchor has been added to add the object to the anchors list
-    // to ensure that the node object is displayed correctly on the screen.
-    if (didAddAnchor == true) {
-      anchors.add(newAnchor);
+      // Checks if anchor has been added to add the object to the anchors list
+      // to ensure that the node object is displayed correctly on the screen.
+      if (didAddAnchor == true) {
+        anchors.add(newAnchor);
+
+      ARNode newNode;
 
       // ----- CREATING AN AR OBJECT -----
       // The node is what is displayed to the user in the AR view, linked to an anchor point.
-      var newNode = ARNode(
-        // Sets the type of object
-        type: NodeType.webGLB,
-        // Where the object is rendered from.
-        // TODO: Change the object uri to dynamically load the correct model or image based on what is being surveyed.
-        uri:
-            "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb",
-        // Sets the overall size of the object on the device.
-        scale: vector_math.Vector3(0.2, 0.2, 0.2),
-        // Sets the position to the anchor point created when pressing on the plane.
-        position: vector_math.Vector3(0.0, 0.0, 0.0),
-        // Sets the rotation to follow the plane axis.
-        rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
-      );
+      // If fire and safety show the fire extinguisher else show the duck.
+      // TODO: Change the object uri to dynamically load the correct model or image based on what is being surveyed.
+      if (widget.questionID == 'f&s') {
+        newNode = ARNode(
+          // Sets the type of object
+          type: NodeType.localGLTF2,
+          // Where the object is rendered from.
 
-      // Takes the node just created and links it to the anchor as added by the
-      // user to display where pressed.
-      bool? didAddNodeToAnchor =
-          await arObjectManager.addNode(newNode, planeAnchor: newAnchor);
-      // Checks if the node could be added to the anchor then saves the node object
-      // to the nodes list.
-      if (didAddNodeToAnchor == true) {
-        nodes.add(newNode);
+          // This work is based on "Fire Extinguisher" (https://sketchfab.com/3d-models/fire-extinguisher-5288f12eb87f4826a73ebedb60a1c82d) by oooFFFFEDDMODELS (https://sketchfab.com/pierre.marcos.19) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+          uri:
+              "Models/fire_extinguisher_3/fire_extinguisher_model_with_render.gltf",
+          // Sets the overall size of the object on the device.
+          scale: vector_math.Vector3(0.2, 0.2, 0.2),
+          // Sets the position to the anchor point created when pressing on the plane.
+          position: vector_math.Vector3(0.0, 0.0, 0.0),
+          // Sets the rotation to follow the plane axis.
+          rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
+        );
       } else {
-        arSessionManager.onError("Failed to add node to anchor.");
+        newNode = ARNode(
+          // Sets the type of object
+          type: NodeType.webGLB,
+          // Where the object is rendered from.
+          uri:
+              "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb",
+          // Sets the overall size of the object on the device.
+          scale: vector_math.Vector3(0.2, 0.2, 0.2),
+          // Sets the position to the anchor point created when pressing on the plane.
+          position: vector_math.Vector3(0.0, 0.0, 0.0),
+          // Sets the rotation to follow the plane axis.
+          rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
+        );
       }
-    } else {
-      arSessionManager.onError("Failed to add anchor.");
+
+        // Takes the node just created and links it to the anchor as added by the
+        // user to display where pressed.
+        bool? didAddNodeToAnchor =
+            await arObjectManager.addNode(newNode, planeAnchor: newAnchor);
+        // Checks if the node could be added to the anchor then saves the node object
+        // to the nodes list.
+        if (didAddNodeToAnchor == true) {
+          nodes.add(newNode);
+        } else {
+          arSessionManager.onError("Failed to add node to anchor.");
+        }
+      } else {
+        arSessionManager.onError("Failed to add anchor.");
+      }
     }
   }
 

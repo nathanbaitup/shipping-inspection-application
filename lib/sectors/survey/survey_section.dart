@@ -136,20 +136,8 @@ class _SurveySectionState extends State<SurveySection> {
                 const SizedBox(height: 10),
 
                 // Opens the survey section in an AR view.
-                //TODO: changed for testing the onboarding screen, revert back to _openARSection() function.
                 ElevatedButton(
-                  onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ARIntroduction(
-                          vesselID: widget.vesselID,
-                          openThroughQR: false,
-                          questionID: widget.questionID,
-                        ),
-                      ),
-                    );
-                  },
+                  onPressed: () async => _openARSection(),
                   style: ElevatedButton.styleFrom(
                       primary: LightColors.sDarkYellow),
                   child: const Text('Open section in AR'),

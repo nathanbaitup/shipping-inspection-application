@@ -1,6 +1,4 @@
 
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:shipping_inspection_app/sectors/history/record.dart';
@@ -32,6 +30,8 @@ String getUsername() {
 
 // --- HISTORY GLOBALS
 // -- For usage in History Logs + History Settings
+bool historyEnabled = true;
+
 List<bool> historyPrefs = List<bool>.filled(5, true, growable: false);
 
 void changeHistoryPref(String type, bool value) {
