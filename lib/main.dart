@@ -9,7 +9,7 @@ import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(ShipApp());
+  runApp(const ShipApp());
 }
 
 final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
@@ -19,7 +19,7 @@ String vesselID = '';
 
 class ShipApp extends StatefulWidget {
 
-  ShipApp({Key? key}) : super(key: key);
+  const ShipApp({Key? key}) : super(key: key);
 
   @override
   _ShipAppState createState() => _ShipAppState();
@@ -50,7 +50,7 @@ class _ShipAppState extends State<ShipApp> {
                   )),
               darkTheme: ThemeData(
                   colorScheme: ColorScheme.fromSwatch().copyWith(
-                    primary: Colors.white,
+                    primary: LightColors.sPurple,
                     secondary: LightColors.sPurple,
                     brightness: Brightness.dark,
                     /* dark theme settings */
@@ -208,7 +208,7 @@ class _WelcomePageState extends State<WelcomePage> {
                             _validation = false;
                           });
                           vesselID = _vesselController.text;
-                          runApp(ShipApp());
+                          runApp(const ShipApp());
                         }
                       },
                       style:

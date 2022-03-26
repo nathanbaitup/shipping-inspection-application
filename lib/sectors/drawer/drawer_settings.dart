@@ -69,10 +69,10 @@ class _MenuSettingsState extends State<MenuSettings> {
         ),
         body: SettingsList(sections: [
           SettingsSection(
-            title: const Text(
+            title: Text(
               'Common',
               style: TextStyle(
-                  color: Colors.black,
+                  color: globals.getTextColour(),
                   decorationColor: LightColors.sPurple,
                   decorationThickness: 2,
                   decoration: TextDecoration.underline),
@@ -118,19 +118,17 @@ class _MenuSettingsState extends State<MenuSettings> {
                     themeNotifier.value = ThemeMode.light;
                   }
                   setState(() {});
-                  print("test");
-                  print(globals.getAppbarColour().toString());
                   value = globals.darkModeEnabled;
                 },
               ),
             ],
           ),
           SettingsSection(
-            title: const Text(
+            title: Text(
               'Account',
               style: TextStyle(
-                  color: Colors.black,
-                  decorationColor: Colors.purple,
+                  color: globals.getTextColour(),
+                  decorationColor: LightColors.sPurple,
                   decorationThickness: 2,
                   decoration: TextDecoration.underline),
             ),
@@ -149,10 +147,10 @@ class _MenuSettingsState extends State<MenuSettings> {
             ],
           ),
           SettingsSection(
-              title: const Text(
+              title: Text(
                 'System',
                 style: TextStyle(
-                    color: Colors.black,
+                    color: globals.getTextColour(),
                     decorationColor: LightColors.sPurple,
                     decorationThickness: 2,
                     decoration: TextDecoration.underline),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shipping_inspection_app/home.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
 import 'package:shipping_inspection_app/utils/colours.dart';
 
@@ -92,7 +93,10 @@ class _SettingsUsernameState extends State<SettingsUsername> {
                               const SnackBar(content: Text('Processing username change...')),
                             );
                             globals.addRecord("settings-username-change", globals.getUsername(), DateTime.now(), username);
-                            globals.setUsername(username);
+                            setState(() {
+                              globals.setUsername(username);
+                              usernameNotifier.value = username;
+                            });
                             updateCurrentUsername();
                             globals.savePrefs();
                           }

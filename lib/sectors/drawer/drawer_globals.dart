@@ -1,11 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:shipping_inspection_app/sectors/history/record.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../utils/colours.dart';
 
 // --- CALLS GLOBALS
 // -- For usage in Calls + Channels Settings
@@ -105,14 +102,21 @@ void loadPrefs() async {
 }
 
 Color getAppbarColour() {
-
   Color appbarColour;
-
   if (darkModeEnabled) {
     appbarColour = Colors.black12;
   } else {
     appbarColour = Colors.white;
   }
+  return appbarColour;
+}
 
+Color getTextColour() {
+  Color appbarColour;
+  if (darkModeEnabled) {
+    appbarColour = Colors.white;
+  } else {
+    appbarColour = Colors.black;
+  }
   return appbarColour;
 }
