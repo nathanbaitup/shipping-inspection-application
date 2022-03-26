@@ -93,24 +93,61 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
             ),
             Align(
               alignment: Alignment.topLeft,
-              child: Container(
-                width: 100,
-                height: 100,
-                color: const Color.fromARGB(255, 255, 255, 255),
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _switch = !_switch;
-                    });
-                  },
-                  child: Center(
-                    child:
-                        _switch ? _renderLocalPreview() : _renderRemoteVideo(),
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: LightColors.sPurple,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _switch = !_switch;
+                      });
+                    },
+                    child: Center(
+                      child: _switch
+                          ? _renderLocalPreview()
+                          : _renderRemoteVideo(),
+                    ),
                   ),
                 ),
               ),
             ),
             _videoCallToolbar(),
+
+            // Displays the option to view questions based on a section.
+            // TODO: add drop down list to select what section to survey and automatically display the questions for it.
+            Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: const [
+                    DisplaySurveyQuestions(
+                      surveyQuestions: ['0', 'View questions for section: '],
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: const [
+                    DisplaySurveyQuestions(
+                      surveyQuestions: [
+                        'question 1',
+                        'question 2',
+                        'question 3',
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -120,7 +157,13 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
   // Local device viewfinder.
   Widget _renderLocalPreview() {
     if (_joined) {
-      return const rtc_local_view.SurfaceView();
+      // REFERENCE accessed 26/03/2022 https://stackoverflow.com/a/69237364
+      // Used to adda rounded edge to the camera view.
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: const rtc_local_view.SurfaceView(),
+      );
+      // END REFERENCE
     } else {
       return const Text(
         'Please join channel first',
@@ -129,12 +172,15 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
     }
   }
 
-  // Other particpant viewfinder.
+  // Other participant viewfinder.
   Widget _renderRemoteVideo() {
     if (_remoteUid != 0) {
-      return rtc_remove_view.SurfaceView(
-        uid: _remoteUid,
-        channelId: "test",
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: rtc_remove_view.SurfaceView(
+          uid: _remoteUid,
+          channelId: "test",
+        ),
       );
     } else {
       return const Text(
@@ -238,5 +284,58 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
   //This widget allows the user to  switch from front and rear camera.
   void _onSwitchCamera() {
     RtcEngine.instance?.switchCamera();
+  }
+}
+
+class DisplaySurveyQuestions extends StatefulWidget {
+  final List<String> surveyQuestions;
+
+  const DisplaySurveyQuestions({Key? key, required this.surveyQuestions})
+      : super(key: key);
+
+  @override
+  _MyARContentState createState() => _MyARContentState();
+}
+
+class _MyARContentState extends State<DisplaySurveyQuestions> {
+  int widgetQuestionID = 1;
+
+  void _updateWidgetQuestion() {
+    setState(() {
+      int newQuestion = widgetQuestionID + 1;
+      if (newQuestion > (widget.surveyQuestions.length - 1)) {
+        newQuestion = 1;
+      }
+      widgetQuestionID = newQuestion;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double cWidth = MediaQuery.of(context).size.width * 0.58;
+    return Column(children: [
+      InkWell(
+        child: Container(
+          width: cWidth,
+          margin: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                color: LightColors.sPurple,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(20))),
+          child: Text(
+            "Question: " + widget.surveyQuestions[widgetQuestionID],
+            style: const TextStyle(
+              color: LightColors.sPurple,
+            ),
+          ),
+        ),
+        onTap: () {
+          _updateWidgetQuestion();
+        },
+      )
+    ]);
   }
 }
