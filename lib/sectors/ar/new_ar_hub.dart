@@ -340,11 +340,11 @@ class _NewARHubState extends State<NewARHub> {
   // Returns the user to the survey_section screen, ensuring they are returned to the section they are currently surveying.
   void _returnToSectionScreen() async {
     _saveImagesToFirebase();
+    arSessionManager.dispose();
     // If the user opened a section through the QR scanner, then only one screen
     // needs to be removed from the stack.
     // TODO: Double check opening through QR closes correctly.
     if (widget.openThroughQR) {
-      Navigator.pop(context);
       Navigator.pop(context);
       Navigator.pop(context);
       Navigator.pushAndRemoveUntil(
@@ -359,23 +359,9 @@ class _NewARHubState extends State<NewARHub> {
       );
       // If opened manually, two screens need to be removed otherwise there
       // will be two section screens open with the user needing to close both screens.
-    } else if (widget.seenTutorial) {
-      Navigator.pop(context);
-      Navigator.pop(context);
     } else {
       Navigator.pop(context);
       Navigator.pop(context);
-      Navigator.pop(context);
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SurveySection(
-              vesselID: widget.vesselID,
-              questionID: widget.questionID,
-              capturedImages: imageViewer),
-        ),
-        (Route<dynamic> route) => true,
-      );
     }
     history_globals.addRecord("pressed", history_globals.getUsername(),
         DateTime.now(), 'return to section');
