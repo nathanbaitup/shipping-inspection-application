@@ -298,6 +298,18 @@ class _SurveySectionState extends State<SurveySection> {
     } else {
       globals.addRecord(
           "opened", globals.getUsername(), DateTime.now(), 'camera');
+
+      await FirebaseFirestore.instance
+          .collection("History_Logging")
+          .add({
+            'title': "Opening camera",
+            'username': globals.getUsername(),
+            'time': DateTime.now(),
+            'permission': 'camera',
+          })
+          .then((value) => debugPrint("Record has been added"))
+          .catchError((error) => debugPrint("Failed to add record: $error"));
+
       await availableCameras().then(
         (value) async {
           await Navigator.push(
