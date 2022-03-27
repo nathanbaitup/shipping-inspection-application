@@ -281,7 +281,7 @@ class _SurveySectionState extends State<SurveySection> {
     await FirebaseFirestore.instance
         .collection("History_Logging")
         .add({
-          'title': "Opening " + pageTitle,
+          'title': "Opening $pageTitle",
           'username': globals.getUsername(),
           'time': DateTime.now(),
         })
@@ -337,6 +337,18 @@ class _SurveySectionState extends State<SurveySection> {
     } else {
       globals.addRecord("opened", globals.getUsername(), DateTime.now(),
           '$pageTitle AR session through button press');
+
+      await FirebaseFirestore.instance
+          .collection("History_Logging")
+          .add({
+            'title': "Opening $pageTitle through AR session",
+            'username': globals.getUsername(),
+            'time': DateTime.now(),
+            'permission': 'camera',
+          })
+          .then((value) => debugPrint("Record has been added"))
+          .catchError((error) => debugPrint("Failed to add record: $error"));
+
       await availableCameras().then(
         (value) async {
           List<String> arContentPush = [pageTitle] + _questionsToAnswer;
