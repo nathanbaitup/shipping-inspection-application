@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_channels.dart';
@@ -148,6 +149,18 @@ class _MenuSettingsState extends State<MenuSettings> {
                       if (await Permission.camera.request().isGranted) {
                         globals.addRecord("settings-permission-add",
                             globals.getUsername(), DateTime.now(), "Camera");
+                        await FirebaseFirestore.instance
+                            .collection("History_Logging")
+                            .add({
+                              'title': "Adding camera permissions",
+                              'username': globals.getUsername(),
+                              'time': DateTime.now(),
+                              'permission': 'Camera',
+                            })
+                            .then(
+                                (value) => debugPrint("Record has been added"))
+                            .catchError((error) =>
+                                debugPrint("Failed to add record: $error"));
                         cameraSwitch = true;
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -179,6 +192,18 @@ class _MenuSettingsState extends State<MenuSettings> {
                             globals.getUsername(),
                             DateTime.now(),
                             "Microphone");
+                        await FirebaseFirestore.instance
+                            .collection("History_Logging")
+                            .add({
+                              'title': "Adding microphone permissions",
+                              'username': globals.getUsername(),
+                              'time': DateTime.now(),
+                              'permission': 'Microphone',
+                            })
+                            .then(
+                                (value) => debugPrint("Record has been added"))
+                            .catchError((error) =>
+                                debugPrint("Failed to add record: $error"));
                         micSwitch = true;
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
