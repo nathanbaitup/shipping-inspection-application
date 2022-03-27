@@ -87,6 +87,16 @@ Color getIconColourCheck(bool enableValue) {
   return newColor;
 }
 
+Color getButtonColourCheck(Color enabledColour) {
+  Color newColor;
+  if(historyEnabled) {
+    newColor = enabledColour;
+  } else {
+    newColor = Colors.grey;
+  }
+  return newColor;
+}
+
 // --- USERNAME GLOBALS
 // -- For usage in Username Settings + History Logs + Calls
 String username = "Current User";

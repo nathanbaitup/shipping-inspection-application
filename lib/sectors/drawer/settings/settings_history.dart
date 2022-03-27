@@ -12,32 +12,13 @@ class SettingsHistory extends StatefulWidget {
   State<SettingsHistory> createState() => _SettingsHistoryState();
 }
 
-Color initButtonColourClear() {
-  Color newColor;
-  if(globals.historyEnabled) {
-    newColor = LightColors.sRed;
-  } else {
-    newColor = Colors.grey;
-  }
-  return newColor;
-}
-
-Color initButtonColourCheck() {
-  Color newColor;
-  if(globals.historyEnabled) {
-    newColor = LightColors.sPurpleL;
-  } else {
-    newColor = Colors.grey;
-  }
-  return newColor;
-}
-
 class _SettingsHistoryState extends State<SettingsHistory> {
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
+        resizeToAvoidBottomInset : false,
         appBar: AppBar(
           backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
@@ -168,7 +149,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                 TextButton(
                   style: TextButton.styleFrom(
                     primary: Colors.white,
-                    backgroundColor: initButtonColourCheck(),
+                    backgroundColor: globals.getButtonColourCheck(LightColors.sPurpleL),
                     elevation: 2,
                     padding: const EdgeInsets.all(15.0),
                     shape: RoundedRectangleBorder(
@@ -190,7 +171,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                 TextButton(
                   style: TextButton.styleFrom(
                     primary: Colors.white,
-                    backgroundColor: initButtonColourClear(),
+                    backgroundColor: globals.getButtonColourCheck(LightColors.sRed),
                     elevation: 2,
                     padding: const EdgeInsets.all(15.0),
                     shape: RoundedRectangleBorder(

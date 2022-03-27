@@ -120,22 +120,118 @@ class _SettingsChannelsState extends State<SettingsChannels> {
             color: LightColors.sPurple,
           ),
         ),
-        body: SettingsList(sections: [
-          SettingsSection(
-            title: Text(
-              'Saved Channels',
-              style: TextStyle(
-                  color: globals.getTextColour(),
-                  decorationColor: LightColors.sPurple,
-                  decorationThickness: 2,
-                  decoration: TextDecoration.underline),
+        body: Column(mainAxisSize: MainAxisSize.min, children: [
+          Container(
+            color: globals.getSettingsBgColour(),
+            height: 100,
+            child: NumericStepButton(
+              onChanged: (value) {
+
+              },
             ),
-            tiles: [
-              channelTile(channels[0]),
-              channelTile(channels[1]),
-              channelTile(channels[2]),
-            ],
+          ),
+          SettingsList(shrinkWrap: true, sections: [
+            SettingsSection(
+              title: Text(
+                'Saved Channels',
+                style: TextStyle(
+                    color: globals.getTextColour(),
+                    decorationColor: LightColors.sPurple,
+                    decorationThickness: 2,
+                    decoration: TextDecoration.underline),
+              ),
+              tiles: [
+                channelTile(channels[0]),
+                channelTile(channels[1]),
+                channelTile(channels[2]),
+              ],
+            )
+          ]),
+          Expanded(
+              child: Container(
+                color: globals.getSettingsBgColour(),
+              )
           )
         ]));
+  }
+}
+
+class NumericStepButton extends StatefulWidget {
+  final int minValue;
+  final int maxValue;
+
+  final ValueChanged<int> onChanged;
+
+  const NumericStepButton(
+      {Key? key,  this.minValue = 0, this.maxValue = 10, required this.onChanged}) : super(key: key);
+
+  @override
+  State<NumericStepButton> createState() {
+    return _NumericStepButtonState();
+  }
+}
+
+class _NumericStepButtonState extends State<NumericStepButton> {
+
+  int counter= 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        TextButton(
+          child: const Icon(
+            Icons.remove,
+            color: Colors.white,
+            size: 32,
+          ),
+          style: TextButton.styleFrom(
+            primary: Colors.white,
+            backgroundColor: LightColors.sPurple,
+            elevation: 2,
+            shape: const CircleBorder(),
+          ),
+          onPressed: () {
+            setState(() {
+              if (counter > widget.minValue) {
+                counter--;
+              }
+              widget.onChanged(counter);
+            });
+          },
+        ),
+        Text(
+          '$counter',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: globals.getTextColour(),
+            fontSize: 24.0,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        TextButton(
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 32,
+          ),
+          style: TextButton.styleFrom(
+            primary: Colors.white,
+            backgroundColor: LightColors.sPurple,
+            elevation: 2,
+            shape: const CircleBorder(),
+          ),
+          onPressed: () {
+            setState(() {
+              if (counter < widget.maxValue) {
+                counter++;
+              }
+              widget.onChanged(counter);
+            });
+          },
+        ),
+      ],
+    );
   }
 }
