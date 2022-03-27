@@ -116,7 +116,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                   globals.systemThemeEnabled = !globals.systemThemeEnabled;
                   if(globals.systemThemeEnabled) {
                     themeNotifier.value = ThemeMode.system;
-                    if(ThemeMode.system == ThemeMode.dark) {
+                    if(MediaQuery.of(context).platformBrightness == Brightness.dark) {
                       globals.darkModeEnabled = true;
                     } else {
                       globals.darkModeEnabled = false;
@@ -125,6 +125,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                   }
                   subtextColourNotifier.value = globals.getSubtextColour(); //Changes subtext colour on home page
                   setState(() {});
+                  globals.savePrefs();
                   value = globals.systemThemeEnabled;
                 },
               ),
@@ -147,6 +148,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                   }
                   subtextColourNotifier.value = globals.getSubtextColour(); //Changes subtext colour on home page
                   setState(() {});
+                  globals.savePrefs();
                   value = globals.darkModeEnabled;
                 },
               ),

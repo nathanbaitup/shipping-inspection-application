@@ -182,11 +182,14 @@ class _WelcomePageState extends State<WelcomePage> {
                       child: TextField(
                         controller: _vesselController,
                         decoration: InputDecoration(
-                          labelText: 'enter the vessel name ',
+                          labelText: 'Enter the Vessel name ',
                           errorText: _validation
-                              ? 'Please enter a vessel name or id'
+                              ? 'Please enter a Vessel name or ID'
                               : null,
-                          border: const OutlineInputBorder(),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: globals.getTextColour(), width: 1),
+                          ),
                         ),
                       ),
                     ),

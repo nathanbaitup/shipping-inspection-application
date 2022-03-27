@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:shipping_inspection_app/sectors/history/record.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../main.dart';
 import '../../utils/colours.dart';
 
 // --- CALLS GLOBALS
@@ -24,6 +25,14 @@ var appBrightness = SchedulerBinding.instance!.window.platformBrightness;
 
 bool systemThemeEnabled = false;
 bool darkModeEnabled = appBrightness == Brightness.dark;
+
+void initTheme() {
+  if(darkModeEnabled) {
+    themeNotifier.value = ThemeMode.dark;
+  } else {
+    themeNotifier.value = ThemeMode.light;
+  }
+}
 
 Color getAppbarColour() {
   Color appbarColour;
@@ -140,6 +149,7 @@ void savePrefs() async {
   await prefs.setBool("history-communications", historyPrefs[4]);
   await prefs.setBool("history-enabled", historyEnabled);
   await prefs.setBool("dark-mode", darkModeEnabled);
+  await prefs.setBool("system-theme", systemThemeEnabled);
 }
 
 void loadPrefs() async {
@@ -154,4 +164,6 @@ void loadPrefs() async {
   historyPrefs[4] = prefs.getBool("history-communications")?? true;
   historyEnabled = prefs.getBool("history-enabled")?? true;
   darkModeEnabled = prefs.getBool("dark-mode")?? false;
+  systemThemeEnabled = prefs.getBool("system-theme")?? false;
+  initTheme();
 }
