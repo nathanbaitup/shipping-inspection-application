@@ -193,8 +193,6 @@ class _NewARHubState extends State<NewARHub> {
   }
 
   // Function that handles adding an object to the AR scene.
-  // Currently adds a model of a duck following the example.
-  // TODO: display the item automatically and not with a tap.
   // TODO: allow for multiple items to be loaded dynamically based on the question ID.
   Future<void> _onPlaneOrPointTap(List<ARHitTestResult> userTapResults) async {
     if (anchors.length == 1 && nodes.length == 1) {
@@ -343,7 +341,6 @@ class _NewARHubState extends State<NewARHub> {
     arSessionManager.dispose();
     // If the user opened a section through the QR scanner, then only one screen
     // needs to be removed from the stack.
-    // TODO: Double check opening through QR closes correctly.
     if (widget.openThroughQR) {
       Navigator.pop(context);
       Navigator.pop(context);

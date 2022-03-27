@@ -369,13 +369,6 @@ class _ARIntroductionState extends State<ARIntroduction> {
                   style: pageInfoStyle,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 45.0,
-                  vertical: 45.0,
-                ),
-                child: Image.asset('images/ar_onboarding/show_model_2.png'),
-              ),
             ],
           ),
         ),
