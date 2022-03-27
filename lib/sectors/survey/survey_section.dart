@@ -372,6 +372,15 @@ class _SurveySectionState extends State<SurveySection> {
   // Saves the images, and survey responses to the database.
   void _saveSurvey() async {
     globals.addRecord("add", globals.getUsername(), DateTime.now(), pageTitle);
+    await FirebaseFirestore.instance
+        .collection("History_Logging")
+        .add({
+          'title': "Adding $pageTitle survey results",
+          'username': globals.getUsername(),
+          'time': DateTime.now(),
+        })
+        .then((value) => debugPrint("Record has been added"))
+        .catchError((error) => debugPrint("Failed to add record: $error"));
     _saveResultsToFirestore();
   }
 
