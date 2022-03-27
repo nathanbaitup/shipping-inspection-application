@@ -135,10 +135,12 @@ class _QRScannerState extends State<QRScanner> {
         context,
         MaterialPageRoute(
           builder: (context) => NewARHub(
-              vesselID: widget.vesselID,
-              questionID: '${_qrResult?.code}',
-              arContent: arContentPush,
-              openThroughQR: true),
+            vesselID: widget.vesselID,
+            questionID: '${_qrResult?.code}',
+            arContent: arContentPush,
+            openThroughQR: true,
+            seenTutorial: false,
+          ),
         ),
       );
       // Adds a message to say what page has been opened from the QR camera.

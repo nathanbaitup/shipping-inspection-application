@@ -14,7 +14,6 @@ import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:shipping_inspection_app/sectors/ar/new_ar_hub.dart';
 import 'package:shipping_inspection_app/sectors/questions/answers.dart';
-import '../ar/ar_onboarding_screen.dart';
 import '../drawer/drawer_globals.dart' as globals;
 
 // The question brain to load all the questions.
@@ -328,6 +327,7 @@ class _SurveySectionState extends State<SurveySection> {
                 questionID: widget.questionID,
                 arContent: arContentPush,
                 openThroughQR: false,
+                seenTutorial: false,
               ),
             ),
           );

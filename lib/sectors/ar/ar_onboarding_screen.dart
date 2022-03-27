@@ -9,13 +9,9 @@ import 'new_ar_hub.dart';
 class ARIntroduction extends StatefulWidget {
   final String vesselID;
   final String questionID;
-  final bool openThroughQR;
 
   const ARIntroduction(
-      {Key? key,
-      required this.vesselID,
-      required this.questionID,
-      required this.openThroughQR})
+      {Key? key, required this.vesselID, required this.questionID})
       : super(key: key);
 
   @override
@@ -24,6 +20,7 @@ class ARIntroduction extends StatefulWidget {
 
 class _ARIntroductionState extends State<ARIntroduction> {
   bool hasSeenTutorial = false;
+
   // The questions relating to a specific section.
   List<String> _questionsToAnswer = [];
   String pageTitle = '';
@@ -138,6 +135,7 @@ class _ARIntroductionState extends State<ARIntroduction> {
       ),
     );
   }
+
   // END REFERENCE
 
   // REFERENCE accessed 23/03/2022 https://pub.dev/packages/onboarding
@@ -369,11 +367,12 @@ class _ARIntroductionState extends State<ARIntroduction> {
       ),
     ),
   ];
+
   // END REFERENCE
 
   void _openARSection() async {
     globals.addRecord("opened", globals.getUsername(), DateTime.now(),
-        '${pageTitle} AR session through button press');
+        '$pageTitle AR session through button press');
     List<String> arContentPush = [pageTitle] + _questionsToAnswer;
     Navigator.push(
       context,
@@ -383,14 +382,10 @@ class _ARIntroductionState extends State<ARIntroduction> {
           questionID: widget.questionID,
           arContent: arContentPush,
           openThroughQR: false,
+          seenTutorial: true,
         ),
       ),
     );
-  }
-
-  void _addEnterRecord() {
-    globals.addRecord(
-        "enter", globals.getUsername(), DateTime.now(), pageTitle);
   }
 }
 

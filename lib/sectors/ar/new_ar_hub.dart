@@ -18,6 +18,7 @@ import '../../utils/colours.dart';
 import '../questions/question_brain.dart';
 import '../survey/survey_section.dart';
 import '../drawer/drawer_globals.dart' as history_globals;
+import 'ar_onboarding_screen.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
 
@@ -26,6 +27,7 @@ class NewARHub extends StatefulWidget {
   final String questionID;
   final List<String> arContent;
   final bool openThroughQR;
+  final bool seenTutorial;
 
   const NewARHub({
     Key? key,
@@ -33,6 +35,7 @@ class NewARHub extends StatefulWidget {
     required this.questionID,
     required this.openThroughQR,
     required this.arContent,
+    required this.seenTutorial,
   }) : super(key: key);
 
   @override
@@ -62,6 +65,12 @@ class _NewARHubState extends State<NewARHub> {
 
   @override
   Widget build(BuildContext context) {
+    if (!widget.seenTutorial) {
+      return ARIntroduction(
+        vesselID: widget.vesselID,
+        questionID: widget.questionID,
+      );
+    }
     return WillPopScope(
         onWillPop: () async {
           _returnToSectionScreen();
@@ -207,43 +216,43 @@ class _NewARHubState extends State<NewARHub> {
       if (didAddAnchor == true) {
         anchors.add(newAnchor);
 
-      ARNode newNode;
+        ARNode newNode;
 
-      // ----- CREATING AN AR OBJECT -----
-      // The node is what is displayed to the user in the AR view, linked to an anchor point.
-      // If fire and safety show the fire extinguisher else show the duck.
-      // TODO: Change the object uri to dynamically load the correct model or image based on what is being surveyed.
-      if (widget.questionID == 'f&s') {
-        newNode = ARNode(
-          // Sets the type of object
-          type: NodeType.localGLTF2,
-          // Where the object is rendered from.
+        // ----- CREATING AN AR OBJECT -----
+        // The node is what is displayed to the user in the AR view, linked to an anchor point.
+        // If fire and safety show the fire extinguisher else show the duck.
+        // TODO: Change the object uri to dynamically load the correct model or image based on what is being surveyed.
+        if (widget.questionID == 'f&s') {
+          newNode = ARNode(
+            // Sets the type of object
+            type: NodeType.localGLTF2,
+            // Where the object is rendered from.
 
-          // This work is based on "Fire Extinguisher" (https://sketchfab.com/3d-models/fire-extinguisher-5288f12eb87f4826a73ebedb60a1c82d) by oooFFFFEDDMODELS (https://sketchfab.com/pierre.marcos.19) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
-          uri:
-              "Models/fire_extinguisher_3/fire_extinguisher_model_with_render.gltf",
-          // Sets the overall size of the object on the device.
-          scale: vector_math.Vector3(0.2, 0.2, 0.2),
-          // Sets the position to the anchor point created when pressing on the plane.
-          position: vector_math.Vector3(0.0, 0.0, 0.0),
-          // Sets the rotation to follow the plane axis.
-          rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
-        );
-      } else {
-        newNode = ARNode(
-          // Sets the type of object
-          type: NodeType.webGLB,
-          // Where the object is rendered from.
-          uri:
-              "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb",
-          // Sets the overall size of the object on the device.
-          scale: vector_math.Vector3(0.2, 0.2, 0.2),
-          // Sets the position to the anchor point created when pressing on the plane.
-          position: vector_math.Vector3(0.0, 0.0, 0.0),
-          // Sets the rotation to follow the plane axis.
-          rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
-        );
-      }
+            // This work is based on "Fire Extinguisher" (https://sketchfab.com/3d-models/fire-extinguisher-5288f12eb87f4826a73ebedb60a1c82d) by oooFFFFEDDMODELS (https://sketchfab.com/pierre.marcos.19) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+            uri:
+                "Models/fire_extinguisher_3/fire_extinguisher_model_with_render.gltf",
+            // Sets the overall size of the object on the device.
+            scale: vector_math.Vector3(0.2, 0.2, 0.2),
+            // Sets the position to the anchor point created when pressing on the plane.
+            position: vector_math.Vector3(0.0, 0.0, 0.0),
+            // Sets the rotation to follow the plane axis.
+            rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
+          );
+        } else {
+          newNode = ARNode(
+            // Sets the type of object
+            type: NodeType.webGLB,
+            // Where the object is rendered from.
+            uri:
+                "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb",
+            // Sets the overall size of the object on the device.
+            scale: vector_math.Vector3(0.2, 0.2, 0.2),
+            // Sets the position to the anchor point created when pressing on the plane.
+            position: vector_math.Vector3(0.0, 0.0, 0.0),
+            // Sets the rotation to follow the plane axis.
+            rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
+          );
+        }
 
         // Takes the node just created and links it to the anchor as added by the
         // user to display where pressed.
@@ -333,7 +342,9 @@ class _NewARHubState extends State<NewARHub> {
     _saveImagesToFirebase();
     // If the user opened a section through the QR scanner, then only one screen
     // needs to be removed from the stack.
+    // TODO: Double check opening through QR closes correctly.
     if (widget.openThroughQR) {
+      Navigator.pop(context);
       Navigator.pop(context);
       Navigator.pop(context);
       Navigator.pushAndRemoveUntil(
@@ -348,6 +359,9 @@ class _NewARHubState extends State<NewARHub> {
       );
       // If opened manually, two screens need to be removed otherwise there
       // will be two section screens open with the user needing to close both screens.
+    } else if (widget.seenTutorial) {
+      Navigator.pop(context);
+      Navigator.pop(context);
     } else {
       Navigator.pop(context);
       Navigator.pop(context);
@@ -379,7 +393,7 @@ class ARQuestionWidget extends StatelessWidget {
     return Column(children: [
       Container(
         width: cWidth,
-        margin: const EdgeInsets.all(10.0),
+        margin: const EdgeInsets.all(8.0),
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
             color: Colors.white,
@@ -427,7 +441,7 @@ class _MyARContentState extends State<ARContentWidget> {
       InkWell(
         child: Container(
           width: cWidth,
-          margin: const EdgeInsets.all(10.0),
+          margin: const EdgeInsets.all(8.0),
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
               color: Colors.white,
