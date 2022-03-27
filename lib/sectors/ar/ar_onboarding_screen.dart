@@ -6,6 +6,9 @@ import '../drawer/drawer_globals.dart' as globals;
 import '../questions/question_brain.dart';
 import 'new_ar_hub.dart';
 
+// The question brain to load all the questions.
+QuestionBrain questionBrain = QuestionBrain();
+
 class ARIntroduction extends StatefulWidget {
   final String vesselID;
   final String questionID;
@@ -19,18 +22,17 @@ class ARIntroduction extends StatefulWidget {
 }
 
 class _ARIntroductionState extends State<ARIntroduction> {
+  // The button that allows a user to skip the on-boarding process.
+  late Material _materialButton;
   bool hasSeenTutorial = false;
 
-  // The questions relating to a specific section.
   List<String> _questionsToAnswer = [];
-  String pageTitle = '';
+  String _pageTitle = '';
 
   @override
   void initState() {
     super.initState();
-    _questionsToAnswer = questionBrain.getQuestions(widget.questionID);
-    pageTitle = questionBrain.getPageTitle(widget.questionID);
-    materialButton = _nextButton;
+    _initPageSetup();
   }
 
   @override
@@ -59,14 +61,14 @@ class _ARIntroductionState extends State<ARIntroduction> {
           ),
         ),
         body: Onboarding(
-          pages: onboardingPagesList,
+          pages: _pagesList,
           background: LightColors.sPurple,
           onPageChange: (int pageIndex) => _buildButton(pageIndex),
           footer: Footer(
             footerMainAxisAlignment: MainAxisAlignment.spaceBetween,
             footerCrossAxisAlignment: CrossAxisAlignment.center,
             child: Container(
-              child: materialButton,
+              child: _materialButton,
             ),
             indicator: Indicator(
               indicatorDesign: IndicatorDesign.polygon(
@@ -84,33 +86,40 @@ class _ARIntroductionState extends State<ARIntroduction> {
     );
   }
 
-  late Material materialButton;
+  // Initializes the page to navigate to the AR scene by getting the survey questions
+  // and survey section title.
+  void _initPageSetup() {
+    _questionsToAnswer = questionBrain.getQuestions(widget.questionID);
+    _pageTitle = questionBrain.getPageTitle(widget.questionID);
+    _materialButton = _skipButton;
+  }
 
   // REFERENCE accessed 23/03/2022 https://pub.dev/packages/onboarding
   // Used to create the next and finish buttons.
   void _buildButton(int pageIndex) {
     if (pageIndex == 4) {
       setState(() {
-        materialButton = _finishButton;
+        _materialButton = _finishButton;
       });
     } else {
       setState(() {
-        materialButton = _nextButton;
+        _materialButton = _skipButton;
       });
     }
   }
 
-  Material get _nextButton {
+  // Creates the skip button to navigate directly to the AR screen.
+  Material get _skipButton {
     return Material(
       borderRadius: defaultSkipButtonBorderRadius,
       color: defaultSkipButtonColor,
       child: InkWell(
         borderRadius: defaultSkipButtonBorderRadius,
-        onTap: () {},
+        onTap: () async => _openARSection(),
         child: const Padding(
           padding: defaultSkipButtonPadding,
           child: Text(
-            'Next',
+            'Skip to AR',
             style: defaultSkipButtonTextStyle,
           ),
         ),
@@ -118,6 +127,8 @@ class _ARIntroductionState extends State<ARIntroduction> {
     );
   }
 
+  // Creates the finish button to navigate to the AR screen after reading through
+  // the instructions.
   Material get _finishButton {
     return Material(
       borderRadius: defaultProceedButtonBorderRadius,
@@ -135,12 +146,12 @@ class _ARIntroductionState extends State<ARIntroduction> {
       ),
     );
   }
-
   // END REFERENCE
 
   // REFERENCE accessed 23/03/2022 https://pub.dev/packages/onboarding
   // Used template to create on-boarding widget with instructions on how to use the AR scene.
-  final onboardingPagesList = [
+  final _pagesList = [
+    // Gives instructions on how the questions function.
     PageModel(
       widget: Container(
         color: LightColors.sPurpleLL,
@@ -188,6 +199,7 @@ class _ARIntroductionState extends State<ARIntroduction> {
         ),
       ),
     ),
+    // Gives instructions on the animated figure.
     PageModel(
       widget: Container(
         color: LightColors.sPurpleLL,
@@ -229,6 +241,7 @@ class _ARIntroductionState extends State<ARIntroduction> {
         ),
       ),
     ),
+    // Gives instructions on the AR navigation controls.
     PageModel(
       widget: Container(
         color: LightColors.sPurpleLL,
@@ -278,6 +291,7 @@ class _ARIntroductionState extends State<ARIntroduction> {
         ),
       ),
     ),
+    // Gives information on the plane detection.
     PageModel(
       widget: Container(
         color: LightColors.sPurpleLL,
@@ -319,6 +333,7 @@ class _ARIntroductionState extends State<ARIntroduction> {
         ),
       ),
     ),
+    // Gives information on adding and viewing a 3D model.
     PageModel(
       widget: Container(
         color: LightColors.sPurpleLL,
@@ -367,13 +382,13 @@ class _ARIntroductionState extends State<ARIntroduction> {
       ),
     ),
   ];
-
   // END REFERENCE
 
+  // Opens the AR section parsing through the data parsed in by the survey section.
   void _openARSection() async {
     globals.addRecord("opened", globals.getUsername(), DateTime.now(),
-        '$pageTitle AR session through button press');
-    List<String> arContentPush = [pageTitle] + _questionsToAnswer;
+        '$_pageTitle AR session through button press');
+    List<String> arContentPush = [_pageTitle] + _questionsToAnswer;
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -388,6 +403,3 @@ class _ARIntroductionState extends State<ARIntroduction> {
     );
   }
 }
-
-// The question brain to load all the questions.
-QuestionBrain questionBrain = QuestionBrain();
