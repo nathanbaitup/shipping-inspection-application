@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
@@ -182,9 +183,20 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
     _channelNameController.text = output;
   }
 
-  void addChannelRecord() {
+  Future<void> addChannelRecord() async {
     globals.addRecord("call", globals.getUsername(), DateTime.now(),
         _channelNameController.text);
+    await FirebaseFirestore.instance
+        .collection("History_Logging")
+        .add({
+          'title': "Accessing call channel",
+          'username': globals.getUsername(),
+          'time': DateTime.now(),
+          'permission': 'Call Channel',
+          'channelName': _channelNameController.text,
+        })
+        .then((value) => debugPrint("Record has been added"))
+        .catchError((error) => debugPrint("Failed to add record: $error"));
   }
 
   void _performChannelNameConnection(String strDioToken) async {
