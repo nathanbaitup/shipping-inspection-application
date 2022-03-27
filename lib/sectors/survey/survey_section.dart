@@ -560,8 +560,11 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
                             answer = value;
                           });
                         },
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
+                        decoration: InputDecoration(
+                          border: const UnderlineInputBorder(),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: globals.getTextColour(), width: 0.5),
+                          ),
                         ),
                       ),
                     ),
