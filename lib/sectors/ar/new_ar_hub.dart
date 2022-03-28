@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +49,7 @@ class _NewARHubState extends State<NewARHub> {
   late ARObjectManager arObjectManager;
   late ARAnchorManager arAnchorManager;
   List<Image> imageViewer = [];
+  List<File> imagePaths = [];
 
   // Nodes are the actual objects themselves shown within the AR view on device.
   // These function by correlating to an anchor to display at a fixed point as decided by the user.
@@ -58,6 +58,9 @@ class _NewARHubState extends State<NewARHub> {
   // Anchors are places where the user has tapped on the AR scene, where an object
   // Should be displayed based on its plane and axis.
   List<ARAnchor> anchors = [];
+
+  //Create an instance of the ScreenshotController
+  final ScreenshotController _screenshotController = ScreenshotController();
 
   @override
   void dispose() {
@@ -270,9 +273,6 @@ class _NewARHubState extends State<NewARHub> {
     }
   }
 
-  //Create an instance of ScreenshotController
-  ScreenshotController _screenshotController = ScreenshotController();
-
   //TODO: Idea:,when it shows the screenshot preview, screenshot that preview again using the screenshot plugin and have that image save to the image viewer.
 
   // -- REFERENCE START https://github.com/CariusLars/ar_flutter_plugin
@@ -291,7 +291,7 @@ class _NewARHubState extends State<NewARHub> {
       builder: (_) {
         // After 1 second the preview image is closed.
         Future.delayed(
-          const Duration(seconds: 5),
+          const Duration(seconds: 2),
           () {
             Navigator.of(context).pop();
           },
@@ -314,34 +314,46 @@ class _NewARHubState extends State<NewARHub> {
         );
       },
     );
+    // REFERENCE END --
 
+    // REFERENCE accessed 28/03/2022 https://github.com/SachinGanesh/screenshot
+    // Used to capture and save the screenshot.
+
+    // Gets the directory and creates a filename to save the screenshot to.
     final directory = (await getApplicationDocumentsDirectory()).path;
     String _filename = 'ar-image-${DateTime.now().microsecondsSinceEpoch}';
+    // Captures the image and saves locally to the device.
     await _screenshotController.captureAndSave(directory, fileName: _filename);
-    imagePaths.add('$directory/$_filename');
+    // Creates a file of the local image and saves the file to the imagePaths list.
     File _imageFile = File('$directory/$_filename');
-    debugPrint("IMAGEHERE: ${imagePaths[0].toString()}");
+    imagePaths.add(_imageFile);
+    // END REFERENCE
 
-    void _saveImagesToFirebaseStorage() async {
-      // Sets loading to true to save images to firebase.
-      //loading = true;
-      // Creates a firebase storage reference to save an image in a survey section
-      // sub folder under the vessel ID.
+    // Saves the screenshot taken to firebase.
+    _saveImagesToFirebaseStorage(_filename, _imageFile);
+  }
+
+  // Saves the taken image directly to firebase. Method can be refactored to save
+  // At a different location if required.
+  void _saveImagesToFirebaseStorage(String _filename, File _imageFile) async {
+    // Creates a firebase storage reference to save an image in a survey section
+    // sub folder under the vessel ID.
+    try {
       Reference firebaseStorageRef = FirebaseStorage.instance
           .ref()
           .child('images/${widget.vesselID}/${widget.questionID}/$_filename');
       // Uploads the images to the firebase storage.
       UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
       await uploadTask.then((value) => value.ref.getDownloadURL());
+      // Creates a toast to say that data cannot be saved.
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Image Saved.")));
+    } catch (e) {
+      // Creates a toast to say that data cannot be saved.
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Unable to save data, please try again.")));
     }
-
-    _saveImagesToFirebaseStorage();
-    //loading = false;
   }
-
-  // REFERENCE END --
-
-  List<String> imagePaths = [];
 
   // Removes all nodes and anchors on the screen to return to a clean view.
   Future<void> _onReset() async {
@@ -362,18 +374,8 @@ class _NewARHubState extends State<NewARHub> {
         DateTime.now(), 'take screenshot');
   }
 
-  // TODO: implement save functionality to save AR images to cloud storage.
-  // Not fully implemented, needs to save image to firebase but currently not sure
-  // how to do so from an image provider.
-  void _saveImagesToFirebase() async {
-    // test to see what kind of output is created from the image provider.
-    var image = imageViewer[0].image;
-    debugPrint('IMAGE: $image');
-  }
-
   // Returns the user to the survey_section screen, ensuring they are returned to the section they are currently surveying.
   void _returnToSectionScreen() async {
-    _saveImagesToFirebase();
     // If the user opened a section through the QR scanner, then only one screen
     // needs to be removed from the stack.
     if (widget.openThroughQR) {
@@ -382,9 +384,9 @@ class _NewARHubState extends State<NewARHub> {
         context,
         MaterialPageRoute(
           builder: (context) => SurveySection(
-              vesselID: widget.vesselID,
-              questionID: widget.questionID,
-              capturedImages: imageViewer),
+            vesselID: widget.vesselID,
+            questionID: widget.questionID,
+          ),
         ),
         (Route<dynamic> route) => true,
       );
@@ -397,9 +399,9 @@ class _NewARHubState extends State<NewARHub> {
         context,
         MaterialPageRoute(
           builder: (context) => SurveySection(
-              vesselID: widget.vesselID,
-              questionID: widget.questionID,
-              capturedImages: imageViewer),
+            vesselID: widget.vesselID,
+            questionID: widget.questionID,
+          ),
         ),
         (Route<dynamic> route) => true,
       );
