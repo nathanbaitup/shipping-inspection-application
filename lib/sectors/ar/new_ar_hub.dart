@@ -1,4 +1,10 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:vector_math/vector_math_64.dart' as vector_math;
 
 // ---------- AR Plugins ----------
@@ -94,7 +100,9 @@ class _NewARHubState extends State<NewARHub> {
                   child: Row(
                     children: [
                       RawMaterialButton(
-                        onPressed: () => _takeScreenshot(),
+                        onPressed: () async {
+                          _takeScreenshot();
+                        },
                         elevation: 5.0,
                         fillColor: LightColors.sPurple,
                         shape: const CircleBorder(),
@@ -207,43 +215,43 @@ class _NewARHubState extends State<NewARHub> {
       if (didAddAnchor == true) {
         anchors.add(newAnchor);
 
-      ARNode newNode;
+        ARNode newNode;
 
-      // ----- CREATING AN AR OBJECT -----
-      // The node is what is displayed to the user in the AR view, linked to an anchor point.
-      // If fire and safety show the fire extinguisher else show the duck.
-      // TODO: Change the object uri to dynamically load the correct model or image based on what is being surveyed.
-      if (widget.questionID == 'f&s') {
-        newNode = ARNode(
-          // Sets the type of object
-          type: NodeType.localGLTF2,
-          // Where the object is rendered from.
+        // ----- CREATING AN AR OBJECT -----
+        // The node is what is displayed to the user in the AR view, linked to an anchor point.
+        // If fire and safety show the fire extinguisher else show the duck.
+        // TODO: Change the object uri to dynamically load the correct model or image based on what is being surveyed.
+        if (widget.questionID == 'f&s') {
+          newNode = ARNode(
+            // Sets the type of object
+            type: NodeType.localGLTF2,
+            // Where the object is rendered from.
 
-          // This work is based on "Fire Extinguisher" (https://sketchfab.com/3d-models/fire-extinguisher-5288f12eb87f4826a73ebedb60a1c82d) by oooFFFFEDDMODELS (https://sketchfab.com/pierre.marcos.19) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
-          uri:
-              "Models/fire_extinguisher_3/fire_extinguisher_model_with_render.gltf",
-          // Sets the overall size of the object on the device.
-          scale: vector_math.Vector3(0.2, 0.2, 0.2),
-          // Sets the position to the anchor point created when pressing on the plane.
-          position: vector_math.Vector3(0.0, 0.0, 0.0),
-          // Sets the rotation to follow the plane axis.
-          rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
-        );
-      } else {
-        newNode = ARNode(
-          // Sets the type of object
-          type: NodeType.webGLB,
-          // Where the object is rendered from.
-          uri:
-              "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb",
-          // Sets the overall size of the object on the device.
-          scale: vector_math.Vector3(0.2, 0.2, 0.2),
-          // Sets the position to the anchor point created when pressing on the plane.
-          position: vector_math.Vector3(0.0, 0.0, 0.0),
-          // Sets the rotation to follow the plane axis.
-          rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
-        );
-      }
+            // This work is based on "Fire Extinguisher" (https://sketchfab.com/3d-models/fire-extinguisher-5288f12eb87f4826a73ebedb60a1c82d) by oooFFFFEDDMODELS (https://sketchfab.com/pierre.marcos.19) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+            uri:
+                "Models/fire_extinguisher_3/fire_extinguisher_model_with_render.gltf",
+            // Sets the overall size of the object on the device.
+            scale: vector_math.Vector3(0.2, 0.2, 0.2),
+            // Sets the position to the anchor point created when pressing on the plane.
+            position: vector_math.Vector3(0.0, 0.0, 0.0),
+            // Sets the rotation to follow the plane axis.
+            rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
+          );
+        } else {
+          newNode = ARNode(
+            // Sets the type of object
+            type: NodeType.webGLB,
+            // Where the object is rendered from.
+            uri:
+                "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb",
+            // Sets the overall size of the object on the device.
+            scale: vector_math.Vector3(0.2, 0.2, 0.2),
+            // Sets the position to the anchor point created when pressing on the plane.
+            position: vector_math.Vector3(0.0, 0.0, 0.0),
+            // Sets the rotation to follow the plane axis.
+            rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
+          );
+        }
 
         // Takes the node just created and links it to the anchor as added by the
         // user to display where pressed.
@@ -262,6 +270,11 @@ class _NewARHubState extends State<NewARHub> {
     }
   }
 
+  //Create an instance of ScreenshotController
+  ScreenshotController _screenshotController = ScreenshotController();
+
+  //TODO: Idea:,when it shows the screenshot preview, screenshot that preview again using the screenshot plugin and have that image save to the image viewer.
+
   // -- REFERENCE START https://github.com/CariusLars/ar_flutter_plugin
   Future<void> onTakeScreenshot() async {
     var imageProv = await arSessionManager.snapshot();
@@ -278,27 +291,57 @@ class _NewARHubState extends State<NewARHub> {
       builder: (_) {
         // After 1 second the preview image is closed.
         Future.delayed(
-          const Duration(seconds: 1),
+          const Duration(seconds: 5),
           () {
             Navigator.of(context).pop();
           },
         );
-        return Dialog(
-          child: InkWell(
-            child: Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(image: imageProv, fit: BoxFit.cover)),
+        return Screenshot(
+          controller: _screenshotController,
+          child: Dialog(
+            child: InkWell(
+              child: Container(
+                decoration: BoxDecoration(
+                    image:
+                        DecorationImage(image: imageProv, fit: BoxFit.cover)),
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+                setState(() {});
+              },
             ),
-            onTap: () {
-              Navigator.of(context).pop();
-              setState(() {});
-            },
           ),
         );
       },
     );
+
+    final directory = (await getApplicationDocumentsDirectory()).path;
+    String _filename = 'ar-image-${DateTime.now().microsecondsSinceEpoch}';
+    await _screenshotController.captureAndSave(directory, fileName: _filename);
+    imagePaths.add('$directory/$_filename');
+    File _imageFile = File('$directory/$_filename');
+    debugPrint("IMAGEHERE: ${imagePaths[0].toString()}");
+
+    void _saveImagesToFirebaseStorage() async {
+      // Sets loading to true to save images to firebase.
+      //loading = true;
+      // Creates a firebase storage reference to save an image in a survey section
+      // sub folder under the vessel ID.
+      Reference firebaseStorageRef = FirebaseStorage.instance
+          .ref()
+          .child('images/${widget.vesselID}/${widget.questionID}/$_filename');
+      // Uploads the images to the firebase storage.
+      UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
+      await uploadTask.then((value) => value.ref.getDownloadURL());
+    }
+
+    _saveImagesToFirebaseStorage();
+    //loading = false;
   }
+
   // REFERENCE END --
+
+  List<String> imagePaths = [];
 
   // Removes all nodes and anchors on the screen to return to a clean view.
   Future<void> _onReset() async {
