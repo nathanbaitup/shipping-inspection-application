@@ -21,14 +21,14 @@ class TasksPage extends StatelessWidget {
           child: Column(
             children: <Widget>[
               const MyBackButton(),
-              const SizedBox(height: 30.0),
+              const SizedBox(height: 25.0),
               Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     const Text(
                       'To-Do',
                       style: TextStyle(
-                          fontSize: 30.0, fontWeight: FontWeight.w700),
+                          fontSize: 27.0, fontWeight: FontWeight.w600),
                     ),
                     Container(
                       height: 40.0,
@@ -62,14 +62,7 @@ class TasksPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: const <Widget>[
-                  Text(
-                    'My task list',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
+                 
                 ],
               ),
               const SizedBox(
