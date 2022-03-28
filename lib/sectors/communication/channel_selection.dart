@@ -276,7 +276,7 @@ class OptionsWidget extends StatelessWidget {
 List<Widget> getChannelOptions(BuildContext context, List<Channel> channels, String title) {
   List<Widget> channelOptionList = [];
 
-  for(var i = 0; i < globals.channelSum; i++) {
+  for(var i = 0; i < globals.savedChannelSum; i++) {
     channelOptionList.add(channelOption(context, channels[i], title));
   }
 

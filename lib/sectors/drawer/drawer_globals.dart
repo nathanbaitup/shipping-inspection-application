@@ -11,7 +11,9 @@ import '../../utils/colours.dart';
 // -- For usage in Calls + Channels Settings
 List<String> savedChannels = List<String>.filled(9, " ", growable: false);
 
-int channelSum = 3;
+bool savedChannelsEnabled = true;
+
+int savedChannelSum = 3;
 
 // --- HISTORY GLOBALS
 // -- For usage in History Logs
@@ -76,7 +78,7 @@ Color getSettingsBgColour() {
   return settingsBgColour;
 }
 
-// --- DISABLED GLOBALS
+// --- STYLING GLOBALS
 // -- For usage in History Settings and the Dark Mode Switch
 
 Color getIconColourCheck(bool enableValue) {
@@ -97,6 +99,14 @@ Color getButtonColourCheck(Color enabledColour) {
     newColor = Colors.grey;
   }
   return newColor;
+}
+
+TextStyle getSettingsTitleStyle() {
+  return TextStyle(
+      color: getTextColour(),
+      decorationColor: LightColors.sPurple,
+      decorationThickness: 2,
+      decoration: TextDecoration.underline);
 }
 
 // --- USERNAME GLOBALS

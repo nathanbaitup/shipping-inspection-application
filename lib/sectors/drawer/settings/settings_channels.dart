@@ -113,7 +113,7 @@ class _SettingsChannelsState extends State<SettingsChannels> {
 
   List<AbstractSettingsTile> generateChannels(List<Channel> channels) {
     List<AbstractSettingsTile> channelList = [];
-    for (var i = 0; i < globals.channelSum; i++) {
+    for (var i = 0; i < globals.savedChannelSum; i++) {
       channelList.add(channelTile(channels[i]));
     }
     return channelList;
@@ -134,41 +134,52 @@ class _SettingsChannelsState extends State<SettingsChannels> {
         ),
 
         body: Column(mainAxisSize: MainAxisSize.min, children: [
-          SettingsList(shrinkWrap: true, sections: [
+          SettingsList(shrinkWrap: true, physics: const NeverScrollableScrollPhysics(), sections: [
             SettingsSection(
               title: Text(
               'Channels',
-              style: TextStyle(
-                  color: globals.getTextColour(),
-                  decorationColor: LightColors.sPurple,
-                  decorationThickness: 2,
-                  decoration: TextDecoration.underline),
-            ), tiles: [],
+              style: globals.getSettingsTitleStyle(),
+            ), tiles: [
+              SettingsTile.switchTile(
+                title: const Text("Saved Channels"),
+                leading: const Icon(Icons.save,
+                    color: LightColors.sPurple),
+                initialValue: globals.savedChannelsEnabled,
+                activeSwitchColor: LightColors.sPurple,
+                onToggle: (bool value) {
+                  globals.savedChannelsEnabled = !globals.savedChannelsEnabled;
+                  setState(() {  value = globals.savedChannelsEnabled; });
+                },
+              )
+            ]
             )]
           ),
+
           Container(
             color: globals.getSettingsBgColour(),
             height: 100,
             child: NumericStepButton(
               onChanged: (value) {
                 setState(() {
-                  globals.channelSum = value;
+                  globals.savedChannelSum = value;
                 });
               },
             ),
           ),
+
+          SettingsList(shrinkWrap: true, physics: const NeverScrollableScrollPhysics(), sections: [
+            SettingsSection(
+                title: Text(
+                  'Saved Channels',
+                  style: globals.getSettingsTitleStyle(),
+                ), tiles: const [],
+            ),
+          ]),
+
           Flexible(
             fit: FlexFit.loose,
             child: SettingsList(shrinkWrap: false, sections: [
               SettingsSection(
-                title: Text(
-                  'Saved Channels',
-                  style: TextStyle(
-                      color: globals.getTextColour(),
-                      decorationColor: LightColors.sPurple,
-                      decorationThickness: 2,
-                      decoration: TextDecoration.underline),
-                ),
                 tiles: generateChannels(channels),
               )
             ]),
@@ -194,7 +205,7 @@ class NumericStepButton extends StatefulWidget {
 
 class _NumericStepButtonState extends State<NumericStepButton> {
 
-  int counter = globals.channelSum;
+  int counter = globals.savedChannelSum;
 
   @override
   Widget build(BuildContext context) {
@@ -263,7 +274,7 @@ class _NumericStepButtonState extends State<NumericStepButton> {
 }
 
 void clearUnusedChannels() {
-  for(var x = globals.channelSum; x < 9; x++) {
+  for(var x = globals.savedChannelSum; x < 9; x++) {
     globals.savedChannels[x] = " ";
   }
   globals.savePrefs();
