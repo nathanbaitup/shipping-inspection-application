@@ -260,9 +260,18 @@ class _SurveySectionState extends State<SurveySection> {
   }
 
   // Function that adds a record of what a user has pressed onto the history page.
-  void _addEnterRecord() {
+  Future<void> _addEnterRecord() async {
     globals.addRecord(
         "enter", globals.getUsername(), DateTime.now(), pageTitle);
+    await FirebaseFirestore.instance
+        .collection("History_Logging")
+        .add({
+          'title': "Opening $pageTitle",
+          'username': globals.getUsername(),
+          'time': DateTime.now(),
+        })
+        .then((value) => debugPrint("Record has been added"))
+        .catchError((error) => debugPrint("Failed to add record: $error"));
   }
 
   // Checks if the camera permission has been granted and opens the camera
@@ -274,6 +283,18 @@ class _SurveySectionState extends State<SurveySection> {
     } else {
       globals.addRecord(
           "opened", globals.getUsername(), DateTime.now(), 'camera');
+
+      await FirebaseFirestore.instance
+          .collection("History_Logging")
+          .add({
+            'title': "Opening camera",
+            'username': globals.getUsername(),
+            'time': DateTime.now(),
+            'permission': 'camera',
+          })
+          .then((value) => debugPrint("Record has been added"))
+          .catchError((error) => debugPrint("Failed to add record: $error"));
+
       await availableCameras().then(
         (value) async {
           await Navigator.push(
@@ -301,6 +322,18 @@ class _SurveySectionState extends State<SurveySection> {
     } else {
       globals.addRecord("opened", globals.getUsername(), DateTime.now(),
           '$pageTitle AR session through button press');
+
+      await FirebaseFirestore.instance
+          .collection("History_Logging")
+          .add({
+            'title': "Opening $pageTitle through AR session",
+            'username': globals.getUsername(),
+            'time': DateTime.now(),
+            'permission': 'camera',
+          })
+          .then((value) => debugPrint("Record has been added"))
+          .catchError((error) => debugPrint("Failed to add record: $error"));
+
       await availableCameras().then(
         (value) async {
           List<String> arContentPush = [pageTitle] + _questionsToAnswer;
@@ -325,6 +358,15 @@ class _SurveySectionState extends State<SurveySection> {
   // Saves the images, and survey responses to the database.
   void _saveSurvey() async {
     globals.addRecord("add", globals.getUsername(), DateTime.now(), pageTitle);
+    await FirebaseFirestore.instance
+        .collection("History_Logging")
+        .add({
+          'title': "Adding $pageTitle survey results",
+          'username': globals.getUsername(),
+          'time': DateTime.now(),
+        })
+        .then((value) => debugPrint("Record has been added"))
+        .catchError((error) => debugPrint("Failed to add record: $error"));
     _saveResultsToFirestore();
   }
 

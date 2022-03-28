@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -403,6 +404,15 @@ class _NewARHubState extends State<NewARHub> {
     }
     history_globals.addRecord("pressed", history_globals.getUsername(),
         DateTime.now(), 'return to section');
+    await FirebaseFirestore.instance
+        .collection("History_Logging")
+        .add({
+          'title': "Returning to the survey section",
+          'username': history_globals.getUsername(),
+          'time': DateTime.now(),
+        })
+        .then((value) => debugPrint("Record has been added"))
+        .catchError((error) => debugPrint("Failed to add record: $error"));
   }
 }
 

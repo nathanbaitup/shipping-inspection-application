@@ -260,6 +260,16 @@ class _SurveyHubState extends State<SurveyHub> {
       // Adds a record of the QR camera being opened to the history page.
       history_global.addRecord(
           'opened', history_global.getUsername(), DateTime.now(), 'QR camera');
+      await FirebaseFirestore.instance
+          .collection("History_Logging")
+          .add({
+            'title': "Opening QR camera",
+            'username': history_global.getUsername(),
+            'time': DateTime.now(),
+            'permission': "QR camera",
+          })
+          .then((value) => debugPrint("Record has been added"))
+          .catchError((error) => debugPrint("Failed to add record: $error"));
     }
   }
 }
