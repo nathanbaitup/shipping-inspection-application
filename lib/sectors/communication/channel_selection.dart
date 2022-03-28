@@ -14,6 +14,8 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 final _channelNameController = TextEditingController();
 
+final ValueNotifier<bool> channelNotifier = ValueNotifier(globals.savedChannelsEnabled);
+
 class ChannelNameSelection extends StatefulWidget {
   final String vesselID;
   const ChannelNameSelection({Key? key, required this.vesselID})
@@ -29,23 +31,61 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
   bool loading = false;
   bool hasInternet = false;
 
+  List<Widget> getChannelButtons(bool value) {
+    List<Widget> channelButtons = [];
+    if(value) {
+      channelButtons = [
+        IconButton(
+          icon: const Icon(Icons.save),
+          onPressed: () {
+            setState(() {
+              showOptionsDialog(
+                  context, "Select Channel to Save");
+            });
+          },
+        ),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              showOptionsDialog(
+                  context, "Select Channel to Paste");
+            });
+          },
+          icon: const Icon(Icons.more_vert),
+        ),
+      ];
+    } else {
+      channelButtons = [];
+    }
+    return channelButtons;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return loading
-        ? const Loading()
-        : Form(
+    return ValueListenableBuilder<bool>(
+        valueListenable: channelNotifier,
+        builder: (_, channelEnableValue, __) {
+          return loading
+              ? const Loading()
+              : Form(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.5,
                   child: Image.network(
                       'https://www.idwalmarine.com/hs-fs/hubfs/IDWAL-Logo-CMYK-Blue+White.png?width=2000&name=IDWAL-Logo-CMYK-Blue+White.png'),
                 ),
                 const Padding(padding: EdgeInsets.only(top: 15)),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.8,
                   child: TextFormField(
                     controller: _channelNameController,
                     decoration: InputDecoration(
@@ -74,28 +114,10 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                       hintText: 'Channel Name',
                       suffixIcon: Row(
                         mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween, // added line
+                        MainAxisAlignment.spaceBetween, // added line
                         mainAxisSize: MainAxisSize.min, // added line
-                        children: <Widget>[
-                          IconButton(
-                            icon: const Icon(Icons.save),
-                            onPressed: () {
-                              setState(() {
-                                showOptionsDialog(
-                                    context, "Select Channel to Save");
-                              });
-                            },
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                showOptionsDialog(
-                                    context, "Select Channel to Paste");
-                              });
-                            },
-                            icon: const Icon(Icons.more_vert),
-                          ),
-                        ],
+                        children: getChannelButtons(
+                            channelEnableValue),
                       ),
                     ),
                   ),
@@ -109,7 +131,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                         onPressed: () async {
                           //Here is the bool that checks if the application has internet
                           final bool isConnected =
-                              await InternetConnectionChecker().hasConnection;
+                          await InternetConnectionChecker().hasConnection;
                           //If the application does have a internet connection it will go through this if statement
                           //and allow the user to access the video call.
                           if (isConnected) {
@@ -117,9 +139,9 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                             _performChannelNameConnection(
                                 _channelNameController.text);
                           } else
-                          //Then if the user doesn't have any internet connection they will get a snack bar that will
-                          //tell them to turn on their internet.
-                          {
+                            //Then if the user doesn't have any internet connection they will get a snack bar that will
+                            //tell them to turn on their internet.
+                              {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text(
@@ -160,6 +182,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
               ],
             ),
           );
+        });
   }
 
   void channelClipboard(BuildContext context) {
@@ -267,12 +290,20 @@ class OptionsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog(title: Text(title), children: <Widget>[
-      channelOption(context, channels[0], title),
-      channelOption(context, channels[1], title),
-      channelOption(context, channels[2], title),
-    ]);
+    return SimpleDialog(title: Text(title),
+        children: getChannelOptions(context, channels, title)
+    );
   }
+}
+
+List<Widget> getChannelOptions(BuildContext context, List<Channel> channels, String title) {
+  List<Widget> channelOptionList = [];
+
+  for(var i = 0; i < globals.savedChannelSum; i++) {
+    channelOptionList.add(channelOption(context, channels[i], title));
+  }
+
+  return channelOptionList;
 }
 
 SimpleDialogOption channelOption(
@@ -300,6 +331,12 @@ SimpleDialogOption channelOption(
             if (_channelNameController.text.isNotEmpty) {
               globals.savedChannels[channel.channelID] =
                   _channelNameController.text;
+              globals.addRecord(
+                  "channels-new",
+                  globals.getUsername(),
+                  DateTime.now(),
+                  _channelNameController.text
+              );
               globals.savePrefs();
             } else {
               globals.savedChannels[channel.channelID] = " ";

@@ -9,7 +9,11 @@ import '../../utils/colours.dart';
 
 // --- CALLS GLOBALS
 // -- For usage in Calls + Channels Settings
-List<String> savedChannels = List<String>.filled(3, " ", growable: false);
+List<String> savedChannels = List<String>.filled(9, " ", growable: false);
+
+bool savedChannelsEnabled = true;
+
+int savedChannelSum = 3;
 
 // --- HISTORY GLOBALS
 // -- For usage in History Logs
@@ -45,23 +49,33 @@ Color getAppbarColour() {
 }
 
 Color getTextColour() {
-  Color appbarColour;
+  Color textColour;
   if (darkModeEnabled) {
-    appbarColour = Colors.white;
+    textColour = Colors.white;
   } else {
-    appbarColour = Colors.black;
+    textColour = Colors.black;
   }
-  return appbarColour;
+  return textColour;
+}
+
+Color getDisabledTextColour() {
+  Color textColour;
+  if (savedChannelsEnabled) {
+    textColour = getTextColour();
+  } else {
+    textColour = const Color(0xFF737277);
+  }
+  return textColour;
 }
 
 Color getSubtextColour() {
-  Color appbarColour;
+  Color textColour;
   if (darkModeEnabled) {
-    appbarColour = Colors.white54;
+    textColour = Colors.white54;
   } else {
-    appbarColour = Colors.black45;
+    textColour = Colors.black45;
   }
-  return appbarColour;
+  return textColour;
 }
 
 Color getSettingsBgColour() {
@@ -74,17 +88,35 @@ Color getSettingsBgColour() {
   return settingsBgColour;
 }
 
-// --- DISABLED GLOBALS
+// --- STYLING GLOBALS
 // -- For usage in History Settings and the Dark Mode Switch
 
-Color getIconColourCheck(bool enableValue) {
+Color getIconColourCheck(Color enabledColour, bool condition) {
   Color newColor;
-  if(enableValue) {
-    newColor = LightColors.sPurple;
+  if(condition) {
+    newColor = enabledColour;
   } else {
     newColor = Colors.grey;
   }
   return newColor;
+}
+
+Color getButtonColourCheck(Color enabledColour, bool condition) {
+  Color newColor;
+  if(condition) {
+    newColor = enabledColour;
+  } else {
+    newColor = Colors.grey;
+  }
+  return newColor;
+}
+
+TextStyle getSettingsTitleStyle() {
+  return TextStyle(
+      color: getTextColour(),
+      decorationColor: LightColors.sPurple,
+      decorationThickness: 2,
+      decoration: TextDecoration.underline);
 }
 
 // --- USERNAME GLOBALS
@@ -103,7 +135,7 @@ String getUsername() {
 // -- For usage in History Logs + History Settings
 bool historyEnabled = true;
 
-List<bool> historyPrefs = List<bool>.filled(5, true, growable: false);
+List<bool> historyPrefs = List<bool>.filled(6, true, growable: false);
 
 void changeHistoryPref(String type, bool value) {
   switch(type) {
@@ -131,6 +163,11 @@ void changeHistoryPref(String type, bool value) {
       historyPrefs[4] = value;
     }
     break;
+
+    case "Channels": {
+      historyPrefs[5] = value;
+    }
+    break;
   }
 }
 
@@ -141,13 +178,19 @@ void changeHistoryPref(String type, bool value) {
 void savePrefs() async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('username', username);
-  await prefs.setStringList("channels", savedChannels);
+
+  await prefs.setStringList("channels-list", savedChannels);
+  await prefs.setInt("channel-sum", savedChannelSum);
+  await prefs.setBool("channels-enabled", savedChannelsEnabled);
+
   await prefs.setBool("history-entering", historyPrefs[0]);
   await prefs.setBool("history-response", historyPrefs[1]);
   await prefs.setBool("history-settings", historyPrefs[2]);
   await prefs.setBool("history-qr", historyPrefs[3]);
   await prefs.setBool("history-communications", historyPrefs[4]);
+  await prefs.setBool("history-channels", historyPrefs[5]);
   await prefs.setBool("history-enabled", historyEnabled);
+
   await prefs.setBool("dark-mode", darkModeEnabled);
   await prefs.setBool("system-theme", systemThemeEnabled);
 }
@@ -155,14 +198,21 @@ void savePrefs() async {
 void loadPrefs() async {
   final prefs = await SharedPreferences.getInstance();
   username = prefs.getString('username')?? "Current User";
-  savedChannels = prefs.getStringList("channels")??
-      List<String>.filled(3, " ", growable: false);
+
+  savedChannels = prefs.getStringList("channels-list")??
+      List<String>.filled(9, " ", growable: false);
+  savedChannelSum = prefs.getInt("channel-sum")?? 3;
+  savedChannelsEnabled = prefs.getBool("channels-enabled")?? true;
+
+
   historyPrefs[0] = prefs.getBool("history-entering")?? true;
   historyPrefs[1] = prefs.getBool("history-response")?? true;
   historyPrefs[2] = prefs.getBool("history-settings")?? true;
   historyPrefs[3] = prefs.getBool("history-qr")?? true;
   historyPrefs[4] = prefs.getBool("history-communications")?? true;
+  historyPrefs[5] = prefs.getBool("history-channels")?? true;
   historyEnabled = prefs.getBool("history-enabled")?? true;
+
   darkModeEnabled = prefs.getBool("dark-mode")?? false;
   systemThemeEnabled = prefs.getBool("system-theme")?? false;
   initTheme();
