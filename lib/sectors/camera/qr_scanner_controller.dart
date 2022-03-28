@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:shipping_inspection_app/shared/loading.dart';
 
-import '../sectors/ar/new_ar_hub.dart';
-import '../sectors/drawer/drawer_globals.dart' as history_globals;
-import '../sectors/questions/question_brain.dart';
-import 'colours.dart';
+import '../ar/new_ar_hub.dart';
+import '../drawer/drawer_globals.dart' as history_globals;
+import '../questions/question_brain.dart';
+import '../../utils/colours.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
 
@@ -135,10 +135,12 @@ class _QRScannerState extends State<QRScanner> {
         context,
         MaterialPageRoute(
           builder: (context) => NewARHub(
-              vesselID: widget.vesselID,
-              questionID: '${_qrResult?.code}',
-              arContent: arContentPush,
-              openThroughQR: true),
+            vesselID: widget.vesselID,
+            questionID: '${_qrResult?.code}',
+            arContent: arContentPush,
+            openThroughQR: true,
+            seenTutorial: false,
+          ),
         ),
       );
       // Adds a message to say what page has been opened from the QR camera.

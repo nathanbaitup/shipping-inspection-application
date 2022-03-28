@@ -113,9 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => const MenuHelp()));
               }),
-          const Divider(
-            color: Colors.grey,
-          ),
+          _drawerDivider(),
           ListTile(
               title: const Text("History"),
               iconColor: LightColors.sPurple,
@@ -132,9 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => const MenuHistory()));
               }),
-          const Divider(
-            color: Colors.grey,
-          ),
+          _drawerDivider(),
           ListTile(
               title: const Text("Feedback"),
               iconColor: LightColors.sPurple,
@@ -153,9 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (BuildContext context) =>
                         MenuFeedback(vesselID: vesselID)));
               }),
-          const Divider(
-            color: Colors.grey,
-          ),
+          _drawerDivider(),
           ListTile(
               title: const Text("Settings"),
               iconColor: LightColors.sPurple,
@@ -172,9 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => const MenuSettings()));
               }),
-          const Divider(
-            color: Colors.grey,
-          ),
+          _drawerDivider(),
         ]),
       ),
 
@@ -208,4 +200,17 @@ class _MyHomePageState extends State<MyHomePage> {
       // -- Nav Bar End
     );
   }
+}
+
+SizedBox _drawerDivider() {
+  return SizedBox(
+    height: 8.0,
+    child: Center(
+      child: Container(
+        margin: const EdgeInsetsDirectional.only(start: 5.0, end: 5.0),
+        height: 1,
+        color: Colors.grey,
+      ),
+    ),
+  );
 }
