@@ -8,7 +8,7 @@ import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import '../drawer/drawer_globals.dart' as history_global;
 
-import '../../utils/qr_scanner_controller.dart';
+import '../camera/qr_scanner_controller.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
 late String vesselID;

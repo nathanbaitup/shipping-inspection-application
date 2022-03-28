@@ -9,7 +9,7 @@ import 'package:camera/camera.dart';
 
 // Package dependencies.
 import 'package:shipping_inspection_app/shared/loading.dart';
-import 'package:shipping_inspection_app/utils/camera_screen.dart';
+import 'package:shipping_inspection_app/sectors/camera/camera_screen.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:shipping_inspection_app/sectors/ar/new_ar_hub.dart';
@@ -77,8 +77,8 @@ class _SurveySectionState extends State<SurveySection> {
       return Scaffold(
         // Sets up the app bar to take the user back to the previous page
         appBar: AppBar(
-          title: const Text(''),
-          backgroundColor: globals.getAppbarColour(),
+          title: const Text('Idwal Vessel Inspection'),
+          backgroundColor: Colors.white,
           titleTextStyle: const TextStyle(color: LightColors.sPurple),
           centerTitle: true,
           leading: Transform.scale(
@@ -327,6 +327,7 @@ class _SurveySectionState extends State<SurveySection> {
                 questionID: widget.questionID,
                 arContent: arContentPush,
                 openThroughQR: false,
+                seenTutorial: false,
               ),
             ),
           );
