@@ -85,8 +85,12 @@ class _SettingsChannelsState extends State<SettingsChannels> {
               TextField(
                 onChanged: (value) {},
                 controller: dialogController,
-                decoration:
-                    const InputDecoration(hintText: "Enter Channel Here"),
+                decoration: InputDecoration(
+                    hintText: "Enter Channel Here",
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: globals.getTextColour(), width: 0.5),
+                    ),
+                ),
               ),
             ]),
             actions: [
@@ -111,17 +115,17 @@ class _SettingsChannelsState extends State<SettingsChannels> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
             color: LightColors.sPurple,
           ),
         ),
         body: SettingsList(sections: [
           SettingsSection(
-            title: const Text(
+            title: Text(
               'Saved Channels',
               style: TextStyle(
-                  color: Colors.black,
+                  color: globals.getTextColour(),
                   decorationColor: LightColors.sPurple,
                   decorationThickness: 2,
                   decoration: TextDecoration.underline),

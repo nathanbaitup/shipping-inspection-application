@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:shipping_inspection_app/main.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_channels.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_sound.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_username.dart';
@@ -7,6 +8,7 @@ import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
     as globals;
+import 'package:shipping_inspection_app/utils/task_list.dart';
 
 import 'settings/settings_history.dart';
 
@@ -68,10 +70,10 @@ class _MenuSettingsState extends State<MenuSettings> {
         ),
         body: SettingsList(sections: [
           SettingsSection(
-            title: const Text(
+            title: Text(
               'Common',
               style: TextStyle(
-                  color: Colors.black,
+                  color: globals.getTextColour(),
                   decorationColor: LightColors.sPurple,
                   decorationThickness: 2,
                   decoration: TextDecoration.underline),
@@ -102,14 +104,62 @@ class _MenuSettingsState extends State<MenuSettings> {
                           const SettingsChannels()));
                 },
               ),
+              SettingsTile.switchTile(
+                title: const Text('Use System Theme'),
+                activeSwitchColor: LightColors.sPurple,
+                leading:
+                const Icon(Icons.phone_android, color: LightColors.sPurple),
+                onPressed: (BuildContext context) {
+                },
+                initialValue: globals.systemThemeEnabled,
+                onToggle: (bool value) {
+                  globals.systemThemeEnabled = !globals.systemThemeEnabled;
+                  if(globals.systemThemeEnabled) {
+                    themeNotifier.value = ThemeMode.system;
+                    if(MediaQuery.of(context).platformBrightness == Brightness.dark) {
+                      globals.darkModeEnabled = true;
+                    } else {
+                      globals.darkModeEnabled = false;
+                    }
+                  } else {
+                  }
+                  subtextColourNotifier.value = globals.getSubtextColour(); //Changes subtext colour on home page
+                  setState(() {});
+                  globals.savePrefs();
+                  value = globals.systemThemeEnabled;
+                },
+              ),
+              SettingsTile.switchTile(
+                title: const Text('Dark Mode'),
+                activeSwitchColor: LightColors.sPurple,
+                enabled: !globals.systemThemeEnabled,
+                leading:
+                Icon(Icons.dark_mode,
+                    color: globals.getIconColourCheck(!globals.systemThemeEnabled)),
+                onPressed: (BuildContext context) {
+                },
+                initialValue: globals.darkModeEnabled,
+                onToggle: (bool value) {
+                  globals.darkModeEnabled = !globals.darkModeEnabled;
+                  if(globals.darkModeEnabled) {
+                    themeNotifier.value = ThemeMode.dark;
+                  } else {
+                    themeNotifier.value = ThemeMode.light;
+                  }
+                  subtextColourNotifier.value = globals.getSubtextColour(); //Changes subtext colour on home page
+                  setState(() {});
+                  globals.savePrefs();
+                  value = globals.darkModeEnabled;
+                },
+              ),
             ],
           ),
           SettingsSection(
-            title: const Text(
+            title: Text(
               'Account',
               style: TextStyle(
-                  color: Colors.black,
-                  decorationColor: Colors.purple,
+                  color: globals.getTextColour(),
+                  decorationColor: LightColors.sPurple,
                   decorationThickness: 2,
                   decoration: TextDecoration.underline),
             ),
@@ -128,10 +178,10 @@ class _MenuSettingsState extends State<MenuSettings> {
             ],
           ),
           SettingsSection(
-              title: const Text(
+              title: Text(
                 'System',
                 style: TextStyle(
-                    color: Colors.black,
+                    color: globals.getTextColour(),
                     decorationColor: LightColors.sPurple,
                     decorationThickness: 2,
                     decoration: TextDecoration.underline),
