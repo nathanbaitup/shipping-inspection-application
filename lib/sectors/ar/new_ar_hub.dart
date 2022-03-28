@@ -87,13 +87,32 @@ class _NewARHubState extends State<NewARHub> {
                 planeDetectionConfig:
                     PlaneDetectionConfig.horizontalAndVertical,
               ),
-              Row(
-                children: [
-                  ARQuestionWidget(
-                    arContent: widget.arContent,
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      ARQuestionWidget(
+                        arContent: widget.arContent,
+                      ),
+                      ARContentWidget(
+                        arContent: widget.arContent,
+                      ),
+                    ],
                   ),
-                  ARContentWidget(
-                    arContent: widget.arContent,
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: RawMaterialButton(
+                      onPressed: () => {},
+                      elevation: 5.0,
+                      fillColor: LightColors.sDarkYellow,
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(10.0),
+                      child: const Icon(
+                        Icons.warning_amber_rounded,
+                        size: 35.0,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ],
               ),
