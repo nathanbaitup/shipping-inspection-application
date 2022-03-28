@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:shipping_inspection_app/sectors/communication/channel_selection.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
     as globals;
 import 'package:shipping_inspection_app/utils/colours.dart';
@@ -180,7 +181,10 @@ class _SettingsChannelsState extends State<SettingsChannels> {
                 activeSwitchColor: LightColors.sPurple,
                 onToggle: (bool value) {
                   globals.savedChannelsEnabled = !globals.savedChannelsEnabled;
-                  setState(() {  value = globals.savedChannelsEnabled; });
+                  setState(() {  
+                    value = globals.savedChannelsEnabled;
+                    channelNotifier.value = value;
+                  });
                 },
               )
             ]
