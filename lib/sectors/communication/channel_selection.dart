@@ -56,6 +56,8 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                         borderRadius: BorderRadius.circular(
                           15,
                         ),
+                        borderSide: BorderSide(
+                            color: globals.getTextColour(), width: 1),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
