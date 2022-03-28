@@ -9,7 +9,9 @@ import '../../utils/colours.dart';
 
 // --- CALLS GLOBALS
 // -- For usage in Calls + Channels Settings
-List<String> savedChannels = List<String>.filled(3, " ", growable: false);
+List<String> savedChannels = List<String>.filled(9, " ", growable: false);
+
+int channelSum = 3;
 
 // --- HISTORY GLOBALS
 // -- For usage in History Logs
@@ -151,7 +153,7 @@ void changeHistoryPref(String type, bool value) {
 void savePrefs() async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('username', username);
-  await prefs.setStringList("channels", savedChannels);
+  await prefs.setStringList("channels-list", savedChannels);
   await prefs.setBool("history-entering", historyPrefs[0]);
   await prefs.setBool("history-response", historyPrefs[1]);
   await prefs.setBool("history-settings", historyPrefs[2]);
@@ -165,8 +167,8 @@ void savePrefs() async {
 void loadPrefs() async {
   final prefs = await SharedPreferences.getInstance();
   username = prefs.getString('username')?? "Current User";
-  savedChannels = prefs.getStringList("channels")??
-      List<String>.filled(3, " ", growable: false);
+  savedChannels = prefs.getStringList("channels-list")??
+      List<String>.filled(9, " ", growable: false);
   historyPrefs[0] = prefs.getBool("history-entering")?? true;
   historyPrefs[1] = prefs.getBool("history-response")?? true;
   historyPrefs[2] = prefs.getBool("history-settings")?? true;

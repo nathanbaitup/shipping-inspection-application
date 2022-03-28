@@ -1,3 +1,5 @@
+import 'package:ar_flutter_plugin/datatypes/node_types.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
@@ -14,6 +16,7 @@ class SettingsChannels extends StatefulWidget {
 }
 
 class _SettingsChannelsState extends State<SettingsChannels> {
+
   SettingsTile channelTile(Channel channel) {
     FontStyle emptyFont = FontStyle.normal;
     Row optionsRow = Row();
@@ -108,50 +111,74 @@ class _SettingsChannelsState extends State<SettingsChannels> {
     );
   }
 
+  List<AbstractSettingsTile> generateChannels(List<Channel> channels) {
+    List<AbstractSettingsTile> channelList = [];
+    for (var i = 0; i < globals.channelSum; i++) {
+      channelList.add(channelTile(channels[i]));
+    }
+
+    return channelList;
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     List<Channel> channels = getDisplayChannels(globals.savedChannels);
 
-    return Scaffold(
+    return  Scaffold(
         resizeToAvoidBottomInset: false,
+
         appBar: AppBar(
           backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
             color: LightColors.sPurple,
           ),
         ),
+
         body: Column(mainAxisSize: MainAxisSize.min, children: [
+          SettingsList(shrinkWrap: true, sections: [
+            SettingsSection(
+              title: Text(
+              'Channels',
+              style: TextStyle(
+                  color: globals.getTextColour(),
+                  decorationColor: LightColors.sPurple,
+                  decorationThickness: 2,
+                  decoration: TextDecoration.underline),
+            ), tiles: [],
+            )]
+          ),
           Container(
             color: globals.getSettingsBgColour(),
             height: 100,
             child: NumericStepButton(
               onChanged: (value) {
+                setState(() {
+                  globals.channelSum = value;
+                });
 
+                print(globals.channelSum);
+                print(value);
               },
             ),
           ),
-          SettingsList(shrinkWrap: true, sections: [
-            SettingsSection(
-              title: Text(
-                'Saved Channels',
-                style: TextStyle(
-                    color: globals.getTextColour(),
-                    decorationColor: LightColors.sPurple,
-                    decorationThickness: 2,
-                    decoration: TextDecoration.underline),
-              ),
-              tiles: [
-                channelTile(channels[0]),
-                channelTile(channels[1]),
-                channelTile(channels[2]),
-              ],
-            )
-          ]),
-          Expanded(
-              child: Container(
-                color: globals.getSettingsBgColour(),
+          Flexible(
+            fit: FlexFit.loose,
+            child: SettingsList(shrinkWrap: false, sections: [
+              SettingsSection(
+                title: Text(
+                  'Saved Channels',
+                  style: TextStyle(
+                      color: globals.getTextColour(),
+                      decorationColor: LightColors.sPurple,
+                      decorationThickness: 2,
+                      decoration: TextDecoration.underline),
+                ),
+                tiles: generateChannels(channels),
               )
-          )
+            ]),
+          ),
         ]));
   }
 }
@@ -163,7 +190,7 @@ class NumericStepButton extends StatefulWidget {
   final ValueChanged<int> onChanged;
 
   const NumericStepButton(
-      {Key? key,  this.minValue = 0, this.maxValue = 10, required this.onChanged}) : super(key: key);
+      {Key? key,  this.minValue = 1, this.maxValue = 9, required this.onChanged}) : super(key: key);
 
   @override
   State<NumericStepButton> createState() {
@@ -173,7 +200,7 @@ class NumericStepButton extends StatefulWidget {
 
 class _NumericStepButtonState extends State<NumericStepButton> {
 
-  int counter= 0;
+  int counter = globals.channelSum;
 
   @override
   Widget build(BuildContext context) {
@@ -201,6 +228,7 @@ class _NumericStepButtonState extends State<NumericStepButton> {
             });
           },
         ),
+
         Text(
           '$counter',
           textAlign: TextAlign.center,
@@ -210,6 +238,7 @@ class _NumericStepButtonState extends State<NumericStepButton> {
             fontWeight: FontWeight.w500,
           ),
         ),
+
         TextButton(
           child: const Icon(
             Icons.add,
@@ -231,6 +260,7 @@ class _NumericStepButtonState extends State<NumericStepButton> {
             });
           },
         ),
+
       ],
     );
   }
