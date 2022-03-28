@@ -135,7 +135,7 @@ String getUsername() {
 // -- For usage in History Logs + History Settings
 bool historyEnabled = true;
 
-List<bool> historyPrefs = List<bool>.filled(5, true, growable: false);
+List<bool> historyPrefs = List<bool>.filled(6, true, growable: false);
 
 void changeHistoryPref(String type, bool value) {
   switch(type) {
@@ -163,6 +163,11 @@ void changeHistoryPref(String type, bool value) {
       historyPrefs[4] = value;
     }
     break;
+
+    case "Channels": {
+      historyPrefs[5] = value;
+    }
+    break;
   }
 }
 
@@ -183,6 +188,7 @@ void savePrefs() async {
   await prefs.setBool("history-settings", historyPrefs[2]);
   await prefs.setBool("history-qr", historyPrefs[3]);
   await prefs.setBool("history-communications", historyPrefs[4]);
+  await prefs.setBool("history-channels", historyPrefs[5]);
   await prefs.setBool("history-enabled", historyEnabled);
 
   await prefs.setBool("dark-mode", darkModeEnabled);
@@ -205,6 +211,7 @@ void loadPrefs() async {
   historyPrefs[2] = prefs.getBool("history-settings")?? true;
   historyPrefs[3] = prefs.getBool("history-qr")?? true;
   historyPrefs[4] = prefs.getBool("history-communications")?? true;
+  historyPrefs[5] = prefs.getBool("history-channels")?? true;
   historyEnabled = prefs.getBool("history-enabled")?? true;
 
   darkModeEnabled = prefs.getBool("dark-mode")?? false;

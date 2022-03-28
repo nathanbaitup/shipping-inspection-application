@@ -57,9 +57,9 @@ class _MenuHistoryState extends State<MenuHistory> {
           {
             if (globals.historyPrefs[4]) {
               currentRecordText[0] = currentRecord.user;
-              currentRecordText[1] = " joined a call channel called ";
+              currentRecordText[1] = " joined channel '";
               currentRecordText[2] = currentRecord.section;
-              currentRecordText[3] = " at ";
+              currentRecordText[3] = "' at ";
               currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)')
                   .format(currentRecord.dateTime);
             } else {
@@ -122,7 +122,7 @@ class _MenuHistoryState extends State<MenuHistory> {
         case "settings-username-change":
           {
             if (globals.historyPrefs[2]) {
-              currentRecordText[1] = "changed the device's username to ";
+              currentRecordText[1] = " changed the device's username to ";
               currentRecordText[2] = currentRecord.section;
               currentRecordText[3] = " at ";
               currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)')
@@ -138,9 +138,89 @@ class _MenuHistoryState extends State<MenuHistory> {
           {
             if (globals.historyPrefs[2]) {
               currentRecordText[0] = currentRecord.user;
-              currentRecordText[1] = "changed the device's language to ";
+              currentRecordText[1] = " changed the device's language to ";
               currentRecordText[2] = currentRecord.section;
               currentRecordText[3] = " at ";
+              currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)')
+                  .format(currentRecord.dateTime);
+            } else {
+              blockRecord = true;
+            }
+          }
+          break;
+
+        // CATEGORY: Settings Change Logging
+        case "settings-enable":
+          {
+            if (globals.historyPrefs[2]) {
+              currentRecordText[0] = currentRecord.user;
+              currentRecordText[1] = " enabled setting ";
+              currentRecordText[2] = currentRecord.section;
+              currentRecordText[3] = " at ";
+              currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)')
+                  .format(currentRecord.dateTime);
+            } else {
+              blockRecord = true;
+            }
+          }
+          break;
+
+        // CATEGORY: Settings Change Logging
+        case "settings-disable":
+          {
+            if (globals.historyPrefs[2]) {
+              currentRecordText[0] = currentRecord.user;
+              currentRecordText[1] = " disabled setting ";
+              currentRecordText[2] = currentRecord.section;
+              currentRecordText[3] = " at ";
+              currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)')
+                  .format(currentRecord.dateTime);
+            } else {
+              blockRecord = true;
+            }
+          }
+          break;
+
+        // CATEGORY: Channel Logging
+        case "channels-new":
+          {
+            if (globals.historyPrefs[5]) {
+              currentRecordText[0] = currentRecord.user;
+              currentRecordText[1] = " saved channel '";
+              currentRecordText[2] = currentRecord.section;
+              currentRecordText[3] = "' at ";
+              currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)')
+                  .format(currentRecord.dateTime);
+            } else {
+              blockRecord = true;
+            }
+          }
+          break;
+
+        // CATEGORY: Channel Logging
+        case "channels-edit":
+          {
+            if (globals.historyPrefs[5]) {
+              currentRecordText[0] = currentRecord.user;
+              currentRecordText[1] = " edited channel '";
+              currentRecordText[2] = currentRecord.section;
+              currentRecordText[3] = "' at ";
+              currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)')
+                  .format(currentRecord.dateTime);
+            } else {
+              blockRecord = true;
+            }
+          }
+          break;
+
+        // CATEGORY: Channel Logging
+        case "channels-generate":
+          {
+            if (globals.historyPrefs[5]) {
+              currentRecordText[0] = currentRecord.user;
+              currentRecordText[1] = " generated a channel named '";
+              currentRecordText[2] = currentRecord.section;
+              currentRecordText[3] = "' at ";
               currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)')
                   .format(currentRecord.dateTime);
             } else {

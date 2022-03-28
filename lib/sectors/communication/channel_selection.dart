@@ -331,6 +331,12 @@ SimpleDialogOption channelOption(
             if (_channelNameController.text.isNotEmpty) {
               globals.savedChannels[channel.channelID] =
                   _channelNameController.text;
+              globals.addRecord(
+                  "channels-new",
+                  globals.getUsername(),
+                  DateTime.now(),
+                  _channelNameController.text
+              );
               globals.savePrefs();
             } else {
               globals.savedChannels[channel.channelID] = " ";

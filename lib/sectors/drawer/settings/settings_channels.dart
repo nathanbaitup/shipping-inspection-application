@@ -134,6 +134,21 @@ class _SettingsChannelsState extends State<SettingsChannels> {
                   onPressed: () {
                     globals.savedChannels[channel.channelID] =
                         dialogController.text;
+                    if (edit) {
+                      globals.addRecord(
+                          "channels-edit",
+                          globals.getUsername(),
+                          DateTime.now(),
+                          dialogController.text
+                      );
+                    } else {
+                      globals.addRecord(
+                          "channels-new",
+                          globals.getUsername(),
+                          DateTime.now(),
+                          dialogController.text
+                      );
+                    }
                     globals.savePrefs();
                     Navigator.pop(context);
                     setState(() {});
@@ -181,6 +196,21 @@ class _SettingsChannelsState extends State<SettingsChannels> {
                 activeSwitchColor: LightColors.sPurple,
                 onToggle: (bool value) {
                   globals.savedChannelsEnabled = !globals.savedChannelsEnabled;
+                  if(globals.savedChannelsEnabled) {
+                    globals.addRecord(
+                        "settings-enable",
+                        globals.getUsername(),
+                        DateTime.now(),
+                        "Saved Channels"
+                    );
+                  } else {
+                    globals.addRecord(
+                        "settings-disable",
+                        globals.getUsername(),
+                        DateTime.now(),
+                        "Saved Channels"
+                    );
+                  }
                   setState(() {
                     value = globals.savedChannelsEnabled;
                     channelNotifier.value = value;
