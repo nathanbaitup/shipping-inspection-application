@@ -1,11 +1,9 @@
-import 'package:ar_flutter_plugin/datatypes/node_types.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
     as globals;
 import 'package:shipping_inspection_app/utils/colours.dart';
-
 import '../../communication/channel.dart';
 
 class SettingsChannels extends StatefulWidget {
@@ -26,19 +24,36 @@ class _SettingsChannelsState extends State<SettingsChannels> {
       optionsRow = Row(
         children: <Widget>[
           IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () {
-              editChannel(channel, true);
-              setState(() {});
-            },
+            icon: Icon(
+                Icons.edit,
+                color: globals.getIconColourCheck(
+                    LightColors.sPurpleLL,
+                    globals.savedChannelsEnabled),
+            ),
+            onPressed: globals.savedChannelsEnabled
+              ? () => {
+                setState(() {
+                  editChannel(channel, true);
+                  globals.savePrefs();
+                })
+              }
+              : null
           ),
           IconButton(
-            onPressed: () {
-              deleteChannel(channel.channelID);
-              globals.savePrefs();
-              setState(() {});
-            },
-            icon: const Icon(Icons.delete),
+            icon: Icon(
+                Icons.delete,
+                color: globals.getIconColourCheck(
+                    LightColors.sPurpleLL,
+                    globals.savedChannelsEnabled),
+            ),
+            onPressed: globals.savedChannelsEnabled
+              ? () => {
+                setState(() {
+                  deleteChannel(channel.channelID);
+                  globals.savePrefs();
+                })
+              }
+              : null
           ),
         ],
       );
@@ -46,20 +61,37 @@ class _SettingsChannelsState extends State<SettingsChannels> {
       emptyFont = FontStyle.italic;
       optionsRow = Row(children: <Widget>[
         IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: () async {
-            editChannel(channel, false);
-          },
-        ),
+          icon: Icon(
+              Icons.add,
+              color: globals.getIconColourCheck(
+                  LightColors.sPurpleLL,
+                  globals.savedChannelsEnabled),
+          ),
+          onPressed: globals.savedChannelsEnabled
+            ? () => {
+              setState(() {
+                editChannel(channel, false);
+                globals.savePrefs();
+              })
+            }
+              : null
+        )
       ]);
     }
 
     return SettingsTile(
       title: Text(
         channel.name,
-        style: TextStyle(fontStyle: emptyFont),
+        style: TextStyle(
+          color: globals.getDisabledTextColour(),
+          fontStyle: emptyFont
+        ),
       ),
-      leading: const Icon(Icons.bookmark, color: LightColors.sPurple),
+      leading: Icon(
+          Icons.bookmark,
+          color: globals.getIconColourCheck(
+              LightColors.sPurple,
+              globals.savedChannelsEnabled)),
       trailing: optionsRow,
     );
   }
@@ -207,6 +239,31 @@ class _NumericStepButtonState extends State<NumericStepButton> {
 
   int counter = globals.savedChannelSum;
 
+  Text getTextCounter() {
+    if(globals.savedChannelsEnabled) {
+      return Text(
+        '$counter',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: globals.getTextColour(),
+          fontSize: 24.0,
+          fontWeight: FontWeight.w500,
+        ),
+      );
+    } else {
+      return const Text(
+        'Disabled',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.grey,
+          fontSize: 18.0,
+          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.w500,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -220,30 +277,27 @@ class _NumericStepButtonState extends State<NumericStepButton> {
           ),
           style: TextButton.styleFrom(
             primary: Colors.white,
-            backgroundColor: LightColors.sPurple,
+            backgroundColor: globals.getButtonColourCheck(
+                LightColors.sPurpleL,
+                globals.savedChannelsEnabled
+            ),
             elevation: 2,
             shape: const CircleBorder(),
           ),
-          onPressed: () {
-            setState(() {
-              if (counter > widget.minValue) {
-                counter--;
-              }
-              widget.onChanged(counter);
-              clearUnusedChannels();
-            });
-          },
+          onPressed: globals.savedChannelsEnabled
+            ? () => {
+              setState(() {
+                if (counter > widget.minValue) {
+                    counter--;
+                  }
+                  widget.onChanged(counter);
+                  clearUnusedChannels();
+                })
+            }
+              : null
         ),
 
-        Text(
-          '$counter',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: globals.getTextColour(),
-            fontSize: 24.0,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+        getTextCounter(),
 
         TextButton(
           child: const Icon(
@@ -253,19 +307,24 @@ class _NumericStepButtonState extends State<NumericStepButton> {
           ),
           style: TextButton.styleFrom(
             primary: Colors.white,
-            backgroundColor: LightColors.sPurple,
+            backgroundColor: globals.getButtonColourCheck(
+                LightColors.sPurpleL,
+                globals.savedChannelsEnabled
+            ),
             elevation: 2,
             shape: const CircleBorder(),
           ),
-          onPressed: () {
-            setState(() {
-              if (counter < widget.maxValue) {
-                counter++;
-              }
-              widget.onChanged(counter);
-              clearUnusedChannels();
-            });
-          },
+          onPressed: globals.savedChannelsEnabled
+            ? () => {
+              setState(() {
+                if (counter < widget.maxValue) {
+                  counter++;
+                }
+                widget.onChanged(counter);
+                clearUnusedChannels();
+              })
+          }
+            : null
         ),
 
       ],

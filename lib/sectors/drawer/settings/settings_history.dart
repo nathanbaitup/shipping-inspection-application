@@ -62,7 +62,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                       SettingsTile.switchTile(
                         title: const Text("Section Entering"),
                         leading: Icon(Icons.door_back_door_outlined,
-                            color: globals.getIconColourCheck(globals.historyEnabled)),
+                            color: globals.getIconColourCheck(LightColors.sPurpleL, globals.historyEnabled)),
                         initialValue: globals.historyPrefs[0],
                         activeSwitchColor: LightColors.sPurple,
                         enabled: globals.historyEnabled,
@@ -75,7 +75,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                       SettingsTile.switchTile(
                         title: const Text("Section Response"),
                         leading: Icon(Icons.newspaper,
-                            color: globals.getIconColourCheck(globals.historyEnabled)),
+                            color: globals.getIconColourCheck(LightColors.sPurpleL, globals.historyEnabled)),
                         initialValue: globals.historyPrefs[1],
                         activeSwitchColor: LightColors.sPurple,
                         enabled: globals.historyEnabled,
@@ -87,7 +87,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                       SettingsTile.switchTile(
                         title: const Text("Settings Change"),
                         leading: Icon(Icons.settings,
-                            color: globals.getIconColourCheck(globals.historyEnabled)),
+                            color: globals.getIconColourCheck(LightColors.sPurpleL, globals.historyEnabled)),
                         initialValue: globals.historyPrefs[2],
                         activeSwitchColor: LightColors.sPurple,
                         enabled: globals.historyEnabled,
@@ -100,7 +100,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                       SettingsTile.switchTile(
                         title: const Text("QR Usage"),
                         leading: Icon(Icons.qr_code,
-                            color: globals.getIconColourCheck(globals.historyEnabled)),
+                            color: globals.getIconColourCheck(LightColors.sPurpleL, globals.historyEnabled)),
                         initialValue: globals.historyPrefs[3],
                         activeSwitchColor: LightColors.sPurple,
                         enabled: globals.historyEnabled,
@@ -113,7 +113,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                       SettingsTile.switchTile(
                         title: const Text("Communications"),
                         leading: Icon(Icons.phone,
-                            color: globals.getIconColourCheck(globals.historyEnabled)),
+                            color: globals.getIconColourCheck(LightColors.sPurpleL, globals.historyEnabled)),
                         initialValue: globals.historyPrefs[4],
                         activeSwitchColor: LightColors.sPurple,
                         enabled: globals.historyEnabled,
@@ -140,7 +140,10 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                 TextButton(
                   style: TextButton.styleFrom(
                     primary: Colors.white,
-                    backgroundColor: globals.getButtonColourCheck(LightColors.sPurpleL),
+                    backgroundColor: globals.getButtonColourCheck(
+                        LightColors.sPurpleL,
+                        globals.historyEnabled
+                    ),
                     elevation: 2,
                     padding: const EdgeInsets.all(15.0),
                     shape: RoundedRectangleBorder(
@@ -162,7 +165,10 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                 TextButton(
                   style: TextButton.styleFrom(
                     primary: Colors.white,
-                    backgroundColor: globals.getButtonColourCheck(LightColors.sRed),
+                    backgroundColor: globals.getButtonColourCheck(
+                        LightColors.sPurpleL,
+                        globals.historyEnabled
+                    ),
                     elevation: 2,
                     padding: const EdgeInsets.all(15.0),
                     shape: RoundedRectangleBorder(

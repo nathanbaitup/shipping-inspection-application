@@ -131,7 +131,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                 enabled: !globals.systemThemeEnabled,
                 leading:
                 Icon(Icons.dark_mode,
-                    color: globals.getIconColourCheck(!globals.systemThemeEnabled)),
+                    color: globals.getIconColourCheck(LightColors.sPurpleL, !globals.systemThemeEnabled)),
                 onPressed: (BuildContext context) {
                 },
                 initialValue: globals.darkModeEnabled,

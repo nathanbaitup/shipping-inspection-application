@@ -49,23 +49,33 @@ Color getAppbarColour() {
 }
 
 Color getTextColour() {
-  Color appbarColour;
+  Color textColour;
   if (darkModeEnabled) {
-    appbarColour = Colors.white;
+    textColour = Colors.white;
   } else {
-    appbarColour = Colors.black;
+    textColour = Colors.black;
   }
-  return appbarColour;
+  return textColour;
+}
+
+Color getDisabledTextColour() {
+  Color textColour;
+  if (savedChannelsEnabled) {
+    textColour = getTextColour();
+  } else {
+    textColour = const Color(0xFF737277);
+  }
+  return textColour;
 }
 
 Color getSubtextColour() {
-  Color appbarColour;
+  Color textColour;
   if (darkModeEnabled) {
-    appbarColour = Colors.white54;
+    textColour = Colors.white54;
   } else {
-    appbarColour = Colors.black45;
+    textColour = Colors.black45;
   }
-  return appbarColour;
+  return textColour;
 }
 
 Color getSettingsBgColour() {
@@ -81,19 +91,19 @@ Color getSettingsBgColour() {
 // --- STYLING GLOBALS
 // -- For usage in History Settings and the Dark Mode Switch
 
-Color getIconColourCheck(bool enableValue) {
+Color getIconColourCheck(Color enabledColour, bool condition) {
   Color newColor;
-  if(enableValue) {
-    newColor = LightColors.sPurple;
+  if(condition) {
+    newColor = enabledColour;
   } else {
     newColor = Colors.grey;
   }
   return newColor;
 }
 
-Color getButtonColourCheck(Color enabledColour) {
+Color getButtonColourCheck(Color enabledColour, bool condition) {
   Color newColor;
-  if(historyEnabled) {
+  if(condition) {
     newColor = enabledColour;
   } else {
     newColor = Colors.grey;
