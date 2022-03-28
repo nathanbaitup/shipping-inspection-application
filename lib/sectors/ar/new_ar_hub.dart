@@ -273,8 +273,6 @@ class _NewARHubState extends State<NewARHub> {
     }
   }
 
-  //TODO: Idea:,when it shows the screenshot preview, screenshot that preview again using the screenshot plugin and have that image save to the image viewer.
-
   // -- REFERENCE START https://github.com/CariusLars/ar_flutter_plugin
   Future<void> onTakeScreenshot() async {
     var imageProv = await arSessionManager.snapshot();
