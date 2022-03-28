@@ -383,9 +383,10 @@ class _SurveySectionState extends State<SurveySection> {
       context,
       MaterialPageRoute(
         builder: (context) => SurveySection(
-            questionID: questionID,
-            capturedImages: imageViewer,
-            vesselID: widget.vesselID),
+          questionID: questionID,
+          capturedImages: imageViewer,
+          vesselID: widget.vesselID,
+        ),
       ),
     );
     setState(() {
@@ -564,7 +565,8 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
                         decoration: InputDecoration(
                           border: const UnderlineInputBorder(),
                           enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: globals.getTextColour(), width: 0.5),
+                            borderSide: BorderSide(
+                                color: globals.getTextColour(), width: 0.5),
                           ),
                         ),
                       ),

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as vector_math;
 
@@ -56,6 +57,7 @@ class _NewARHubState extends State<NewARHub> {
   // Should be displayed based on its plane and axis.
   List<ARAnchor> anchors = [];
 
+  bool issueFlagged = false;
   @override
   void dispose() {
     super.dispose();
@@ -99,20 +101,30 @@ class _NewARHubState extends State<NewARHub> {
                       ),
                     ],
                   ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: RawMaterialButton(
-                      onPressed: () => {},
-                      elevation: 5.0,
-                      fillColor: LightColors.sDarkYellow,
-                      shape: const CircleBorder(),
-                      padding: const EdgeInsets.all(10.0),
-                      child: const Icon(
-                        Icons.warning_amber_rounded,
-                        size: 35.0,
-                        color: Colors.white,
+                  Row(
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: RawMaterialButton(
+                          onPressed: () => _onIssueFlagged(),
+                          elevation: 5.0,
+                          fillColor: LightColors.sDarkYellow,
+                          shape: const CircleBorder(),
+                          padding: const EdgeInsets.all(10.0),
+                          child: const Icon(
+                            Icons.warning_amber_rounded,
+                            size: 35.0,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
+                      issueFlagged
+                          ? const Text('Issue Flagged',
+                              style: TextStyle(
+                                color: LightColors.sLightYellow,
+                              ))
+                          : const Text(''),
+                    ],
                   ),
                 ],
               ),
@@ -354,9 +366,39 @@ class _NewARHubState extends State<NewARHub> {
     debugPrint('IMAGE: $image');
   }
 
+  // Creates a new collection to save if an issue has been flagged to display in the
+  // survey section.
+  void _saveFlaggedToFirebase() async {
+    setState(() {
+      loading = true;
+    });
+    try {
+      await FirebaseFirestore.instance.collection('section_flagged').add({
+        'sectionID': widget.questionID,
+        'vesselID': widget.vesselID,
+        'flagged': issueFlagged,
+        'timestamp': FieldValue.serverTimestamp()
+      });
+      setState(() {
+        loading = false;
+      });
+      // Creates a toast to say save successful.
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Data successfully saved.")));
+    } catch (error) {
+      // Creates a toast to say that data cannot be saved.
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Unable to save data, please try again.")));
+    }
+    setState(() {
+      loading = false;
+    });
+  }
+
   // Returns the user to the survey_section screen, ensuring they are returned to the section they are currently surveying.
   void _returnToSectionScreen() async {
     _saveImagesToFirebase();
+    _saveFlaggedToFirebase();
     arSessionManager.dispose();
     // If the user opened a section through the QR scanner, then only one screen
     // needs to be removed from the stack.
@@ -367,9 +409,10 @@ class _NewARHubState extends State<NewARHub> {
         context,
         MaterialPageRoute(
           builder: (context) => SurveySection(
-              vesselID: widget.vesselID,
-              questionID: widget.questionID,
-              capturedImages: imageViewer),
+            vesselID: widget.vesselID,
+            questionID: widget.questionID,
+            capturedImages: imageViewer,
+          ),
         ),
         (Route<dynamic> route) => true,
       );
@@ -381,6 +424,22 @@ class _NewARHubState extends State<NewARHub> {
     }
     history_globals.addRecord("pressed", history_globals.getUsername(),
         DateTime.now(), 'return to section');
+  }
+
+  // Creates an int to update if an issue has been flagged or not.
+  int issueFlaggedCounter = 0;
+
+  // Checks if the issue button has been pressed to update an issue setting from true to false.
+  void _onIssueFlagged() async {
+    setState(() {
+      if (issueFlaggedCounter == 0) {
+        issueFlagged = true;
+        issueFlaggedCounter = 1;
+      } else {
+        issueFlagged = false;
+        issueFlaggedCounter = 0;
+      }
+    });
   }
 }
 
