@@ -9,7 +9,7 @@ import 'package:camera/camera.dart';
 
 // Package dependencies.
 import 'package:shipping_inspection_app/shared/loading.dart';
-import 'package:shipping_inspection_app/utils/camera_screen.dart';
+import 'package:shipping_inspection_app/sectors/camera/camera_screen.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:shipping_inspection_app/sectors/ar/new_ar_hub.dart';
@@ -32,13 +32,9 @@ List<Answer> answersList = [];
 class SurveySection extends StatefulWidget {
   final String vesselID;
   // Images that have been taken within the AR view. This can be removed once AR screenshots can be saved to firebase.
-  final List<Image> capturedImages;
   final String questionID;
   const SurveySection(
-      {required this.questionID,
-      required this.capturedImages,
-      required this.vesselID,
-      Key? key})
+      {required this.questionID, required this.vesselID, Key? key})
       : super(key: key);
 
   @override
@@ -59,8 +55,6 @@ class _SurveySectionState extends State<SurveySection> {
     _getResultsFromFirestore();
     // Adds a record of the user history.
     _addEnterRecord();
-    // Sets up the image viewer. Can be removed one images can be saved from AR into firebase.
-    _initializeImageViewer();
     super.initState();
   }
 
@@ -77,8 +71,8 @@ class _SurveySectionState extends State<SurveySection> {
       return Scaffold(
         // Sets up the app bar to take the user back to the previous page
         appBar: AppBar(
-          title: const Text(''),
-          backgroundColor: globals.getAppbarColour(),
+          title: const Text('Idwal Vessel Inspection'),
+          backgroundColor: Colors.white,
           titleTextStyle: const TextStyle(color: LightColors.sPurple),
           centerTitle: true,
           leading: Transform.scale(
@@ -265,15 +259,6 @@ class _SurveySectionState extends State<SurveySection> {
     answersList = [];
   }
 
-  // Sets up the image viewer so if images have been taken within the AR view,
-  // they will be added to the image viewer.
-  // Can be removed once AR images save to firebase.
-  void _initializeImageViewer() {
-    if (widget.capturedImages.isNotEmpty) {
-      imageViewer = imageViewer + widget.capturedImages;
-    }
-  }
-
   // Function that adds a record of what a user has pressed onto the history page.
   Future<void> _addEnterRecord() async {
     globals.addRecord(
@@ -360,6 +345,7 @@ class _SurveySectionState extends State<SurveySection> {
                 questionID: widget.questionID,
                 arContent: arContentPush,
                 openThroughQR: false,
+                seenTutorial: false,
               ),
             ),
           );
@@ -423,10 +409,8 @@ class _SurveySectionState extends State<SurveySection> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SurveySection(
-            questionID: questionID,
-            capturedImages: imageViewer,
-            vesselID: widget.vesselID),
+        builder: (context) =>
+            SurveySection(questionID: questionID, vesselID: widget.vesselID),
       ),
     );
     setState(() {
@@ -602,8 +586,12 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
                             answer = value;
                           });
                         },
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
+                        decoration: InputDecoration(
+                          border: const UnderlineInputBorder(),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: globals.getTextColour(), width: 0.5),
+                          ),
                         ),
                       ),
                     ),

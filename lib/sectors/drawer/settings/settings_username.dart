@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
-    as globals;
+import 'package:shipping_inspection_app/home.dart';
+import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
 import 'package:shipping_inspection_app/utils/colours.dart';
 
 class SettingsUsername extends StatefulWidget {
@@ -31,12 +31,13 @@ class _SettingsUsernameState extends State<SettingsUsername> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
             color: LightColors.sPurple,
           ),
         ),
         body: Container(
+            color: globals.getSettingsBgColour(),
             padding: const EdgeInsets.all(20.0),
             child: Form(
                 key: _formKey,
@@ -73,8 +74,16 @@ class _SettingsUsernameState extends State<SettingsUsername> {
                           }
                           return null;
                         },
-                        decoration: const InputDecoration(
-                            hintText: 'Sarah', labelText: 'Username')),
+                        decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: globals.getTextColour(), width: 0.5),
+                            ),
+                            hintText: 'Sarah',
+                            labelText: 'Username'
+                        )
+                    ),
+
+
                     Container(
                       width: screenSize.width,
                       child: ElevatedButton(
@@ -86,12 +95,11 @@ class _SettingsUsernameState extends State<SettingsUsername> {
                                   content:
                                       Text('Processing username change...')),
                             );
-                            globals.addRecord(
-                                "settings-username-change",
-                                globals.getUsername(),
-                                DateTime.now(),
-                                username);
-                            globals.setUsername(username);
+                            globals.addRecord("settings-username-change", globals.getUsername(), DateTime.now(), username);
+                            setState(() {
+                              globals.setUsername(username);
+                              usernameNotifier.value = username;
+                            });
                             updateCurrentUsername();
                             globals.savePrefs();
 
