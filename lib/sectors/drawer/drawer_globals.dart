@@ -173,13 +173,18 @@ void changeHistoryPref(String type, bool value) {
 void savePrefs() async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('username', username);
+
   await prefs.setStringList("channels-list", savedChannels);
+  await prefs.setInt("channel-sum", savedChannelSum);
+  await prefs.setBool("channels-enabled", savedChannelsEnabled);
+
   await prefs.setBool("history-entering", historyPrefs[0]);
   await prefs.setBool("history-response", historyPrefs[1]);
   await prefs.setBool("history-settings", historyPrefs[2]);
   await prefs.setBool("history-qr", historyPrefs[3]);
   await prefs.setBool("history-communications", historyPrefs[4]);
   await prefs.setBool("history-enabled", historyEnabled);
+
   await prefs.setBool("dark-mode", darkModeEnabled);
   await prefs.setBool("system-theme", systemThemeEnabled);
 }
@@ -187,14 +192,21 @@ void savePrefs() async {
 void loadPrefs() async {
   final prefs = await SharedPreferences.getInstance();
   username = prefs.getString('username')?? "Current User";
+
   savedChannels = prefs.getStringList("channels-list")??
       List<String>.filled(9, " ", growable: false);
+  savedChannelSum = prefs.getInt("channel-sum")?? 3;
+  savedChannelsEnabled = prefs.getBool("channels-enabled")?? true;
+  print(savedChannelsEnabled);
+
+
   historyPrefs[0] = prefs.getBool("history-entering")?? true;
   historyPrefs[1] = prefs.getBool("history-response")?? true;
   historyPrefs[2] = prefs.getBool("history-settings")?? true;
   historyPrefs[3] = prefs.getBool("history-qr")?? true;
   historyPrefs[4] = prefs.getBool("history-communications")?? true;
   historyEnabled = prefs.getBool("history-enabled")?? true;
+
   darkModeEnabled = prefs.getBool("dark-mode")?? false;
   systemThemeEnabled = prefs.getBool("system-theme")?? false;
   initTheme();

@@ -181,10 +181,11 @@ class _SettingsChannelsState extends State<SettingsChannels> {
                 activeSwitchColor: LightColors.sPurple,
                 onToggle: (bool value) {
                   globals.savedChannelsEnabled = !globals.savedChannelsEnabled;
-                  setState(() {  
+                  setState(() {
                     value = globals.savedChannelsEnabled;
                     channelNotifier.value = value;
                   });
+                  globals.savePrefs();
                 },
               )
             ]
