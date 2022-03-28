@@ -103,9 +103,10 @@ class _SettingsUsernameState extends State<SettingsUsername> {
                                   'time': DateTime.now(),
                                   'permission': "User Name",
                                 })
-                                .then((value) => print("Record has been added"))
+                                .then((value) =>
+                                    debugPrint("Record has been added"))
                                 .catchError((error) =>
-                                    print("Failed to add record: $error"));
+                                    debugPrint("Failed to add record: $error"));
                           }
                         },
                       ),
