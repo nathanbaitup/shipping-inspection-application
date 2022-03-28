@@ -111,9 +111,6 @@ flutter:
      - Models/
      - Models/fire_extinguisher/
      - Models/fire_extinguisher_3/
-     - Models/ship/
-     - Models/life_boat_small/
-     - Models/lifeboat_big/
      - Models/lifeboat_accurate/
      - Models/valve/
      - Models/ship_engine_low_poly/
