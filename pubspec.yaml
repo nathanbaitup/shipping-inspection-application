@@ -114,6 +114,9 @@ flutter:
      - Models/ship/
      - Models/life_boat_small/
      - Models/lifeboat_big/
+     - Models/lifeboat_accurate/
+     - Models/valve/
+     - Models/ship_engine_low_poly/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
