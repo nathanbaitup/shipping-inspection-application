@@ -23,6 +23,7 @@ import '../../utils/colours.dart';
 import '../questions/question_brain.dart';
 import '../survey/survey_section.dart';
 import '../drawer/drawer_globals.dart' as history_globals;
+import 'ar_onboarding_screen.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
 
@@ -31,6 +32,7 @@ class NewARHub extends StatefulWidget {
   final String questionID;
   final List<String> arContent;
   final bool openThroughQR;
+  final bool seenTutorial;
 
   const NewARHub({
     Key? key,
@@ -38,6 +40,7 @@ class NewARHub extends StatefulWidget {
     required this.questionID,
     required this.openThroughQR,
     required this.arContent,
+    required this.seenTutorial,
   }) : super(key: key);
 
   @override
@@ -71,6 +74,12 @@ class _NewARHubState extends State<NewARHub> {
 
   @override
   Widget build(BuildContext context) {
+    if (!widget.seenTutorial) {
+      return ARIntroduction(
+        vesselID: widget.vesselID,
+        questionID: widget.questionID,
+      );
+    }
     return WillPopScope(
         onWillPop: () async {
           _returnToSectionScreen();
@@ -103,9 +112,7 @@ class _NewARHubState extends State<NewARHub> {
                   child: Row(
                     children: [
                       RawMaterialButton(
-                        onPressed: () async {
-                          _takeScreenshot();
-                        },
+                        onPressed: () => _takeScreenshot(),
                         elevation: 5.0,
                         fillColor: LightColors.sPurple,
                         shape: const CircleBorder(),
@@ -195,8 +202,6 @@ class _NewARHubState extends State<NewARHub> {
   }
 
   // Function that handles adding an object to the AR scene.
-  // Currently adds a model of a duck following the example.
-  // TODO: display the item automatically and not with a tap.
   // TODO: allow for multiple items to be loaded dynamically based on the question ID.
   Future<void> _onPlaneOrPointTap(List<ARHitTestResult> userTapResults) async {
     if (anchors.length == 1 && nodes.length == 1) {
@@ -374,9 +379,11 @@ class _NewARHubState extends State<NewARHub> {
 
   // Returns the user to the survey_section screen, ensuring they are returned to the section they are currently surveying.
   void _returnToSectionScreen() async {
+    arSessionManager.dispose();
     // If the user opened a section through the QR scanner, then only one screen
     // needs to be removed from the stack.
     if (widget.openThroughQR) {
+      Navigator.pop(context);
       Navigator.pop(context);
       Navigator.pushAndRemoveUntil(
         context,
@@ -393,16 +400,6 @@ class _NewARHubState extends State<NewARHub> {
     } else {
       Navigator.pop(context);
       Navigator.pop(context);
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SurveySection(
-            vesselID: widget.vesselID,
-            questionID: widget.questionID,
-          ),
-        ),
-        (Route<dynamic> route) => true,
-      );
     }
     history_globals.addRecord("pressed", history_globals.getUsername(),
         DateTime.now(), 'return to section');
@@ -420,7 +417,7 @@ class ARQuestionWidget extends StatelessWidget {
     return Column(children: [
       Container(
         width: cWidth,
-        margin: const EdgeInsets.all(10.0),
+        margin: const EdgeInsets.all(8.0),
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
             color: Colors.white,
@@ -468,7 +465,7 @@ class _MyARContentState extends State<ARContentWidget> {
       InkWell(
         child: Container(
           width: cWidth,
-          margin: const EdgeInsets.all(10.0),
+          margin: const EdgeInsets.all(8.0),
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
               color: Colors.white,

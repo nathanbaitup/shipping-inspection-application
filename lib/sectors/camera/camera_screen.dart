@@ -3,8 +3,8 @@ import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-import '../sectors/survey/survey_section.dart';
-import 'colours.dart';
+import '../survey/survey_section.dart';
+import '../../utils/colours.dart';
 
 // TODO: cleanup this dart file in a separate branch for code quality.
 class CameraScreen extends StatefulWidget {
