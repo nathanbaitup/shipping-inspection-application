@@ -203,7 +203,6 @@ void loadPrefs() async {
       List<String>.filled(9, " ", growable: false);
   savedChannelSum = prefs.getInt("channel-sum")?? 3;
   savedChannelsEnabled = prefs.getBool("channels-enabled")?? true;
-  print(savedChannelsEnabled);
 
 
   historyPrefs[0] = prefs.getBool("history-entering")?? true;
