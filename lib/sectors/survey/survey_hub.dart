@@ -272,7 +272,6 @@ void _loadQuestion(BuildContext context, String questionID) {
       builder: (context) => SurveySection(
         vesselID: vesselID,
         questionID: questionID,
-        capturedImages: const [],
       ),
     ),
   );

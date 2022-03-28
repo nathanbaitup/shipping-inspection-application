@@ -91,6 +91,10 @@ dependencies:
   # https://pub.dev/packages/onboarding
   onboarding: ^3.0.0
 
+  # Used to screenshot the produced image from AR to store to firebase.
+  # https://pub.dev/packages/screenshot/install
+  screenshot: ^1.2.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -32,13 +32,9 @@ List<Answer> answersList = [];
 class SurveySection extends StatefulWidget {
   final String vesselID;
   // Images that have been taken within the AR view. This can be removed once AR screenshots can be saved to firebase.
-  final List<Image> capturedImages;
   final String questionID;
   const SurveySection(
-      {required this.questionID,
-      required this.capturedImages,
-      required this.vesselID,
-      Key? key})
+      {required this.questionID, required this.vesselID, Key? key})
       : super(key: key);
 
   @override
@@ -59,8 +55,6 @@ class _SurveySectionState extends State<SurveySection> {
     _getResultsFromFirestore();
     // Adds a record of the user history.
     _addEnterRecord();
-    // Sets up the image viewer. Can be removed one images can be saved from AR into firebase.
-    _initializeImageViewer();
     super.initState();
   }
 
@@ -265,15 +259,6 @@ class _SurveySectionState extends State<SurveySection> {
     answersList = [];
   }
 
-  // Sets up the image viewer so if images have been taken within the AR view,
-  // they will be added to the image viewer.
-  // Can be removed once AR images save to firebase.
-  void _initializeImageViewer() {
-    if (widget.capturedImages.isNotEmpty) {
-      imageViewer = imageViewer + widget.capturedImages;
-    }
-  }
-
   // Function that adds a record of what a user has pressed onto the history page.
   void _addEnterRecord() {
     globals.addRecord(
@@ -382,10 +367,8 @@ class _SurveySectionState extends State<SurveySection> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SurveySection(
-            questionID: questionID,
-            capturedImages: imageViewer,
-            vesselID: widget.vesselID),
+        builder: (context) =>
+            SurveySection(questionID: questionID, vesselID: widget.vesselID),
       ),
     );
     setState(() {
@@ -564,7 +547,8 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
                         decoration: InputDecoration(
                           border: const UnderlineInputBorder(),
                           enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: globals.getTextColour(), width: 0.5),
+                            borderSide: BorderSide(
+                                color: globals.getTextColour(), width: 0.5),
                           ),
                         ),
                       ),

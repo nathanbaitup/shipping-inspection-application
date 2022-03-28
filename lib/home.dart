@@ -11,7 +11,7 @@ import 'package:shipping_inspection_app/utils/task_list.dart';
 import 'package:shipping_inspection_app/utils/active_questionnaire_card.dart';
 import 'package:shipping_inspection_app/utils/homecontainer.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
-as globals;
+    as globals;
 
 QuestionBrain questionBrain = QuestionBrain();
 late String vesselID;
@@ -64,189 +64,189 @@ class HomeState extends State<Home> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return ValueListenableBuilder<String>(
-      valueListenable: usernameNotifier,
-      builder: (_, username, __) {
-        return Scaffold(
-          body: SafeArea(
-            child: Column(
-              children: <Widget>[
-                TopContainer(
-                  height: height * 0.12,
-                  width: width,
-                  padding: const EdgeInsets.all(0.0),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 0, vertical: 0.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              CircularPercentIndicator(
-                                radius: 65.0,
-                                lineWidth: 6.0,
-                                animation: true,
-                                percent: 0.75,
-                                circularStrokeCap: CircularStrokeCap.round,
-                                progressColor: LightColors.sRed,
-                                backgroundColor: LightColors.sLavender,
-                                center: const CircleAvatar(
-                                  backgroundColor: LightColors.sBlue,
-                                  radius: 20.0,
-                                  backgroundImage: AssetImage(
-                                    'images/avatar.png',
-                                  ),
-                                ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    username,
-                                    textAlign: TextAlign.start,
-                                    style: const TextStyle(
-                                      fontSize: 25.0,
-                                      color: LightColors.sDarkBlue,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Surveying: $vesselID',
-                                    textAlign: TextAlign.start,
-                                    style: const TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.black45,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        )
-                      ]),
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
+        valueListenable: usernameNotifier,
+        builder: (_, username, __) {
+          return Scaffold(
+            body: SafeArea(
+              child: Column(
+                children: <Widget>[
+                  TopContainer(
+                    height: height * 0.12,
+                    width: width,
+                    padding: const EdgeInsets.all(0.0),
                     child: Column(
-                      children: <Widget>[
-                        Container(
-                          color: Colors.transparent,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 10.0),
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                children: <Widget>[
-                                  const Text(
-                                    'My tasks',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      fontSize: 23.0,
-                                      fontWeight: FontWeight.w700,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 0.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                CircularPercentIndicator(
+                                  radius: 65.0,
+                                  lineWidth: 6.0,
+                                  animation: true,
+                                  percent: 0.75,
+                                  circularStrokeCap: CircularStrokeCap.round,
+                                  progressColor: LightColors.sRed,
+                                  backgroundColor: LightColors.sLavender,
+                                  center: const CircleAvatar(
+                                    backgroundColor: LightColors.sBlue,
+                                    radius: 20.0,
+                                    backgroundImage: AssetImage(
+                                      'images/avatar.png',
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                            const TasksPage()),
-                                      );
-                                    },
-                                    child: calendarIcon(),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 15.0),
-                              const TaskList(
-                                icon: Icons.alarm,
-                                iconBackgroundColor: LightColors.sRed,
-                                title: 'To Do',
-                                subtitle: '5 task(s) to do',
-                              ),
-                              const SizedBox(
-                                height: 15.0,
-                              ),
-                              const TaskList(
-                                icon: Icons.blur_circular,
-                                iconBackgroundColor: LightColors.sDarkYellow,
-                                title: 'In Progress',
-                                subtitle: '2 task(s) in progress',
-                              ),
-                              const SizedBox(height: 15.0),
-                              const TaskList(
-                                icon: Icons.check_circle_outline,
-                                iconBackgroundColor: LightColors.sBlue,
-                                title: 'Done',
-                                subtitle: '18 task(s) completed',
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          color: Colors.transparent,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              const Text(
-                                'Active Surveys',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  fontSize: 23.0,
-                                  fontWeight: FontWeight.w700,
                                 ),
-                              ),
-                              const SizedBox(height: 5.0),
-                              // The active survey sections.
-                              Column(
-                                children: [
-                                  Row(
-                                    children: const <Widget>[
-                                      ActiveSurveysWidget(
-                                        sectionName: 'Fire and Safety',
-                                        sectionID: 'f&s',
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      username,
+                                      textAlign: TextAlign.start,
+                                      style: const TextStyle(
+                                        fontSize: 25.0,
+                                        color: LightColors.sDarkBlue,
+                                        fontWeight: FontWeight.w800,
                                       ),
-                                      ActiveSurveysWidget(
-                                        sectionName: 'Lifesaving',
-                                        sectionID: 'lifesaving',
+                                    ),
+                                    Text(
+                                      'Surveying: $vesselID',
+                                      textAlign: TextAlign.start,
+                                      style: const TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.black45,
+                                        fontWeight: FontWeight.w400,
                                       ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: const <Widget>[
-                                      ActiveSurveysWidget(
-                                        sectionName: 'Engine Room',
-                                        sectionID: 'engine',
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          )
+                        ]),
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            color: Colors.transparent,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 10.0),
+                            child: Column(
+                              children: <Widget>[
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    const Text(
+                                      'My tasks',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontSize: 23.0,
+                                        fontWeight: FontWeight.w700,
                                       ),
-                                      ActiveSurveysWidget(
-                                        sectionName: 'Placholder',
-                                        sectionID: 'engine',
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const TasksPage()),
+                                        );
+                                      },
+                                      child: calendarIcon(),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 15.0),
+                                const TaskList(
+                                  icon: Icons.alarm,
+                                  iconBackgroundColor: LightColors.sRed,
+                                  title: 'To Do',
+                                  subtitle: '5 task(s) to do',
+                                ),
+                                const SizedBox(
+                                  height: 15.0,
+                                ),
+                                const TaskList(
+                                  icon: Icons.blur_circular,
+                                  iconBackgroundColor: LightColors.sDarkYellow,
+                                  title: 'In Progress',
+                                  subtitle: '2 task(s) in progress',
+                                ),
+                                const SizedBox(height: 15.0),
+                                const TaskList(
+                                  icon: Icons.check_circle_outline,
+                                  iconBackgroundColor: LightColors.sBlue,
+                                  title: 'Done',
+                                  subtitle: '18 task(s) completed',
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                          Container(
+                            color: Colors.transparent,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 10.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                const Text(
+                                  'Active Surveys',
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontSize: 23.0,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                const SizedBox(height: 5.0),
+                                // The active survey sections.
+                                Column(
+                                  children: [
+                                    Row(
+                                      children: const <Widget>[
+                                        ActiveSurveysWidget(
+                                          sectionName: 'Fire and Safety',
+                                          sectionID: 'f&s',
+                                        ),
+                                        ActiveSurveysWidget(
+                                          sectionName: 'Lifesaving',
+                                          sectionID: 'lifesaving',
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: const <Widget>[
+                                        ActiveSurveysWidget(
+                                          sectionName: 'Engine Room',
+                                          sectionID: 'engine',
+                                        ),
+                                        ActiveSurveysWidget(
+                                          sectionName: 'Placholder',
+                                          sectionID: 'engine',
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      });
+          );
+        });
   }
 }
 
@@ -335,7 +335,6 @@ class _ActiveSurveysWidgetState extends State<ActiveSurveysWidget> {
         builder: (context) => SurveySection(
           vesselID: vesselID,
           questionID: questionID,
-          capturedImages: const [],
         ),
       ),
     );
