@@ -229,6 +229,22 @@ class _MenuHistoryState extends State<MenuHistory> {
           }
           break;
 
+        // CATEGORY: Channel Logging
+        case "channels-delete":
+          {
+            if (globals.historyPrefs[5]) {
+              currentRecordText[0] = currentRecord.user;
+              currentRecordText[1] = " deleted channel '";
+              currentRecordText[2] = currentRecord.section;
+              currentRecordText[3] = "' at ";
+              currentRecordText[4] = DateFormat('kk:mm (yyyy-MM-dd)')
+                  .format(currentRecord.dateTime);
+            } else {
+              blockRecord = true;
+            }
+          }
+          break;
+
         default:
           {
             currentRecordText[0] = "NULL RECORD";

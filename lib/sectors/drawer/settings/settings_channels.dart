@@ -50,6 +50,12 @@ class _SettingsChannelsState extends State<SettingsChannels> {
             onPressed: globals.savedChannelsEnabled
               ? () => {
                 setState(() {
+                  globals.addRecord(
+                      "channels-delete",
+                      globals.getUsername(),
+                      DateTime.now(),
+                      channel.name
+                  );
                   deleteChannel(channel.channelID);
                   globals.savePrefs();
                 })
