@@ -267,12 +267,20 @@ class OptionsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog(title: Text(title), children: <Widget>[
-      channelOption(context, channels[0], title),
-      channelOption(context, channels[1], title),
-      channelOption(context, channels[2], title),
-    ]);
+    return SimpleDialog(title: Text(title),
+        children: getChannelOptions(context, channels, title)
+    );
   }
+}
+
+List<Widget> getChannelOptions(BuildContext context, List<Channel> channels, String title) {
+  List<Widget> channelOptionList = [];
+
+  for(var i = 0; i < globals.channelSum; i++) {
+    channelOptionList.add(channelOption(context, channels[i], title));
+  }
+
+  return channelOptionList;
 }
 
 SimpleDialogOption channelOption(

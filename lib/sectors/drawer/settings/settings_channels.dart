@@ -116,11 +116,8 @@ class _SettingsChannelsState extends State<SettingsChannels> {
     for (var i = 0; i < globals.channelSum; i++) {
       channelList.add(channelTile(channels[i]));
     }
-
     return channelList;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -157,9 +154,6 @@ class _SettingsChannelsState extends State<SettingsChannels> {
                 setState(() {
                   globals.channelSum = value;
                 });
-
-                print(globals.channelSum);
-                print(value);
               },
             ),
           ),
@@ -225,6 +219,7 @@ class _NumericStepButtonState extends State<NumericStepButton> {
                 counter--;
               }
               widget.onChanged(counter);
+              clearUnusedChannels();
             });
           },
         ),
@@ -257,6 +252,7 @@ class _NumericStepButtonState extends State<NumericStepButton> {
                 counter++;
               }
               widget.onChanged(counter);
+              clearUnusedChannels();
             });
           },
         ),
@@ -264,4 +260,11 @@ class _NumericStepButtonState extends State<NumericStepButton> {
       ],
     );
   }
+}
+
+void clearUnusedChannels() {
+  for(var x = globals.channelSum; x < 9; x++) {
+    globals.savedChannels[x] = " ";
+  }
+  globals.savePrefs();
 }
