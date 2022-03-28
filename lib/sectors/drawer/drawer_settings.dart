@@ -72,11 +72,7 @@ class _MenuSettingsState extends State<MenuSettings> {
           SettingsSection(
             title: Text(
               'Common',
-              style: TextStyle(
-                  color: globals.getTextColour(),
-                  decorationColor: LightColors.sPurple,
-                  decorationThickness: 2,
-                  decoration: TextDecoration.underline),
+              style: globals.getSettingsTitleStyle(),
             ),
             tiles: [
               SettingsTile(
@@ -135,7 +131,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                 enabled: !globals.systemThemeEnabled,
                 leading:
                 Icon(Icons.dark_mode,
-                    color: globals.getIconColourCheck(!globals.systemThemeEnabled)),
+                    color: globals.getIconColourCheck(LightColors.sPurpleL, !globals.systemThemeEnabled)),
                 onPressed: (BuildContext context) {
                 },
                 initialValue: globals.darkModeEnabled,
@@ -157,11 +153,7 @@ class _MenuSettingsState extends State<MenuSettings> {
           SettingsSection(
             title: Text(
               'Account',
-              style: TextStyle(
-                  color: globals.getTextColour(),
-                  decorationColor: LightColors.sPurple,
-                  decorationThickness: 2,
-                  decoration: TextDecoration.underline),
+              style: globals.getSettingsTitleStyle(),
             ),
             tiles: [
               SettingsTile.navigation(
@@ -180,11 +172,7 @@ class _MenuSettingsState extends State<MenuSettings> {
           SettingsSection(
               title: Text(
                 'System',
-                style: TextStyle(
-                    color: globals.getTextColour(),
-                    decorationColor: LightColors.sPurple,
-                    decorationThickness: 2,
-                    decoration: TextDecoration.underline),
+                style: globals.getSettingsTitleStyle(),
               ),
               tiles: [
                 SettingsTile.switchTile(
