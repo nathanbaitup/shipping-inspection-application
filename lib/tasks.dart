@@ -37,7 +37,7 @@ class _TasksPageState extends State<TasksPage> {
         if (_taskFormKey.currentState!.validate()) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Processing feedback...'),
+              content: Text('Adding task...'),
             ),
           );
           TaskData addedTask = TaskData(title.trim(),
@@ -48,7 +48,9 @@ class _TasksPageState extends State<TasksPage> {
 
     // Create AlertDialog
     AlertDialog alert = AlertDialog(
-      title: const Text("Add New Task"),
+      title: const Text("Add New Task", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22)),
+      backgroundColor: const Color(0xFFF0EBFA),
+      
 
       content: Form(
         key: _taskFormKey,
@@ -68,6 +70,8 @@ class _TasksPageState extends State<TasksPage> {
               return null;
             },
             decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
                 labelText: 'Title',
                 labelStyle: const TextStyle(
                     color: Colors.black54, fontSize: 20, fontWeight: FontWeight.w500),
@@ -89,6 +93,7 @@ class _TasksPageState extends State<TasksPage> {
             minLines: 4,
             maxLines: 4,
             style: const TextStyle(color: Colors.black),
+
             controller: _taskDescription,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -99,6 +104,8 @@ class _TasksPageState extends State<TasksPage> {
               return null;
             },
             decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
                 labelText: 'Description',
                 labelStyle: const TextStyle(
                     color: Colors.black54, fontSize: 20, fontWeight: FontWeight.w500),
