@@ -67,7 +67,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
         valueListenable: channelNotifier,
         builder: (_, channelEnableValue, __) {
           return loading
-              ? const Loading()
+              ? const Loading(color: Colors.black)
               : Form(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,

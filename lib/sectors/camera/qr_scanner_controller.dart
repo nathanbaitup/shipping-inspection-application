@@ -65,7 +65,7 @@ class _QRScannerState extends State<QRScanner> {
   @override
   Widget build(BuildContext context) {
     return loading
-        ? const Loading()
+        ? const Loading(color: Colors.black)
         : MaterialApp(
             theme: ThemeData(
               colorScheme: ColorScheme.fromSwatch().copyWith(

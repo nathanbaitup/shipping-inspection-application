@@ -66,7 +66,7 @@ class _SurveySectionState extends State<SurveySection> {
 
     // If loading is required, then return the loading page.
     if (loading) {
-      return const Scaffold(body: Loading());
+      return const Scaffold(body: Loading(color: Colors.black));
     } else {
       return Scaffold(
         // Sets up the app bar to take the user back to the previous page
@@ -231,7 +231,9 @@ class _SurveySectionState extends State<SurveySection> {
                             ),
                             const SizedBox(width: 20),
                             ElevatedButton(
-                              onPressed: () async => _saveSurvey(),
+                              onPressed: () async {
+                                _saveSurvey();
+                              },
                               child: const Text('Save Responses'),
                               style: ElevatedButton.styleFrom(
                                   primary: Colors.lightGreen),
@@ -396,10 +398,13 @@ class _SurveySectionState extends State<SurveySection> {
       });
       // Creates a toast to say save successful.
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Data successfully saved.")));
+         SnackBar(
+              backgroundColor: app_globals.getSnackBarBgColour(),
+              content: Text("Data successfully saved.")));
     } catch (error) {
       // Creates a toast to say that data cannot be saved.
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: app_globals.getSnackBarBgColour(),
           content: Text("Unable to save data, please try again.")));
     }
 

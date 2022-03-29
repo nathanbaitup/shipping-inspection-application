@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shipping_inspection_app/sectors/home/home_percent.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import '../../main.dart';
 import '../../shared/loading.dart';
@@ -112,15 +113,25 @@ class _HomeHubState extends State<HomeHub> {
                                 padding: const EdgeInsets.only(
                                   bottom: 20,
                                   left: 20,
-                                  right: 20,
                                 ),
-                                child: Row(
-                                  children: const [
-                                    ActiveSurveysWidget(
-                                      sectionName: 'Fire and Safety',
-                                      sectionID: 'f&s',
-                                    ),
-                                  ],
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: const [
+                                      ActiveSurveysWidget(
+                                        sectionName: 'Fire and Safety',
+                                        sectionID: 'f&s',
+                                      ),
+                                      ActiveSurveysWidget(
+                                        sectionName: 'Lifesaving',
+                                        sectionID: 'lifesaving',
+                                      ),
+                                      ActiveSurveysWidget(
+                                        sectionName: 'Engine Room',
+                                        sectionID: 'engine',
+                                      ),
+                                    ],
+                                  )
                                 )
                               ),
 
@@ -190,79 +201,22 @@ class _ActiveSurveysWidgetState extends State<ActiveSurveysWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // Gets the width of the current device.
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    double percent = answeredQuestions / numberOfQuestions;
 
     if (loading) {
-      return Row(
-        children: <Widget>[
-          Container(
-            height: screenHeight * 0.2,
-            width: screenWidth * 0.3,
-            decoration: BoxDecoration(
-              color: AppColours.appPurpleLight,
-              borderRadius: BorderRadius.circular(25.0),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Loading(),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 11.0),
-        ],
-      );
+      return const HomePercentLoad();
     } else {
       return Row(
         children: <Widget>[
           GestureDetector(
-            child: Container(
-              height: screenHeight * 0.2,
-              width: screenWidth * 0.3,
-                decoration: BoxDecoration(
-                  color: AppColours.appPurpleLight,
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(widget.sectionName),
-                  SizedBox(height: screenHeight * 0.05,),
-                  LinearPercentIndicator(
-                    padding: const EdgeInsets.only(
-                      left: 20,
-                      right: 20,
-                    ),
-                    animation: true,
-                    lineHeight: 20.0,
-                    percent: 0.5,
-                    backgroundColor: AppColours.appPurpleLighter,
-                    progressColor: AppColours.appLavender,
-                    center: Text(
-                      '${(0 * 100).round()}%',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w700, color: Colors.white),
-                    ),
-                  ),
-                ]
-              )
+            child: HomePercentActive(
+              sectionName: widget.sectionName,
+              loadingPercent: percent,
+              sectionSubtitle: '$answeredQuestions of $numberOfQuestions',
             ),
-            // child: ActiveQuestionnairesCard(
-            //   cardColor: AppColours.appPurple,
-            //   loadingPercent: answeredQuestions / numberOfQuestions,
-            //   title: widget.sectionName,
-            //   subtitle:
-            //   '$answeredQuestions of $numberOfQuestions questions answered',
-            // ),
             onTap: () {
               _loadQuestion(widget.sectionID);
+              setState(() {});
             },
           ),
           const SizedBox(width: 10.0),
