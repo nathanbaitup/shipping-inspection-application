@@ -298,42 +298,58 @@ List<Widget> getHomeChannels() {
   List<Widget> homeChannels = [];
 
   int currentChannel = 0;
-  for(int i = 0; i < (app_globals.savedChannelSum / 2); i++) {
-    List<Widget> rowContent = [];
+  if(app_globals.savedChannelsEnabled) {
+    for (int i = 0; i < (app_globals.savedChannelSum / 2); i++) {
+      List<Widget> rowContent = [];
 
-    print(app_globals.savedChannelSum);
-    print(currentChannel);
-    if(app_globals.savedChannelSum - 1 > currentChannel) {
-      rowContent = [
-        Container(
+      print(app_globals.savedChannelSum);
+      print(currentChannel);
+      if (app_globals.savedChannelSum - 1 > currentChannel) {
+        rowContent = [
+          Container(
             padding: const EdgeInsets.only(
               bottom: 20,
               left: 20,
               right: 5,
             ),
             child: HomeChannel(id: currentChannel),
-        ),
-        const Spacer(),
-        Container(
-          padding: const EdgeInsets.only(
-            bottom: 20,
-            left: 5,
-            right: 20,
           ),
-          child: HomeChannel(id: currentChannel + 1),
-        ),
-        const Spacer(),
-      ];
-    } else {
-      rowContent = [
-        const Spacer(),
-        HomeChannel(id: currentChannel),
-        const Spacer(),
-      ];
-    }
+          const Spacer(),
+          Container(
+            padding: const EdgeInsets.only(
+              bottom: 20,
+              left: 5,
+              right: 20,
+            ),
+            child: HomeChannel(id: currentChannel + 1),
+          ),
+          const Spacer(),
+        ];
+      } else {
+        rowContent = [
+          const Spacer(),
+          HomeChannel(id: currentChannel),
+          const Spacer(),
+        ];
+      }
 
-    homeChannels.add(Row(children: rowContent));
-    currentChannel += 2;
+      homeChannels.add(Row(children: rowContent));
+      currentChannel += 2;
+    }
+  } else {
+    homeChannels = [
+      const Text("Saved channels have been disabled.",
+        style: TextStyle(
+            fontSize: 15,
+            fontStyle: FontStyle.italic),),
+      const SizedBox(
+        height: 15,
+      ),
+      const Text("Navigate to Settings to re-enable this feature.",
+        style: TextStyle(
+            fontSize: 15,
+            fontStyle: FontStyle.italic),),
+    ];
   }
   // for(int i = 0; i < app_globals.savedChannelSum; i++) {
   //   print(i.toString());
