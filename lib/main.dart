@@ -18,7 +18,6 @@ final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 String vesselID = '';
 
 class ShipApp extends StatefulWidget {
-
   const ShipApp({Key? key}) : super(key: key);
 
   @override
@@ -43,18 +42,18 @@ class _ShipAppState extends State<ShipApp> {
               title: 'Shipping Application',
               theme: ThemeData(
                   colorScheme: ColorScheme.fromSwatch().copyWith(
-                    primary: AppColours.appPurple,
-                    secondary: AppColours.appPurple,
-                    brightness: Brightness.light,
-                    /* light theme settings */
-                  )),
+                primary: AppColours.appPurple,
+                secondary: AppColours.appPurple,
+                brightness: Brightness.light,
+                /* light theme settings */
+              )),
               darkTheme: ThemeData(
                   colorScheme: ColorScheme.fromSwatch().copyWith(
-                    primary: AppColours.appPurple,
-                    secondary: AppColours.appPurple,
-                    brightness: Brightness.dark,
-                    /* dark theme settings */
-                  )),
+                primary: AppColours.appPurple,
+                secondary: AppColours.appPurple,
+                brightness: Brightness.dark,
+                /* dark theme settings */
+              )),
               themeMode: mode,
               // Dark mode now follows system settings
               // Requires Android 10 (API level 29) or above to switch to dark mode
@@ -64,7 +63,7 @@ class _ShipAppState extends State<ShipApp> {
               home: vesselID.isEmpty
                   ? const WelcomePage()
                   : MyHomePage(
-                  title: 'Idwal Vessel Inspection', vesselID: vesselID));
+                      title: 'Idwal Vessel Inspection', vesselID: vesselID));
         });
   }
 
@@ -154,7 +153,12 @@ class _WelcomePageState extends State<WelcomePage> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.5,
                       child: Image.network(
-                          'https://www.idwalmarine.com/hs-fs/hubfs/IDWAL-Logo-CMYK-Blue+White.png?width=2000&name=IDWAL-Logo-CMYK-Blue+White.png'),
+                        'https://www.idwalmarine.com/hs-fs/hubfs/IDWAL-Logo-CMYK-Blue+White.png?width=2000&name=IDWAL-Logo-CMYK-Blue+White.png',
+                        errorBuilder: (BuildContext context, Object exception,
+                            StackTrace? stackTrace) {
+                          return const Text('');
+                        },
+                      ),
                     ),
                     const SizedBox(height: 20),
 
@@ -214,8 +218,8 @@ class _WelcomePageState extends State<WelcomePage> {
                           runApp(const ShipApp());
                         }
                       },
-                      style:
-                          ElevatedButton.styleFrom(primary: AppColours.appPurple),
+                      style: ElevatedButton.styleFrom(
+                          primary: AppColours.appPurple),
                       child: const Text('Continue to Application'),
                     ),
 
