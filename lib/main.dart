@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shipping_inspection_app/sectors/tasks/taskhandler.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:shipping_inspection_app/userdashboard.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -42,6 +44,7 @@ class _ShipAppState extends State<ShipApp> {
             brightness: Brightness.light,
             /* light theme settings */
         )),
+
         darkTheme: ThemeData(
             colorScheme: ColorScheme.fromSwatch().copyWith(
               primary: Colors.white,
@@ -53,12 +56,14 @@ class _ShipAppState extends State<ShipApp> {
         // Dark mode now follows system settings
         // Requires Android 10 (API level 29) or above to switch to dark mode
         debugShowCheckedModeBanner: false,
+
         // Checks if vesselID is empty, if true opens the welcome screen
         // else opens the application with the vesselID parsed in.
         home: vesselID.isEmpty
             ? const WelcomePage()
             : MyHomePage(
                 title: 'Idwal Vessel Inspection', vesselID: vesselID));
+
   }
 
   // Checks if permissions have been granted and asks the user for permission if not.
@@ -101,6 +106,7 @@ class _WelcomePageState extends State<WelcomePage> {
     // Gets the height and width of the current device.
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
 
     return Scaffold(
       body: SingleChildScrollView(

@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:shipping_inspection_app/sectors/tasks/taskdata.dart';
 import 'package:shipping_inspection_app/sectors/tasks/taskhandler.dart';
 import 'package:shipping_inspection_app/utils/back_button.dart';
 import 'package:shipping_inspection_app/utils/taskcontainer.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:provider/provider.dart';
 
-
-class TasksPage extends StatelessWidget {
+class TasksPage extends StatefulWidget {
   const TasksPage({Key? key}) : super(key: key);
+
+  @override
+  State<TasksPage> createState() => _TasksPageState();
+}
+
+class _TasksPageState extends State<TasksPage> {
+
+  late String title;
+  late String description;
 
 
   showAlertDialog(BuildContext context) {
@@ -16,19 +25,27 @@ class TasksPage extends StatelessWidget {
 
     //
     Widget submitBtn = TextButton(
-      child: Text("CONFIRM",
+      child: const Text("CONFIRM",
         style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)
         ,
       ),
       onPressed: () {
-        Provider.of<EachTask>(context,listen: false).addTask(_taskTitle.text, _taskDescription.text);
-        Navigator.of(context).pop();
-      },
-    );
+        // if (_taskform.currentState!.validate()) {
+        //   ScaffoldMessenger.of(context).showSnackBar(
+        //     const SnackBar(
+        //       content: Text('Processing feedback...'),
+        //     ),
+        //   );
+        //   UserFeedback newFeedback = UserFeedback(name.trim(),
+        //       email.trim(), feedback.trim(), sliderFeedback);
+        //   Navigator.of(context).pop();
+        // }
+        // ,
+      });
 
     // Create AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Add New Task"),
+      title: const Text("Add New Task"),
 
       content:
       Column(
@@ -161,8 +178,8 @@ class TasksPage extends StatelessWidget {
                 flex: 5,
                 child: ListView(
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: const <Widget>[
+                  physics: NeverScrollableScrollPhysics(),
+                  children: <Widget>[
                     TaskContainer(
                       title: 'IMO Guidelines review',
                       subtitle:
@@ -175,20 +192,22 @@ class TasksPage extends StatelessWidget {
                           'Complete engine bay inspection for the SS Milwaukee',
                       boxColor: LightColors.sLavender,
                     ),
-                    TaskContainer(
-                      title: 'Call HQ',
-                      subtitle:
-                          'Contact HQ to request a revision of my duties for this week',
-                      boxColor: LightColors.sPalePink,
-                    ),
-                    TaskContainer(
-                      title: 'Collaborate with surveyor X',
-                      subtitle:
-                          'Meet up with surveyor X to ask about lifeboat inspection safety guidelines, as I have little experience in this field',
-                      boxColor: LightColors.sLightGreen,
-                    ),
-                  ],
+                  TaskContainer(
+                       title: 'Call HQ',
+                       subtitle:
+                           'Contact HQ to request a revision of my duties for this week',
+                       boxColor: LightColors.sPalePink,
+                     ),
+                     TaskContainer(
+                       title: 'Collaborate with surveyor X',
+                       subtitle:
+                           'Meet up with surveyor X to ask about lifeboat inspection safety guidelines, as I have little experience in this field',
+                       boxColor: LightColors.sLightGreen,
+                     ),
+                   ],
                 ),
+
+
               )
             ],
           ),
@@ -196,4 +215,6 @@ class TasksPage extends StatelessWidget {
       ),
     );
   }
-}
+  }
+
+
