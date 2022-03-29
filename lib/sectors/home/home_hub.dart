@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_history.dart';
@@ -18,6 +20,8 @@ import '../survey/survey_section.dart';
 QuestionBrain questionBrain = QuestionBrain();
 
 final ValueNotifier<bool> homeStateNotifier = ValueNotifier(false);
+
+bool _loading = false;
 
 class HomeHub extends StatefulWidget {
   final String vesselID;
@@ -379,30 +383,38 @@ class _ActiveSurveysWidgetState extends State<ActiveSurveysWidget> {
   Widget build(BuildContext context) {
     double percent = answeredQuestions / numberOfQuestions;
 
-    if (loading) {
+    if (_loading) {
       return const HomePercentLoad();
     } else {
-      return Row(
-        children: <Widget>[
-          GestureDetector(
-            child: HomePercentActive(
-              sectionName: widget.sectionName,
-              loadingPercent: percent,
-              sectionSubtitle: '$answeredQuestions of $numberOfQuestions',
-            ),
-            onTap: () {
-              _loadQuestion(widget.sectionID);
-              setState(() {});
-            },
-          ),
-          const SizedBox(width: 10.0),
-        ],
+      return ValueListenableBuilder<bool>(
+        valueListenable: homeStateNotifier,
+        builder: (_, homeState, __) {
+          return Row(
+            children: <Widget>[
+              GestureDetector(
+                child: HomePercentActive(
+                  sectionName: widget.sectionName,
+                  loadingPercent: percent,
+                  sectionSubtitle: '$answeredQuestions of $numberOfQuestions',
+                ),
+                onTap: () {
+                  _loadQuestion(widget.sectionID);
+                  setState(() {});
+                },
+              ),
+              const SizedBox(width: 10.0),
+            ],
+          );
+        },
       );
     }
   }
 
   // Takes the user to the required survey section when pressing on an active survey.
   void _loadQuestion(String questionID) {
+    app_globals.addRecord(
+        "opened", app_globals.getUsername(), DateTime.now(), 'camera');
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -412,14 +424,16 @@ class _ActiveSurveysWidgetState extends State<ActiveSurveysWidget> {
           issueFlagged: false,
         ),
       ),
-    );
+    ).then(onGoBack);
   }
 
   // Loads a list of all the answered questions from firebase to see the total
   // amount of questions answered per section and saves them in a list.
   Future<List<QuestionTotals>> _getResultsFromFirestore(
       String sectionID) async {
-    loading = true;
+    setState(() {
+      _loading = true;
+    });
     // The list to store all the total amount of questions and answered questions.
     List<QuestionTotals> questionTotals = [];
     int totalAnswered = 0;
@@ -433,35 +447,48 @@ class _ActiveSurveysWidgetState extends State<ActiveSurveysWidget> {
       // Queries the snapshot to retrieve the section ID, the number of questions,
       // in the section and the number of answered questions and saves to
       // questionTotals.
-      for (var document in querySnapshot.docs) {
-        questionTotals.add(QuestionTotals(document['sectionID'],
-            document['numberOfQuestions'], document['answeredQuestions']));
-      }
-
-      // Sets the total amount of questions questions from Firebase.
-      for (var i = 0; i < questionTotals.length; i++) {
-        if (questionTotals[i].sectionID == sectionID) {
-          totalAnswered++;
-        }
-      }
-      // Sets the total number of questions and answered amount.
       setState(() {
+        for (var document in querySnapshot.docs) {
+          questionTotals.add(QuestionTotals(document['sectionID'],
+              document['numberOfQuestions'], document['answeredQuestions']));
+        }
+
+        // Sets the total amount of questions questions from Firebase.
+        for (var i = 0; i < questionTotals.length; i++) {
+          if (questionTotals[i].sectionID == sectionID) {
+            totalAnswered++;
+          }
+        }
+        // Sets the total number of questions and answered amount.
         numberOfQuestions = questionBrain.getQuestionAmount(sectionID);
         answeredQuestions = totalAnswered;
-      });
 
-      // Checks if the number of answered questions is greater than the total
-      // number of questions and sets the answered questions to the total
-      // number of questions.
-      if (answeredQuestions > numberOfQuestions) {
-        answeredQuestions = numberOfQuestions;
-      }
+        // Checks if the number of answered questions is greater than the total
+        // number of questions and sets the answered questions to the total
+        // number of questions.
+        if (answeredQuestions > numberOfQuestions) {
+          answeredQuestions = numberOfQuestions;
+        }
+        _loading = false;
+      });
     } catch (error) {
       debugPrint("Error: $error");
+      setState(() {
+        _loading = false;
+      });
     }
     setState(() {
-      loading = false;
+      _loading = false;
     });
     return questionTotals;
   }
+
+  // REFERENCE accessed 29/03/2022 https://www.nstack.in/blog/flutter-refresh-on-navigator-pop-or-go-back/
+  // Used to update the state of the progress widget once a survey section has been
+  // updated, representing the current amount of responses.
+  FutureOr<dynamic> onGoBack(dynamic value) {
+    _getResultsFromFirestore(widget.sectionID);
+    setState(() {});
+  }
+  // END REFERENCE
 }
