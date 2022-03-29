@@ -28,14 +28,15 @@ class TasksPage extends StatelessWidget {
                     const Text(
                       'To-Do',
                       style: TextStyle(
-                          fontSize: 27.0, fontWeight: FontWeight.w600),
+                          fontSize: 27.0, fontWeight: FontWeight.w800),
                     ),
                     Container(
-                      height: 40.0,
-                      width: 120,
+                      width: 130,
+                      height: 45.0,
                       decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
                         color: LightColors.sPurple,
-                        borderRadius: BorderRadius.circular(30),
+
                       ),
                       child: TextButton(
                         onPressed: () {
@@ -50,9 +51,10 @@ class TasksPage extends StatelessWidget {
                           child: Text(
                             'Add task',
                             style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 17,
+                              color: Colors.white,
+                                ),
                           ),
                         ),
                       ),
@@ -62,7 +64,7 @@ class TasksPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: const <Widget>[
-                 
+
                 ],
               ),
               const SizedBox(
