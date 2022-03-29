@@ -23,7 +23,8 @@ import 'package:ar_flutter_plugin/models/ar_node.dart';
 import '../../utils/app_colours.dart';
 import '../questions/question_brain.dart';
 import '../survey/survey_section.dart';
-import '../drawer/drawer_globals.dart' as history_globals;
+import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
+as app_globals;
 import 'ar_onboarding_screen.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
@@ -351,7 +352,9 @@ class _NewARHubState extends State<NewARHub> {
       await uploadTask.then((value) => value.ref.getDownloadURL());
       // Creates a toast to say that data cannot be saved.
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Image Saved.")));
+          .showSnackBar(SnackBar(
+          backgroundColor: app_globals.getSnackBarBgColour(),
+          content: Text("Image Saved.")));
     } catch (e) {
       // Creates a toast to say that data cannot be saved.
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -374,7 +377,7 @@ class _NewARHubState extends State<NewARHub> {
 
   void _takeScreenshot() async {
     onTakeScreenshot();
-    history_globals.addRecord("pressed", history_globals.getUsername(),
+    app_globals.addRecord("pressed", app_globals.getUsername(),
         DateTime.now(), 'take screenshot');
   }
 
@@ -402,13 +405,13 @@ class _NewARHubState extends State<NewARHub> {
       Navigator.pop(context);
       Navigator.pop(context);
     }
-    history_globals.addRecord("pressed", history_globals.getUsername(),
+    app_globals.addRecord("pressed", app_globals.getUsername(),
         DateTime.now(), 'return to section');
     await FirebaseFirestore.instance
         .collection("History_Logging")
         .add({
           'title': "Returning to the survey section",
-          'username': history_globals.getUsername(),
+          'username': app_globals.getUsername(),
           'time': DateTime.now(),
         })
         .then((value) => debugPrint("Record has been added"))

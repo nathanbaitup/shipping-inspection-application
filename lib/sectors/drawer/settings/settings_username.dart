@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
 
 import '../../../utils/app_colours.dart';
+import '../../home/home_hub.dart';
 
 class SettingsUsername extends StatefulWidget {
   const SettingsUsername({Key? key}) : super(key: key);
@@ -91,14 +93,14 @@ class _SettingsUsernameState extends State<SettingsUsername> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content:
-                                      Text('Processing username change...')),
+                              SnackBar(
+                                backgroundColor: globals.getSnackBarBgColour(),
+                                content: const Text('Processing username change...')),
                             );
                             globals.addRecord("settings-username-change", globals.getUsername(), DateTime.now(), username);
                             setState(() {
                               globals.setUsername(username);
-                              //usernameNotifier.value = username;
+                              usernameNotifier.value = username;
                             });
                             updateCurrentUsername();
                             globals.savePrefs();

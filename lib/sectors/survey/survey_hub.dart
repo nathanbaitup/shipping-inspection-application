@@ -11,6 +11,7 @@ import '../drawer/drawer_globals.dart' as app_globals;
 import '../camera/qr_scanner_controller.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
+
 late String vesselID;
 
 class SurveyHub extends StatefulWidget {
@@ -221,15 +222,6 @@ class _SurveyHubState extends State<SurveyHub> {
                               sectionMethod: "lifesaving"),
                           SurveySectionWidget(
                               sectionName: "Engine Room",
-                              sectionMethod: "engine"),
-                          SurveySectionWidget(
-                              sectionName: "Placeholder",
-                              sectionMethod: "engine"),
-                          SurveySectionWidget(
-                              sectionName: "Placeholder",
-                              sectionMethod: "engine"),
-                          SurveySectionWidget(
-                              sectionName: "Placeholder",
                               sectionMethod: "engine"),
                         ],
                       ),

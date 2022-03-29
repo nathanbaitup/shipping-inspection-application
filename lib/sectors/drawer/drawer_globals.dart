@@ -88,6 +88,16 @@ Color getSettingsBgColour() {
   return settingsBgColour;
 }
 
+Color getSnackBarBgColour() {
+  Color settingsBgColour;
+  if (darkModeEnabled) {
+    settingsBgColour = Colors.white;
+  } else {
+    settingsBgColour =  Colors.black54;
+  }
+  return settingsBgColour;
+}
+
 // --- STYLING GLOBALS
 // -- For usage in History Settings and the Dark Mode Switch
 
