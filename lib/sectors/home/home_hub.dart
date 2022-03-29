@@ -10,6 +10,7 @@ import 'package:shipping_inspection_app/sectors/home/home_channel.dart';
 import 'package:shipping_inspection_app/sectors/home/home_percent.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import '../../main.dart';
+import '../../shared/history_cleardialog.dart';
 import '../../shared/history_format.dart';
 import '../../shared/loading.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -249,38 +250,44 @@ class _HomeHubState extends State<HomeHub> {
                                       child: TextButton(
                                         style: TextButton.styleFrom(
                                           primary: Colors.white,
-                                          backgroundColor: AppColours.appRed,
+                                          backgroundColor: app_globals.getButtonColourCheck(
+                                              AppColours.appRed, app_globals.historyEnabled),
                                           elevation: 2,
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(18.0)),
                                         ),
                                         child: const Text("Clear"),
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => const MenuHistory(),
-                                            ),
-                                          );
-                                        },
+                                        onPressed: app_globals.historyEnabled
+                                            ? () => {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return historyClearDialog(context);
+                                              },
+                                            )
+                                          }
+                                              : null
                                       ),
                                     ),
                                     TextButton(
                                       style: TextButton.styleFrom(
                                         primary: Colors.white,
-                                        backgroundColor: AppColours.appBlue,
+                                        backgroundColor: app_globals.getButtonColourCheck(
+                                            AppColours.appBlue, app_globals.historyEnabled),
                                         elevation: 2,
                                         shape: const CircleBorder(),
                                       ),
                                       child: const Icon(Icons.history),
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => const MenuHistory(),
-                                          ),
-                                        );
-                                      },
+                                        onPressed: app_globals.historyEnabled
+                                          ? () => {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                              builder: (context) => const MenuHistory(),
+                                              ),
+                                            ),
+                                        }
+                                            : null
                                     ),
                                   ],
                                 ),
