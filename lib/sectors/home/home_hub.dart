@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_history.dart';
@@ -421,7 +423,7 @@ class _ActiveSurveysWidgetState extends State<ActiveSurveysWidget> {
           questionID: questionID,
         ),
       ),
-    );
+    ).then(onGoBack);
   }
 
   // Loads a list of all the answered questions from firebase to see the total
@@ -444,30 +446,28 @@ class _ActiveSurveysWidgetState extends State<ActiveSurveysWidget> {
       // Queries the snapshot to retrieve the section ID, the number of questions,
       // in the section and the number of answered questions and saves to
       // questionTotals.
-      for (var document in querySnapshot.docs) {
-        questionTotals.add(QuestionTotals(document['sectionID'],
-            document['numberOfQuestions'], document['answeredQuestions']));
-      }
-
-      // Sets the total amount of questions questions from Firebase.
-      for (var i = 0; i < questionTotals.length; i++) {
-        if (questionTotals[i].sectionID == sectionID) {
-          totalAnswered++;
-        }
-      }
-      // Sets the total number of questions and answered amount.
       setState(() {
+        for (var document in querySnapshot.docs) {
+          questionTotals.add(QuestionTotals(document['sectionID'],
+              document['numberOfQuestions'], document['answeredQuestions']));
+        }
+
+        // Sets the total amount of questions questions from Firebase.
+        for (var i = 0; i < questionTotals.length; i++) {
+          if (questionTotals[i].sectionID == sectionID) {
+            totalAnswered++;
+          }
+        }
+        // Sets the total number of questions and answered amount.
         numberOfQuestions = questionBrain.getQuestionAmount(sectionID);
         answeredQuestions = totalAnswered;
-      });
 
-      // Checks if the number of answered questions is greater than the total
-      // number of questions and sets the answered questions to the total
-      // number of questions.
-      if (answeredQuestions > numberOfQuestions) {
-        answeredQuestions = numberOfQuestions;
-      }
-      setState(() {
+        // Checks if the number of answered questions is greater than the total
+        // number of questions and sets the answered questions to the total
+        // number of questions.
+        if (answeredQuestions > numberOfQuestions) {
+          answeredQuestions = numberOfQuestions;
+        }
         _loading = false;
       });
     } catch (error) {
@@ -481,4 +481,13 @@ class _ActiveSurveysWidgetState extends State<ActiveSurveysWidget> {
     });
     return questionTotals;
   }
+
+  // REFERENCE accessed 29/03/2022 https://www.nstack.in/blog/flutter-refresh-on-navigator-pop-or-go-back/
+  // Used to update the state of the progress widget once a survey section has been
+  // updated, representing the current amount of responses.
+  FutureOr<dynamic> onGoBack(dynamic value) {
+    _getResultsFromFirestore(widget.sectionID);
+    setState(() {});
+  }
+  // END REFERENCE
 }
