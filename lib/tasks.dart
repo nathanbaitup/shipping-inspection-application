@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/tasks/taskdata.dart';
-import 'package:shipping_inspection_app/sectors/tasks/taskhandler.dart';
 import 'package:shipping_inspection_app/utils/back_button.dart';
 import 'package:shipping_inspection_app/utils/taskcontainer.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
@@ -50,7 +49,7 @@ class _TasksPageState extends State<TasksPage> {
     AlertDialog alert = AlertDialog(
       title: const Text("Add New Task", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22)),
       backgroundColor: const Color(0xFFF0EBFA),
-      
+
 
       content: Form(
         key: _taskFormKey,
@@ -59,6 +58,8 @@ class _TasksPageState extends State<TasksPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextFormField(
+            minLines: 1,
+            maxLines: 2,
             style: const TextStyle(color: Colors.black),
             controller: _taskTitle,
             validator: (value) {
@@ -91,7 +92,7 @@ class _TasksPageState extends State<TasksPage> {
 
           TextFormField(
             minLines: 4,
-            maxLines: 4,
+            maxLines: 5,
             style: const TextStyle(color: Colors.black),
 
             controller: _taskDescription,
