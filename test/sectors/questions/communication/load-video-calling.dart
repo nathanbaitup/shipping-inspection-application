@@ -8,8 +8,8 @@ import 'package:shipping_inspection_app/sectors/communication/channel_selection.
 Widget buildTestWidget(Widget widget) {
   return MediaQuery(
     data: const MediaQueryData(),
-    child: Form(
-      child: widget,
+    child: MaterialApp(
+      home: widget,
     ),
   );
 }
@@ -43,7 +43,7 @@ void main() {
 
           final finder = find.byType(MaterialButton);
 
-          expect(finder, findsOneWidget);
+          expect(finder, findsWidgets);
         },
       );
     },
