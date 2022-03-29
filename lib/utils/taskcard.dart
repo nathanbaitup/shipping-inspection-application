@@ -1,35 +1,40 @@
 import 'package:flutter/material.dart';
 
-class TaskContainer extends StatelessWidget {
+class TaskCard extends StatelessWidget {
   final String title;
   final String subtitle;
-  final Color boxColor;
+  final Color cardColor;
 
-  const TaskContainer(
+  const TaskCard(
       {Key? key,
       required this.title,
       required this.subtitle,
-      required this.boxColor})
+      required this.cardColor})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10.0),
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
+    return Card(
+      color: cardColor,
+      margin: const EdgeInsets.only(top: 5, bottom: 10),
+
+
+      child: Padding(
+      padding: const EdgeInsets.only(left: 10), child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          Padding(padding: EdgeInsets.only(top:10, bottom:10),child:
           Text(
+
             title,
             style: const TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.w700,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10.0),
-            child: Text(
+          ),
+          Padding(padding: EdgeInsets.only(top:10, bottom:10),child:
+          Text(
               subtitle,
               style: const TextStyle(
                 fontSize: 14.0,
@@ -37,11 +42,12 @@ class TaskContainer extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
             ),
-          )
+      ),
+
         ],
       ),
-      decoration: BoxDecoration(
-          color: boxColor, borderRadius: BorderRadius.circular(30.0)),
+    ),
+        elevation: (5),
     );
   }
 }

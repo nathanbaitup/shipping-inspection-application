@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/tasks/taskdata.dart';
 import 'package:shipping_inspection_app/utils/back_button.dart';
-import 'package:shipping_inspection_app/utils/taskcontainer.dart';
+import 'package:shipping_inspection_app/utils/taskcard.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:provider/provider.dart';
 
@@ -211,29 +211,29 @@ class _TasksPageState extends State<TasksPage> {
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   children: <Widget>[
-                    TaskContainer(
+                    TaskCard(
                       title: 'IMO Guidelines review',
                       subtitle:
                           'Review the inspection conventions given by International Maritime Organization (IMO) to keep on top of my duties',
-                      boxColor: LightColors.sLightYellow2,
+                      cardColor: LightColors.sLightYellow2,
                     ),
-                    TaskContainer(
+                    TaskCard(
                       title: 'Engine Bay',
                       subtitle:
                           'Complete engine bay inspection for the SS Milwaukee',
-                      boxColor: LightColors.sLavender,
+                      cardColor: LightColors.sLavender,
                     ),
-                  TaskContainer(
+                  TaskCard(
                        title: 'Call HQ',
                        subtitle:
                            'Contact HQ to request a revision of my duties for this week',
-                       boxColor: LightColors.sPalePink,
+                       cardColor: LightColors.sPalePink,
                      ),
-                     TaskContainer(
+                     TaskCard(
                        title: 'Collaborate with surveyor X',
                        subtitle:
                            'Meet up with surveyor X to ask about lifeboat inspection safety guidelines, as I have little experience in this field',
-                       boxColor: LightColors.sLightGreen,
+                       cardColor: LightColors.sLightGreen,
                      ),
                    ],
                 ),
