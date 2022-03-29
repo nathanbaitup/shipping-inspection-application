@@ -625,8 +625,8 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
                             // and adds the new value.
                             _answers.removeWhere((response) =>
                                 response.question == questionText);
-                            _answers.add(Answer(
-                                questionText, answer, questionID, questionNumber, _issueFlagged));
+                            _answers.add(Answer(questionText, answer,
+                                questionID, questionNumber, _issueFlagged));
                           });
                         },
                         decoration: InputDecoration(
