@@ -10,6 +10,7 @@ import 'package:shipping_inspection_app/sectors/home/home_channel.dart';
 import 'package:shipping_inspection_app/sectors/home/home_percent.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import '../../main.dart';
+import '../../shared/history_format.dart';
 import '../../shared/loading.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import '../../utils/app_colours.dart';
@@ -284,6 +285,27 @@ class _HomeHubState extends State<HomeHub> {
                                   ],
                                 ),
                               ),
+
+                              Container(
+                                height: screenHeight * 0.45,
+                                padding: const EdgeInsets.only(
+                                  left: 5,
+                                  right: 5,
+                                ),
+                                margin: const EdgeInsets.only(
+                                  left: 20,
+                                  right: 20,
+                                  bottom: 20,
+                                ),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: AppColours.appPurple),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(20),
+                                  ),
+                                ),
+                                child: getHistoryBody()
+                              ),
+
                             ]
                         )
                     )
@@ -351,12 +373,6 @@ List<Widget> getHomeChannels() {
             fontStyle: FontStyle.italic),),
     ];
   }
-  // for(int i = 0; i < app_globals.savedChannelSum; i++) {
-  //   print(i.toString());
-  //   homeChannels.add(
-  //     HomeChannel(id: i)
-  //   );
-  // }
   return homeChannels;
 }
 
