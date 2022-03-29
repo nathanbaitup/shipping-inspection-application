@@ -19,6 +19,7 @@ const agoraToken = tokenAgora;
 
 // Uses the question brain to load questions to display to the surveyor / technical expert.
 QuestionBrain questionBrain = QuestionBrain();
+
 // Creates the default selection for the drop down list and automatically changes
 // based on the user selection to update the questions being displayed.
 String surveySection = 'noSelection';
@@ -84,6 +85,7 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
     await engine.joinChannel(widget.agoraToken, widget.channelName, null, 0);
     // add 'widget.channelName' to pass channel name across from selection screen beforehand
     // print('HELLO THIS IS FROM THE CALLING SCREEN ' + widget.channelName);
+
   }
 
   // UI elements
@@ -110,7 +112,7 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border.all(
-                      color: LightColors.sPurple,
+                      color: AppColours.appPurple,
                     ),
                     borderRadius: const BorderRadius.all(Radius.circular(20)),
                   ),
@@ -242,9 +244,7 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
                   builder: (context) => surveySection == 'noSelection'
                       ? SurveyHub(vesselID: widget.vesselID)
                       : SurveySection(
-                          vesselID: widget.vesselID,
-                          questionID: surveySection,
-                          capturedImages: const []),
+                          vesselID: widget.vesselID, questionID: surveySection),
                 ),
               );
             },
@@ -312,7 +312,7 @@ class _ChooseSurveySectionState extends State<ChooseSurveySection> {
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(
-                color: LightColors.sPurple,
+                color: AppColours.appPurple,
               ),
               borderRadius: const BorderRadius.all(Radius.circular(20))),
           child: Center(
@@ -322,7 +322,7 @@ class _ChooseSurveySectionState extends State<ChooseSurveySection> {
               value: surveySection,
               items: _dropdownItems(),
               style: const TextStyle(
-                color: LightColors.sPurple,
+                color: AppColours.appPurple,
               ),
               onChanged: (String? newSelection) {
                 setState(
@@ -346,13 +346,13 @@ class _ChooseSurveySectionState extends State<ChooseSurveySection> {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border.all(
-                      color: LightColors.sPurple,
+                      color: AppColours.appPurple,
                     ),
                     borderRadius: const BorderRadius.all(Radius.circular(20))),
                 child: Text(
                   "Question: " + displayQuestions[widgetQuestionID],
                   style: const TextStyle(
-                    color: LightColors.sPurple,
+                    color: AppColours.appPurple,
                   ),
                 ),
               ),
@@ -372,7 +372,9 @@ class _ChooseSurveySectionState extends State<ChooseSurveySection> {
   void _displaySurveyQuestions(String questionID) {
     setState(() {
       if (questionID == 'noSelection' || questionID == '') {
-        displayQuestions = ['No items to display'];
+        widgetQuestionID = 0;
+        displayQuestions = [];
+        displayQuestions.add('No items to display');
       } else {
         displayQuestions = questionBrain.getQuestions(questionID);
       }
