@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/sectors/communication/keys/credentials.dart';
 
-import '../../utils/colours.dart';
+import '../../utils/app_colours.dart';
 import '../questions/question_brain.dart';
 import '../survey/survey_hub.dart';
 import '../survey/survey_section.dart';
@@ -195,12 +195,12 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
             onPressed: _onCallToggleMute,
             child: Icon(
               muted ? Icons.mic_off : Icons.mic,
-              color: muted ? Colors.white : LightColors.sPurple,
+              color: muted ? Colors.white : AppColours.appPurple,
               size: 20.0,
             ),
             shape: const CircleBorder(),
             elevation: 2.0,
-            fillColor: muted ? LightColors.sPurple : Colors.white,
+            fillColor: muted ? AppColours.appPurple : Colors.white,
             padding: const EdgeInsets.all(12.0),
           ),
           //End call button.
@@ -221,7 +221,7 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
             onPressed: _onSwitchCamera,
             child: const Icon(
               Icons.switch_camera,
-              color: LightColors.sPurple,
+              color: AppColours.appPurple,
               size: 20.0,
             ),
             shape: const CircleBorder(),
@@ -250,7 +250,7 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
             },
             child: const Icon(
               Icons.list_rounded,
-              color: LightColors.sPurple,
+              color: AppColours.appPurple,
               size: 20.0,
             ),
             shape: const CircleBorder(),
