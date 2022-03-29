@@ -46,6 +46,26 @@ void main() {
           expect(finder, findsWidgets);
         },
       );
+
+      testWidgets(
+        'Testing input in the text field',
+        ((tester) async {
+          SystemChrome.setPreferredOrientations(
+              [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+          await Firebase.initializeApp();
+
+          await tester.pumpWidget(
+            buildTestWidget(
+              const ChannelNameSelection(
+                vesselID: "test",
+              ),
+            ),
+          );
+
+          await tester.enterText(find.byType(TextFormField), 'hi');
+        }),
+      );
     },
   );
 }

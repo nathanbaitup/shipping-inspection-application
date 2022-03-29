@@ -143,6 +143,8 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                           textColor: Colors.white,
                         ),
                         MaterialButton(
+                          key: const Key(
+                              'IDWALCommunicationGenerateChannelButton'),
                           onPressed: () {
                             channelGenerate();
                           },
