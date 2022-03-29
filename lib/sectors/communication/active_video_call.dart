@@ -49,6 +49,8 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
   bool _switch = false;
   bool muted = false;
 
+  bool issueFlagged = false;
+
   @override
   void initState() {
     super.initState();
@@ -111,34 +113,41 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
             Center(
               child: _switch ? _renderRemoteVideo() : _renderLocalPreview(),
             ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: AppColours.appPurple,
-                    ),
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _switch = !_switch;
-                      });
-                    },
-                    child: Center(
-                      child: _switch
-                          ? _renderLocalPreview()
-                          : _renderRemoteVideo(),
+            Column(
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                          color: AppColours.appPurple,
+                        ),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20)),
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _switch = !_switch;
+                          });
+                        },
+                        child: Center(
+                          child: _switch
+                              ? _renderLocalPreview()
+                              : _renderRemoteVideo(),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+                const SizedBox(height: 5),
+                _issueFlaggedButton()
+              ],
             ),
             _videoCallToolbar(),
 
@@ -253,7 +262,10 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
                   builder: (context) => surveySection == 'noSelection'
                       ? SurveyHub(vesselID: widget.vesselID)
                       : SurveySection(
-                          vesselID: widget.vesselID, questionID: surveySection),
+                          vesselID: widget.vesselID,
+                          questionID: surveySection,
+                          issueFlagged: issueFlagged,
+                        ),
                 ),
               );
             },
@@ -292,6 +304,51 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
   //This widget allows the user to  switch from front and rear camera.
   void _onSwitchCamera() {
     RtcEngine.instance?.switchCamera();
+  }
+
+  // Creates a button that allows a technical expert to flag if there is an issue when completing a survey.
+  Widget _issueFlaggedButton() {
+    return Row(
+      children: <Widget>[
+        Align(
+          alignment: Alignment.topLeft,
+          child: RawMaterialButton(
+            onPressed: () => _onIssueFlagged(),
+            elevation: 5.0,
+            fillColor: AppColours.appYellow,
+            shape: const CircleBorder(),
+            padding: const EdgeInsets.all(10.0),
+            child: const Icon(
+              Icons.warning_amber_rounded,
+              size: 35.0,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        issueFlagged
+            ? const Text('Issue Flagged',
+                style: TextStyle(
+                  color: Colors.white,
+                ))
+            : const Text(''),
+      ],
+    );
+  }
+
+  // Creates an int to update if an issue has been flagged or not.
+  int issueFlaggedCounter = 0;
+
+  // Checks if the issue button has been pressed to update an issue setting from true to false.
+  void _onIssueFlagged() async {
+    setState(() {
+      if (issueFlaggedCounter == 0) {
+        issueFlagged = true;
+        issueFlaggedCounter = 1;
+      } else {
+        issueFlagged = false;
+        issueFlaggedCounter = 0;
+      }
+    });
   }
 }
 

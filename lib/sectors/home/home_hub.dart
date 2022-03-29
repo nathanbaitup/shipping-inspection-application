@@ -421,6 +421,7 @@ class _ActiveSurveysWidgetState extends State<ActiveSurveysWidget> {
         builder: (context) => SurveySection(
           vesselID: vesselID,
           questionID: questionID,
+          issueFlagged: false,
         ),
       ),
     ).then(onGoBack);

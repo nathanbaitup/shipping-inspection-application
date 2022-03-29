@@ -24,7 +24,7 @@ import '../../utils/app_colours.dart';
 import '../questions/question_brain.dart';
 import '../survey/survey_section.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
-as app_globals;
+    as app_globals;
 import 'ar_onboarding_screen.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
@@ -64,6 +64,8 @@ class _NewARHubState extends State<NewARHub> {
   // Should be displayed based on its plane and axis.
   List<ARAnchor> anchors = [];
 
+  bool issueFlagged = false;
+
   //Create an instance of the ScreenshotController
   final ScreenshotController _screenshotController = ScreenshotController();
 
@@ -98,13 +100,42 @@ class _NewARHubState extends State<NewARHub> {
                 planeDetectionConfig:
                     PlaneDetectionConfig.horizontalAndVertical,
               ),
-              Row(
-                children: [
-                  ARQuestionWidget(
-                    arContent: widget.arContent,
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      ARQuestionWidget(
+                        arContent: widget.arContent,
+                      ),
+                      ARContentWidget(
+                        arContent: widget.arContent,
+                      ),
+                    ],
                   ),
-                  ARContentWidget(
-                    arContent: widget.arContent,
+                  Row(
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: RawMaterialButton(
+                          onPressed: () => _onIssueFlagged(),
+                          elevation: 5.0,
+                          fillColor: AppColours.appYellow,
+                          shape: const CircleBorder(),
+                          padding: const EdgeInsets.all(10.0),
+                          child: const Icon(
+                            Icons.warning_amber_rounded,
+                            size: 35.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      issueFlagged
+                          ? const Text('Issue Flagged',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ))
+                          : const Text(''),
+                    ],
                   ),
                 ],
               ),
@@ -351,8 +382,7 @@ class _NewARHubState extends State<NewARHub> {
       UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
       await uploadTask.then((value) => value.ref.getDownloadURL());
       // Creates a toast to say that data cannot be saved.
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: app_globals.getSnackBarBgColour(),
           content: const Text("Image Saved.")));
     } catch (e) {
@@ -377,8 +407,8 @@ class _NewARHubState extends State<NewARHub> {
 
   void _takeScreenshot() async {
     onTakeScreenshot();
-    app_globals.addRecord("pressed", app_globals.getUsername(),
-        DateTime.now(), 'take screenshot');
+    app_globals.addRecord("pressed", app_globals.getUsername(), DateTime.now(),
+        'take screenshot');
   }
 
   // Returns the user to the survey_section screen, ensuring they are returned to the section they are currently surveying.
@@ -395,6 +425,7 @@ class _NewARHubState extends State<NewARHub> {
           builder: (context) => SurveySection(
             vesselID: widget.vesselID,
             questionID: widget.questionID,
+            issueFlagged: issueFlagged,
           ),
         ),
         (Route<dynamic> route) => true,
@@ -403,10 +434,20 @@ class _NewARHubState extends State<NewARHub> {
       // will be two section screens open with the user needing to close both screens.
     } else {
       Navigator.pop(context);
-      Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SurveySection(
+            vesselID: widget.vesselID,
+            questionID: widget.questionID,
+            issueFlagged: issueFlagged,
+          ),
+        ),
+        (Route<dynamic> route) => true,
+      );
     }
-    app_globals.addRecord("pressed", app_globals.getUsername(),
-        DateTime.now(), 'return to section');
+    app_globals.addRecord("pressed", app_globals.getUsername(), DateTime.now(),
+        'return to section');
     await FirebaseFirestore.instance
         .collection("History_Logging")
         .add({
@@ -416,6 +457,22 @@ class _NewARHubState extends State<NewARHub> {
         })
         .then((value) => debugPrint("Record has been added"))
         .catchError((error) => debugPrint("Failed to add record: $error"));
+  }
+
+  // Creates an int to update if an issue has been flagged or not.
+  int issueFlaggedCounter = 0;
+
+  // Checks if the issue button has been pressed to update an issue setting from true to false.
+  void _onIssueFlagged() async {
+    setState(() {
+      if (issueFlaggedCounter == 0) {
+        issueFlagged = true;
+        issueFlaggedCounter = 1;
+      } else {
+        issueFlagged = false;
+        issueFlaggedCounter = 0;
+      }
+    });
   }
 }
 
