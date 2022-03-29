@@ -5,12 +5,13 @@ import 'package:shipping_inspection_app/sectors/drawer/drawer_help.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_totals.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
-import 'package:shipping_inspection_app/utils/colours.dart';
-import '../drawer/drawer_globals.dart' as history_global;
+import 'package:shipping_inspection_app/utils/app_colours.dart';
+import '../drawer/drawer_globals.dart' as app_globals;
 
-import '../../utils/qr_scanner_controller.dart';
+import '../camera/qr_scanner_controller.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
+
 late String vesselID;
 
 class SurveyHub extends StatefulWidget {
@@ -45,7 +46,7 @@ class _SurveyHubState extends State<SurveyHub> {
                       width: screenWidth,
                       padding: const EdgeInsets.all(0.0),
                       decoration: const BoxDecoration(
-                          color: LightColors.sLavender,
+                          color: AppColours.appLavender,
                           borderRadius: BorderRadius.only(
                             bottomRight: Radius.circular(30.0),
                             bottomLeft: Radius.circular(30.0),
@@ -69,7 +70,7 @@ class _SurveyHubState extends State<SurveyHub> {
                         Container(
                           padding: const EdgeInsets.all(10.0),
                           decoration: const BoxDecoration(
-                            color: LightColors.sPurple,
+                            color: AppColours.appPurple,
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
                           child: const Text(
@@ -84,7 +85,7 @@ class _SurveyHubState extends State<SurveyHub> {
                         TextButton(
                           style: TextButton.styleFrom(
                             primary: Colors.white,
-                            backgroundColor: LightColors.sDarkYellow,
+                            backgroundColor: AppColours.appYellow,
                             elevation: 2,
                             shape: const CircleBorder(),
                           ),
@@ -111,7 +112,7 @@ class _SurveyHubState extends State<SurveyHub> {
                           child: TextButton(
                               style: TextButton.styleFrom(
                                 primary: Colors.white,
-                                backgroundColor: LightColors.sPurpleLL,
+                                backgroundColor: AppColours.appPurpleLighter,
                                 elevation: 2,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(18.0)),
@@ -141,7 +142,7 @@ class _SurveyHubState extends State<SurveyHub> {
                         Container(
                           padding: const EdgeInsets.all(10.0),
                           decoration: const BoxDecoration(
-                            color: LightColors.sPurple,
+                            color: AppColours.appPurple,
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
                           child: const Text(
@@ -156,7 +157,7 @@ class _SurveyHubState extends State<SurveyHub> {
                         TextButton(
                           style: TextButton.styleFrom(
                             primary: Colors.white,
-                            backgroundColor: LightColors.sDarkYellow,
+                            backgroundColor: AppColours.appYellow,
                             elevation: 2,
                             shape: const CircleBorder(),
                           ),
@@ -222,15 +223,6 @@ class _SurveyHubState extends State<SurveyHub> {
                           SurveySectionWidget(
                               sectionName: "Engine Room",
                               sectionMethod: "engine"),
-                          SurveySectionWidget(
-                              sectionName: "Placeholder",
-                              sectionMethod: "engine"),
-                          SurveySectionWidget(
-                              sectionName: "Placeholder",
-                              sectionMethod: "engine"),
-                          SurveySectionWidget(
-                              sectionName: "Placeholder",
-                              sectionMethod: "engine"),
                         ],
                       ),
                     ),
@@ -258,8 +250,18 @@ class _SurveyHubState extends State<SurveyHub> {
         ),
       );
       // Adds a record of the QR camera being opened to the history page.
-      history_global.addRecord(
-          'opened', history_global.getUsername(), DateTime.now(), 'QR camera');
+      app_globals.addRecord(
+          'opened', app_globals.getUsername(), DateTime.now(), 'QR camera');
+      await FirebaseFirestore.instance
+          .collection("History_Logging")
+          .add({
+            'title': "Opening QR camera",
+            'username': app_globals.getUsername(),
+            'time': DateTime.now(),
+            'permission': "QR camera",
+          })
+          .then((value) => debugPrint("Record has been added"))
+          .catchError((error) => debugPrint("Failed to add record: $error"));
     }
   }
 }
@@ -272,7 +274,6 @@ void _loadQuestion(BuildContext context, String questionID) {
       builder: (context) => SurveySection(
         vesselID: vesselID,
         questionID: questionID,
-        capturedImages: const [],
       ),
     ),
   );
@@ -317,7 +318,7 @@ class _SurveySectionWidgetState extends State<SurveySectionWidget> {
             bottom: 5,
           ),
           decoration: const BoxDecoration(
-            color: LightColors.sPurpleL,
+            color: AppColours.appPurpleLight,
             borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
           child: Center(
@@ -341,7 +342,7 @@ class _SurveySectionWidgetState extends State<SurveySectionWidget> {
             left: 10,
           ),
           decoration: const BoxDecoration(
-            color: LightColors.sPurpleL,
+            color: AppColours.appPurpleLight,
             borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
           child: Center(
@@ -358,7 +359,7 @@ class _SurveySectionWidgetState extends State<SurveySectionWidget> {
         child: TextButton(
           style: TextButton.styleFrom(
             primary: Colors.white,
-            backgroundColor: LightColors.sPurpleLL,
+            backgroundColor: AppColours.appPurpleLighter,
             elevation: 2,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),

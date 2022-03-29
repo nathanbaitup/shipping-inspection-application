@@ -1,15 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shipping_inspection_app/main.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_channels.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_sound.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_username.dart';
-import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
     as globals;
-import 'package:shipping_inspection_app/utils/task_list.dart';
 
+import '../../utils/app_colours.dart';
 import 'settings/settings_history.dart';
 
 class MenuSettings extends StatefulWidget {
@@ -65,29 +65,25 @@ class _MenuSettingsState extends State<MenuSettings> {
         appBar: AppBar(
           backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
-            color: LightColors.sPurple,
+            color: AppColours.appPurple,
           ),
         ),
         body: SettingsList(sections: [
           SettingsSection(
             title: Text(
               'Common',
-              style: TextStyle(
-                  color: globals.getTextColour(),
-                  decorationColor: LightColors.sPurple,
-                  decorationThickness: 2,
-                  decoration: TextDecoration.underline),
+              style: globals.getSettingsTitleStyle(),
             ),
             tiles: [
               SettingsTile(
                 title: const Text('Language'),
-                leading: const Icon(Icons.language, color: LightColors.sPurple),
+                leading: const Icon(Icons.language, color: AppColours.appPurple),
                 value: const Text('English'),
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile.navigation(
                 title: const Text('History'),
-                leading: const Icon(Icons.history, color: LightColors.sPurple),
+                leading: const Icon(Icons.history, color: AppColours.appPurple),
                 onPressed: (BuildContext context) {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) =>
@@ -97,7 +93,7 @@ class _MenuSettingsState extends State<MenuSettings> {
               SettingsTile.navigation(
                 title: const Text('Channels'),
                 leading:
-                    const Icon(Icons.video_call, color: LightColors.sPurple),
+                    const Icon(Icons.video_call, color: AppColours.appPurple),
                 onPressed: (BuildContext context) {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) =>
@@ -106,9 +102,9 @@ class _MenuSettingsState extends State<MenuSettings> {
               ),
               SettingsTile.switchTile(
                 title: const Text('Use System Theme'),
-                activeSwitchColor: LightColors.sPurple,
+                activeSwitchColor: AppColours.appPurple,
                 leading:
-                const Icon(Icons.phone_android, color: LightColors.sPurple),
+                const Icon(Icons.phone_android, color: AppColours.appPurple),
                 onPressed: (BuildContext context) {
                 },
                 initialValue: globals.systemThemeEnabled,
@@ -122,8 +118,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                       globals.darkModeEnabled = false;
                     }
                   } else {
-                  }
-                  subtextColourNotifier.value = globals.getSubtextColour(); //Changes subtext colour on home page
+                  }//Changes subtext colour on home page
                   setState(() {});
                   globals.savePrefs();
                   value = globals.systemThemeEnabled;
@@ -131,11 +126,11 @@ class _MenuSettingsState extends State<MenuSettings> {
               ),
               SettingsTile.switchTile(
                 title: const Text('Dark Mode'),
-                activeSwitchColor: LightColors.sPurple,
+                activeSwitchColor: AppColours.appPurple,
                 enabled: !globals.systemThemeEnabled,
                 leading:
                 Icon(Icons.dark_mode,
-                    color: globals.getIconColourCheck(!globals.systemThemeEnabled)),
+                    color: globals.getIconColourCheck(AppColours.appPurpleLight, !globals.systemThemeEnabled)),
                 onPressed: (BuildContext context) {
                 },
                 initialValue: globals.darkModeEnabled,
@@ -145,8 +140,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                     themeNotifier.value = ThemeMode.dark;
                   } else {
                     themeNotifier.value = ThemeMode.light;
-                  }
-                  subtextColourNotifier.value = globals.getSubtextColour(); //Changes subtext colour on home page
+                  }//Changes subtext colour on home page
                   setState(() {});
                   globals.savePrefs();
                   value = globals.darkModeEnabled;
@@ -157,17 +151,13 @@ class _MenuSettingsState extends State<MenuSettings> {
           SettingsSection(
             title: Text(
               'Account',
-              style: TextStyle(
-                  color: globals.getTextColour(),
-                  decorationColor: LightColors.sPurple,
-                  decorationThickness: 2,
-                  decoration: TextDecoration.underline),
+              style: globals.getSettingsTitleStyle(),
             ),
             tiles: [
               SettingsTile.navigation(
                 title: const Text('Username'),
                 leading:
-                    const Icon(Icons.text_format, color: LightColors.sPurple),
+                    const Icon(Icons.text_format, color: AppColours.appPurple),
                 value: Text(usernameSubtext),
                 onPressed: (BuildContext context) {
                   Navigator.of(context).push(MaterialPageRoute(
@@ -180,24 +170,32 @@ class _MenuSettingsState extends State<MenuSettings> {
           SettingsSection(
               title: Text(
                 'System',
-                style: TextStyle(
-                    color: globals.getTextColour(),
-                    decorationColor: LightColors.sPurple,
-                    decorationThickness: 2,
-                    decoration: TextDecoration.underline),
+                style: globals.getSettingsTitleStyle(),
               ),
               tiles: [
                 SettingsTile.switchTile(
                   title: const Text('Camera'),
-                  activeSwitchColor: LightColors.sPurple,
+                  activeSwitchColor: AppColours.appPurple,
                   leading:
-                      const Icon(Icons.camera_alt, color: LightColors.sPurple),
+                      const Icon(Icons.camera_alt, color: AppColours.appPurple),
                   onToggle: (bool value) async {
                     var status = await Permission.camera.status;
                     if (status.isDenied) {
                       if (await Permission.camera.request().isGranted) {
                         globals.addRecord("settings-permission-add",
                             globals.getUsername(), DateTime.now(), "Camera");
+                        await FirebaseFirestore.instance
+                            .collection("History_Logging")
+                            .add({
+                              'title': "Adding camera permissions",
+                              'username': globals.getUsername(),
+                              'time': DateTime.now(),
+                              'permission': 'Camera',
+                            })
+                            .then(
+                                (value) => debugPrint("Record has been added"))
+                            .catchError((error) =>
+                                debugPrint("Failed to add record: $error"));
                         cameraSwitch = true;
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -218,8 +216,8 @@ class _MenuSettingsState extends State<MenuSettings> {
                 ),
                 SettingsTile.switchTile(
                   title: const Text('Microphone'),
-                  activeSwitchColor: LightColors.sPurple,
-                  leading: const Icon(Icons.mic, color: LightColors.sPurple),
+                  activeSwitchColor: AppColours.appPurple,
+                  leading: const Icon(Icons.mic, color: AppColours.appPurple),
                   onToggle: (bool value) async {
                     var status = await Permission.microphone.status;
                     if (status.isDenied) {
@@ -229,6 +227,18 @@ class _MenuSettingsState extends State<MenuSettings> {
                             globals.getUsername(),
                             DateTime.now(),
                             "Microphone");
+                        await FirebaseFirestore.instance
+                            .collection("History_Logging")
+                            .add({
+                              'title': "Adding microphone permissions",
+                              'username': globals.getUsername(),
+                              'time': DateTime.now(),
+                              'permission': 'Microphone',
+                            })
+                            .then(
+                                (value) => debugPrint("Record has been added"))
+                            .catchError((error) =>
+                                debugPrint("Failed to add record: $error"));
                         micSwitch = true;
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -250,7 +260,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                 SettingsTile.navigation(
                   title: const Text('Sound'),
                   leading:
-                      const Icon(Icons.volume_up, color: LightColors.sPurple),
+                      const Icon(Icons.volume_up, color: AppColours.appPurple),
                   onPressed: (BuildContext context) {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) =>

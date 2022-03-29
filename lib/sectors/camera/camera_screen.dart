@@ -3,8 +3,8 @@ import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-import '../sectors/survey/survey_section.dart';
-import 'colours.dart';
+import '../../utils/app_colours.dart';
+import '../survey/survey_section.dart';
 
 // TODO: cleanup this dart file in a separate branch for code quality.
 class CameraScreen extends StatefulWidget {
@@ -63,8 +63,8 @@ class _CameraScreenState extends State<CameraScreen> {
     return MaterialApp(
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: LightColors.sPurple,
-          secondary: LightColors.sPurpleLL,
+          primary: AppColours.appPurple,
+          secondary: AppColours.appPurpleLighter,
         ),
       ),
       debugShowCheckedModeBanner: false,
@@ -76,7 +76,7 @@ class _CameraScreenState extends State<CameraScreen> {
             child: FloatingActionButton(
               heroTag: 'on_back',
               onPressed: () => Navigator.pop(context),
-              backgroundColor: LightColors.sPurpleLL,
+              backgroundColor: AppColours.appPurpleLighter,
               child: const Icon(Icons.arrow_back),
             ),
           ),
@@ -120,7 +120,7 @@ class _CameraScreenState extends State<CameraScreen> {
                       RawMaterialButton(
                         onPressed: () async => _captureImage(),
                         elevation: 5.0,
-                        fillColor: LightColors.sPurple,
+                        fillColor: AppColours.appPurple,
                         shape: const CircleBorder(),
                         padding: const EdgeInsets.all(15.0),
                         child: const Icon(
@@ -134,7 +134,7 @@ class _CameraScreenState extends State<CameraScreen> {
                       RawMaterialButton(
                         onPressed: () async => _saveAndReturnToSurvey(),
                         elevation: 5.0,
-                        fillColor: LightColors.sPurpleLL,
+                        fillColor: AppColours.appPurpleLighter,
                         shape: const CircleBorder(),
                         padding: const EdgeInsets.all(10.0),
                         child: const Icon(
@@ -193,6 +193,7 @@ class _CameraScreenState extends State<CameraScreen> {
           ),
         );
       });
+      _saveImagesToFirebaseStorage(_imageFile);
     } catch (error) {
       const AlertDialog(title: Text("Error capturing image"));
     }
@@ -200,13 +201,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   // Tries to save captured images to firebase and returns the surveyor to the survey.
   void _saveAndReturnToSurvey() async {
-    try {
-      _saveImagesToFirebaseStorage();
-    } catch (e) {
-      // Creates a toast to say that data cannot be saved.
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Unable to save data, please try again later.")));
-    }
+    _controller.dispose();
     // Deletes the camera from the navigation stack and reloads the survey section.
     Navigator.pop(context);
     Navigator.pop(context);
@@ -214,31 +209,35 @@ class _CameraScreenState extends State<CameraScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => SurveySection(
-            questionID: widget.questionID,
-            capturedImages: imageViewer,
-            vesselID: widget.vesselID),
+            questionID: widget.questionID, vesselID: widget.vesselID),
       ),
     );
   }
 
   // REFERENCE accessed 16/03/2022 https://stackoverflow.com/a/64764390
   // Used to save a file to firebase.
-  void _saveImagesToFirebaseStorage() async {
-    // Sets loading to true to save images to firebase.
-    loading = true;
-    for (var i = 0; i < imageViewer.length; i++) {
-      // Creates a filename for the image to save.
-      String filename = 'image-$i-${DateTime.now().toString()}.jpeg';
-      // Creates a firebase storage reference to save an image in a survey section
-      // sub folder under the vessel ID.
+  // Saves the taken image directly to firebase. Method can be refactored to save
+  // At a different location if required.
+  void _saveImagesToFirebaseStorage(File _imageFile) async {
+    // Creates a firebase storage reference to save an image in a survey section
+    // sub folder under the vessel ID.
+    try {
+      String _filename =
+          'image-camera-${DateTime.now().microsecondsSinceEpoch}';
       Reference firebaseStorageRef = FirebaseStorage.instance
           .ref()
-          .child('images/${widget.vesselID}/${widget.questionID}/$filename');
+          .child('images/${widget.vesselID}/${widget.questionID}/$_filename');
       // Uploads the images to the firebase storage.
       UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
       await uploadTask.then((value) => value.ref.getDownloadURL());
+      // Creates a toast to say that data cannot be saved.
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Image Saved.")));
+    } catch (e) {
+      // Creates a toast to say that data cannot be saved.
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Unable to save data, please try again.")));
     }
-    loading = false;
   }
 //END REFERENCE
 }

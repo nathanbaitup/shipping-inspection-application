@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shipping_inspection_app/utils/colours.dart';
+import '../../utils/app_colours.dart';
 import '../drawer/drawer_globals.dart' as globals;
 
 var content = List.filled(2, "", growable: false);
@@ -20,7 +20,7 @@ class _MenuHelpState extends State<MenuHelp> {
         appBar: AppBar(
           backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
-            color: LightColors.sPurple,
+            color: AppColours.appPurple,
           ),
         ),
         body: ListView(
