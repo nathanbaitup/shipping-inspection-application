@@ -47,7 +47,7 @@ class _TasksPageState extends State<TasksPage> {
 
     // Create AlertDialog
     AlertDialog alert = AlertDialog(
-      title: const Text("Add New Task", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22)),
+      title: const Text("Create New Task", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22)),
       backgroundColor: const Color(0xFFF0EBFA),
 
 
@@ -75,7 +75,7 @@ class _TasksPageState extends State<TasksPage> {
                 fillColor: Colors.white,
                 labelText: 'Title',
                 labelStyle: const TextStyle(
-                    color: Colors.black54, fontSize: 20, fontWeight: FontWeight.w500),
+                    color: Colors.black87, fontSize: 18, fontWeight: FontWeight.w500),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(color: Colors.grey, width: 2),
@@ -109,7 +109,7 @@ class _TasksPageState extends State<TasksPage> {
                 fillColor: Colors.white,
                 labelText: 'Description',
                 labelStyle: const TextStyle(
-                    color: Colors.black54, fontSize: 20, fontWeight: FontWeight.w500),
+                    color: Colors.black87, fontSize: 18, fontWeight: FontWeight.w500),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(color: Colors.grey, width: 2),
@@ -161,15 +161,14 @@ class _TasksPageState extends State<TasksPage> {
                       style: TextStyle(
                           fontSize: 27.0, fontWeight: FontWeight.w800),
                     ),
-                    Container(
+                    SizedBox(
                       width: 130,
                       height: 45.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: const Color(0xFF9370DB),
-
-                      ),
-                      child: TextButton(
+                      child: ElevatedButton(
+                        style:
+                      ElevatedButton.styleFrom(primary: const Color(0xFF9370DB), shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(10),
+                        ),),
                         onPressed: () {
                           // Navigator.push(
                           //   context,
@@ -183,12 +182,11 @@ class _TasksPageState extends State<TasksPage> {
                         child: const Center(
 
                           child: Text(
-                            'New task',
+                            'Add task',
                             style: TextStyle(
-
                                 fontWeight: FontWeight.w600,
                                 fontSize: 17,
-                              color: Colors.white,
+                                color: Colors.white,
                                 ),
                           ),
                         ),
