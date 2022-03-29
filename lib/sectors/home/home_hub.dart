@@ -384,27 +384,35 @@ class _ActiveSurveysWidgetState extends State<ActiveSurveysWidget> {
     if (_loading) {
       return const HomePercentLoad();
     } else {
-      return Row(
-        children: <Widget>[
-          GestureDetector(
-            child: HomePercentActive(
-              sectionName: widget.sectionName,
-              loadingPercent: percent,
-              sectionSubtitle: '$answeredQuestions of $numberOfQuestions',
-            ),
-            onTap: () {
-              _loadQuestion(widget.sectionID);
-              setState(() {});
-            },
-          ),
-          const SizedBox(width: 10.0),
-        ],
+      return ValueListenableBuilder<bool>(
+        valueListenable: homeStateNotifier,
+        builder: (_, homeState, __) {
+          return Row(
+            children: <Widget>[
+              GestureDetector(
+                child: HomePercentActive(
+                  sectionName: widget.sectionName,
+                  loadingPercent: percent,
+                  sectionSubtitle: '$answeredQuestions of $numberOfQuestions',
+                ),
+                onTap: () {
+                  _loadQuestion(widget.sectionID);
+                  setState(() {});
+                },
+              ),
+              const SizedBox(width: 10.0),
+            ],
+          );
+        },
       );
     }
   }
 
   // Takes the user to the required survey section when pressing on an active survey.
   void _loadQuestion(String questionID) {
+    app_globals.addRecord(
+        "opened", app_globals.getUsername(), DateTime.now(), 'camera');
+
     Navigator.push(
       context,
       MaterialPageRoute(

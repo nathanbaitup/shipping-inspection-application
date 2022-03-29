@@ -79,7 +79,10 @@ class _SurveySectionState extends State<SurveySection> {
             scale: 0.7,
             child: FloatingActionButton(
               heroTag: 'on_back',
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                Navigator.pop(context);
+                app_globals.homeStateUpdate();
+              },
               child: const Icon(Icons.arrow_back),
             ),
           ),
@@ -372,6 +375,7 @@ class _SurveySectionState extends State<SurveySection> {
         .then((value) => debugPrint("Record has been added"))
         .catchError((error) => debugPrint("Failed to add record: $error"));
     _saveResultsToFirestore();
+    app_globals.homeStateUpdate();
   }
 
   // Awaits for the Survey Responses collection and if it doesn't exist,
