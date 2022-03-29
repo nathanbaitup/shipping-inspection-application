@@ -87,6 +87,7 @@ Instructions on their use and documentation are provided below.
 | [flutter_spinkit][flutter_spinkit] | 5.1.0 | Provides loading animations to the application |
 | [internet_connection_checker][internet_connection_checker] | 0.0.1+3 | Provides the ability to check of the user is connected to the internet or not |
 | [onboarding][onboarding] | 3.0.0 | Provides the ability to display a splash screen giving instructions on how to use a specific part of the application. |
+| [screenshot][screenshot] | 1.2.3 | Used to capture and save the screenshot taking within the AR scene. |
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. Place all links to documentation used here to keep README clean. Ref: http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
@@ -110,4 +111,5 @@ Instructions on their use and documentation are provided below.
 [flutter_install]: <https://docs.flutter.dev/get-started/install>
 [internet_connection_checker]: <https://pub.dev/packages/internet_connection_checker>
 [onboarding]: <https://pub.dev/packages/onboarding>
+[screenshot]: <https://pub.dev/packages/screenshot>
 

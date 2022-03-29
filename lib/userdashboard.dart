@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:shipping_inspection_app/home.dart';
 import 'package:shipping_inspection_app/sectors/communication/channel_selection.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_feedback.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_history.dart';
+import 'package:shipping_inspection_app/sectors/home/home_hub.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_hub.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_settings.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_help.dart';
-import 'package:shipping_inspection_app/utils/colours.dart';
-import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
-
-import 'home.dart';
+import 'package:shipping_inspection_app/utils/app_colours.dart';
+import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
+  as app_globals;
 
 String vesselID = '';
 
@@ -36,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
-    Home(vesselID: vesselID),
+    HomeHub(vesselID: vesselID),
     SurveyHub(vesselID: vesselID),
     ChannelNameSelection(vesselID: vesselID),
     const Text(
@@ -63,9 +62,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
       appBar: AppBar(
         title: Text(widget.title),
-        titleTextStyle: const TextStyle(color: LightColors.sPurple),
+        titleTextStyle: const TextStyle(color: AppColours.appPurple),
         centerTitle: true,
-        backgroundColor: globals.getAppbarColour(),
+        backgroundColor: app_globals.getAppbarColour(),
         leading: Transform.scale(
           scale: 0.7,
           child: FloatingActionButton(
@@ -83,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListView(children: [
           DrawerHeader(
             decoration: const BoxDecoration(
-              color: LightColors.sPurple,
+              color: AppColours.appPurple,
             ),
             child: Container(
               alignment: Alignment.centerLeft,
@@ -99,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           ListTile(
               title: const Text("Help"),
-              iconColor: LightColors.sPurple,
+              iconColor: AppColours.appPurple,
               leading: IconButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -113,12 +112,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => const MenuHelp()));
               }),
-          const Divider(
-            color: Colors.grey,
-          ),
+          _drawerDivider(),
           ListTile(
               title: const Text("History"),
-              iconColor: LightColors.sPurple,
+              iconColor: AppColours.appPurple,
               leading: IconButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -132,12 +129,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => const MenuHistory()));
               }),
-          const Divider(
-            color: Colors.grey,
-          ),
+          _drawerDivider(),
           ListTile(
               title: const Text("Feedback"),
-              iconColor: LightColors.sPurple,
+              iconColor: AppColours.appPurple,
               leading: IconButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -153,12 +148,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (BuildContext context) =>
                         MenuFeedback(vesselID: vesselID)));
               }),
-          const Divider(
-            color: Colors.grey,
-          ),
+          _drawerDivider(),
           ListTile(
               title: const Text("Settings"),
-              iconColor: LightColors.sPurple,
+              iconColor: AppColours.appPurple,
               leading: IconButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -172,9 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => const MenuSettings()));
               }),
-          const Divider(
-            color: Colors.grey,
-          ),
+          _drawerDivider(),
         ]),
       ),
 
@@ -201,11 +192,24 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: LightColors.sPurple,
+        selectedItemColor: AppColours.appPurple,
         onTap: _onItemTapped,
       ),
 
       // -- Nav Bar End
     );
   }
+}
+
+SizedBox _drawerDivider() {
+  return SizedBox(
+    height: 8.0,
+    child: Center(
+      child: Container(
+        margin: const EdgeInsetsDirectional.only(start: 5.0, end: 5.0),
+        height: 1,
+        color: Colors.grey,
+      ),
+    ),
+  );
 }
