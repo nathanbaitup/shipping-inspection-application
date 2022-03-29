@@ -46,6 +46,7 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
   int _remoteUid = 0;
   bool _switch = false;
   bool muted = false;
+  bool _mainCameraShown = false;
 
   @override
   void initState() {
@@ -85,6 +86,13 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
     await engine.joinChannel(widget.agoraToken, widget.channelName, null, 0);
     // add 'widget.channelName' to pass channel name across from selection screen beforehand
     // print('HELLO THIS IS FROM THE CALLING SCREEN ' + widget.channelName);
+
+    if (!_mainCameraShown) {
+      await RtcEngine.instance?.switchCamera();
+      setState(() {
+        _mainCameraShown = true;
+      });
+    }
   }
 
   // UI elements
