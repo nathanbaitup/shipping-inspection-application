@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:shipping_inspection_app/sectors/history/record.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shipping_inspection_app/sectors/home/home_hub.dart';
 
 import '../../main.dart';
 import '../../utils/app_colours.dart';
@@ -144,6 +145,15 @@ String getUsername() {
 // --- HISTORY GLOBALS
 // -- For usage in History Logs + History Settings
 bool historyEnabled = true;
+
+bool getHistoryEnabled() {
+  return historyEnabled;
+}
+
+void toggleHistoryEnabled() {
+  historyEnabled = !historyEnabled;
+  historyEnabledNotifier.value = historyEnabled;
+}
 
 List<bool> historyPrefs = List<bool>.filled(6, true, growable: false);
 

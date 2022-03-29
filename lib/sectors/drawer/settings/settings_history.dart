@@ -48,8 +48,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                               initialValue: globals.historyEnabled,
                               activeSwitchColor: AppColours.appPurple,
                               onToggle: (bool value) {
-                                globals.historyEnabled =
-                                    !globals.historyEnabled;
+                                globals.toggleHistoryEnabled();
                                 if(globals.historyEnabled) {
                                   globals.addRecord(
                                       "settings-enable",
