@@ -32,138 +32,132 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          loading
-              ? const Loading()
-              : Form(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: Image.network(
-                            'https://www.idwalmarine.com/hs-fs/hubfs/IDWAL-Logo-CMYK-Blue+White.png?width=2000&name=IDWAL-Logo-CMYK-Blue+White.png'),
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 15)),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        child: TextFormField(
-                          controller: _channelNameController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                15,
-                              ),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: const BorderSide(
-                                width: 3,
-                                color: Colors.red,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                    color: LightColors.sPurpleLL, width: 2)),
-                            prefixIcon: const Icon(Icons.video_call),
-                            hintText: 'Channel Name',
-                            suffixIcon: Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween, // added line
-                              mainAxisSize: MainAxisSize.min, // added line
-                              children: <Widget>[
-                                IconButton(
-                                  icon: const Icon(Icons.save),
-                                  onPressed: () {
-                                    setState(() {
-                                      showOptionsDialog(
-                                          context, "Select Channel to Save");
-                                    });
-                                  },
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      showOptionsDialog(
-                                          context, "Select Channel to Paste");
-                                    });
-                                  },
-                                  icon: const Icon(Icons.more_vert),
-                                ),
-                              ],
-                            ),
+      body: loading
+          ? const Loading()
+          : Form(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: Image.asset('images/IDWAL-Logo.png'),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 15)),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: TextFormField(
+                      controller: _channelNameController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                            15,
                           ),
                         ),
-                      ),
-                      Container(
-                        alignment: Alignment.bottomCenter,
-                        padding: const EdgeInsets.only(top: 15),
-                        child: Column(
-                          children: [
-                            MaterialButton(
-                              onPressed: () async {
-                                //Here is the bool that checks if the application has internet
-                                final bool isConnected =
-                                    await InternetConnectionChecker()
-                                        .hasConnection;
-                                //If the application does have a internet connection it will go through this if statement
-                                //and allow the user to access the video call.
-                                if (isConnected) {
-                                  addChannelRecord();
-                                  _performChannelNameConnection(
-                                      _channelNameController.text);
-                                } else
-                                //Then if the user doesn't have any internet connection they will get a snack bar that will
-                                //tell them to turn on their internet.
-                                {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'You have no internet connection please check to see if you are connected to wifi!'),
-                                    ),
-                                  );
-                                }
-                              },
-                              color: LightColors.sPurple,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: const Text('Join/Create Channel'),
-                              textColor: Colors.white,
-                            ),
-                            MaterialButton(
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                            width: 3,
+                            color: Colors.red,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(
+                                color: LightColors.sPurpleLL, width: 2)),
+                        prefixIcon: const Icon(Icons.video_call),
+                        hintText: 'Channel Name',
+                        suffixIcon: Row(
+                          mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween, // added line
+                          mainAxisSize: MainAxisSize.min, // added line
+                          children: <Widget>[
+                            IconButton(
+                              icon: const Icon(Icons.save),
                               onPressed: () {
-                                channelClipboard(context);
+                                setState(() {
+                                  showOptionsDialog(
+                                      context, "Select Channel to Save");
+                                });
                               },
-                              color: LightColors.sPurpleL,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: const Text('Copy to Clipboard'),
-                              textColor: Colors.white,
                             ),
-                            MaterialButton(
+                            IconButton(
                               onPressed: () {
-                                channelGenerate();
+                                setState(() {
+                                  showOptionsDialog(
+                                      context, "Select Channel to Paste");
+                                });
                               },
-                              color: LightColors.sPurpleLL,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: const Text('Generate Channel'),
-                              textColor: Colors.white,
+                              icon: const Icon(Icons.more_vert),
                             ),
                           ],
                         ),
-                      )
-                    ],
+                      ),
+                    ),
                   ),
-                ),
-        ],
-      ),
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Column(
+                      children: [
+                        MaterialButton(
+                          onPressed: () async {
+                            //Here is the bool that checks if the application has internet
+                            final bool isConnected =
+                                await InternetConnectionChecker().hasConnection;
+                            //If the application does have a internet connection it will go through this if statement
+                            //and allow the user to access the video call.
+                            if (isConnected) {
+                              addChannelRecord();
+                              _performChannelNameConnection(
+                                  _channelNameController.text);
+                            } else
+                            //Then if the user doesn't have any internet connection they will get a snack bar that will
+                            //tell them to turn on their internet.
+                            {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'You have no internet connection please check to see if you are connected to wifi!'),
+                                ),
+                              );
+                            }
+                          },
+                          color: LightColors.sPurple,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          child: const Text('Join/Create Channel'),
+                          textColor: Colors.white,
+                        ),
+                        MaterialButton(
+                          onPressed: () {
+                            channelClipboard(context);
+                          },
+                          color: LightColors.sPurpleL,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          child: const Text('Copy to Clipboard'),
+                          textColor: Colors.white,
+                        ),
+                        MaterialButton(
+                          onPressed: () {
+                            channelGenerate();
+                          },
+                          color: LightColors.sPurpleLL,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          child: const Text('Generate Channel'),
+                          textColor: Colors.white,
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
     );
   }
 
