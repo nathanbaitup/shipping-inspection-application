@@ -25,6 +25,8 @@ QuestionBrain questionBrain = QuestionBrain();
 String surveySection = 'noSelection';
 List<String> displayQuestions = ['No items to display'];
 
+int _mainCameraShown = 0;
+
 class VideoCallFragment extends StatefulWidget {
   final String channelName;
   final String agoraToken;
@@ -46,7 +48,6 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
   int _remoteUid = 0;
   bool _switch = false;
   bool muted = false;
-  bool _mainCameraShown = false;
 
   @override
   void initState() {
@@ -80,19 +81,20 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
         _remoteUid = 0;
       });
     }));
+
+    // Checks if the main camera is being shown, if not flips the camera.
+    if (_mainCameraShown == 0) {
+      await RtcEngine.instance?.switchCamera();
+      setState(() {
+        _mainCameraShown = 1;
+      });
+    }
     // Enabling video within the engine with the permissions granted before hand.
     await engine.enableVideo();
     // CHANNEL CONNECTION INFORMATION
     await engine.joinChannel(widget.agoraToken, widget.channelName, null, 0);
     // add 'widget.channelName' to pass channel name across from selection screen beforehand
     // print('HELLO THIS IS FROM THE CALLING SCREEN ' + widget.channelName);
-
-    if (!_mainCameraShown) {
-      await RtcEngine.instance?.switchCamera();
-      setState(() {
-        _mainCameraShown = true;
-      });
-    }
   }
 
   // UI elements
@@ -378,6 +380,7 @@ class _ChooseSurveySectionState extends State<ChooseSurveySection> {
   // a section.
   void _displaySurveyQuestions(String questionID) {
     setState(() {
+      widgetQuestionID = 0;
       if (questionID == 'noSelection' || questionID == '') {
         widgetQuestionID = 0;
         displayQuestions = [];
