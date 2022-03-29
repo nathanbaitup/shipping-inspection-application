@@ -131,8 +131,8 @@ class _SurveySectionState extends State<SurveySection> {
                 // Opens the survey section in an AR view.
                 ElevatedButton(
                   onPressed: () async => _openARSection(),
-                  style: ElevatedButton.styleFrom(
-                      primary: AppColours.appYellow),
+                  style:
+                      ElevatedButton.styleFrom(primary: AppColours.appYellow),
                   child: const Text('Open section in AR'),
                 ),
                 const SizedBox(height: 20),
@@ -360,7 +360,8 @@ class _SurveySectionState extends State<SurveySection> {
 
   // Saves the images, and survey responses to the database.
   void _saveSurvey() async {
-    app_globals.addRecord("add", app_globals.getUsername(), DateTime.now(), pageTitle);
+    app_globals.addRecord(
+        "add", app_globals.getUsername(), DateTime.now(), pageTitle);
     await FirebaseFirestore.instance
         .collection("History_Logging")
         .add({
@@ -398,10 +399,9 @@ class _SurveySectionState extends State<SurveySection> {
         loading = false;
       });
       // Creates a toast to say save successful.
-      ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(
-              backgroundColor: app_globals.getSnackBarBgColour(),
-              content: const Text("Data successfully saved.")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: app_globals.getSnackBarBgColour(),
+          content: const Text("Data successfully saved.")));
     } catch (error) {
       // Creates a toast to say that data cannot be saved.
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -528,15 +528,8 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
   @override
   void initState() {
     super.initState();
-    _setupFocusNode();
     // Resets the answers list.
     _answers = [];
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    focusNode.dispose();
   }
 
   @override
@@ -582,7 +575,6 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
                   : Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
-                        focusNode: focusNode,
                         onChanged: (String value) {
                           setState(() {
                             questionText = widget.question;
@@ -590,6 +582,13 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
                             questionNumber =
                                 int.parse(widget.question.split('.')[0]);
                             answer = value;
+
+                            // Removes the answer from the answer list if a user updates the value
+                            // and adds the new value.
+                            _answers.removeWhere((response) =>
+                                response.question == questionText);
+                            _answers.add(Answer(questionText, answer,
+                                questionID, questionNumber));
                           });
                         },
                         decoration: InputDecoration(
@@ -609,24 +608,7 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
   }
 
   // Retrieve the user input for answering a question.
-  FocusNode focusNode = FocusNode();
   String questionText = '';
   String answer = '';
   int questionNumber = 0;
-
-  // Creates a focus node that checks if focus has been lost on a text field to
-  // add the user value to the answers list.
-  void _setupFocusNode() {
-    focusNode.addListener(() {
-      if (!focusNode.hasFocus) {
-        setState(() {
-          // Removes the answer from the answer list if a user updates the value
-          // and adds the new value.
-          _answers.removeWhere((value) => value.question == questionText);
-          _answers
-              .add(Answer(questionText, answer, questionID, questionNumber));
-        });
-      }
-    });
-  }
 }
