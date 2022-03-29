@@ -85,7 +85,6 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
     await engine.joinChannel(widget.agoraToken, widget.channelName, null, 0);
     // add 'widget.channelName' to pass channel name across from selection screen beforehand
     // print('HELLO THIS IS FROM THE CALLING SCREEN ' + widget.channelName);
-
   }
 
   // UI elements
