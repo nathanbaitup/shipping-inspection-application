@@ -29,12 +29,18 @@ List<Answer> _answers = [];
 // The retrieved answers from firebase to be displayed if there are responses.
 List<Answer> answersList = [];
 
+bool _issueFlagged = false;
+
 class SurveySection extends StatefulWidget {
   final String vesselID;
   // Images that have been taken within the AR view. This can be removed once AR screenshots can be saved to firebase.
   final String questionID;
+  final bool issueFlagged;
   const SurveySection(
-      {required this.questionID, required this.vesselID, Key? key})
+      {required this.questionID,
+      required this.vesselID,
+      required this.issueFlagged,
+      Key? key})
       : super(key: key);
 
   @override
@@ -55,7 +61,15 @@ class _SurveySectionState extends State<SurveySection> {
     _getResultsFromFirestore();
     // Adds a record of the user history.
     _addEnterRecord();
+    _initialiseIssueFlagged();
     super.initState();
+  }
+
+  void _initialiseIssueFlagged() {
+    setState(() {
+      _issueFlagged = widget.issueFlagged;
+    });
+    debugPrint("$_issueFlagged");
   }
 
   @override
@@ -116,6 +130,18 @@ class _SurveySectionState extends State<SurveySection> {
                 ),
                 const SizedBox(height: 20),
 
+                _issueFlagged
+                    ? const Text(
+                        "An issue has been flagged for this survey. Please contact a technical expert.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.red,
+                        ),
+                      )
+                    : const Text(""),
                 // Gives a description on the survey section.
                 Center(
                   child: Text(
@@ -131,8 +157,8 @@ class _SurveySectionState extends State<SurveySection> {
                 // Opens the survey section in an AR view.
                 ElevatedButton(
                   onPressed: () async => _openARSection(),
-                  style: ElevatedButton.styleFrom(
-                      primary: AppColours.appYellow),
+                  style:
+                      ElevatedButton.styleFrom(primary: AppColours.appYellow),
                   child: const Text('Open section in AR'),
                 ),
                 const SizedBox(height: 20),
@@ -140,7 +166,7 @@ class _SurveySectionState extends State<SurveySection> {
                 // Allows rest of the display to be scrollable to be able to see and answer the questions,
                 // add and save images.
                 Container(
-                  height: screenHeight * 0.6,
+                  height: screenHeight * 0.55,
                   padding: const EdgeInsets.only(
                     left: 20,
                     right: 20,
@@ -360,7 +386,8 @@ class _SurveySectionState extends State<SurveySection> {
 
   // Saves the images, and survey responses to the database.
   void _saveSurvey() async {
-    app_globals.addRecord("add", app_globals.getUsername(), DateTime.now(), pageTitle);
+    app_globals.addRecord(
+        "add", app_globals.getUsername(), DateTime.now(), pageTitle);
     await FirebaseFirestore.instance
         .collection("History_Logging")
         .add({
@@ -391,6 +418,7 @@ class _SurveySectionState extends State<SurveySection> {
           'question': _answers[i].question,
           'answer': _answers[i].answer,
           'questionNumber': _answers[i].questionNumber,
+          'issueFlagged': _issueFlagged,
           'timestamp': FieldValue.serverTimestamp()
         });
       }
@@ -398,10 +426,9 @@ class _SurveySectionState extends State<SurveySection> {
         loading = false;
       });
       // Creates a toast to say save successful.
-      ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(
-              backgroundColor: app_globals.getSnackBarBgColour(),
-              content: const Text("Data successfully saved.")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: app_globals.getSnackBarBgColour(),
+          content: const Text("Data successfully saved.")));
     } catch (error) {
       // Creates a toast to say that data cannot be saved.
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -415,8 +442,11 @@ class _SurveySectionState extends State<SurveySection> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            SurveySection(questionID: questionID, vesselID: widget.vesselID),
+        builder: (context) => SurveySection(
+          questionID: questionID,
+          vesselID: widget.vesselID,
+          issueFlagged: _issueFlagged,
+        ),
       ),
     );
     setState(() {
@@ -444,11 +474,11 @@ class _SurveySectionState extends State<SurveySection> {
       // add them to answersList.
       for (var document in querySnapshot.docs) {
         answersList.add(Answer(
-          document['question'],
-          document['answer'],
-          document['sectionID'],
-          document['questionNumber'],
-        ));
+            document['question'],
+            document['answer'],
+            document['sectionID'],
+            document['questionNumber'],
+            document['issueFlagged']));
       }
       setState(() {
         // REFERENCE accessed 20/03/2022 https://stackoverflow.com/a/53549197
@@ -457,6 +487,12 @@ class _SurveySectionState extends State<SurveySection> {
         answersList
             .sort((a, b) => a.questionNumber.compareTo(b.questionNumber));
         // END REFERENCE
+
+        if (answersList[0].issueFlagged = true) {
+          _issueFlagged = true;
+        } else {
+          _issueFlagged = false;
+        }
       });
     } catch (error) {
       debugPrint("Error: $error");
@@ -623,8 +659,8 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
           // Removes the answer from the answer list if a user updates the value
           // and adds the new value.
           _answers.removeWhere((value) => value.question == questionText);
-          _answers
-              .add(Answer(questionText, answer, questionID, questionNumber));
+          _answers.add(Answer(
+              questionText, answer, questionID, questionNumber, _issueFlagged));
         });
       }
     });
