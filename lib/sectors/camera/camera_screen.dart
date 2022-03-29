@@ -3,8 +3,8 @@ import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
+import '../../utils/app_colours.dart';
 import '../survey/survey_section.dart';
-import '../../utils/colours.dart';
 
 // TODO: cleanup this dart file in a separate branch for code quality.
 class CameraScreen extends StatefulWidget {
@@ -63,8 +63,8 @@ class _CameraScreenState extends State<CameraScreen> {
     return MaterialApp(
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: LightColors.sPurple,
-          secondary: LightColors.sPurpleLL,
+          primary: AppColours.appPurple,
+          secondary: AppColours.appPurpleLighter,
         ),
       ),
       debugShowCheckedModeBanner: false,
@@ -76,7 +76,7 @@ class _CameraScreenState extends State<CameraScreen> {
             child: FloatingActionButton(
               heroTag: 'on_back',
               onPressed: () => Navigator.pop(context),
-              backgroundColor: LightColors.sPurpleLL,
+              backgroundColor: AppColours.appPurpleLighter,
               child: const Icon(Icons.arrow_back),
             ),
           ),
@@ -120,7 +120,7 @@ class _CameraScreenState extends State<CameraScreen> {
                       RawMaterialButton(
                         onPressed: () async => _captureImage(),
                         elevation: 5.0,
-                        fillColor: LightColors.sPurple,
+                        fillColor: AppColours.appPurple,
                         shape: const CircleBorder(),
                         padding: const EdgeInsets.all(15.0),
                         child: const Icon(
@@ -134,7 +134,7 @@ class _CameraScreenState extends State<CameraScreen> {
                       RawMaterialButton(
                         onPressed: () async => _saveAndReturnToSurvey(),
                         elevation: 5.0,
-                        fillColor: LightColors.sPurpleLL,
+                        fillColor: AppColours.appPurpleLighter,
                         shape: const CircleBorder(),
                         padding: const EdgeInsets.all(10.0),
                         child: const Icon(

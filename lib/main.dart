@@ -1,10 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:shipping_inspection_app/userdashboard.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shipping_inspection_app/utils/app_colours.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
-    as globals;
+    as app_globals;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +29,7 @@ class _ShipAppState extends State<ShipApp> {
   @override
   void initState() {
     super.initState();
-    globals.loadPrefs();
+    app_globals.loadPrefs();
     // Requests camera and microphone permissions on app load.
     _requestPermissions();
   }
@@ -43,15 +43,15 @@ class _ShipAppState extends State<ShipApp> {
               title: 'Shipping Application',
               theme: ThemeData(
                   colorScheme: ColorScheme.fromSwatch().copyWith(
-                    primary: LightColors.sPurple,
-                    secondary: LightColors.sPurple,
+                    primary: AppColours.appPurple,
+                    secondary: AppColours.appPurple,
                     brightness: Brightness.light,
                     /* light theme settings */
                   )),
               darkTheme: ThemeData(
                   colorScheme: ColorScheme.fromSwatch().copyWith(
-                    primary: LightColors.sPurple,
-                    secondary: LightColors.sPurple,
+                    primary: AppColours.appPurple,
+                    secondary: AppColours.appPurple,
                     brightness: Brightness.dark,
                     /* dark theme settings */
                   )),
@@ -123,7 +123,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 width: screenWidth,
                 padding: const EdgeInsets.all(0.0),
                 decoration: const BoxDecoration(
-                  color: LightColors.sLavender,
+                  color: AppColours.appLavender,
                   borderRadius: BorderRadius.only(
                     bottomRight: Radius.circular(30.0),
                     bottomLeft: Radius.circular(30.0),
@@ -188,7 +188,7 @@ class _WelcomePageState extends State<WelcomePage> {
                               : null,
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                                color: globals.getTextColour(), width: 1),
+                                color: app_globals.getTextColour(), width: 1),
                           ),
                         ),
                       ),
@@ -215,7 +215,7 @@ class _WelcomePageState extends State<WelcomePage> {
                         }
                       },
                       style:
-                          ElevatedButton.styleFrom(primary: LightColors.sGreen),
+                          ElevatedButton.styleFrom(primary: AppColours.appPurple),
                       child: const Text('Continue to Application'),
                     ),
 

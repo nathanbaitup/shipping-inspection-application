@@ -3,15 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:shipping_inspection_app/sectors/history/record.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shipping_inspection_app/sectors/home/home_hub.dart';
 
 import '../../main.dart';
-import '../../utils/colours.dart';
+import '../../utils/app_colours.dart';
 
 // --- CALLS GLOBALS
 // -- For usage in Calls + Channels Settings
 List<String> savedChannels = List<String>.filled(9, " ", growable: false);
 
 bool savedChannelsEnabled = true;
+
+bool getSavedChannelsEnabled() {
+  return savedChannelsEnabled;
+}
+
+void toggleSavedChannelsEnabled() {
+  savedChannelsEnabled = !savedChannelsEnabled;
+  homeStateUpdate();
+}
 
 int savedChannelSum = 3;
 
@@ -88,6 +98,16 @@ Color getSettingsBgColour() {
   return settingsBgColour;
 }
 
+Color getSnackBarBgColour() {
+  Color settingsBgColour;
+  if (darkModeEnabled) {
+    settingsBgColour = Colors.white;
+  } else {
+    settingsBgColour =  Colors.black54;
+  }
+  return settingsBgColour;
+}
+
 // --- STYLING GLOBALS
 // -- For usage in History Settings and the Dark Mode Switch
 
@@ -114,7 +134,7 @@ Color getButtonColourCheck(Color enabledColour, bool condition) {
 TextStyle getSettingsTitleStyle() {
   return TextStyle(
       color: getTextColour(),
-      decorationColor: LightColors.sPurple,
+      decorationColor: AppColours.appPurple,
       decorationThickness: 2,
       decoration: TextDecoration.underline);
 }
@@ -134,6 +154,15 @@ String getUsername() {
 // --- HISTORY GLOBALS
 // -- For usage in History Logs + History Settings
 bool historyEnabled = true;
+
+bool getHistoryEnabled() {
+  return historyEnabled;
+}
+
+void toggleHistoryEnabled() {
+  historyEnabled = !historyEnabled;
+  homeStateUpdate();
+}
 
 List<bool> historyPrefs = List<bool>.filled(6, true, growable: false);
 
@@ -216,4 +245,8 @@ void loadPrefs() async {
   darkModeEnabled = prefs.getBool("dark-mode")?? false;
   systemThemeEnabled = prefs.getBool("system-theme")?? false;
   initTheme();
+}
+
+void homeStateUpdate() {
+  homeStateNotifier.value = !homeStateNotifier.value;
 }

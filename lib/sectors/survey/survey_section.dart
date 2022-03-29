@@ -11,10 +11,10 @@ import 'package:camera/camera.dart';
 import 'package:shipping_inspection_app/shared/loading.dart';
 import 'package:shipping_inspection_app/sectors/camera/camera_screen.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
-import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:shipping_inspection_app/sectors/ar/new_ar_hub.dart';
 import 'package:shipping_inspection_app/sectors/questions/answers.dart';
-import '../drawer/drawer_globals.dart' as globals;
+import '../../utils/app_colours.dart';
+import '../drawer/drawer_globals.dart' as app_globals;
 
 // The question brain to load all the questions.
 QuestionBrain questionBrain = QuestionBrain();
@@ -66,14 +66,14 @@ class _SurveySectionState extends State<SurveySection> {
 
     // If loading is required, then return the loading page.
     if (loading) {
-      return const Scaffold(body: Loading());
+      return const Scaffold(body: Loading(color: Colors.black));
     } else {
       return Scaffold(
         // Sets up the app bar to take the user back to the previous page
         appBar: AppBar(
           title: const Text('Idwal Vessel Inspection'),
-          backgroundColor: Colors.white,
-          titleTextStyle: const TextStyle(color: LightColors.sPurple),
+          backgroundColor: app_globals.getAppbarColour(),
+          titleTextStyle: const TextStyle(color: AppColours.appPurple),
           centerTitle: true,
           leading: Transform.scale(
             scale: 0.7,
@@ -95,7 +95,7 @@ class _SurveySectionState extends State<SurveySection> {
                   width: screenWidth,
                   padding: const EdgeInsets.all(0.0),
                   decoration: const BoxDecoration(
-                    color: LightColors.sLavender,
+                    color: AppColours.appPurple,
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(30.0),
                       bottomLeft: Radius.circular(30.0),
@@ -132,7 +132,7 @@ class _SurveySectionState extends State<SurveySection> {
                 ElevatedButton(
                   onPressed: () async => _openARSection(),
                   style: ElevatedButton.styleFrom(
-                      primary: LightColors.sDarkYellow),
+                      primary: AppColours.appYellow),
                   child: const Text('Open section in AR'),
                 ),
                 const SizedBox(height: 20),
@@ -163,7 +163,7 @@ class _SurveySectionState extends State<SurveySection> {
                               width: 100,
                               child: Divider(
                                 thickness: 1.5,
-                                color: LightColors.sGreen,
+                                color: AppColours.appPurple,
                               ),
                             ),
                             SizedBox(height: 10),
@@ -191,7 +191,7 @@ class _SurveySectionState extends State<SurveySection> {
                         if (imageViewer.isEmpty)
                           Container(
                             decoration: const BoxDecoration(
-                              color: LightColors.sGrey,
+                              color: AppColours.appPurpleLighter,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
                             ),
@@ -227,11 +227,14 @@ class _SurveySectionState extends State<SurveySection> {
                               onPressed: () async => _openCamera(),
                               child: const Text('Add Images'),
                               style: ElevatedButton.styleFrom(
-                                  primary: LightColors.sPurpleL),
+                                  primary: AppColours.appPurpleLight),
                             ),
                             const SizedBox(width: 20),
                             ElevatedButton(
-                              onPressed: () async => _saveSurvey(),
+                              onPressed: () async {
+                                _saveSurvey();
+                                app_globals.homeStateUpdate();
+                              },
                               child: const Text('Save Responses'),
                               style: ElevatedButton.styleFrom(
                                   primary: Colors.lightGreen),
@@ -261,13 +264,13 @@ class _SurveySectionState extends State<SurveySection> {
 
   // Function that adds a record of what a user has pressed onto the history page.
   Future<void> _addEnterRecord() async {
-    globals.addRecord(
-        "enter", globals.getUsername(), DateTime.now(), pageTitle);
+    app_globals.addRecord(
+        "enter", app_globals.getUsername(), DateTime.now(), pageTitle);
     await FirebaseFirestore.instance
         .collection("History_Logging")
         .add({
           'title': "Opening $pageTitle",
-          'username': globals.getUsername(),
+          'username': app_globals.getUsername(),
           'time': DateTime.now(),
         })
         .then((value) => debugPrint("Record has been added"))
@@ -281,14 +284,14 @@ class _SurveySectionState extends State<SurveySection> {
       await Permission.camera.request();
       debugPrint("Camera Permissions are required to access Camera.");
     } else {
-      globals.addRecord(
-          "opened", globals.getUsername(), DateTime.now(), 'camera');
+      app_globals.addRecord(
+          "opened", app_globals.getUsername(), DateTime.now(), 'camera');
 
       await FirebaseFirestore.instance
           .collection("History_Logging")
           .add({
             'title': "Opening camera",
-            'username': globals.getUsername(),
+            'username': app_globals.getUsername(),
             'time': DateTime.now(),
             'permission': 'camera',
           })
@@ -320,14 +323,14 @@ class _SurveySectionState extends State<SurveySection> {
       await Permission.camera.request();
       debugPrint("Camera Permissions are required to access QR Scanner");
     } else {
-      globals.addRecord("opened", globals.getUsername(), DateTime.now(),
+      app_globals.addRecord("opened", app_globals.getUsername(), DateTime.now(),
           '$pageTitle AR session through button press');
 
       await FirebaseFirestore.instance
           .collection("History_Logging")
           .add({
             'title': "Opening $pageTitle through AR session",
-            'username': globals.getUsername(),
+            'username': app_globals.getUsername(),
             'time': DateTime.now(),
             'permission': 'camera',
           })
@@ -357,12 +360,12 @@ class _SurveySectionState extends State<SurveySection> {
 
   // Saves the images, and survey responses to the database.
   void _saveSurvey() async {
-    globals.addRecord("add", globals.getUsername(), DateTime.now(), pageTitle);
+    app_globals.addRecord("add", app_globals.getUsername(), DateTime.now(), pageTitle);
     await FirebaseFirestore.instance
         .collection("History_Logging")
         .add({
           'title': "Adding $pageTitle survey results",
-          'username': globals.getUsername(),
+          'username': app_globals.getUsername(),
           'time': DateTime.now(),
         })
         .then((value) => debugPrint("Record has been added"))
@@ -396,11 +399,14 @@ class _SurveySectionState extends State<SurveySection> {
       });
       // Creates a toast to say save successful.
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Data successfully saved.")));
+         SnackBar(
+              backgroundColor: app_globals.getSnackBarBgColour(),
+              content: const Text("Data successfully saved.")));
     } catch (error) {
       // Creates a toast to say that data cannot be saved.
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Unable to save data, please try again.")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: app_globals.getSnackBarBgColour(),
+          content: const Text("Unable to save data, please try again.")));
     }
 
     // Reloads the page by popping the current page from the navigator and
@@ -543,7 +549,7 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
           margin: const EdgeInsets.all(10.0),
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
-            border: Border.all(color: LightColors.sPurple),
+            border: Border.all(color: AppColours.appPurple),
             borderRadius: const BorderRadius.all(
               Radius.circular(20),
             ),
@@ -590,7 +596,7 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
                           border: const UnderlineInputBorder(),
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
-                                color: globals.getTextColour(), width: 0.5),
+                                color: app_globals.getTextColour(), width: 0.5),
                           ),
                         ),
                       ),

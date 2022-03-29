@@ -8,14 +8,14 @@ import 'dart:math';
 import 'package:shipping_inspection_app/sectors/communication/active_video_call.dart';
 import 'package:shipping_inspection_app/sectors/communication/channel.dart';
 import 'package:shipping_inspection_app/shared/loading.dart';
-import 'package:shipping_inspection_app/utils/colours.dart';
+import '../../utils/app_colours.dart';
 import '../drawer/drawer_globals.dart' as globals;
 import 'package:dio/dio.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 final _channelNameController = TextEditingController();
 
-final ValueNotifier<bool> channelNotifier = ValueNotifier(globals.savedChannelsEnabled);
+final ValueNotifier<bool> channelNotifier = ValueNotifier(globals.getSavedChannelsEnabled());
 
 class ChannelNameSelection extends StatefulWidget {
   final String vesselID;
@@ -67,7 +67,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
         valueListenable: channelNotifier,
         builder: (_, channelEnableValue, __) {
           return loading
-              ? const Loading()
+              ? const Loading(color: Colors.black)
               : Form(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -110,7 +110,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: const BorderSide(
-                              color: LightColors.sPurpleLL, width: 2)),
+                              color: AppColours.appPurpleLighter, width: 2)),
                       prefixIcon: const Icon(Icons.video_call),
                       hintText: 'Channel Name',
                       suffixIcon: Row(
@@ -151,7 +151,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                             );
                           }
                         },
-                        color: LightColors.sPurple,
+                        color: AppColours.appPurple,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15)),
                         child: const Text('Join/Create Channel'),
@@ -161,7 +161,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                         onPressed: () {
                           channelClipboard(context);
                         },
-                        color: LightColors.sPurpleL,
+                        color: AppColours.appPurpleLight,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15)),
                         child: const Text('Copy to Clipboard'),
@@ -171,7 +171,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                         onPressed: () {
                           channelGenerate();
                         },
-                        color: LightColors.sPurpleLL,
+                        color: AppColours.appPurpleLighter,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15)),
                         child: const Text('Generate Channel'),
