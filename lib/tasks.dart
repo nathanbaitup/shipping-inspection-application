@@ -18,8 +18,12 @@ class _TasksPageState extends State<TasksPage> {
   late String title;
   late String description;
 
+  final _taskFormKey = GlobalKey<FormState>();
 
-  showAlertDialog(BuildContext context) {
+
+
+  showTasksDialog(BuildContext context) {
+
     TextEditingController _taskTitle = TextEditingController();
     TextEditingController _taskDescription = TextEditingController();
 
@@ -30,30 +34,39 @@ class _TasksPageState extends State<TasksPage> {
         ,
       ),
       onPressed: () {
-        // if (_taskform.currentState!.validate()) {
-        //   ScaffoldMessenger.of(context).showSnackBar(
-        //     const SnackBar(
-        //       content: Text('Processing feedback...'),
-        //     ),
-        //   );
-        //   UserFeedback newFeedback = UserFeedback(name.trim(),
-        //       email.trim(), feedback.trim(), sliderFeedback);
-        //   Navigator.of(context).pop();
-        // }
-        // ,
-      });
+        if (_taskFormKey.currentState!.validate()) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Processing feedback...'),
+            ),
+          );
+          TaskData addedTask = TaskData(title.trim(),
+              description.trim());
+        }
+      }
+      );
 
     // Create AlertDialog
     AlertDialog alert = AlertDialog(
       title: const Text("Add New Task"),
 
-      content:
+      content: Form(
+        key: _taskFormKey,
+      child:
       Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          TextField(
+          TextFormField(
             style: const TextStyle(color: Colors.black),
             controller: _taskTitle,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a title';
+              } else {
+                title = value;
+              }
+              return null;
+            },
             decoration: InputDecoration(
                 labelText: 'Title',
                 labelStyle: const TextStyle(
@@ -72,13 +85,20 @@ class _TasksPageState extends State<TasksPage> {
           ),
           const SizedBox(height: 15, width: 500),
 
-          TextField(
+          TextFormField(
             minLines: 4,
             maxLines: 4,
             style: const TextStyle(color: Colors.black),
             controller: _taskDescription,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a description';
+              } else {
+                description = value;
+              }
+              return null;
+            },
             decoration: InputDecoration(
-
                 labelText: 'Description',
                 labelStyle: const TextStyle(
                     color: Colors.black54, fontSize: 20, fontWeight: FontWeight.w500),
@@ -94,10 +114,12 @@ class _TasksPageState extends State<TasksPage> {
                 hintText: "Enter Description"),
           ),
         ],
+      )
       ),
       actions: [
         submitBtn,
       ],
+
     );
     // show the dialog
     showDialog(
@@ -147,7 +169,8 @@ class _TasksPageState extends State<TasksPage> {
                           //     builder: (context) => const AddTask(),
                           //   ),
                           // );
-                          showAlertDialog(context);
+
+                          showTasksDialog(context);
                         },
                         child: const Center(
 
