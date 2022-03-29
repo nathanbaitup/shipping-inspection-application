@@ -5,7 +5,7 @@ import 'package:shipping_inspection_app/sectors/history/record.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
-import '../../utils/colours.dart';
+import '../../utils/app_colours.dart';
 
 // --- CALLS GLOBALS
 // -- For usage in Calls + Channels Settings
@@ -114,7 +114,7 @@ Color getButtonColourCheck(Color enabledColour, bool condition) {
 TextStyle getSettingsTitleStyle() {
   return TextStyle(
       color: getTextColour(),
-      decorationColor: LightColors.sPurple,
+      decorationColor: AppColours.appPurple,
       decorationThickness: 2,
       decoration: TextDecoration.underline);
 }

@@ -4,7 +4,7 @@ import 'package:settings_ui/settings_ui.dart';
 import 'package:shipping_inspection_app/sectors/communication/channel_selection.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
     as globals;
-import 'package:shipping_inspection_app/utils/colours.dart';
+import '../../../utils/app_colours.dart';
 import '../../communication/channel.dart';
 
 class SettingsChannels extends StatefulWidget {
@@ -28,7 +28,7 @@ class _SettingsChannelsState extends State<SettingsChannels> {
             icon: Icon(
                 Icons.edit,
                 color: globals.getIconColourCheck(
-                    LightColors.sPurpleLL,
+                    AppColours.appPurpleLighter,
                     globals.savedChannelsEnabled),
             ),
             onPressed: globals.savedChannelsEnabled
@@ -44,7 +44,7 @@ class _SettingsChannelsState extends State<SettingsChannels> {
             icon: Icon(
                 Icons.delete,
                 color: globals.getIconColourCheck(
-                    LightColors.sPurpleLL,
+                    AppColours.appPurpleLighter,
                     globals.savedChannelsEnabled),
             ),
             onPressed: globals.savedChannelsEnabled
@@ -71,7 +71,7 @@ class _SettingsChannelsState extends State<SettingsChannels> {
           icon: Icon(
               Icons.add,
               color: globals.getIconColourCheck(
-                  LightColors.sPurpleLL,
+                  AppColours.appPurpleLighter,
                   globals.savedChannelsEnabled),
           ),
           onPressed: globals.savedChannelsEnabled
@@ -97,7 +97,7 @@ class _SettingsChannelsState extends State<SettingsChannels> {
       leading: Icon(
           Icons.bookmark,
           color: globals.getIconColourCheck(
-              LightColors.sPurple,
+              AppColours.appPurple,
               globals.savedChannelsEnabled)),
       trailing: optionsRow,
     );
@@ -183,7 +183,7 @@ class _SettingsChannelsState extends State<SettingsChannels> {
         appBar: AppBar(
           backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
-            color: LightColors.sPurple,
+            color: AppColours.appPurple,
           ),
         ),
 
@@ -197,9 +197,9 @@ class _SettingsChannelsState extends State<SettingsChannels> {
               SettingsTile.switchTile(
                 title: const Text("Saved Channels"),
                 leading: const Icon(Icons.save,
-                    color: LightColors.sPurple),
+                    color: AppColours.appPurple),
                 initialValue: globals.savedChannelsEnabled,
-                activeSwitchColor: LightColors.sPurple,
+                activeSwitchColor: AppColours.appPurple,
                 onToggle: (bool value) {
                   globals.savedChannelsEnabled = !globals.savedChannelsEnabled;
                   if(globals.savedChannelsEnabled) {
@@ -319,7 +319,7 @@ class _NumericStepButtonState extends State<NumericStepButton> {
           style: TextButton.styleFrom(
             primary: Colors.white,
             backgroundColor: globals.getButtonColourCheck(
-                LightColors.sPurpleL,
+                AppColours.appPurpleLight,
                 globals.savedChannelsEnabled
             ),
             elevation: 2,
@@ -349,7 +349,7 @@ class _NumericStepButtonState extends State<NumericStepButton> {
           style: TextButton.styleFrom(
             primary: Colors.white,
             backgroundColor: globals.getButtonColourCheck(
-                LightColors.sPurpleL,
+                AppColours.appPurpleLight,
                 globals.savedChannelsEnabled
             ),
             elevation: 2,

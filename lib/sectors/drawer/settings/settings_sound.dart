@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:perfect_volume_control/perfect_volume_control.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
   as globals;
+
+import '../../../utils/app_colours.dart';
 
 class SettingsSound extends StatefulWidget {
   const SettingsSound({Key? key}) : super(key: key);
@@ -39,7 +40,7 @@ class _SettingsSoundState extends State<SettingsSound> {
         appBar: AppBar(
           backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
-            color: LightColors.sPurple,
+            color: AppColours.appPurple,
           ),
         ),
 
@@ -57,7 +58,7 @@ class _SettingsSoundState extends State<SettingsSound> {
               Text(
                 currentVolumeRounded.toString(),
                 style: const TextStyle(
-                  color: LightColors.sPurple,
+                  color: AppColours.appPurple,
                   fontWeight: FontWeight.bold,
                 ),
               ),

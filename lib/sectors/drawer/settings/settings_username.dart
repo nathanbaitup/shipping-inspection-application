@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shipping_inspection_app/home.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
-import 'package:shipping_inspection_app/utils/colours.dart';
+
+import '../../../utils/app_colours.dart';
 
 class SettingsUsername extends StatefulWidget {
   const SettingsUsername({Key? key}) : super(key: key);
@@ -33,7 +33,7 @@ class _SettingsUsernameState extends State<SettingsUsername> {
         appBar: AppBar(
           backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
-            color: LightColors.sPurple,
+            color: AppColours.appPurple,
           ),
         ),
         body: Container(
@@ -55,7 +55,7 @@ class _SettingsUsernameState extends State<SettingsUsername> {
                                 Text(
                                   currentUsername,
                                   style: const TextStyle(
-                                    color: LightColors.sPurple,
+                                    color: AppColours.appPurple,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -98,7 +98,7 @@ class _SettingsUsernameState extends State<SettingsUsername> {
                             globals.addRecord("settings-username-change", globals.getUsername(), DateTime.now(), username);
                             setState(() {
                               globals.setUsername(username);
-                              usernameNotifier.value = username;
+                              //usernameNotifier.value = username;
                             });
                             updateCurrentUsername();
                             globals.savePrefs();

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../utils/app_colours.dart';
 import 'drawer_globals.dart' as globals;
-import 'package:shipping_inspection_app/utils/colours.dart';
 
 class MenuHistory extends StatefulWidget {
   const MenuHistory({Key? key}) : super(key: key);
@@ -294,7 +294,7 @@ class _MenuHistoryState extends State<MenuHistory> {
         appBar: AppBar(
           backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
-            color: LightColors.sPurple,
+            color: AppColours.appPurple,
           ),
         ),
         body: getBody());

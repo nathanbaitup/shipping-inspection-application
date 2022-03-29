@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:shipping_inspection_app/utils/colours.dart';
 
+import '../../../utils/app_colours.dart';
 import '../drawer_history.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
 
@@ -22,7 +22,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
         appBar: AppBar(
           backgroundColor: globals.getAppbarColour(),
           iconTheme: const IconThemeData(
-            color: LightColors.sPurple,
+            color: AppColours.appPurple,
           ),
         ),
 
@@ -43,9 +43,9 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                             SettingsTile.switchTile(
                               title: const Text("History Logging"),
                               leading: const Icon(Icons.history,
-                                  color: LightColors.sPurple),
+                                  color: AppColours.appPurple),
                               initialValue: globals.historyEnabled,
-                              activeSwitchColor: LightColors.sPurple,
+                              activeSwitchColor: AppColours.appPurple,
                               onToggle: (bool value) {
                                 globals.historyEnabled =
                                     !globals.historyEnabled;
@@ -80,10 +80,10 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                             title: const Text("Section Entering"),
                             leading: Icon(Icons.door_back_door_outlined,
                                 color: globals.getIconColourCheck(
-                                    LightColors.sPurpleL,
+                                    AppColours.appPurpleLight,
                                     globals.historyEnabled)),
                             initialValue: globals.historyPrefs[0],
-                            activeSwitchColor: LightColors.sPurple,
+                            activeSwitchColor: AppColours.appPurple,
                             enabled: globals.historyEnabled,
                             onToggle: (bool value) {
                               globals.changeHistoryPref(
@@ -98,10 +98,10 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                             title: const Text("Section Response"),
                             leading: Icon(Icons.newspaper,
                                 color: globals.getIconColourCheck(
-                                    LightColors.sPurpleL,
+                                    AppColours.appPurpleLight,
                                     globals.historyEnabled)),
                             initialValue: globals.historyPrefs[1],
-                            activeSwitchColor: LightColors.sPurple,
+                            activeSwitchColor: AppColours.appPurple,
                             enabled: globals.historyEnabled,
                             onToggle: (bool value) {
                               globals.changeHistoryPref(
@@ -115,10 +115,10 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                             title: const Text("Settings Change"),
                             leading: Icon(Icons.settings,
                                 color: globals.getIconColourCheck(
-                                    LightColors.sPurpleL,
+                                    AppColours.appPurpleLight,
                                     globals.historyEnabled)),
                             initialValue: globals.historyPrefs[2],
-                            activeSwitchColor: LightColors.sPurple,
+                            activeSwitchColor: AppColours.appPurple,
                             enabled: globals.historyEnabled,
                             onToggle: (bool value) {
                               globals.changeHistoryPref(
@@ -133,10 +133,10 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                             title: const Text("QR Usage"),
                             leading: Icon(Icons.qr_code,
                                 color: globals.getIconColourCheck(
-                                    LightColors.sPurpleL,
+                                    AppColours.appPurpleLight,
                                     globals.historyEnabled)),
                             initialValue: globals.historyPrefs[3],
-                            activeSwitchColor: LightColors.sPurple,
+                            activeSwitchColor: AppColours.appPurple,
                             enabled: globals.historyEnabled,
                             onToggle: (bool value) {
                               globals.changeHistoryPref(
@@ -151,10 +151,10 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                             title: const Text("Communications"),
                             leading: Icon(Icons.phone,
                                 color: globals.getIconColourCheck(
-                                    LightColors.sPurpleL,
+                                    AppColours.appPurpleLight,
                                     globals.historyEnabled)),
                             initialValue: globals.historyPrefs[4],
-                            activeSwitchColor: LightColors.sPurple,
+                            activeSwitchColor: AppColours.appPurple,
                             enabled: globals.historyEnabled,
                             onToggle: (bool value) {
                               globals.changeHistoryPref(
@@ -169,10 +169,10 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                             title: const Text("Channels"),
                             leading: Icon(Icons.videocam,
                                 color: globals.getIconColourCheck(
-                                    LightColors.sPurpleL,
+                                    AppColours.appPurpleLight,
                                     globals.historyEnabled)),
                             initialValue: globals.historyPrefs[5],
-                            activeSwitchColor: LightColors.sPurple,
+                            activeSwitchColor: AppColours.appPurple,
                             enabled: globals.historyEnabled,
                             onToggle: (bool value) {
                               globals.changeHistoryPref(
@@ -196,7 +196,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                             style: TextButton.styleFrom(
                               primary: Colors.white,
                               backgroundColor: globals.getButtonColourCheck(
-                                  LightColors.sPurpleL, globals.historyEnabled),
+                                  AppColours.appPurpleLight, globals.historyEnabled),
                               elevation: 2,
                               padding: const EdgeInsets.all(15.0),
                               shape: RoundedRectangleBorder(
@@ -218,7 +218,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                             style: TextButton.styleFrom(
                               primary: Colors.white,
                               backgroundColor: globals.getButtonColourCheck(
-                                  LightColors.sRed, globals.historyEnabled),
+                                  AppColours.appRed, globals.historyEnabled),
                               elevation: 2,
                               padding: const EdgeInsets.all(15.0),
                               shape: RoundedRectangleBorder(
@@ -243,7 +243,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                                                     },
                                                     style: ElevatedButton
                                                         .styleFrom(
-                                                      primary: LightColors.sRed,
+                                                      primary: AppColours.appRed,
                                                     ),
                                                     child: const Text('Clear')),
                                                 ElevatedButton(
@@ -253,7 +253,7 @@ class _SettingsHistoryState extends State<SettingsHistory> {
                                                     style: ElevatedButton
                                                         .styleFrom(
                                                       primary:
-                                                          LightColors.sPurpleL,
+                                                        AppColours.appPurpleLight,
                                                     ),
                                                     child:
                                                         const Text('Cancel')),

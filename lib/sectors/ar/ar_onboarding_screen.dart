@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:onboarding/onboarding.dart';
 
-import 'package:shipping_inspection_app/utils/colours.dart';
-import '../drawer/drawer_globals.dart' as globals;
+import '../../utils/app_colours.dart';
+import '../drawer/drawer_globals.dart' as app_globals;
 import '../questions/question_brain.dart';
 import 'new_ar_hub.dart';
 
@@ -40,8 +40,8 @@ class _ARIntroductionState extends State<ARIntroduction> {
     return MaterialApp(
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: LightColors.sPurple,
-          secondary: LightColors.sPurpleLL,
+          primary: AppColours.appPurple,
+          secondary: AppColours.appPurpleLighter,
         ),
       ),
       debugShowCheckedModeBanner: false,
@@ -49,7 +49,7 @@ class _ARIntroductionState extends State<ARIntroduction> {
         appBar: AppBar(
           title: const Text('Idwal Vessel Inspection'),
           backgroundColor: Colors.white,
-          titleTextStyle: const TextStyle(color: LightColors.sPurple),
+          titleTextStyle: const TextStyle(color: AppColours.appPurple),
           centerTitle: true,
           leading: Transform.scale(
             scale: 0.7,
@@ -62,7 +62,7 @@ class _ARIntroductionState extends State<ARIntroduction> {
         ),
         body: Onboarding(
           pages: _pagesList,
-          background: LightColors.sPurple,
+          background: AppColours.appPurple,
           onPageChange: (int pageIndex) => _buildButton(pageIndex),
           footer: Footer(
             footerMainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -154,7 +154,7 @@ class _ARIntroductionState extends State<ARIntroduction> {
     // Gives instructions on how the questions function.
     PageModel(
       widget: Container(
-        color: LightColors.sPurpleLL,
+        color: AppColours.appPurpleLighter,
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -202,7 +202,7 @@ class _ARIntroductionState extends State<ARIntroduction> {
     // Gives instructions on the animated figure.
     PageModel(
       widget: Container(
-        color: LightColors.sPurpleLL,
+        color: AppColours.appPurpleLighter,
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -244,7 +244,7 @@ class _ARIntroductionState extends State<ARIntroduction> {
     // Gives instructions on the AR navigation controls.
     PageModel(
       widget: Container(
-        color: LightColors.sPurpleLL,
+        color: AppColours.appPurpleLighter,
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -294,7 +294,7 @@ class _ARIntroductionState extends State<ARIntroduction> {
     // Gives information on the plane detection.
     PageModel(
       widget: Container(
-        color: LightColors.sPurpleLL,
+        color: AppColours.appPurpleLighter,
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -336,7 +336,7 @@ class _ARIntroductionState extends State<ARIntroduction> {
     // Gives information on adding and viewing a 3D model.
     PageModel(
       widget: Container(
-        color: LightColors.sPurpleLL,
+        color: AppColours.appPurpleLighter,
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -379,7 +379,7 @@ class _ARIntroductionState extends State<ARIntroduction> {
 
   // Opens the AR section parsing through the data parsed in by the survey section.
   void _openARSection() async {
-    globals.addRecord("opened", globals.getUsername(), DateTime.now(),
+    app_globals.addRecord("opened", app_globals.getUsername(), DateTime.now(),
         '$_pageTitle AR session through button press');
     List<String> arContentPush = [_pageTitle] + _questionsToAnswer;
     Navigator.push(
