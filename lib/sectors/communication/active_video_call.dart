@@ -8,12 +8,24 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shipping_inspection_app/sectors/communication/keys/credentials.dart';
 
 import '../../utils/app_colours.dart';
+import '../questions/question_brain.dart';
 import '../survey/survey_hub.dart';
+import '../survey/survey_section.dart';
 
 /// APP ID AND TOKEN
 /// TOKEN MUST BE CHANGED EVERY 24HRS, IF NOT WORKING GENERATE NEW TOKEN
 const appID = appIDAgora;
 const agoraToken = tokenAgora;
+
+// Uses the question brain to load questions to display to the surveyor / technical expert.
+QuestionBrain questionBrain = QuestionBrain();
+
+// Creates the default selection for the drop down list and automatically changes
+// based on the user selection to update the questions being displayed.
+String surveySection = 'noSelection';
+List<String> displayQuestions = ['No items to display'];
+
+int _mainCameraShown = 0;
 
 class VideoCallFragment extends StatefulWidget {
   final String channelName;
@@ -44,14 +56,14 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
-  // Requesting permissions if not already granted from the PermissionHandler dependecy
+  // Requesting permissions if not already granted from the PermissionHandler dependency
   Future<void> initPlatformState() async {
     await [Permission.camera, Permission.microphone].request();
 
     // Creating an instance of the Agora Engine.
     RtcEngineContext context = RtcEngineContext(appID);
     var engine = await RtcEngine.createWithContext(context);
-    // Event Handeling of memebers joining and leaving.
+    // Event Handling of members joining and leaving.
     engine.setEventHandler(RtcEngineEventHandler(
         joinChannelSuccess: (String channel, int uid, int elapsed) {
       // print('joinChannelSuccess $channel $uid');
@@ -69,6 +81,14 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
         _remoteUid = 0;
       });
     }));
+
+    // Checks if the main camera is being shown, if not flips the camera.
+    if (_mainCameraShown == 0) {
+      await RtcEngine.instance?.switchCamera();
+      setState(() {
+        _mainCameraShown = 1;
+      });
+    }
     // Enabling video within the engine with the permissions granted before hand.
     await engine.enableVideo();
     // CHANNEL CONNECTION INFORMATION
@@ -93,24 +113,44 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
             ),
             Align(
               alignment: Alignment.topLeft,
-              child: Container(
-                width: 100,
-                height: 100,
-                color: const Color.fromARGB(255, 255, 255, 255),
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _switch = !_switch;
-                    });
-                  },
-                  child: Center(
-                    child:
-                        _switch ? _renderLocalPreview() : _renderRemoteVideo(),
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: AppColours.appPurple,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _switch = !_switch;
+                      });
+                    },
+                    child: Center(
+                      child: _switch
+                          ? _renderLocalPreview()
+                          : _renderRemoteVideo(),
+                    ),
                   ),
                 ),
               ),
             ),
             _videoCallToolbar(),
+
+            // Displays a drop down list to view survey questions and cycle through them.
+            Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: const [ChooseSurveySection()],
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -120,7 +160,13 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
   // Local device viewfinder.
   Widget _renderLocalPreview() {
     if (_joined) {
-      return const rtc_local_view.SurfaceView();
+      // REFERENCE accessed 26/03/2022 https://stackoverflow.com/a/69237364
+      // Used to adda rounded edge to the camera view.
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: const rtc_local_view.SurfaceView(),
+      );
+      // END REFERENCE
     } else {
       return const Text(
         'Please join channel first',
@@ -129,12 +175,15 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
     }
   }
 
-  // Other particpant viewfinder.
+  // Other participant viewfinder.
   Widget _renderRemoteVideo() {
     if (_remoteUid != 0) {
-      return rtc_remove_view.SurfaceView(
-        uid: _remoteUid,
-        channelId: "test",
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: rtc_remove_view.SurfaceView(
+          uid: _remoteUid,
+          channelId: "test",
+        ),
       );
     } else {
       return const Text(
@@ -191,7 +240,9 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
             fillColor: Colors.white,
             padding: const EdgeInsets.all(12.0),
           ),
-          //This button takes the user to the survey hub page.
+
+          // Takes the user to the survey hub page if no selection has been made
+          // or takes the user to a specific survey section page to leave a response.
           RawMaterialButton(
             onPressed: () {
               SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
@@ -199,7 +250,10 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SurveyHub(vesselID: widget.vesselID),
+                  builder: (context) => surveySection == 'noSelection'
+                      ? SurveyHub(vesselID: widget.vesselID)
+                      : SurveySection(
+                          vesselID: widget.vesselID, questionID: surveySection),
                 ),
               );
             },
@@ -238,5 +292,135 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
   //This widget allows the user to  switch from front and rear camera.
   void _onSwitchCamera() {
     RtcEngine.instance?.switchCamera();
+  }
+}
+
+// Creates a widget that displays a dropdown list of all survey sections currently
+// within the application, and displays the related questions to the sections for the
+// technical expert and surveyor to see.
+class ChooseSurveySection extends StatefulWidget {
+  const ChooseSurveySection({Key? key}) : super(key: key);
+
+  @override
+  _ChooseSurveySectionState createState() => _ChooseSurveySectionState();
+}
+
+class _ChooseSurveySectionState extends State<ChooseSurveySection> {
+  int widgetQuestionID = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final double cWidth = MediaQuery.of(context).size.width * 0.58;
+    return Column(
+      children: <Widget>[
+        // The container with the drop down list to select a survey section.
+        Container(
+          width: cWidth,
+          margin: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(2.0),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                color: AppColours.appPurple,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(20))),
+          child: Center(
+            // The dropdown list taking the surveySection variable as the value
+            // to update the list of questions shown.
+            child: DropdownButton(
+              value: surveySection,
+              items: _dropdownItems(),
+              style: const TextStyle(
+                color: AppColours.appPurple,
+              ),
+              onChanged: (String? newSelection) {
+                setState(
+                  () {
+                    surveySection = newSelection!;
+                    _displaySurveyQuestions(newSelection);
+                  },
+                );
+              },
+            ),
+          ),
+        ),
+        // Creates a container widget below the dropdown list to display the area specific questions.
+        Column(
+          children: <Widget>[
+            InkWell(
+              child: Container(
+                width: cWidth,
+                margin: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: AppColours.appPurple,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(20))),
+                child: Text(
+                  "Question: " + displayQuestions[widgetQuestionID],
+                  style: const TextStyle(
+                    color: AppColours.appPurple,
+                  ),
+                ),
+              ),
+              onTap: () {
+                _updateWidgetQuestion();
+              },
+            )
+          ],
+        )
+      ],
+    );
+  }
+
+  // Checks if the dropdown value is set to noSelection and sets the displayQuestions
+  // list to the default text, else updates the list to include the questions for
+  // a section.
+  void _displaySurveyQuestions(String questionID) {
+    setState(() {
+      widgetQuestionID = 0;
+      if (questionID == 'noSelection' || questionID == '') {
+        widgetQuestionID = 0;
+        displayQuestions = [];
+        displayQuestions.add('No items to display');
+      } else {
+        displayQuestions = questionBrain.getQuestions(questionID);
+      }
+    });
+  }
+
+  // Returns a DropdownMenuItem of all questions within the Question Bank, with a
+  // text value of the question title, and a value of the question ID.
+  List<DropdownMenuItem<String>> _dropdownItems() {
+    List<DropdownMenuItem<String>> surveySections = [];
+    List<String> surveyIDs = questionBrain.getAllQuestionIDs();
+    // Adds the default no selection to the list.
+    surveySections.add(
+      const DropdownMenuItem(
+          child: Text("- Select a Survey -"), value: 'noSelection'),
+    );
+    // Iterates through the retrieval of all questions to get the question title
+    // and ID to display in the dropdown menu.
+    for (var questionID in surveyIDs) {
+      surveySections.add(
+        DropdownMenuItem(
+            child: Text(questionBrain.getPageTitle(questionID)),
+            value: questionID),
+      );
+    }
+    return surveySections;
+  }
+
+  // Allows for questions to be cycled through when interacted with.
+  void _updateWidgetQuestion() {
+    setState(() {
+      int newQuestion = widgetQuestionID + 1;
+      if (newQuestion > (displayQuestions.length - 1)) {
+        newQuestion = 0;
+      }
+      widgetQuestionID = newQuestion;
+    });
   }
 }
