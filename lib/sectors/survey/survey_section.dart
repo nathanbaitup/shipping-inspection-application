@@ -19,7 +19,7 @@ import '../drawer/drawer_globals.dart' as app_globals;
 // The question brain to load all the questions.
 QuestionBrain questionBrain = QuestionBrain();
 // Updates the state to a loading indicator if set to true.
-bool loading = false;
+bool _loading = false;
 // The section ID.
 late String questionID;
 // The questions relating to a specific section.
@@ -65,7 +65,7 @@ class _SurveySectionState extends State<SurveySection> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     // If loading is required, then return the loading page.
-    if (loading) {
+    if (_loading) {
       return const Scaffold(body: Loading(color: Colors.black));
     } else {
       return Scaffold(
@@ -379,7 +379,7 @@ class _SurveySectionState extends State<SurveySection> {
   // be stored and used in future app instances.
   void _saveResultsToFirestore() async {
     setState(() {
-      loading = true;
+      _loading = true;
     });
     try {
       for (var i = 0; i < _answers.length; i++) {
@@ -396,7 +396,7 @@ class _SurveySectionState extends State<SurveySection> {
         });
       }
       setState(() {
-        loading = false;
+        _loading = false;
       });
       // Creates a toast to say save successful.
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -420,7 +420,7 @@ class _SurveySectionState extends State<SurveySection> {
       ),
     );
     setState(() {
-      loading = false;
+      _loading = false;
     });
   }
 
@@ -428,7 +428,7 @@ class _SurveySectionState extends State<SurveySection> {
   // display the answer to the question within the survey section.
   Future<List<Answer>> _getResultsFromFirestore() async {
     setState(() {
-      loading = true;
+      _loading = true;
     });
     try {
       // Creates a instance reference to the Survey_Responses collection.
@@ -462,7 +462,7 @@ class _SurveySectionState extends State<SurveySection> {
       debugPrint("Error: $error");
     }
     setState(() {
-      loading = false;
+      _loading = false;
     });
     // returns the answer list.
     return answersList;
@@ -473,7 +473,7 @@ class _SurveySectionState extends State<SurveySection> {
   // to add all stored images to the image viewer.
   void _getImagesFromFirebase() async {
     setState(() {
-      loading = true;
+      _loading = true;
     });
     try {
       final Reference storageRef = FirebaseStorage.instance
@@ -487,11 +487,11 @@ class _SurveySectionState extends State<SurveySection> {
     } catch (error) {
       debugPrint("Error: $error");
       setState(() {
-        loading = false;
+        _loading = false;
       });
     }
     setState(() {
-      loading = false;
+      _loading = false;
     });
   }
 
