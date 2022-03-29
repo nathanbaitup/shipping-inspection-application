@@ -37,7 +37,12 @@ class HomePercentActive extends StatelessWidget {
               SizedBox(
                 height: screenHeight * 0.02,
               ),
-              Text(sectionName),
+              Text(
+                sectionName,
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
+              ),
               SizedBox(
                 height: screenHeight * 0.02,
               ),
@@ -64,6 +69,7 @@ class HomePercentActive extends StatelessWidget {
                 sectionSubtitle,
                 style: const TextStyle(
                   fontSize: 12,
+                  color: Colors.white,
                 ),
               ),
             ]));

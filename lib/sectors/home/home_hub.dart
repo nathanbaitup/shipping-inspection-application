@@ -1,6 +1,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shipping_inspection_app/sectors/drawer/drawer_settings.dart';
+import 'package:shipping_inspection_app/sectors/drawer/settings/settings_channels.dart';
+import 'package:shipping_inspection_app/sectors/home/home_channel.dart';
 import 'package:shipping_inspection_app/sectors/home/home_percent.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import '../../main.dart';
@@ -161,9 +165,45 @@ class _HomeHubState extends State<HomeHub> {
                                         ),
                                       ),
                                     ),
+                                    TextButton(
+                                      style: TextButton.styleFrom(
+                                        primary: Colors.white,
+                                        backgroundColor: AppColours.appGrey,
+                                        elevation: 2,
+                                        shape: const CircleBorder(),
+                                      ),
+                                      child: const Icon(Icons.settings),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const SettingsChannels(),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ],
                                 ),
                               ),
+
+                              Container(
+
+                                child: Column(
+                                  children: getHomeChannels()
+                                )
+                              )
+
+                              // Expanded(
+                              //   child: Container(
+                              //     padding: const EdgeInsets.only(
+                              //       bottom: 20,
+                              //       left: 20,
+                              //     ),
+                              //     child: Column(
+                              //       children: getHomeChannels()
+                              //     )
+                              //   )
+                              // )
                             ]
                         )
                     )
@@ -172,6 +212,56 @@ class _HomeHubState extends State<HomeHub> {
         );
     });
   }
+}
+
+List<Widget> getHomeChannels() {
+  List<Widget> homeChannels = [];
+
+  int currentChannel = 0;
+  for(int i = 0; i < (app_globals.savedChannelSum / 2); i++) {
+    List<Widget> rowContent = [];
+
+    print(app_globals.savedChannelSum);
+    print(currentChannel);
+    if(app_globals.savedChannelSum - 1 > currentChannel) {
+      rowContent = [
+        Container(
+            padding: const EdgeInsets.only(
+              bottom: 20,
+              left: 20,
+              right: 5,
+            ),
+            child: HomeChannel(id: currentChannel),
+        ),
+        const Spacer(),
+        Container(
+          padding: const EdgeInsets.only(
+            bottom: 20,
+            left: 5,
+            right: 20,
+          ),
+          child: HomeChannel(id: currentChannel + 1),
+        ),
+        const Spacer(),
+      ];
+    } else {
+      rowContent = [
+        const Spacer(),
+        HomeChannel(id: currentChannel),
+        const Spacer(),
+      ];
+    }
+
+    homeChannels.add(Row(children: rowContent));
+    currentChannel += 2;
+  }
+  // for(int i = 0; i < app_globals.savedChannelSum; i++) {
+  //   print(i.toString());
+  //   homeChannels.add(
+  //     HomeChannel(id: i)
+  //   );
+  // }
+  return homeChannels;
 }
 
 // Widget specifically for creating an active surveys box to be displayed in the state.
