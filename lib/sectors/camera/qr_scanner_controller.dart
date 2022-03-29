@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:shipping_inspection_app/shared/loading.dart';
 
+import '../../utils/app_colours.dart';
 import '../ar/new_ar_hub.dart';
 import '../drawer/drawer_globals.dart' as history_globals;
 import '../questions/question_brain.dart';
-import '../../utils/colours.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
 
@@ -65,12 +65,12 @@ class _QRScannerState extends State<QRScanner> {
   @override
   Widget build(BuildContext context) {
     return loading
-        ? const Loading()
+        ? const Loading(color: Colors.black)
         : MaterialApp(
             theme: ThemeData(
               colorScheme: ColorScheme.fromSwatch().copyWith(
-                primary: LightColors.sPurple,
-                secondary: LightColors.sPurpleLL,
+                primary: AppColours.appPurple,
+                secondary: AppColours.appPurpleLighter,
               ),
             ),
             debugShowCheckedModeBanner: false,
@@ -82,7 +82,7 @@ class _QRScannerState extends State<QRScanner> {
                   child: FloatingActionButton(
                     heroTag: 'on_back',
                     onPressed: () => Navigator.pop(context),
-                    backgroundColor: LightColors.sPurpleLL,
+                    backgroundColor: AppColours.appPurpleLighter,
                     child: const Icon(Icons.arrow_back),
                   ),
                 ),
@@ -95,7 +95,7 @@ class _QRScannerState extends State<QRScanner> {
                       key: qrKey,
                       onQRViewCreated: _onQRViewCreated,
                       overlay: QrScannerOverlayShape(
-                        borderColor: LightColors.sPurple,
+                        borderColor: AppColours.appPurple,
                         borderWidth: 10.0,
                         borderRadius: 10.0,
                         overlayColor: const Color.fromRGBO(0, 0, 0, 95),

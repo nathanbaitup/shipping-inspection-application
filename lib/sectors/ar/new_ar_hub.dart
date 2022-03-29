@@ -20,10 +20,11 @@ import 'package:ar_flutter_plugin/models/ar_anchor.dart';
 import 'package:ar_flutter_plugin/models/ar_hittest_result.dart';
 import 'package:ar_flutter_plugin/models/ar_node.dart';
 
-import '../../utils/colours.dart';
+import '../../utils/app_colours.dart';
 import '../questions/question_brain.dart';
 import '../survey/survey_section.dart';
-import '../drawer/drawer_globals.dart' as history_globals;
+import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
+as app_globals;
 import 'ar_onboarding_screen.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
@@ -91,7 +92,7 @@ class _NewARHubState extends State<NewARHub> {
         child: Scaffold(
             appBar: AppBar(
               title: Text(widget.arContent[0]),
-              backgroundColor: LightColors.sPurple,
+              backgroundColor: AppColours.appPurple,
             ),
             body: Stack(children: [
               ARView(
@@ -146,7 +147,7 @@ class _NewARHubState extends State<NewARHub> {
                       RawMaterialButton(
                         onPressed: () => _takeScreenshot(),
                         elevation: 5.0,
-                        fillColor: LightColors.sPurple,
+                        fillColor: AppColours.appPurple,
                         shape: const CircleBorder(),
                         padding: const EdgeInsets.all(15.0),
                         child: const Icon(
@@ -159,7 +160,7 @@ class _NewARHubState extends State<NewARHub> {
                       RawMaterialButton(
                         onPressed: () async => _returnToSectionScreen(),
                         elevation: 5.0,
-                        fillColor: LightColors.sPurpleL,
+                        fillColor: AppColours.appPurpleLight,
                         shape: const CircleBorder(),
                         padding: const EdgeInsets.all(10.0),
                         child: const Icon(
@@ -172,7 +173,7 @@ class _NewARHubState extends State<NewARHub> {
                       RawMaterialButton(
                         onPressed: () => _onReset(),
                         elevation: 5.0,
-                        fillColor: LightColors.sPurpleLL,
+                        fillColor: AppColours.appPurpleLighter,
                         shape: const CircleBorder(),
                         padding: const EdgeInsets.all(10.0),
                         child: const Icon(
@@ -382,7 +383,9 @@ class _NewARHubState extends State<NewARHub> {
       await uploadTask.then((value) => value.ref.getDownloadURL());
       // Creates a toast to say that data cannot be saved.
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Image Saved.")));
+          .showSnackBar(SnackBar(
+          backgroundColor: app_globals.getSnackBarBgColour(),
+          content: const Text("Image Saved.")));
     } catch (e) {
       // Creates a toast to say that data cannot be saved.
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -405,7 +408,7 @@ class _NewARHubState extends State<NewARHub> {
 
   void _takeScreenshot() async {
     onTakeScreenshot();
-    history_globals.addRecord("pressed", history_globals.getUsername(),
+    app_globals.addRecord("pressed", app_globals.getUsername(),
         DateTime.now(), 'take screenshot');
   }
 
@@ -463,8 +466,17 @@ class _NewARHubState extends State<NewARHub> {
       Navigator.pop(context);
       Navigator.pop(context);
     }
-    history_globals.addRecord("pressed", history_globals.getUsername(),
+    app_globals.addRecord("pressed", app_globals.getUsername(),
         DateTime.now(), 'return to section');
+    await FirebaseFirestore.instance
+        .collection("History_Logging")
+        .add({
+          'title': "Returning to the survey section",
+          'username': app_globals.getUsername(),
+          'time': DateTime.now(),
+        })
+        .then((value) => debugPrint("Record has been added"))
+        .catchError((error) => debugPrint("Failed to add record: $error"));
   }
 
   // Creates an int to update if an issue has been flagged or not.
@@ -500,13 +512,13 @@ class ARQuestionWidget extends StatelessWidget {
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(
-              color: LightColors.sPurple,
+              color: AppColours.appPurple,
             ),
             borderRadius: const BorderRadius.all(Radius.circular(20))),
         child: Text(
           "Section: " + arContent[0],
           style: const TextStyle(
-            color: LightColors.sPurple,
+            color: AppColours.appPurple,
           ),
         ),
       )
@@ -548,13 +560,13 @@ class _MyARContentState extends State<ARContentWidget> {
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(
-                color: LightColors.sPurple,
+                color: AppColours.appPurple,
               ),
               borderRadius: const BorderRadius.all(Radius.circular(20))),
           child: Text(
             "Question: " + widget.arContent[widgetQuestionID],
             style: const TextStyle(
-              color: LightColors.sPurple,
+              color: AppColours.appPurple,
             ),
           ),
         ),
