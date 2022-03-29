@@ -1,10 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
-
 import '../../../utils/app_colours.dart';
-import '../../home/home_hub.dart';
 
 class SettingsUsername extends StatefulWidget {
   const SettingsUsername({Key? key}) : super(key: key);

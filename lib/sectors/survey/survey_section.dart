@@ -401,12 +401,12 @@ class _SurveySectionState extends State<SurveySection> {
       ScaffoldMessenger.of(context).showSnackBar(
          SnackBar(
               backgroundColor: app_globals.getSnackBarBgColour(),
-              content: Text("Data successfully saved.")));
+              content: const Text("Data successfully saved.")));
     } catch (error) {
       // Creates a toast to say that data cannot be saved.
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: app_globals.getSnackBarBgColour(),
-          content: Text("Unable to save data, please try again.")));
+          content: const Text("Unable to save data, please try again.")));
     }
 
     // Reloads the page by popping the current page from the navigator and

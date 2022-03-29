@@ -23,7 +23,6 @@ class HomeChannel extends StatelessWidget {
 
   Text getSavedChannelString() {
     Channel channel = getSavedChannel();
-    String output = "";
 
     if(channel.empty) {
       return const Text(

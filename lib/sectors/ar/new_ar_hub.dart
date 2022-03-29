@@ -354,7 +354,7 @@ class _NewARHubState extends State<NewARHub> {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(
           backgroundColor: app_globals.getSnackBarBgColour(),
-          content: Text("Image Saved.")));
+          content: const Text("Image Saved.")));
     } catch (e) {
       // Creates a toast to say that data cannot be saved.
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

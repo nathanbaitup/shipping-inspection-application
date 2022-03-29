@@ -1,9 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_history.dart';
-import 'package:shipping_inspection_app/sectors/drawer/drawer_settings.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_channels.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_history.dart';
 import 'package:shipping_inspection_app/sectors/home/home_channel.dart';
@@ -12,12 +10,9 @@ import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import '../../main.dart';
 import '../../shared/history_cleardialog.dart';
 import '../../shared/history_format.dart';
-import '../../shared/loading.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import '../../utils/app_colours.dart';
 
 import '../drawer/drawer_globals.dart' as app_globals;
-import '../drawer/drawer_help.dart';
 import '../questions/question_totals.dart';
 import '../survey/survey_section.dart';
 
@@ -177,7 +172,7 @@ class _HomeHubState extends State<HomeHub> {
                                 ],
                               ),
                             ),
-                            Container(child: Column(children: getHomeChannels())),
+                            Column(children: getHomeChannels()),
                             const SizedBox(
                               height: 20,
                             ),
@@ -307,8 +302,6 @@ List<Widget> getHomeChannels() {
     for (int i = 0; i < (app_globals.savedChannelSum / 2); i++) {
       List<Widget> rowContent = [];
 
-      print(app_globals.savedChannelSum);
-      print(currentChannel);
       if (app_globals.savedChannelSum - 1 > currentChannel) {
         rowContent = [
           Container(
