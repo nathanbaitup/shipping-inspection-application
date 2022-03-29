@@ -27,7 +27,7 @@ class HomeChannel extends StatelessWidget {
 
     if(channel.empty) {
       return const Text(
-        "Empty",
+        'Empty',
         style: TextStyle(
             fontSize: 14,
             fontStyle: FontStyle.italic),
@@ -44,14 +44,21 @@ class HomeChannel extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Container(
-      height: screenHeight * 0.1,
+      height: screenHeight * 0.06,
       width: screenWidth * 0.435,
       decoration: BoxDecoration(
         color: AppColours.appPurpleLight,
         borderRadius: BorderRadius.circular(25.0),
       ),
-      child: Center(
-        child: getSavedChannelString()
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('$id: '),
+          Center(
+            child: getSavedChannelString(),
+          )
+        ]
       )
     );
   }

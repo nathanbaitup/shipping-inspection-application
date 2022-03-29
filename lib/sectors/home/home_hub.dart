@@ -2,8 +2,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shipping_inspection_app/sectors/drawer/drawer_history.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_settings.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_channels.dart';
+import 'package:shipping_inspection_app/sectors/drawer/settings/settings_history.dart';
 import 'package:shipping_inspection_app/sectors/home/home_channel.dart';
 import 'package:shipping_inspection_app/sectors/home/home_percent.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
@@ -191,19 +193,97 @@ class _HomeHubState extends State<HomeHub> {
                                 child: Column(
                                   children: getHomeChannels()
                                 )
-                              )
+                              ),
 
-                              // Expanded(
-                              //   child: Container(
-                              //     padding: const EdgeInsets.only(
-                              //       bottom: 20,
-                              //       left: 20,
-                              //     ),
-                              //     child: Column(
-                              //       children: getHomeChannels()
-                              //     )
-                              //   )
-                              // )
+                              const SizedBox(
+                                height: 20,
+                              ),
+
+                              const Divider(
+                                thickness: 1,
+                                height: 1,
+                              ),
+
+                              Container(
+                                height: screenHeight * 0.12,
+                                padding: const EdgeInsets.all(20.0),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(10.0),
+                                      decoration: const BoxDecoration(
+                                        color: AppColours.appPurple,
+                                        borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
+                                      ),
+                                      child: const Text(
+                                        "History",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                    TextButton(
+                                      style: TextButton.styleFrom(
+                                        primary: Colors.white,
+                                        backgroundColor: AppColours.appGrey,
+                                        elevation: 2,
+                                        shape: const CircleBorder(),
+                                      ),
+                                      child: const Icon(Icons.settings),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const SettingsHistory(),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    const Spacer(),
+                                    SizedBox(
+                                      height: 40,
+                                      child: TextButton(
+                                        style: TextButton.styleFrom(
+                                          primary: Colors.white,
+                                          backgroundColor: AppColours.appRed,
+                                          elevation: 2,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(18.0)),
+                                        ),
+                                        child: const Text("Clear"),
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => const MenuHistory(),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    TextButton(
+                                      style: TextButton.styleFrom(
+                                        primary: Colors.white,
+                                        backgroundColor: AppColours.appBlue,
+                                        elevation: 2,
+                                        shape: const CircleBorder(),
+                                      ),
+                                      child: const Icon(Icons.history),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const MenuHistory(),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ]
                         )
                     )
