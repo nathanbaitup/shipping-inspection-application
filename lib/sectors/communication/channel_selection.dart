@@ -15,7 +15,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 final _channelNameController = TextEditingController();
 
-final ValueNotifier<bool> channelNotifier = ValueNotifier(globals.savedChannelsEnabled);
+final ValueNotifier<bool> channelNotifier = ValueNotifier(globals.getSavedChannelsEnabled());
 
 class ChannelNameSelection extends StatefulWidget {
   final String vesselID;

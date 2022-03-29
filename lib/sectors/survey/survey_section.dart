@@ -233,6 +233,7 @@ class _SurveySectionState extends State<SurveySection> {
                             ElevatedButton(
                               onPressed: () async {
                                 _saveSurvey();
+                                app_globals.homeStateUpdate();
                               },
                               child: const Text('Save Responses'),
                               style: ElevatedButton.styleFrom(

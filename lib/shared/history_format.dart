@@ -257,8 +257,18 @@ List<RecordWidget> formatRecords() {
 
 Widget getHistoryBody() {
   if (app_globals.historyEnabled) {
-    return ListView(
-        padding: const EdgeInsets.all(8), children: formatRecords());
+    if (app_globals.records.isNotEmpty) {
+      return ListView(
+          padding: const EdgeInsets.all(8), children: formatRecords());
+    } else {
+      return const Center(
+          child: Text("There are currently no actions logged.",
+            style: TextStyle(
+                fontSize: 15,
+                fontStyle: FontStyle.italic),
+          ),
+      );
+    }
   } else {
     return Center(
         child: Column(

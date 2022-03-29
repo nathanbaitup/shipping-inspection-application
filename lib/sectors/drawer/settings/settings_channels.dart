@@ -29,13 +29,12 @@ class _SettingsChannelsState extends State<SettingsChannels> {
                 Icons.edit,
                 color: globals.getIconColourCheck(
                     AppColours.appPurpleLighter,
-                    globals.savedChannelsEnabled),
+                    globals.getSavedChannelsEnabled()),
             ),
-            onPressed: globals.savedChannelsEnabled
+            onPressed: globals.getSavedChannelsEnabled()
               ? () => {
                 setState(() {
                   editChannel(channel, true);
-                  globals.savePrefs();
                 })
               }
               : null
@@ -45,9 +44,9 @@ class _SettingsChannelsState extends State<SettingsChannels> {
                 Icons.delete,
                 color: globals.getIconColourCheck(
                     AppColours.appPurpleLighter,
-                    globals.savedChannelsEnabled),
+                    globals.getSavedChannelsEnabled()),
             ),
-            onPressed: globals.savedChannelsEnabled
+            onPressed: globals.getSavedChannelsEnabled()
               ? () => {
                 setState(() {
                   globals.addRecord(
@@ -57,7 +56,6 @@ class _SettingsChannelsState extends State<SettingsChannels> {
                       channel.name
                   );
                   deleteChannel(channel.channelID);
-                  globals.savePrefs();
                 })
               }
               : null
@@ -72,13 +70,12 @@ class _SettingsChannelsState extends State<SettingsChannels> {
               Icons.add,
               color: globals.getIconColourCheck(
                   AppColours.appPurpleLighter,
-                  globals.savedChannelsEnabled),
+                  globals.getSavedChannelsEnabled()),
           ),
-          onPressed: globals.savedChannelsEnabled
+          onPressed: globals.getSavedChannelsEnabled()
             ? () => {
               setState(() {
                 editChannel(channel, false);
-                globals.savePrefs();
               })
             }
               : null
@@ -98,13 +95,15 @@ class _SettingsChannelsState extends State<SettingsChannels> {
           Icons.bookmark,
           color: globals.getIconColourCheck(
               AppColours.appPurple,
-              globals.savedChannelsEnabled)),
+              globals.getSavedChannelsEnabled())),
       trailing: optionsRow,
     );
   }
 
   void deleteChannel(int channelID) {
     globals.savedChannels[channelID] = " ";
+    globals.savePrefs();
+    globals.homeStateUpdate();
   }
 
   void editChannel(Channel channel, bool edit) {
@@ -156,6 +155,7 @@ class _SettingsChannelsState extends State<SettingsChannels> {
                       );
                     }
                     globals.savePrefs();
+                    globals.homeStateUpdate();
                     Navigator.pop(context);
                     setState(() {});
                   },
@@ -198,11 +198,11 @@ class _SettingsChannelsState extends State<SettingsChannels> {
                 title: const Text("Saved Channels"),
                 leading: const Icon(Icons.save,
                     color: AppColours.appPurple),
-                initialValue: globals.savedChannelsEnabled,
+                initialValue: globals.getSavedChannelsEnabled(),
                 activeSwitchColor: AppColours.appPurple,
                 onToggle: (bool value) {
-                  globals.savedChannelsEnabled = !globals.savedChannelsEnabled;
-                  if(globals.savedChannelsEnabled) {
+                  globals.toggleSavedChannelsEnabled();
+                  if(globals.getSavedChannelsEnabled()) {
                     globals.addRecord(
                         "settings-enable",
                         globals.getUsername(),
@@ -218,7 +218,7 @@ class _SettingsChannelsState extends State<SettingsChannels> {
                     );
                   }
                   setState(() {
-                    value = globals.savedChannelsEnabled;
+                    value = globals.getSavedChannelsEnabled();
                     channelNotifier.value = value;
                   });
                   globals.savePrefs();
@@ -281,7 +281,7 @@ class _NumericStepButtonState extends State<NumericStepButton> {
   int counter = globals.savedChannelSum;
 
   Text getTextCounter() {
-    if(globals.savedChannelsEnabled) {
+    if(globals.getSavedChannelsEnabled()) {
       return Text(
         '$counter',
         textAlign: TextAlign.center,
@@ -320,12 +320,12 @@ class _NumericStepButtonState extends State<NumericStepButton> {
             primary: Colors.white,
             backgroundColor: globals.getButtonColourCheck(
                 AppColours.appPurpleLight,
-                globals.savedChannelsEnabled
+                globals.getSavedChannelsEnabled()
             ),
             elevation: 2,
             shape: const CircleBorder(),
           ),
-          onPressed: globals.savedChannelsEnabled
+          onPressed: globals.getSavedChannelsEnabled()
             ? () => {
               setState(() {
                 if (counter > widget.minValue) {
@@ -333,6 +333,7 @@ class _NumericStepButtonState extends State<NumericStepButton> {
                   }
                   widget.onChanged(counter);
                   clearUnusedChannels();
+                  globals.homeStateUpdate();
                 })
             }
               : null
@@ -350,12 +351,12 @@ class _NumericStepButtonState extends State<NumericStepButton> {
             primary: Colors.white,
             backgroundColor: globals.getButtonColourCheck(
                 AppColours.appPurpleLight,
-                globals.savedChannelsEnabled
+                globals.getSavedChannelsEnabled()
             ),
             elevation: 2,
             shape: const CircleBorder(),
           ),
-          onPressed: globals.savedChannelsEnabled
+          onPressed: globals.getSavedChannelsEnabled()
             ? () => {
               setState(() {
                 if (counter < widget.maxValue) {
@@ -363,6 +364,7 @@ class _NumericStepButtonState extends State<NumericStepButton> {
                 }
                 widget.onChanged(counter);
                 clearUnusedChannels();
+                globals.homeStateUpdate();
               })
           }
             : null

@@ -41,6 +41,7 @@ class HomeChannel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int displayId = id + 1;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Container(
@@ -54,7 +55,7 @@ class HomeChannel extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('$id: '),
+          Text('$displayId: '),
           Center(
             child: getSavedChannelString(),
           )

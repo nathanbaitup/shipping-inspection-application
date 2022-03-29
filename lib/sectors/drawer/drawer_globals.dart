@@ -14,6 +14,15 @@ List<String> savedChannels = List<String>.filled(9, " ", growable: false);
 
 bool savedChannelsEnabled = true;
 
+bool getSavedChannelsEnabled() {
+  return savedChannelsEnabled;
+}
+
+void toggleSavedChannelsEnabled() {
+  savedChannelsEnabled = !savedChannelsEnabled;
+  homeStateUpdate();
+}
+
 int savedChannelSum = 3;
 
 // --- HISTORY GLOBALS
@@ -152,7 +161,7 @@ bool getHistoryEnabled() {
 
 void toggleHistoryEnabled() {
   historyEnabled = !historyEnabled;
-  historyEnabledNotifier.value = historyEnabled;
+  homeStateUpdate();
 }
 
 List<bool> historyPrefs = List<bool>.filled(6, true, growable: false);
@@ -236,4 +245,8 @@ void loadPrefs() async {
   darkModeEnabled = prefs.getBool("dark-mode")?? false;
   systemThemeEnabled = prefs.getBool("system-theme")?? false;
   initTheme();
+}
+
+void homeStateUpdate() {
+  homeStateNotifier.value = !homeStateNotifier.value;
 }

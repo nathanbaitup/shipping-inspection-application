@@ -16,6 +16,9 @@ AlertDialog historyClearDialog(BuildContext context) {
         ElevatedButton(
             onPressed: () {
               app_globals.records = [];
+
+              app_globals.homeStateUpdate();
+
               Navigator.pop(context);
             },
             style: ElevatedButton
