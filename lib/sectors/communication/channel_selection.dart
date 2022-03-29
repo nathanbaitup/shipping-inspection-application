@@ -25,9 +25,11 @@ class ChannelNameSelection extends StatefulWidget {
 
 class _ChannelNameSelectionState extends State<ChannelNameSelection> {
   // To store the channel name captured by the text field.
-  late String channelName;
+  String channelName = '';
   bool loading = false;
   bool hasInternet = false;
+
+  final _formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
       body: loading
           ? const Loading()
           : Form(
+              key: _formkey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -48,6 +51,14 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: TextFormField(
                       controller: _channelNameController,
+                      validator: ChannelNameValidator.validate,
+                      onChanged: (val) {
+                        setState(
+                          () {
+                            channelName = val;
+                          },
+                        );
+                      },
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
@@ -247,6 +258,12 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
   //   tokenDataFromJsonToString = agoraToken;
   //   return tokenDataFromJson;
   // }
+}
+
+class ChannelNameValidator {
+  static String? validate(String? value) {
+    return value!.isEmpty ? 'Please enter text' : null;
+  }
 }
 
 showOptionsDialog(BuildContext context, String title) {

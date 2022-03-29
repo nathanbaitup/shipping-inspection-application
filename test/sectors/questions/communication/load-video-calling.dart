@@ -66,6 +66,38 @@ void main() {
           await tester.enterText(find.byType(TextFormField), 'hi');
         }),
       );
+
+      testWidgets(
+        'Testing Generate Channel button',
+        ((tester) async {
+          SystemChrome.setPreferredOrientations(
+              [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+          await Firebase.initializeApp();
+
+          await tester.pumpWidget(
+            buildTestWidget(
+              const ChannelNameSelection(
+                vesselID: "test",
+              ),
+            ),
+          );
+
+          // INIT Complete here
+
+          // Finding the button
+          await tester.tap(
+            find.byKey(
+              const Key('IDWALCommunicationGenerateChannelButton'),
+            ),
+          );
+
+          // Finding the textField
+          final textField = find.byType(TextFormField);
+
+          // final result = textField.;
+        }),
+      );
     },
   );
 }
