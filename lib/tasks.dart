@@ -1,11 +1,95 @@
 import 'package:flutter/material.dart';
+import 'package:shipping_inspection_app/sectors/tasks/taskhandler.dart';
 import 'package:shipping_inspection_app/utils/back_button.dart';
 import 'package:shipping_inspection_app/utils/taskcontainer.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
-import 'package:shipping_inspection_app/add_task.dart';
+import 'package:provider/provider.dart';
+
 
 class TasksPage extends StatelessWidget {
   const TasksPage({Key? key}) : super(key: key);
+
+
+  showAlertDialog(BuildContext context) {
+    TextEditingController _taskTitle = TextEditingController();
+    TextEditingController _taskDescription = TextEditingController();
+
+    //
+    Widget submitBtn = TextButton(
+      child: Text("CONFIRM",
+        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)
+        ,
+      ),
+      onPressed: () {
+        Provider.of<EachTask>(context,listen: false).addTask(_taskTitle.text, _taskDescription.text);
+        Navigator.of(context).pop();
+      },
+    );
+
+    // Create AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Add New Task"),
+
+      content:
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            style: const TextStyle(color: Colors.black),
+            controller: _taskTitle,
+            decoration: InputDecoration(
+                labelText: 'Title',
+                labelStyle: const TextStyle(
+                    color: Colors.black54, fontSize: 20, fontWeight: FontWeight.w500),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: Colors.grey, width: 2),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey, width: 2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                contentPadding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+
+                hintText: "Enter Title"),
+          ),
+          const SizedBox(height: 15, width: 500),
+
+          TextField(
+            minLines: 4,
+            maxLines: 4,
+            style: const TextStyle(color: Colors.black),
+            controller: _taskDescription,
+            decoration: InputDecoration(
+
+                labelText: 'Description',
+                labelStyle: const TextStyle(
+                    color: Colors.black54, fontSize: 20, fontWeight: FontWeight.w500),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: Colors.grey, width: 2),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey, width: 2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                contentPadding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                hintText: "Enter Description"),
+          ),
+        ],
+      ),
+      actions: [
+        submitBtn,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,22 +119,25 @@ class TasksPage extends StatelessWidget {
                       height: 45.0,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(25),
-                        color: LightColors.sPurple,
+                        color: const Color(0xFF9370DB),
 
                       ),
                       child: TextButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const AddTask(),
-                            ),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => const AddTask(),
+                          //   ),
+                          // );
+                          showAlertDialog(context);
                         },
                         child: const Center(
+
                           child: Text(
-                            'Add task',
+                            'New task',
                             style: TextStyle(
+
                                 fontWeight: FontWeight.w600,
                                 fontSize: 17,
                               color: Colors.white,
