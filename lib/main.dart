@@ -39,31 +39,32 @@ class _ShipAppState extends State<ShipApp> {
         valueListenable: themeNotifier,
         builder: (_, mode, __) {
           return MaterialApp(
-              title: 'Shipping Application',
-              theme: ThemeData(
-                  colorScheme: ColorScheme.fromSwatch().copyWith(
-                primary: LightColors.sPurple,
-                secondary: LightColors.sPurple,
-                brightness: Brightness.light,
-                /* light theme settings */
-              )),
-              darkTheme: ThemeData(
-                  colorScheme: ColorScheme.fromSwatch().copyWith(
-                primary: LightColors.sPurple,
-                secondary: LightColors.sPurple,
-                brightness: Brightness.dark,
-                /* dark theme settings */
-              )),
-              themeMode: mode,
-              // Dark mode now follows system settings
-              // Requires Android 10 (API level 29) or above to switch to dark mode
-              debugShowCheckedModeBanner: false,
-              // Checks if vesselID is empty, if true opens the welcome screen
-              // else opens the application with the vesselID parsed in.
-              home: vesselID.isEmpty
-                  ? const WelcomePage()
-                  : MyHomePage(
-                      title: 'Idwal Vessel Inspection', vesselID: vesselID));
+            title: 'Shipping Application',
+            theme: ThemeData(
+                colorScheme: ColorScheme.fromSwatch().copyWith(
+              primary: LightColors.sPurple,
+              secondary: LightColors.sPurple,
+              brightness: Brightness.light,
+              /* light theme settings */
+            )),
+            darkTheme: ThemeData(
+                colorScheme: ColorScheme.fromSwatch().copyWith(
+              primary: LightColors.sPurple,
+              secondary: LightColors.sPurple,
+              brightness: Brightness.dark,
+              /* dark theme settings */
+            )),
+            themeMode: mode,
+            // Dark mode now follows system settings
+            // Requires Android 10 (API level 29) or above to switch to dark mode
+            debugShowCheckedModeBanner: false,
+            // Checks if vesselID is empty, if true opens the welcome screen
+            // else opens the application with the vesselID parsed in.
+            home: vesselID.isEmpty
+                ? const WelcomePage()
+                : MyHomePage(
+                    title: 'Idwal Vessel Inspection', vesselID: vesselID),
+          );
         });
   }
 
