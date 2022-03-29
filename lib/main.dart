@@ -42,18 +42,18 @@ class _ShipAppState extends State<ShipApp> {
               title: 'Shipping Application',
               theme: ThemeData(
                   colorScheme: ColorScheme.fromSwatch().copyWith(
-                    primary: AppColours.appPurple,
-                    secondary: AppColours.appPurple,
-                    brightness: Brightness.light,
-                    /* light theme settings */
-                  )),
+                primary: AppColours.appPurple,
+                secondary: AppColours.appPurple,
+                brightness: Brightness.light,
+                /* light theme settings */
+              )),
               darkTheme: ThemeData(
                   colorScheme: ColorScheme.fromSwatch().copyWith(
-                    primary: AppColours.appPurple,
-                    secondary: AppColours.appPurple,
-                    brightness: Brightness.dark,
-                    /* dark theme settings */
-                  )),
+                primary: AppColours.appPurple,
+                secondary: AppColours.appPurple,
+                brightness: Brightness.dark,
+                /* dark theme settings */
+              )),
               themeMode: mode,
               // Dark mode now follows system settings
               // Requires Android 10 (API level 29) or above to switch to dark mode
@@ -63,7 +63,7 @@ class _ShipAppState extends State<ShipApp> {
               home: vesselID.isEmpty
                   ? const WelcomePage()
                   : MyHomePage(
-                  title: 'Idwal Vessel Inspection', vesselID: vesselID));
+                      title: 'Idwal Vessel Inspection', vesselID: vesselID));
         });
   }
 
@@ -218,8 +218,8 @@ class _WelcomePageState extends State<WelcomePage> {
                           runApp(const ShipApp());
                         }
                       },
-                      style:
-                          ElevatedButton.styleFrom(primary: AppColours.appPurple),
+                      style: ElevatedButton.styleFrom(
+                          primary: AppColours.appPurple),
                       child: const Text('Continue to Application'),
                     ),
 
