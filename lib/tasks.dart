@@ -4,7 +4,11 @@ import 'package:shipping_inspection_app/sectors/tasks/taskdata.dart';
 import 'package:shipping_inspection_app/utils/back_button.dart';
 import 'package:shipping_inspection_app/utils/taskcard.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
+import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
+
 import 'package:provider/provider.dart';
+
+import 'home.dart';
 
 class TasksPage extends StatefulWidget {
   final String vesselID;
@@ -17,7 +21,6 @@ class TasksPage extends StatefulWidget {
 
 class _TasksPageState extends State<TasksPage> {
 
-  late int id;
   late String title;
   late String description;
 
@@ -159,6 +162,12 @@ class _TasksPageState extends State<TasksPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: globals.getAppbarColour(),
+        iconTheme: const IconThemeData(
+          color: Color(0xFF9370DB),
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(
@@ -169,8 +178,7 @@ class _TasksPageState extends State<TasksPage> {
           ),
           child: Column(
             children: <Widget>[
-              const MyBackButton(),
-              const SizedBox(height: 25.0),
+
               Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
