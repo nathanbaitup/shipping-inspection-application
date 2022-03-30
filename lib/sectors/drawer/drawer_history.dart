@@ -14,6 +14,7 @@ class _MenuHistoryState extends State<MenuHistory> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: app_globals.getAppbarColour(),
@@ -21,6 +22,20 @@ class _MenuHistoryState extends State<MenuHistory> {
             color: AppColours.appPurple,
           ),
         ),
-        body: getHistoryBody());
+        body: Container(
+            padding: const EdgeInsets.only(
+              left: 5,
+              right: 5,
+            ),
+            margin: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColours.appPurple),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(20),
+              ),
+            ),
+            child: getHistoryBody()
+        )
+    );
   }
 }
