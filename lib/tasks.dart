@@ -58,6 +58,7 @@ class _TasksPageState extends State<TasksPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextFormField(
+            maxLength: 75,
             minLines: 1,
             maxLines: 2,
             style: const TextStyle(color: Colors.black),
@@ -75,13 +76,13 @@ class _TasksPageState extends State<TasksPage> {
                 fillColor: Colors.white,
                 labelText: 'Title',
                 labelStyle: const TextStyle(
-                    color: Colors.black87, fontSize: 18, fontWeight: FontWeight.w500),
+                    color: Color(0xFF5F6368), fontSize: 18, fontWeight: FontWeight.w500),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Colors.grey, width: 2),
+                  borderSide: const BorderSide(color: Colors.grey, width: 1.25),
                 ),
                 border: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.grey, width: 2),
+                  borderSide: const BorderSide(color: Colors.grey, width: 1.25),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 contentPadding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
@@ -91,6 +92,7 @@ class _TasksPageState extends State<TasksPage> {
           const SizedBox(height: 15, width: 500),
 
           TextFormField(
+            maxLength: 150,
             minLines: 4,
             maxLines: 5,
             style: const TextStyle(color: Colors.black),
@@ -109,13 +111,13 @@ class _TasksPageState extends State<TasksPage> {
                 fillColor: Colors.white,
                 labelText: 'Description',
                 labelStyle: const TextStyle(
-                    color: Colors.black87, fontSize: 18, fontWeight: FontWeight.w500),
+                    color: Color(0xFF5F6368), fontSize: 18, fontWeight: FontWeight.w500),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Colors.grey, width: 2),
+                  borderSide: const BorderSide(color: Colors.grey, width: 1.25),
                 ),
                 border: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.grey, width: 2),
+                  borderSide: const BorderSide(color: Colors.grey, width: 1.25),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 contentPadding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
