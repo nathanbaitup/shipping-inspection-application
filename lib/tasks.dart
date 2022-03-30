@@ -41,6 +41,13 @@ class _TasksPageState extends State<TasksPage> {
           );
           TaskData addedTask = TaskData(title.trim(),
               description.trim());
+
+          print("Latest task:");
+          print(addedTask.title + " / " + addedTask.description);
+
+          Navigator.of(context).pop();
+
+
         }
       }
       );
