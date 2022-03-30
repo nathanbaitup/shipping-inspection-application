@@ -23,7 +23,7 @@ class TaskCard extends StatelessWidget {
       padding: const EdgeInsets.only(left: 10), child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(padding: EdgeInsets.only(top:10, bottom:10),child:
+          Padding(padding: const EdgeInsets.only(top:10, bottom:10),child:
           Text(
 
             title,
@@ -33,7 +33,7 @@ class TaskCard extends StatelessWidget {
             ),
           ),
           ),
-          Padding(padding: EdgeInsets.only(top:10, bottom:10),child:
+          Padding(padding: const EdgeInsets.only(top:10, bottom:10),child:
           Text(
               subtitle,
               style: const TextStyle(
