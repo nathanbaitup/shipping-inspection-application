@@ -107,6 +107,13 @@ class _MenuSettingsState extends State<MenuSettings> {
                 initialValue: globals.tutorialEnabled,
                 onToggle: (bool value) {
                   globals.setTutorialEnabled(value);
+                  if(globals.getTutorialEnabled()) {
+                    globals.addRecord("settings-enable",
+                        globals.getUsername(), DateTime.now(), "AR Tutorial");
+                  } else {
+                    globals.addRecord("settings-disable",
+                        globals.getUsername(), DateTime.now(), "AR Tutorial");
+                  }
                 },
               ),
               SettingsTile.switchTile(
@@ -193,6 +200,7 @@ class _MenuSettingsState extends State<MenuSettings> {
                       if (await Permission.camera.request().isGranted) {
                         globals.addRecord("settings-permission-add",
                             globals.getUsername(), DateTime.now(), "Camera");
+                        print("added record");
                         await FirebaseFirestore.instance
                             .collection("History_Logging")
                             .add({
@@ -205,6 +213,8 @@ class _MenuSettingsState extends State<MenuSettings> {
                                 (value) => debugPrint("Record has been added"))
                             .catchError((error) =>
                                 debugPrint("Failed to add record: $error"));
+                        globals.savePrefs();
+                        globals.homeStateUpdate();
                         cameraSwitch = true;
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -248,6 +258,8 @@ class _MenuSettingsState extends State<MenuSettings> {
                                 (value) => debugPrint("Record has been added"))
                             .catchError((error) =>
                                 debugPrint("Failed to add record: $error"));
+                        globals.savePrefs();
+                        globals.homeStateUpdate();
                         micSwitch = true;
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
