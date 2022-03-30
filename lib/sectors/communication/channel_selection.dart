@@ -28,7 +28,6 @@ class ChannelNameSelection extends StatefulWidget {
 
 class _ChannelNameSelectionState extends State<ChannelNameSelection> {
   // To store the channel name captured by the text field.
-  late String channelName;
   bool loading = false;
   bool hasInternet = false;
 
@@ -63,6 +62,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
 
   @override
   Widget build(BuildContext context) {
+    _channelNameController.text = globals.savedChannelCurrent;
     return ValueListenableBuilder<bool>(
         valueListenable: channelNotifier,
         builder: (_, channelEnableValue, __) {
