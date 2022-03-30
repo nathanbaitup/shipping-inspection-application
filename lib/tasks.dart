@@ -105,6 +105,7 @@ class _TasksPageState extends State<TasksPage> {
           }
 
 
+
           Navigator.of(context).pop();
 
         }
@@ -268,12 +269,7 @@ class _TasksPageState extends State<TasksPage> {
                     ),
                   ]),
               const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: const <Widget>[
 
-                ],
-              ),
               const SizedBox(
                 width: 20,
               ),
@@ -282,30 +278,31 @@ class _TasksPageState extends State<TasksPage> {
                 child: ListView(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
+
                   children: <Widget>[
                     TaskCard(
                       title: 'IMO Guidelines review',
                       subtitle:
                           'Review the inspection conventions given by International Maritime Organization (IMO) to keep on top of my duties',
-                      cardColor: LightColors.sLightYellow2,
+                      cardColor: Color(0xFFFFE4C7),
                     ),
                     TaskCard(
                       title: 'Engine Bay',
                       subtitle:
                           'Complete engine bay inspection for the SS Milwaukee',
-                      cardColor: LightColors.sLavender,
+                      cardColor: Color(0xFFDBCFF3),
                     ),
                   TaskCard(
                        title: 'Call HQ',
                        subtitle:
                            'Contact HQ to request a revision of my duties for this week',
-                       cardColor: LightColors.sPalePink,
+                       cardColor: Color(0xFFFED4D6),
                      ),
                      TaskCard(
                        title: 'Collaborate with surveyor X',
                        subtitle:
                            'Meet up with surveyor X to ask about lifeboat inspection safety guidelines, as I have little experience in this field',
-                       cardColor: LightColors.sLightGreen,
+                       cardColor: Color(0xFFD9E6DC),
                      ),
                    ],
                 ),
