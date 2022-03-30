@@ -28,6 +28,8 @@ import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
 import 'ar_onboarding_screen.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
+// Updates a counter to differentiate between the fire extinguisher and valve models.
+int updateModelRender = 1;
 
 class NewARHub extends StatefulWidget {
   final String vesselID;
@@ -218,9 +220,8 @@ class _NewARHubState extends State<NewARHub> {
           // Shows where a point has been detected within AR.
           showFeaturePoints: false,
           // Show where object can be placed and the texture for the object.
-          // TODO: set to false after testing is completed.
           showPlanes: true,
-          customPlaneTexturePath: "images/triangle.png",
+          customPlaneTexturePath: "images/circle.png",
           // Allow object to move
           handlePans: true,
           // Allow object to rotation
@@ -235,9 +236,8 @@ class _NewARHubState extends State<NewARHub> {
   }
 
   // Function that handles adding an object to the AR scene.
-  // TODO: allow for multiple items to be loaded dynamically based on the question ID.
   Future<void> _onPlaneOrPointTap(List<ARHitTestResult> userTapResults) async {
-    if (anchors.length == 1 && nodes.length == 1) {
+    if (anchors.length == 1 || nodes.length == 1) {
       debugPrint("Already displaying a model.");
     } else {
       // Gets the users hit point and sets the first tap to a plane type.
@@ -261,37 +261,84 @@ class _NewARHubState extends State<NewARHub> {
         // ----- CREATING AN AR OBJECT -----
         // The node is what is displayed to the user in the AR view, linked to an anchor point.
         // If fire and safety show the fire extinguisher else show the duck.
-        // TODO: Change the object uri to dynamically load the correct model or image based on what is being surveyed.
-        if (widget.questionID == 'f&s') {
-          newNode = ARNode(
-            // Sets the type of object
-            type: NodeType.localGLTF2,
-            // Where the object is rendered from.
-
-            // This work is based on "Fire Extinguisher" (https://sketchfab.com/3d-models/fire-extinguisher-5288f12eb87f4826a73ebedb60a1c82d) by oooFFFFEDDMODELS (https://sketchfab.com/pierre.marcos.19) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
-            uri:
-                "Models/fire_extinguisher_3/fire_extinguisher_model_with_render.gltf",
-            // Sets the overall size of the object on the device.
-            scale: vector_math.Vector3(0.2, 0.2, 0.2),
-            // Sets the position to the anchor point created when pressing on the plane.
-            position: vector_math.Vector3(0.0, 0.0, 0.0),
-            // Sets the rotation to follow the plane axis.
-            rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
-          );
-        } else {
-          newNode = ARNode(
-            // Sets the type of object
-            type: NodeType.webGLB,
-            // Where the object is rendered from.
-            uri:
-                "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb",
-            // Sets the overall size of the object on the device.
-            scale: vector_math.Vector3(0.2, 0.2, 0.2),
-            // Sets the position to the anchor point created when pressing on the plane.
-            position: vector_math.Vector3(0.0, 0.0, 0.0),
-            // Sets the rotation to follow the plane axis.
-            rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
-          );
+        switch (widget.questionID) {
+          case 'f&s':
+            {
+              // Checks to see what question is displayed and changes the model
+              // from an extinguisher to a valve.
+              switch (updateModelRender) {
+                case 2:
+                  {
+                    newNode = ARNode(
+                      type: NodeType.localGLTF2,
+                      // "Valve II" (https://skfb.ly/6zxYE) by Víctor Hernández is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+                      uri: "Models/valve_ii/scene.gltf",
+                      scale: vector_math.Vector3(0.5, 0.5, 0.5),
+                      position: vector_math.Vector3(0.0, 0.0, 0.0),
+                      rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
+                    );
+                  }
+                  break;
+                default:
+                  {
+                    newNode = ARNode(
+                      // Sets the type of object
+                      type: NodeType.localGLTF2,
+                      // Where the object is rendered from.
+                      // "Fire Extinguisher" (https://skfb.ly/onUZp) by oooFFFFEDDMODELS is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+                      uri:
+                          "Models/fire_extinguisher_3/fire_extinguisher_model_with_render.gltf",
+                      // Sets the overall size of the object on the device.
+                      scale: vector_math.Vector3(0.1, 0.1, 0.1),
+                      // Sets the position to the anchor point created when pressing on the plane.
+                      position: vector_math.Vector3(0.0, 0.0, 0.0),
+                      // Sets the rotation to follow the plane axis.
+                      rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
+                    );
+                  }
+                  break;
+              }
+            }
+            break;
+          // Sets the model to a lifeboat.
+          case 'lifesaving':
+            {
+              newNode = ARNode(
+                type: NodeType.localGLTF2,
+                // "Lifeboat Compact" (https://skfb.ly/o6SXv) by jeffgeoff95 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+                uri: "Models/lifeboat_compact/scene.gltf",
+                scale: vector_math.Vector3(0.1, 0.07, 0.1),
+                position: vector_math.Vector3(0.0, 0.0, 0.0),
+                rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
+              );
+            }
+            break;
+          // Sets the model to an engine. Due to the size of the model this takes
+          // a while to render in.
+          case 'engine':
+            {
+              newNode = ARNode(
+                type: NodeType.localGLTF2,
+                uri:
+                    "Models/ship_engine_low_poly/ship_engine_lower_face_count/ship-engine-low-poly.gltf",
+                scale: vector_math.Vector3(1.2, 1.2, 1.2),
+                position: vector_math.Vector3(0.0, 0.0, 0.0),
+                rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
+              );
+            }
+            break;
+          // defaults to the duck as a placeholder, can be modified for new sections.
+          default:
+            {
+              newNode = ARNode(
+                type: NodeType.webGLB,
+                uri:
+                    "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb",
+                scale: vector_math.Vector3(0.2, 0.2, 0.2),
+                position: vector_math.Vector3(0.0, 0.0, 0.0),
+                rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
+              );
+            }
         }
 
         // Takes the node just created and links it to the anchor as added by the
@@ -413,6 +460,8 @@ class _NewARHubState extends State<NewARHub> {
 
   // Returns the user to the survey_section screen, ensuring they are returned to the section they are currently surveying.
   void _returnToSectionScreen() async {
+    nodes = [];
+    anchors = [];
     arSessionManager.dispose();
     // If the user opened a section through the QR scanner, then only one screen
     // needs to be removed from the stack.
@@ -517,7 +566,6 @@ class ARContentWidget extends StatefulWidget {
 
 class _MyARContentState extends State<ARContentWidget> {
   int widgetQuestionID = 1;
-
   void _updateWidgetQuestion() {
     setState(() {
       int newQuestion = widgetQuestionID + 1;
@@ -525,6 +573,7 @@ class _MyARContentState extends State<ARContentWidget> {
         newQuestion = 1;
       }
       widgetQuestionID = newQuestion;
+      updateModelRender = newQuestion;
     });
   }
 

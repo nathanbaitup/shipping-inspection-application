@@ -32,8 +32,11 @@ class ChannelNameSelection extends StatefulWidget {
 
 class _ChannelNameSelectionState extends State<ChannelNameSelection> {
   // To store the channel name captured by the text field.
+  String channelName = '';
   bool loading = false;
   bool hasInternet = false;
+
+  final _formkey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -77,20 +80,28 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
           return loading
               ? const Loading(color: Colors.black)
               : Form(
+                  key: _formkey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.5,
-                        child: Image.network(
-                            'https://www.idwalmarine.com/hs-fs/hubfs/IDWAL-Logo-CMYK-Blue+White.png?width=2000&name=IDWAL-Logo-CMYK-Blue+White.png'),
+                        child: Image.asset('images/IDWAL-Logo.png'),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 15)),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.8,
                         child: TextFormField(
                           controller: _channelNameController,
+                          validator: ChannelNameValidator.validate,
+                          onChanged: (val) {
+                            setState(
+                                  () {
+                                channelName = val;
+                              },
+                            );
+                          },
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
@@ -112,8 +123,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
                                 borderSide: const BorderSide(
-                                    color: AppColours.appPurpleLighter,
-                                    width: 2)),
+                                  color: AppColours.appPurpleLighter, width: 2)),
                             prefixIcon: const Icon(Icons.video_call),
                             hintText: 'Channel Name',
                             suffixIcon: Row(
@@ -171,6 +181,8 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                               textColor: Colors.white,
                             ),
                             MaterialButton(
+                              key: const Key(
+                                  'IDWALCommunicationGenerateChannelButton'),
                               onPressed: () {
                                 channelGenerate();
                               },
@@ -284,6 +296,12 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
   //   tokenDataFromJsonToString = agoraToken;
   //   return tokenDataFromJson;
   // }
+}
+
+class ChannelNameValidator {
+  static String? validate(String? value) {
+    return value!.isEmpty ? 'Please enter text' : null;
+  }
 }
 
 showOptionsDialog(BuildContext context, String title) {
