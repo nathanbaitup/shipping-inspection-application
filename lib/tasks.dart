@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/tasks/taskdata.dart';
+import 'package:shipping_inspection_app/utils/app_colours.dart';
 import 'package:shipping_inspection_app/utils/taskcard.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
 
@@ -124,7 +125,7 @@ class _TasksPageState extends State<TasksPage> {
     // Create AlertDialog
     AlertDialog alert = AlertDialog(
       title: const Text("Create New Task", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22)),
-      backgroundColor: const Color(0xFFF0EBFA),
+      backgroundColor: AppColours.appLavenderLighter,
 
 
       content: Form(
@@ -152,7 +153,7 @@ class _TasksPageState extends State<TasksPage> {
                 fillColor: Colors.white,
                 labelText: 'Title',
                 labelStyle: const TextStyle(
-                    color: Color(0xFF5F6368), fontSize: 18, fontWeight: FontWeight.w500),
+                    color: AppColours.appDarkGrey, fontSize: 18, fontWeight: FontWeight.w500),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(color: Colors.grey, width: 1.25),
@@ -187,7 +188,7 @@ class _TasksPageState extends State<TasksPage> {
                 fillColor: Colors.white,
                 labelText: 'Description',
                 labelStyle: const TextStyle(
-                    color: Color(0xFF5F6368), fontSize: 18, fontWeight: FontWeight.w500),
+                    color: AppColours.appDarkGrey, fontSize: 18, fontWeight: FontWeight.w500),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(color: Colors.grey, width: 1.25),
@@ -223,7 +224,7 @@ class _TasksPageState extends State<TasksPage> {
       appBar: AppBar(
         backgroundColor: globals.getAppbarColour(),
         iconTheme: const IconThemeData(
-          color: Color(0xFF9370DB),
+          color: AppColours.appPurple,
         ),
       ),
       body: SafeArea(
@@ -250,7 +251,7 @@ class _TasksPageState extends State<TasksPage> {
                       height: 45.0,
                       child: ElevatedButton(
                         style:
-                      ElevatedButton.styleFrom(primary: const Color(0xFF9370DB), shape: RoundedRectangleBorder(
+                      ElevatedButton.styleFrom(primary: AppColours.appPurple, shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(10),
                         ),),
                         onPressed: () {
@@ -284,7 +285,7 @@ class _TasksPageState extends State<TasksPage> {
                     for (TaskData cardTask in allTasks)
                       TaskCard(title: cardTask.title.toString(),
                           subtitle:  cardTask.description.toString(),
-                          cardColor: Color(0xFFE8E0F8))
+                          cardColor: AppColours.appLavender)
 
                    ],
                 ),
