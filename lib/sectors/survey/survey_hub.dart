@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -6,6 +8,7 @@ import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_totals.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
 import 'package:shipping_inspection_app/utils/app_colours.dart';
+import '../../shared/section_header.dart';
 import '../drawer/drawer_globals.dart' as app_globals;
 
 import '../camera/qr_scanner_controller.dart';
@@ -67,21 +70,7 @@ class _SurveyHubState extends State<SurveyHub> {
                     padding: const EdgeInsets.all(20.0),
                     child: Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(10.0),
-                          decoration: const BoxDecoration(
-                            color: AppColours.appPurple,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: const Text(
-                            "QR Camera",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
+                        sectionHeader("QR Camera"),
                         TextButton(
                           style: TextButton.styleFrom(
                             primary: Colors.white,
@@ -139,21 +128,7 @@ class _SurveyHubState extends State<SurveyHub> {
                     padding: const EdgeInsets.all(20.0),
                     child: Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(10.0),
-                          decoration: const BoxDecoration(
-                            color: AppColours.appPurple,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: const Text(
-                            "Sections",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
+                        sectionHeader("Sections"),
                         TextButton(
                           style: TextButton.styleFrom(
                             primary: Colors.white,
@@ -264,19 +239,6 @@ class _SurveyHubState extends State<SurveyHub> {
           .catchError((error) => debugPrint("Failed to add record: $error"));
     }
   }
-}
-
-// Takes the user to the required survey section when pressing on an active survey.
-void _loadQuestion(BuildContext context, String questionID) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => SurveySection(
-        vesselID: vesselID,
-        questionID: questionID,
-      ),
-    ),
-  );
 }
 
 class SurveySectionWidget extends StatefulWidget {
@@ -390,32 +352,55 @@ class _SurveySectionWidgetState extends State<SurveySectionWidget> {
       // Queries the snapshot to retrieve the section ID, the number of questions,
       // in the section and the number of answered questions and saves to
       // questionTotals.
-      for (var document in querySnapshot.docs) {
-        questionTotals.add(QuestionTotals(document['sectionID'],
-            document['numberOfQuestions'], document['answeredQuestions']));
-      }
-
-      // Sets the total amount of questions questions from Firebase.
-      for (var i = 0; i < questionTotals.length; i++) {
-        if (questionTotals[i].sectionID == sectionID) {
-          totalAnswered++;
-        }
-      }
-      // Sets the total number of questions and answered amount.
       setState(() {
+        for (var document in querySnapshot.docs) {
+          questionTotals.add(QuestionTotals(document['sectionID'],
+              document['numberOfQuestions'], document['answeredQuestions']));
+        }
+
+        // Sets the total amount of questions questions from Firebase.
+        for (var i = 0; i < questionTotals.length; i++) {
+          if (questionTotals[i].sectionID == sectionID) {
+            totalAnswered++;
+          }
+        }
+        // Sets the total number of questions and answered amount.
         numberOfQuestions = questionBrain.getQuestionAmount(sectionID);
         answeredQuestions = totalAnswered;
-      });
 
-      // Checks if the number of answered questions is greater than the total
-      // number of questions and sets the answered questions to the total
-      // number of questions.
-      if (answeredQuestions > numberOfQuestions) {
-        answeredQuestions = numberOfQuestions;
-      }
+        // Checks if the number of answered questions is greater than the total
+        // number of questions and sets the answered questions to the total
+        // number of questions.
+        if (answeredQuestions > numberOfQuestions) {
+          answeredQuestions = numberOfQuestions;
+        }
+      });
     } catch (error) {
       debugPrint("Error: $error");
     }
     return questionTotals;
   }
+
+  // Takes the user to the required survey section when pressing on an active survey.
+  void _loadQuestion(BuildContext context, String questionID) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SurveySection(
+          vesselID: vesselID,
+          questionID: questionID,
+          issueFlagged: false,
+        ),
+      ),
+    ).then(onGoBack);
+  }
+
+  // REFERENCE accessed 29/03/2022 https://www.nstack.in/blog/flutter-refresh-on-navigator-pop-or-go-back/
+  // Used to update the state of the progress widget once a survey section has been
+  // updated, representing the current amount of responses.
+  FutureOr<dynamic> onGoBack(dynamic value) {
+    _getResultsFromFirestore(widget.sectionMethod);
+    setState(() {});
+  }
+// END REFERENCE
 }

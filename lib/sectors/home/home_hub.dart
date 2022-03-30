@@ -1,14 +1,14 @@
+import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shipping_inspection_app/sectors/drawer/drawer_history.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_channels.dart';
-import 'package:shipping_inspection_app/sectors/drawer/settings/settings_history.dart';
+import 'package:shipping_inspection_app/sectors/history/history_buttons.dart';
 import 'package:shipping_inspection_app/sectors/home/home_channel.dart';
 import 'package:shipping_inspection_app/sectors/home/home_percent.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
+import 'package:shipping_inspection_app/shared/section_header.dart';
 import '../../main.dart';
-import '../../shared/history_cleardialog.dart';
 import '../../shared/history_format.dart';
 import '../../utils/app_colours.dart';
 
@@ -18,8 +18,9 @@ import '../survey/survey_section.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
 
-final ValueNotifier<bool> homeStateNotifier =
-ValueNotifier(false);
+final ValueNotifier<bool> homeStateNotifier = ValueNotifier(false);
+
+bool _loading = false;
 
 class HomeHub extends StatefulWidget {
   final String vesselID;
@@ -87,21 +88,7 @@ class _HomeHubState extends State<HomeHub> {
                               padding: const EdgeInsets.all(20.0),
                               child: Row(
                                 children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(10.0),
-                                    decoration: const BoxDecoration(
-                                      color: AppColours.appPurple,
-                                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                                    ),
-                                    child: const Text(
-                                      "Progress",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
+                                  sectionHeader("Progress")
                                 ],
                               ),
                             ),
@@ -137,21 +124,7 @@ class _HomeHubState extends State<HomeHub> {
                               padding: const EdgeInsets.all(20.0),
                               child: Row(
                                 children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(10.0),
-                                    decoration: const BoxDecoration(
-                                      color: AppColours.appPurple,
-                                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                                    ),
-                                    child: const Text(
-                                      "Channels",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
+                                  sectionHeader("Channels"),
                                   TextButton(
                                     style: TextButton.styleFrom(
                                       primary: Colors.white,
@@ -185,89 +158,8 @@ class _HomeHubState extends State<HomeHub> {
                               padding: const EdgeInsets.all(20.0),
                               child: Row(
                                 children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(10.0),
-                                    decoration: const BoxDecoration(
-                                      color: AppColours.appPurple,
-                                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                                    ),
-                                    child: const Text(
-                                      "History",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    style: TextButton.styleFrom(
-                                      primary: Colors.white,
-                                      backgroundColor: AppColours.appGrey,
-                                      elevation: 2,
-                                      shape: const CircleBorder(),
-                                    ),
-                                    child: const Icon(Icons.settings),
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => const SettingsHistory(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  const Spacer(),
-                                  SizedBox(
-                                      height: 40,
-                                      child: Row(children: [
-                                        TextButton(
-                                            style: TextButton.styleFrom(
-                                              primary: Colors.white,
-                                              backgroundColor:
-                                                  app_globals.getButtonColourCheck(
-                                                      AppColours.appRed,
-                                                      app_globals.getHistoryEnabled()),
-                                              elevation: 2,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(18.0)),
-                                            ),
-                                            child: const Text("Clear"),
-                                            onPressed: app_globals.getHistoryEnabled()
-                                                ? () => {
-                                                      showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext context) {
-                                                          return historyClearDialog(
-                                                              context);
-                                                        },
-                                                      )
-                                                    }
-                                                : null),
-                                        TextButton(
-                                            style: TextButton.styleFrom(
-                                              primary: Colors.white,
-                                              backgroundColor:
-                                                  app_globals.getButtonColourCheck(
-                                                      AppColours.appBlue,
-                                                      app_globals.getHistoryEnabled()),
-                                              elevation: 2,
-                                              shape: const CircleBorder(),
-                                            ),
-                                            child: const Icon(Icons.history),
-                                            onPressed: app_globals.getHistoryEnabled()
-                                                ? () => {
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              const MenuHistory(),
-                                                        ),
-                                                      ),
-                                                    }
-                                                : null),
-                                      ]))
+                                  sectionHeader("History"),
+                                  historyButtons(context),
                                 ],
                               ),
                             ),
@@ -289,7 +181,8 @@ class _HomeHubState extends State<HomeHub> {
                                   ),
                                 ),
                                 child: getHistoryBody())
-              ])))));
+                          ])))));
+
         });
   }
 }
@@ -298,7 +191,7 @@ List<Widget> getHomeChannels() {
   List<Widget> homeChannels = [];
 
   int currentChannel = 0;
-  if(app_globals.getSavedChannelsEnabled()) {
+  if (app_globals.getSavedChannelsEnabled()) {
     for (int i = 0; i < (app_globals.savedChannelSum / 2); i++) {
       List<Widget> rowContent = [];
 
@@ -336,17 +229,17 @@ List<Widget> getHomeChannels() {
     }
   } else {
     homeChannels = [
-      const Text("Saved channels have been disabled.",
-        style: TextStyle(
-            fontSize: 15,
-            fontStyle: FontStyle.italic),),
+      const Text(
+        "Saved channels have been disabled.",
+        style: TextStyle(fontSize: 15, fontStyle: FontStyle.italic),
+      ),
       const SizedBox(
         height: 15,
       ),
-      const Text("Navigate to Settings to re-enable this feature.",
-        style: TextStyle(
-            fontSize: 15,
-            fontStyle: FontStyle.italic),),
+      const Text(
+        "Navigate to Settings to re-enable this feature.",
+        style: TextStyle(fontSize: 15, fontStyle: FontStyle.italic),
+      ),
     ];
   }
   return homeChannels;
@@ -381,88 +274,112 @@ class _ActiveSurveysWidgetState extends State<ActiveSurveysWidget> {
   Widget build(BuildContext context) {
     double percent = answeredQuestions / numberOfQuestions;
 
-    if (loading) {
+    if (_loading) {
       return const HomePercentLoad();
     } else {
-      return Row(
-        children: <Widget>[
-          GestureDetector(
-            child: HomePercentActive(
-              sectionName: widget.sectionName,
-              loadingPercent: percent,
-              sectionSubtitle: '$answeredQuestions of $numberOfQuestions',
-            ),
-            onTap: () {
-              _loadQuestion(widget.sectionID);
-              setState(() {});
-            },
-          ),
-          const SizedBox(width: 10.0),
-        ],
+      return ValueListenableBuilder<bool>(
+        valueListenable: homeStateNotifier,
+        builder: (_, homeState, __) {
+          return Row(
+            children: <Widget>[
+              GestureDetector(
+                child: HomePercentActive(
+                  sectionName: widget.sectionName,
+                  loadingPercent: percent,
+                  sectionSubtitle: '$answeredQuestions of $numberOfQuestions',
+                ),
+                onTap: () {
+                  _loadQuestion(widget.sectionID);
+                  setState(() {});
+                },
+              ),
+              const SizedBox(width: 10.0),
+            ],
+          );
+        },
       );
     }
   }
 
   // Takes the user to the required survey section when pressing on an active survey.
   void _loadQuestion(String questionID) {
+    app_globals.addRecord(
+        "opened", app_globals.getUsername(), DateTime.now(), 'camera');
+
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => SurveySection(
           vesselID: vesselID,
           questionID: questionID,
+          issueFlagged: false,
         ),
       ),
-    );
+    ).then(onGoBack);
   }
 
   // Loads a list of all the answered questions from firebase to see the total
   // amount of questions answered per section and saves them in a list.
   Future<List<QuestionTotals>> _getResultsFromFirestore(
       String sectionID) async {
-    loading = true;
+    setState(() {
+      _loading = true;
+    });
     // The list to store all the total amount of questions and answered questions.
     List<QuestionTotals> questionTotals = [];
     int totalAnswered = 0;
     try {
       // Creates a instance reference to the Survey_Responses collection.
       CollectionReference reference =
-      FirebaseFirestore.instance.collection('Survey_Responses');
+          FirebaseFirestore.instance.collection('Survey_Responses');
       // Pulls all data where the vesselID and sectionID match.
       QuerySnapshot querySnapshot =
-      await reference.where('vesselID', isEqualTo: vesselID).get();
+          await reference.where('vesselID', isEqualTo: vesselID).get();
       // Queries the snapshot to retrieve the section ID, the number of questions,
       // in the section and the number of answered questions and saves to
       // questionTotals.
-      for (var document in querySnapshot.docs) {
-        questionTotals.add(QuestionTotals(document['sectionID'],
-            document['numberOfQuestions'], document['answeredQuestions']));
-      }
-
-      // Sets the total amount of questions questions from Firebase.
-      for (var i = 0; i < questionTotals.length; i++) {
-        if (questionTotals[i].sectionID == sectionID) {
-          totalAnswered++;
-        }
-      }
-      // Sets the total number of questions and answered amount.
       setState(() {
+        for (var document in querySnapshot.docs) {
+          questionTotals.add(QuestionTotals(document['sectionID'],
+              document['numberOfQuestions'], document['answeredQuestions']));
+        }
+
+        // Sets the total amount of questions questions from Firebase.
+        for (var i = 0; i < questionTotals.length; i++) {
+          if (questionTotals[i].sectionID == sectionID) {
+            totalAnswered++;
+          }
+        }
+        // Sets the total number of questions and answered amount.
         numberOfQuestions = questionBrain.getQuestionAmount(sectionID);
         answeredQuestions = totalAnswered;
-      });
 
-      // Checks if the number of answered questions is greater than the total
-      // number of questions and sets the answered questions to the total
-      // number of questions.
-      if (answeredQuestions > numberOfQuestions) {
-        answeredQuestions = numberOfQuestions;
-      }
+        // Checks if the number of answered questions is greater than the total
+        // number of questions and sets the answered questions to the total
+        // number of questions.
+        if (answeredQuestions > numberOfQuestions) {
+          answeredQuestions = numberOfQuestions;
+        }
+        _loading = false;
+      });
     } catch (error) {
       debugPrint("Error: $error");
+      setState(() {
+        _loading = false;
+      });
     }
     setState(() {
-      loading = false;
+      _loading = false;
     });
     return questionTotals;
   }
+
+  // REFERENCE accessed 29/03/2022 https://www.nstack.in/blog/flutter-refresh-on-navigator-pop-or-go-back/
+  // Used to update the state of the progress widget once a survey section has been
+  // updated, representing the current amount of responses.
+  FutureOr<dynamic> onGoBack(dynamic value) {
+    _getResultsFromFirestore(widget.sectionID);
+    setState(() {});
+  }
+  // END REFERENCE
 }
