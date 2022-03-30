@@ -100,6 +100,11 @@ class _TasksPageState extends State<TasksPage> {
           print("Latest task:");
           print(addedTask.title + " / " + addedTask.description);
 
+          for (TaskData aTask in allTasks){
+            print(aTask.toString());
+          }
+
+
           Navigator.of(context).pop();
 
         }
