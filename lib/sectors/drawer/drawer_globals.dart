@@ -20,10 +20,17 @@ bool getSavedChannelsEnabled() {
 
 void toggleSavedChannelsEnabled() {
   savedChannelsEnabled = !savedChannelsEnabled;
+  savePrefs();
   homeStateUpdate();
 }
 
 int savedChannelSum = 3;
+
+String savedChannelCurrent = "";
+
+void setSavedChannelCurrent(String tappedChannel) {
+  savedChannelCurrent = tappedChannel;
+}
 
 // --- HISTORY GLOBALS
 // -- For usage in History Logs
@@ -139,12 +146,28 @@ TextStyle getSettingsTitleStyle() {
       decoration: TextDecoration.underline);
 }
 
+// --- TUTORIAL GLOBALS
+// -- For usage in Tutorial Settings + Survey Sections
+
+bool tutorialEnabled = true;
+
+void setTutorialEnabled(bool value) {
+  tutorialEnabled = value;
+  savePrefs();
+}
+
+bool getTutorialEnabled(bool value) {
+  return tutorialEnabled;
+}
+
+
 // --- USERNAME GLOBALS
 // -- For usage in Username Settings + History Logs + Calls
 String username = "Current User";
 
 void setUsername(newUsername) {
   username = newUsername;
+  savePrefs();
 }
 
 String getUsername() {
@@ -161,6 +184,7 @@ bool getHistoryEnabled() {
 
 void toggleHistoryEnabled() {
   historyEnabled = !historyEnabled;
+  savePrefs();
   homeStateUpdate();
 }
 
@@ -220,6 +244,8 @@ void savePrefs() async {
   await prefs.setBool("history-channels", historyPrefs[5]);
   await prefs.setBool("history-enabled", historyEnabled);
 
+  await prefs.setBool("tutorial-enabled", tutorialEnabled);
+
   await prefs.setBool("dark-mode", darkModeEnabled);
   await prefs.setBool("system-theme", systemThemeEnabled);
 }
@@ -241,6 +267,8 @@ void loadPrefs() async {
   historyPrefs[4] = prefs.getBool("history-communications")?? true;
   historyPrefs[5] = prefs.getBool("history-channels")?? true;
   historyEnabled = prefs.getBool("history-enabled")?? true;
+
+  tutorialEnabled = prefs.getBool("tutorial-enabled")?? true;
 
   darkModeEnabled = prefs.getBool("dark-mode")?? false;
   systemThemeEnabled = prefs.getBool("system-theme")?? false;

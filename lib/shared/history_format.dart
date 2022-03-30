@@ -4,8 +4,20 @@ import 'package:intl/intl.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
 as app_globals;
 
-List<RecordWidget> formatRecords() {
-  List<RecordWidget> recordListTiles = [];
+import '../utils/app_colours.dart';
+
+List<Widget> formatRecords() {
+
+  //Organise records by date
+  for (var i = 0; i < app_globals.records.length; i++) {
+    app_globals.records.sort((a, b){ //sorting in ascending order
+      return a.getDatetime.compareTo(b.getDatetime);
+    });
+  }
+
+
+  //Format records into text
+  List<Widget> recordListTiles = [const SizedBox(height: 15)];
   for (var i = 0; i < app_globals.records.length; i++) {
     var currentRecord = app_globals.records[i];
     List<String> currentRecordText = List<String>.filled(5, "");
@@ -259,7 +271,9 @@ Widget getHistoryBody() {
   if (app_globals.historyEnabled) {
     if (app_globals.records.isNotEmpty) {
       return ListView(
-          padding: const EdgeInsets.all(8), children: formatRecords());
+          padding: const EdgeInsets.all(8),
+          children: formatRecords(),
+      );
     } else {
       return const Center(
           child: Text("There are currently no actions logged.",
@@ -302,19 +316,29 @@ class RecordWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      ListTile(
-          title: Text.rich(
-            TextSpan(text: "User ", children: <TextSpan>[
-              TextSpan(text: record[0], style: bold),
-              TextSpan(text: record[1]),
-              TextSpan(text: record[2], style: bold),
-              TextSpan(text: record[3]),
-              TextSpan(text: record[4], style: bold)
-            ]),
-          )),
-      const Divider(
-        color: Colors.grey,
-        thickness: 1,
+      Container(
+          padding: const EdgeInsets.all(5),
+          margin: const EdgeInsets.only(
+            left: 20,
+            right: 20,
+            bottom: 20,
+          ),
+          decoration: BoxDecoration(
+            border: Border.all(color: AppColours.appPurple),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(20),
+            ),
+          ),
+          child: ListTile(
+              title: Text.rich(
+                TextSpan(text: "User ", children: <TextSpan>[
+                  TextSpan(text: record[0], style: const TextStyle(fontStyle: FontStyle.italic, color: AppColours.appPurpleLight)),
+                  TextSpan(text: record[1]),
+                  TextSpan(text: record[2], style: const TextStyle(fontStyle: FontStyle.italic, color: AppColours.appPurpleLight)),
+                  TextSpan(text: record[3]),
+                  TextSpan(text: record[4], style: const TextStyle(fontStyle: FontStyle.italic, color: AppColours.appPurpleLight))
+                ]),
+              )),
       ),
     ]);
   }

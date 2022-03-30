@@ -64,6 +64,8 @@ class _NewARHubState extends State<NewARHub> {
   // Should be displayed based on its plane and axis.
   List<ARAnchor> anchors = [];
 
+  bool issueFlagged = false;
+
   //Create an instance of the ScreenshotController
   final ScreenshotController _screenshotController = ScreenshotController();
 
@@ -98,13 +100,42 @@ class _NewARHubState extends State<NewARHub> {
                 planeDetectionConfig:
                     PlaneDetectionConfig.horizontalAndVertical,
               ),
-              Row(
-                children: [
-                  ARQuestionWidget(
-                    arContent: widget.arContent,
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      ARQuestionWidget(
+                        arContent: widget.arContent,
+                      ),
+                      ARContentWidget(
+                        arContent: widget.arContent,
+                      ),
+                    ],
                   ),
-                  ARContentWidget(
-                    arContent: widget.arContent,
+                  Row(
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: RawMaterialButton(
+                          onPressed: () => _onIssueFlagged(),
+                          elevation: 5.0,
+                          fillColor: AppColours.appYellow,
+                          shape: const CircleBorder(),
+                          padding: const EdgeInsets.all(10.0),
+                          child: const Icon(
+                            Icons.warning_amber_rounded,
+                            size: 35.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      issueFlagged
+                          ? const Text('Issue Flagged',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ))
+                          : const Text(''),
+                    ],
                   ),
                 ],
               ),
@@ -439,6 +470,7 @@ class _NewARHubState extends State<NewARHub> {
           builder: (context) => SurveySection(
             vesselID: widget.vesselID,
             questionID: widget.questionID,
+            issueFlagged: issueFlagged,
           ),
         ),
         (Route<dynamic> route) => true,
@@ -447,7 +479,17 @@ class _NewARHubState extends State<NewARHub> {
       // will be two section screens open with the user needing to close both screens.
     } else {
       Navigator.pop(context);
-      Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SurveySection(
+            vesselID: widget.vesselID,
+            questionID: widget.questionID,
+            issueFlagged: issueFlagged,
+          ),
+        ),
+        (Route<dynamic> route) => true,
+      );
     }
     app_globals.addRecord("pressed", app_globals.getUsername(), DateTime.now(),
         'return to section');
@@ -460,6 +502,22 @@ class _NewARHubState extends State<NewARHub> {
         })
         .then((value) => debugPrint("Record has been added"))
         .catchError((error) => debugPrint("Failed to add record: $error"));
+  }
+
+  // Creates an int to update if an issue has been flagged or not.
+  int issueFlaggedCounter = 0;
+
+  // Checks if the issue button has been pressed to update an issue setting from true to false.
+  void _onIssueFlagged() async {
+    setState(() {
+      if (issueFlaggedCounter == 0) {
+        issueFlagged = true;
+        issueFlaggedCounter = 1;
+      } else {
+        issueFlagged = false;
+        issueFlaggedCounter = 0;
+      }
+    });
   }
 }
 

@@ -101,6 +101,15 @@ class _MenuSettingsState extends State<MenuSettings> {
                 },
               ),
               SettingsTile.switchTile(
+                title: const Text('Tutorial'),
+                leading: const Icon(Icons.book, color: AppColours.appPurple),
+                activeSwitchColor: AppColours.appPurple,
+                initialValue: globals.tutorialEnabled,
+                onToggle: (bool value) {
+                  globals.setTutorialEnabled(value);
+                },
+              ),
+              SettingsTile.switchTile(
                 title: const Text('Use System Theme'),
                 activeSwitchColor: AppColours.appPurple,
                 leading:

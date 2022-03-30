@@ -4,5 +4,9 @@ class Record {
   DateTime dateTime;
   String section;
 
+  DateTime get getDatetime {
+    return dateTime;
+  }
+
   Record(this.type, this.user, this.dateTime, this.section);
 }

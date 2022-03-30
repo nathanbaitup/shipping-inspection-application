@@ -19,7 +19,7 @@ import '../drawer/drawer_globals.dart' as app_globals;
 // The question brain to load all the questions.
 QuestionBrain questionBrain = QuestionBrain();
 // Updates the state to a loading indicator if set to true.
-bool loading = false;
+bool _loading = false;
 // The section ID.
 late String questionID;
 // The questions relating to a specific section.
@@ -29,12 +29,18 @@ List<Answer> _answers = [];
 // The retrieved answers from firebase to be displayed if there are responses.
 List<Answer> answersList = [];
 
+bool _issueFlagged = false;
+
 class SurveySection extends StatefulWidget {
   final String vesselID;
   // Images that have been taken within the AR view. This can be removed once AR screenshots can be saved to firebase.
   final String questionID;
+  final bool issueFlagged;
   const SurveySection(
-      {required this.questionID, required this.vesselID, Key? key})
+      {required this.questionID,
+      required this.vesselID,
+      required this.issueFlagged,
+      Key? key})
       : super(key: key);
 
   @override
@@ -55,7 +61,16 @@ class _SurveySectionState extends State<SurveySection> {
     _getResultsFromFirestore();
     // Adds a record of the user history.
     _addEnterRecord();
+    _initialiseIssueFlagged();
     super.initState();
+  }
+
+  // Sets if the issue flagged bool has been activated to display a message to the user.
+  void _initialiseIssueFlagged() {
+    setState(() {
+      _issueFlagged = widget.issueFlagged;
+    });
+    debugPrint("$_issueFlagged");
   }
 
   @override
@@ -65,7 +80,7 @@ class _SurveySectionState extends State<SurveySection> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     // If loading is required, then return the loading page.
-    if (loading) {
+    if (_loading) {
       return const Scaffold(body: Loading(color: Colors.black));
     } else {
       return Scaffold(
@@ -116,6 +131,18 @@ class _SurveySectionState extends State<SurveySection> {
                 ),
                 const SizedBox(height: 20),
 
+                _issueFlagged
+                    ? const Text(
+                        "An issue has been flagged for this survey. Please contact a technical expert.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.red,
+                        ),
+                      )
+                    : const Text(""),
                 // Gives a description on the survey section.
                 Center(
                   child: Text(
@@ -130,9 +157,11 @@ class _SurveySectionState extends State<SurveySection> {
 
                 // Opens the survey section in an AR view.
                 ElevatedButton(
-                  onPressed: () async => _openARSection(),
-                  style: ElevatedButton.styleFrom(
-                      primary: AppColours.appYellow),
+                  onPressed: () {
+                    _openARSection();
+                  },
+                  style:
+                      ElevatedButton.styleFrom(primary: AppColours.appYellow),
                   child: const Text('Open section in AR'),
                 ),
                 const SizedBox(height: 20),
@@ -140,7 +169,7 @@ class _SurveySectionState extends State<SurveySection> {
                 // Allows rest of the display to be scrollable to be able to see and answer the questions,
                 // add and save images.
                 Container(
-                  height: screenHeight * 0.6,
+                  height: screenHeight * 0.55,
                   padding: const EdgeInsets.only(
                     left: 20,
                     right: 20,
@@ -348,7 +377,7 @@ class _SurveySectionState extends State<SurveySection> {
                 questionID: widget.questionID,
                 arContent: arContentPush,
                 openThroughQR: false,
-                seenTutorial: false,
+                seenTutorial: !app_globals.tutorialEnabled,
               ),
             ),
           );
@@ -360,7 +389,8 @@ class _SurveySectionState extends State<SurveySection> {
 
   // Saves the images, and survey responses to the database.
   void _saveSurvey() async {
-    app_globals.addRecord("add", app_globals.getUsername(), DateTime.now(), pageTitle);
+    app_globals.addRecord(
+        "add", app_globals.getUsername(), DateTime.now(), pageTitle);
     await FirebaseFirestore.instance
         .collection("History_Logging")
         .add({
@@ -371,6 +401,7 @@ class _SurveySectionState extends State<SurveySection> {
         .then((value) => debugPrint("Record has been added"))
         .catchError((error) => debugPrint("Failed to add record: $error"));
     _saveResultsToFirestore();
+    app_globals.homeStateUpdate();
   }
 
   // Awaits for the Survey Responses collection and if it doesn't exist,
@@ -378,7 +409,7 @@ class _SurveySectionState extends State<SurveySection> {
   // be stored and used in future app instances.
   void _saveResultsToFirestore() async {
     setState(() {
-      loading = true;
+      _loading = true;
     });
     try {
       for (var i = 0; i < _answers.length; i++) {
@@ -391,17 +422,17 @@ class _SurveySectionState extends State<SurveySection> {
           'question': _answers[i].question,
           'answer': _answers[i].answer,
           'questionNumber': _answers[i].questionNumber,
+          'issueFlagged': _issueFlagged,
           'timestamp': FieldValue.serverTimestamp()
         });
       }
       setState(() {
-        loading = false;
+        _loading = false;
       });
       // Creates a toast to say save successful.
-      ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(
-              backgroundColor: app_globals.getSnackBarBgColour(),
-              content: const Text("Data successfully saved.")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: app_globals.getSnackBarBgColour(),
+          content: const Text("Data successfully saved.")));
     } catch (error) {
       // Creates a toast to say that data cannot be saved.
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -415,12 +446,15 @@ class _SurveySectionState extends State<SurveySection> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            SurveySection(questionID: questionID, vesselID: widget.vesselID),
+        builder: (context) => SurveySection(
+          questionID: questionID,
+          vesselID: widget.vesselID,
+          issueFlagged: _issueFlagged,
+        ),
       ),
     );
     setState(() {
-      loading = false;
+      _loading = false;
     });
   }
 
@@ -428,7 +462,7 @@ class _SurveySectionState extends State<SurveySection> {
   // display the answer to the question within the survey section.
   Future<List<Answer>> _getResultsFromFirestore() async {
     setState(() {
-      loading = true;
+      _loading = true;
     });
     try {
       // Creates a instance reference to the Survey_Responses collection.
@@ -444,11 +478,11 @@ class _SurveySectionState extends State<SurveySection> {
       // add them to answersList.
       for (var document in querySnapshot.docs) {
         answersList.add(Answer(
-          document['question'],
-          document['answer'],
-          document['sectionID'],
-          document['questionNumber'],
-        ));
+            document['question'],
+            document['answer'],
+            document['sectionID'],
+            document['questionNumber'],
+            document['issueFlagged']));
       }
       setState(() {
         // REFERENCE accessed 20/03/2022 https://stackoverflow.com/a/53549197
@@ -457,12 +491,18 @@ class _SurveySectionState extends State<SurveySection> {
         answersList
             .sort((a, b) => a.questionNumber.compareTo(b.questionNumber));
         // END REFERENCE
+
+        if (answersList[0].issueFlagged = true) {
+          _issueFlagged = true;
+        } else {
+          _issueFlagged = false;
+        }
       });
     } catch (error) {
       debugPrint("Error: $error");
     }
     setState(() {
-      loading = false;
+      _loading = false;
     });
     // returns the answer list.
     return answersList;
@@ -473,7 +513,7 @@ class _SurveySectionState extends State<SurveySection> {
   // to add all stored images to the image viewer.
   void _getImagesFromFirebase() async {
     setState(() {
-      loading = true;
+      _loading = true;
     });
     try {
       final Reference storageRef = FirebaseStorage.instance
@@ -487,11 +527,11 @@ class _SurveySectionState extends State<SurveySection> {
     } catch (error) {
       debugPrint("Error: $error");
       setState(() {
-        loading = false;
+        _loading = false;
       });
     }
     setState(() {
-      loading = false;
+      _loading = false;
     });
   }
 
@@ -528,15 +568,8 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
   @override
   void initState() {
     super.initState();
-    _setupFocusNode();
     // Resets the answers list.
     _answers = [];
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    focusNode.dispose();
   }
 
   @override
@@ -582,7 +615,6 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
                   : Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
-                        focusNode: focusNode,
                         onChanged: (String value) {
                           setState(() {
                             questionText = widget.question;
@@ -590,6 +622,13 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
                             questionNumber =
                                 int.parse(widget.question.split('.')[0]);
                             answer = value;
+
+                            // Removes the answer from the answer list if a user updates the value
+                            // and adds the new value.
+                            _answers.removeWhere((response) =>
+                                response.question == questionText);
+                            _answers.add(Answer(questionText, answer,
+                                questionID, questionNumber, _issueFlagged));
                           });
                         },
                         decoration: InputDecoration(
@@ -609,24 +648,7 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
   }
 
   // Retrieve the user input for answering a question.
-  FocusNode focusNode = FocusNode();
   String questionText = '';
   String answer = '';
   int questionNumber = 0;
-
-  // Creates a focus node that checks if focus has been lost on a text field to
-  // add the user value to the answers list.
-  void _setupFocusNode() {
-    focusNode.addListener(() {
-      if (!focusNode.hasFocus) {
-        setState(() {
-          // Removes the answer from the answer list if a user updates the value
-          // and adds the new value.
-          _answers.removeWhere((value) => value.question == questionText);
-          _answers
-              .add(Answer(questionText, answer, questionID, questionNumber));
-        });
-      }
-    });
-  }
 }
