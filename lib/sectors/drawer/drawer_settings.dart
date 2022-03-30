@@ -200,7 +200,6 @@ class _MenuSettingsState extends State<MenuSettings> {
                       if (await Permission.camera.request().isGranted) {
                         globals.addRecord("settings-permission-add",
                             globals.getUsername(), DateTime.now(), "Camera");
-                        print("added record");
                         await FirebaseFirestore.instance
                             .collection("History_Logging")
                             .add({
