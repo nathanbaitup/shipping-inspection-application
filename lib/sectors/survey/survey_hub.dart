@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -5,12 +7,14 @@ import 'package:shipping_inspection_app/sectors/drawer/drawer_help.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_totals.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
-import 'package:shipping_inspection_app/utils/colours.dart';
-import '../drawer/drawer_globals.dart' as history_global;
+import 'package:shipping_inspection_app/utils/app_colours.dart';
+import '../../shared/section_header.dart';
+import '../drawer/drawer_globals.dart' as app_globals;
 
-import '../../utils/qr_scanner_controller.dart';
+import '../camera/qr_scanner_controller.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
+
 late String vesselID;
 
 class SurveyHub extends StatefulWidget {
@@ -45,7 +49,7 @@ class _SurveyHubState extends State<SurveyHub> {
                       width: screenWidth,
                       padding: const EdgeInsets.all(0.0),
                       decoration: const BoxDecoration(
-                          color: LightColors.sLavender,
+                          color: AppColours.appLavender,
                           borderRadius: BorderRadius.only(
                             bottomRight: Radius.circular(30.0),
                             bottomLeft: Radius.circular(30.0),
@@ -66,25 +70,11 @@ class _SurveyHubState extends State<SurveyHub> {
                     padding: const EdgeInsets.all(20.0),
                     child: Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(10.0),
-                          decoration: const BoxDecoration(
-                            color: LightColors.sPurple,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: const Text(
-                            "QR Camera",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
+                        sectionHeader("QR Camera"),
                         TextButton(
                           style: TextButton.styleFrom(
                             primary: Colors.white,
-                            backgroundColor: LightColors.sDarkYellow,
+                            backgroundColor: AppColours.appYellow,
                             elevation: 2,
                             shape: const CircleBorder(),
                           ),
@@ -111,7 +101,7 @@ class _SurveyHubState extends State<SurveyHub> {
                           child: TextButton(
                               style: TextButton.styleFrom(
                                 primary: Colors.white,
-                                backgroundColor: LightColors.sPurpleLL,
+                                backgroundColor: AppColours.appPurpleLighter,
                                 elevation: 2,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(18.0)),
@@ -138,25 +128,11 @@ class _SurveyHubState extends State<SurveyHub> {
                     padding: const EdgeInsets.all(20.0),
                     child: Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(10.0),
-                          decoration: const BoxDecoration(
-                            color: LightColors.sPurple,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: const Text(
-                            "Sections",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
+                        sectionHeader("Sections"),
                         TextButton(
                           style: TextButton.styleFrom(
                             primary: Colors.white,
-                            backgroundColor: LightColors.sDarkYellow,
+                            backgroundColor: AppColours.appYellow,
                             elevation: 2,
                             shape: const CircleBorder(),
                           ),
@@ -222,15 +198,6 @@ class _SurveyHubState extends State<SurveyHub> {
                           SurveySectionWidget(
                               sectionName: "Engine Room",
                               sectionMethod: "engine"),
-                          SurveySectionWidget(
-                              sectionName: "Placeholder",
-                              sectionMethod: "engine"),
-                          SurveySectionWidget(
-                              sectionName: "Placeholder",
-                              sectionMethod: "engine"),
-                          SurveySectionWidget(
-                              sectionName: "Placeholder",
-                              sectionMethod: "engine"),
                         ],
                       ),
                     ),
@@ -258,24 +225,20 @@ class _SurveyHubState extends State<SurveyHub> {
         ),
       );
       // Adds a record of the QR camera being opened to the history page.
-      history_global.addRecord(
-          'opened', history_global.getUsername(), DateTime.now(), 'QR camera');
+      app_globals.addRecord(
+          'opened', app_globals.getUsername(), DateTime.now(), 'QR camera');
+      await FirebaseFirestore.instance
+          .collection("History_Logging")
+          .add({
+            'title': "Opening QR camera",
+            'username': app_globals.getUsername(),
+            'time': DateTime.now(),
+            'permission': "QR camera",
+          })
+          .then((value) => debugPrint("Record has been added"))
+          .catchError((error) => debugPrint("Failed to add record: $error"));
     }
   }
-}
-
-// Takes the user to the required survey section when pressing on an active survey.
-void _loadQuestion(BuildContext context, String questionID) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => SurveySection(
-        vesselID: vesselID,
-        questionID: questionID,
-        capturedImages: const [],
-      ),
-    ),
-  );
 }
 
 class SurveySectionWidget extends StatefulWidget {
@@ -317,7 +280,7 @@ class _SurveySectionWidgetState extends State<SurveySectionWidget> {
             bottom: 5,
           ),
           decoration: const BoxDecoration(
-            color: LightColors.sPurpleL,
+            color: AppColours.appPurpleLight,
             borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
           child: Center(
@@ -341,7 +304,7 @@ class _SurveySectionWidgetState extends State<SurveySectionWidget> {
             left: 10,
           ),
           decoration: const BoxDecoration(
-            color: LightColors.sPurpleL,
+            color: AppColours.appPurpleLight,
             borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
           child: Center(
@@ -358,7 +321,7 @@ class _SurveySectionWidgetState extends State<SurveySectionWidget> {
         child: TextButton(
           style: TextButton.styleFrom(
             primary: Colors.white,
-            backgroundColor: LightColors.sPurpleLL,
+            backgroundColor: AppColours.appPurpleLighter,
             elevation: 2,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
@@ -389,32 +352,55 @@ class _SurveySectionWidgetState extends State<SurveySectionWidget> {
       // Queries the snapshot to retrieve the section ID, the number of questions,
       // in the section and the number of answered questions and saves to
       // questionTotals.
-      for (var document in querySnapshot.docs) {
-        questionTotals.add(QuestionTotals(document['sectionID'],
-            document['numberOfQuestions'], document['answeredQuestions']));
-      }
-
-      // Sets the total amount of questions questions from Firebase.
-      for (var i = 0; i < questionTotals.length; i++) {
-        if (questionTotals[i].sectionID == sectionID) {
-          totalAnswered++;
-        }
-      }
-      // Sets the total number of questions and answered amount.
       setState(() {
+        for (var document in querySnapshot.docs) {
+          questionTotals.add(QuestionTotals(document['sectionID'],
+              document['numberOfQuestions'], document['answeredQuestions']));
+        }
+
+        // Sets the total amount of questions questions from Firebase.
+        for (var i = 0; i < questionTotals.length; i++) {
+          if (questionTotals[i].sectionID == sectionID) {
+            totalAnswered++;
+          }
+        }
+        // Sets the total number of questions and answered amount.
         numberOfQuestions = questionBrain.getQuestionAmount(sectionID);
         answeredQuestions = totalAnswered;
-      });
 
-      // Checks if the number of answered questions is greater than the total
-      // number of questions and sets the answered questions to the total
-      // number of questions.
-      if (answeredQuestions > numberOfQuestions) {
-        answeredQuestions = numberOfQuestions;
-      }
+        // Checks if the number of answered questions is greater than the total
+        // number of questions and sets the answered questions to the total
+        // number of questions.
+        if (answeredQuestions > numberOfQuestions) {
+          answeredQuestions = numberOfQuestions;
+        }
+      });
     } catch (error) {
       debugPrint("Error: $error");
     }
     return questionTotals;
   }
+
+  // Takes the user to the required survey section when pressing on an active survey.
+  void _loadQuestion(BuildContext context, String questionID) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SurveySection(
+          vesselID: vesselID,
+          questionID: questionID,
+          issueFlagged: false,
+        ),
+      ),
+    ).then(onGoBack);
+  }
+
+  // REFERENCE accessed 29/03/2022 https://www.nstack.in/blog/flutter-refresh-on-navigator-pop-or-go-back/
+  // Used to update the state of the progress widget once a survey section has been
+  // updated, representing the current amount of responses.
+  FutureOr<dynamic> onGoBack(dynamic value) {
+    _getResultsFromFirestore(widget.sectionMethod);
+    setState(() {});
+  }
+// END REFERENCE
 }
