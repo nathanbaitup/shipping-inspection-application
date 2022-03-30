@@ -209,7 +209,9 @@ class _CameraScreenState extends State<CameraScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => SurveySection(
-            questionID: widget.questionID, vesselID: widget.vesselID),
+            questionID: widget.questionID,
+            vesselID: widget.vesselID,
+            issueFlagged: false),
       ),
     );
   }

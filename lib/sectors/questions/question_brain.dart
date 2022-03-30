@@ -67,6 +67,17 @@ class QuestionBrain {
     return answerAmount;
   }
 
+  // Returns a list of all individual question IDs that are currently stored within the question bank.
+  List<String> getAllQuestionIDs() {
+    List<String> questionID = [];
+    for (var question in _questionBank) {
+      if (!questionID.contains(question.questionID)) {
+        questionID.add(question.questionID);
+      }
+    }
+    return questionID;
+  }
+
   // Allows for questions to be added to the question bank.
   void addQuestionToBank(String questionID, String questionTitle,
       String questionText, bool answered) {
