@@ -7,7 +7,9 @@ import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:provider/provider.dart';
 
 class TasksPage extends StatefulWidget {
-  const TasksPage({Key? key}) : super(key: key);
+  final String vesselID;
+
+  const TasksPage({Key? key, required this.vesselID}) : super(key: key);
 
   @override
   State<TasksPage> createState() => _TasksPageState();
@@ -43,9 +45,6 @@ class _TasksPageState extends State<TasksPage> {
           TaskData addedTask = TaskData(title.trim(),
               description.trim());
 
-          print("Latest task:");
-          print(addedTask.title + " / " + addedTask.description);
-
           // Handles the storage of the form entry into the Firestore collection
           await FirebaseFirestore.instance
               .collection("Task_Form")
@@ -54,9 +53,10 @@ class _TasksPageState extends State<TasksPage> {
             'email': addedTask.description,
           });
 
+          print("Latest task:");
+          print(addedTask.title + " / " + addedTask.description);
+
           Navigator.of(context).pop();
-
-
         }
       }
       );
