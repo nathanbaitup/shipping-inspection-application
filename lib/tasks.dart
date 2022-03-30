@@ -97,13 +97,13 @@ class _TasksPageState extends State<TasksPage> {
           });
 
           //debug
-          print("Latest task:");
-          print(addedTask.title + " / " + addedTask.description);
+          // print("Latest task:");
+          // print(addedTask.title + " / " + addedTask.description);
 
           //debug
-          for (TaskData aTask in allTasks){
-            print(aTask.toString());
-          }
+          // for (TaskData aTask in allTasks){
+          //   print(aTask.toString());
+          // }
 
           //clears current task list so it can be replaced by the newly updated Firestore list
           allTasks = [];
