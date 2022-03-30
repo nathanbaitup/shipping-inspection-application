@@ -121,6 +121,7 @@ class _HomeHubState extends State<HomeHub> {
                                     child: Row(
                                       children: const [
                                         ActiveSurveysWidget(
+                                          key: Key('IDWALFireAndSafetySectionProgressWidget'),
                                           sectionName: 'Fire and Safety',
                                           sectionID: 'f&s',
                                         ),
@@ -145,6 +146,7 @@ class _HomeHubState extends State<HomeHub> {
                                 children: [
                                   sectionHeader("Channels"),
                                   TextButton(
+                                    key: const Key('IDWALHomeHubChannelSettingsButton'),
                                     style: TextButton.styleFrom(
                                       primary: Colors.white,
                                       backgroundColor: AppColours.appGrey,
