@@ -1,5 +1,4 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/communication/channel.dart';
 import '../../utils/app_colours.dart';

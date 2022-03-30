@@ -15,7 +15,6 @@ class _MenuHistoryState extends State<MenuHistory> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: app_globals.getAppbarColour(),
@@ -25,7 +24,7 @@ class _MenuHistoryState extends State<MenuHistory> {
         ),
         body: Column(
             children: [
-              Container(
+              SizedBox(
                 height: 75,
                 child: Row(
                   children: [

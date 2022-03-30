@@ -1,16 +1,13 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shipping_inspection_app/sectors/drawer/drawer_history.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_channels.dart';
-import 'package:shipping_inspection_app/sectors/drawer/settings/settings_history.dart';
 import 'package:shipping_inspection_app/sectors/history/history_buttons.dart';
 import 'package:shipping_inspection_app/sectors/home/home_channel.dart';
 import 'package:shipping_inspection_app/sectors/home/home_percent.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/shared/section_header.dart';
 import '../../main.dart';
-import '../../shared/history_cleardialog.dart';
 import '../../shared/history_format.dart';
 import '../../utils/app_colours.dart';
 
