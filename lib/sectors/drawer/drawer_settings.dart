@@ -101,6 +101,22 @@ class _MenuSettingsState extends State<MenuSettings> {
                 },
               ),
               SettingsTile.switchTile(
+                title: const Text('Tutorial'),
+                leading: const Icon(Icons.book, color: AppColours.appPurple),
+                activeSwitchColor: AppColours.appPurple,
+                initialValue: globals.tutorialEnabled,
+                onToggle: (bool value) {
+                  globals.setTutorialEnabled(value);
+                  if(globals.getTutorialEnabled()) {
+                    globals.addRecord("settings-enable",
+                        globals.getUsername(), DateTime.now(), "AR Tutorial");
+                  } else {
+                    globals.addRecord("settings-disable",
+                        globals.getUsername(), DateTime.now(), "AR Tutorial");
+                  }
+                },
+              ),
+              SettingsTile.switchTile(
                 title: const Text('Use System Theme'),
                 activeSwitchColor: AppColours.appPurple,
                 leading:
@@ -196,6 +212,8 @@ class _MenuSettingsState extends State<MenuSettings> {
                                 (value) => debugPrint("Record has been added"))
                             .catchError((error) =>
                                 debugPrint("Failed to add record: $error"));
+                        globals.savePrefs();
+                        globals.homeStateUpdate();
                         cameraSwitch = true;
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -239,6 +257,8 @@ class _MenuSettingsState extends State<MenuSettings> {
                                 (value) => debugPrint("Record has been added"))
                             .catchError((error) =>
                                 debugPrint("Failed to add record: $error"));
+                        globals.savePrefs();
+                        globals.homeStateUpdate();
                         micSwitch = true;
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

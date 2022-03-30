@@ -2,14 +2,13 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shipping_inspection_app/sectors/drawer/drawer_history.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_channels.dart';
-import 'package:shipping_inspection_app/sectors/drawer/settings/settings_history.dart';
+import 'package:shipping_inspection_app/sectors/history/history_buttons.dart';
 import 'package:shipping_inspection_app/sectors/home/home_channel.dart';
 import 'package:shipping_inspection_app/sectors/home/home_percent.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
+import 'package:shipping_inspection_app/shared/section_header.dart';
 import '../../main.dart';
-import '../../shared/history_cleardialog.dart';
 import '../../shared/history_format.dart';
 import '../../utils/app_colours.dart';
 
@@ -51,247 +50,139 @@ class _HomeHubState extends State<HomeHub> {
                   child: SafeArea(
                       child: Center(
                           child: Column(children: <Widget>[
-                Container(
-                    height: screenHeight * 0.12,
-                    width: screenWidth,
-                    padding: const EdgeInsets.all(0.0),
-                    decoration: const BoxDecoration(
-                        color: AppColours.appLavender,
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(30.0),
-                          bottomLeft: Radius.circular(30.0),
-                        )),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            app_globals.getUsername(),
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 28,
-                              fontWeight: FontWeight.w500,
+                            Container(
+                                height: screenHeight * 0.12,
+                                width: screenWidth,
+                                padding: const EdgeInsets.all(0.0),
+                                decoration: const BoxDecoration(
+                                    color: AppColours.appLavender,
+                                    borderRadius: BorderRadius.only(
+                                      bottomRight: Radius.circular(30.0),
+                                      bottomLeft: Radius.circular(30.0),
+                                    )),
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        app_globals.getUsername(),
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Vessel: " + widget.vesselID,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ])),
+                            Container(
+                              height: screenHeight * 0.12,
+                              padding: const EdgeInsets.all(20.0),
+                              child: Row(
+                                children: [
+                                  sectionHeader("Progress")
+                                ],
+                              ),
                             ),
-                          ),
-                          Text(
-                            "Vessel: " + widget.vesselID,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ])),
-                Container(
-                  height: screenHeight * 0.12,
-                  padding: const EdgeInsets.all(20.0),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(10.0),
-                        decoration: const BoxDecoration(
-                          color: AppColours.appPurple,
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child: const Text(
-                          "Progress",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                    padding: const EdgeInsets.only(
-                      bottom: 20,
-                      left: 20,
-                    ),
-                    child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: const [
-                            ActiveSurveysWidget(
-                              sectionName: 'Fire and Safety',
-                              sectionID: 'f&s',
-                            ),
-                            ActiveSurveysWidget(
-                              sectionName: 'Lifesaving',
-                              sectionID: 'lifesaving',
-                            ),
-                            ActiveSurveysWidget(
-                              sectionName: 'Engine Room',
-                              sectionID: 'engine',
-                            ),
-                          ],
-                        ))),
-                const Divider(
-                  thickness: 1,
-                  height: 1,
-                ),
-                Container(
-                  height: screenHeight * 0.12,
-                  padding: const EdgeInsets.all(20.0),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(10.0),
-                        decoration: const BoxDecoration(
-                          color: AppColours.appPurple,
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child: const Text(
-                          "Channels",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          primary: Colors.white,
-                          backgroundColor: AppColours.appGrey,
-                          elevation: 2,
-                          shape: const CircleBorder(),
-                        ),
-                        child: const Icon(Icons.settings),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SettingsChannels(),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                Column(children: getHomeChannels()),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Divider(
-                  thickness: 1,
-                  height: 1,
-                ),
-                Container(
-                  height: screenHeight * 0.12,
-                  padding: const EdgeInsets.all(20.0),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(10.0),
-                        decoration: const BoxDecoration(
-                          color: AppColours.appPurple,
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child: const Text(
-                          "History",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          primary: Colors.white,
-                          backgroundColor: AppColours.appGrey,
-                          elevation: 2,
-                          shape: const CircleBorder(),
-                        ),
-                        child: const Icon(Icons.settings),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SettingsHistory(),
-                            ),
-                          );
-                        },
-                      ),
-                      const Spacer(),
-                      SizedBox(
-                          height: 40,
-                          child: Row(children: [
-                            TextButton(
-                                style: TextButton.styleFrom(
-                                  primary: Colors.white,
-                                  backgroundColor:
-                                      app_globals.getButtonColourCheck(
-                                          AppColours.appRed,
-                                          app_globals.getHistoryEnabled()),
-                                  elevation: 2,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(18.0)),
+                            Container(
+                                padding: const EdgeInsets.only(
+                                  bottom: 20,
+                                  left: 20,
                                 ),
-                                child: const Text("Clear"),
-                                onPressed: app_globals.getHistoryEnabled()
-                                    ? () => {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return historyClearDialog(
-                                                  context);
-                                            },
-                                          )
-                                        }
-                                    : null),
-                            TextButton(
-                                style: TextButton.styleFrom(
-                                  primary: Colors.white,
-                                  backgroundColor:
-                                      app_globals.getButtonColourCheck(
-                                          AppColours.appBlue,
-                                          app_globals.getHistoryEnabled()),
-                                  elevation: 2,
-                                  shape: const CircleBorder(),
+                                child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: const [
+                                        ActiveSurveysWidget(
+                                          sectionName: 'Fire and Safety',
+                                          sectionID: 'f&s',
+                                        ),
+                                        ActiveSurveysWidget(
+                                          sectionName: 'Lifesaving',
+                                          sectionID: 'lifesaving',
+                                        ),
+                                        ActiveSurveysWidget(
+                                          sectionName: 'Engine Room',
+                                          sectionID: 'engine',
+                                        ),
+                                      ],
+                                    ))),
+                            const Divider(
+                              thickness: 1,
+                              height: 1,
+                            ),
+                            Container(
+                              height: screenHeight * 0.12,
+                              padding: const EdgeInsets.all(20.0),
+                              child: Row(
+                                children: [
+                                  sectionHeader("Channels"),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      primary: Colors.white,
+                                      backgroundColor: AppColours.appGrey,
+                                      elevation: 2,
+                                      shape: const CircleBorder(),
+                                    ),
+                                    child: const Icon(Icons.settings),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const SettingsChannels(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Column(children: getHomeChannels()),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Divider(
+                              thickness: 1,
+                              height: 1,
+                            ),
+                            Container(
+                              height: screenHeight * 0.12,
+                              padding: const EdgeInsets.all(20.0),
+                              child: Row(
+                                children: [
+                                  sectionHeader("History"),
+                                  historyButtons(context),
+                                ],
+                              ),
+                            ),
+                            Container(
+                                height: screenHeight * 0.45,
+                                padding: const EdgeInsets.only(
+                                  left: 5,
+                                  right: 5,
                                 ),
-                                child: const Icon(Icons.history),
-                                onPressed: app_globals.getHistoryEnabled()
-                                    ? () => {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const MenuHistory(),
-                                            ),
-                                          ),
-                                        }
-                                    : null),
-                          ]))
-                    ],
-                  ),
-                ),
-                Container(
-                    height: screenHeight * 0.45,
-                    padding: const EdgeInsets.only(
-                      left: 5,
-                      right: 5,
-                    ),
-                    margin: const EdgeInsets.only(
-                      left: 20,
-                      right: 20,
-                      bottom: 20,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: AppColours.appPurple),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                    ),
-                    child: getHistoryBody())
-              ])))));
+                                margin: const EdgeInsets.only(
+                                  left: 20,
+                                  right: 20,
+                                  bottom: 20,
+                                ),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: AppColours.appPurple),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(20),
+                                  ),
+                                ),
+                                child: getHistoryBody())
+                          ])))));
+
         });
   }
 }
@@ -421,6 +312,7 @@ class _ActiveSurveysWidgetState extends State<ActiveSurveysWidget> {
         builder: (context) => SurveySection(
           vesselID: vesselID,
           questionID: questionID,
+          issueFlagged: false,
         ),
       ),
     ).then(onGoBack);

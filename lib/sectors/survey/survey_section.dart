@@ -29,12 +29,18 @@ List<Answer> _answers = [];
 // The retrieved answers from firebase to be displayed if there are responses.
 List<Answer> answersList = [];
 
+bool _issueFlagged = false;
+
 class SurveySection extends StatefulWidget {
   final String vesselID;
   // Images that have been taken within the AR view. This can be removed once AR screenshots can be saved to firebase.
   final String questionID;
+  final bool issueFlagged;
   const SurveySection(
-      {required this.questionID, required this.vesselID, Key? key})
+      {required this.questionID,
+      required this.vesselID,
+      required this.issueFlagged,
+      Key? key})
       : super(key: key);
 
   @override
@@ -55,7 +61,16 @@ class _SurveySectionState extends State<SurveySection> {
     _getResultsFromFirestore();
     // Adds a record of the user history.
     _addEnterRecord();
+    _initialiseIssueFlagged();
     super.initState();
+  }
+
+  // Sets if the issue flagged bool has been activated to display a message to the user.
+  void _initialiseIssueFlagged() {
+    setState(() {
+      _issueFlagged = widget.issueFlagged;
+    });
+    debugPrint("$_issueFlagged");
   }
 
   @override
@@ -79,10 +94,7 @@ class _SurveySectionState extends State<SurveySection> {
             scale: 0.7,
             child: FloatingActionButton(
               heroTag: 'on_back',
-              onPressed: () {
-                Navigator.pop(context);
-                app_globals.homeStateUpdate();
-              },
+              onPressed: () => Navigator.pop(context),
               child: const Icon(Icons.arrow_back),
             ),
           ),
@@ -119,6 +131,18 @@ class _SurveySectionState extends State<SurveySection> {
                 ),
                 const SizedBox(height: 20),
 
+                _issueFlagged
+                    ? const Text(
+                        "An issue has been flagged for this survey. Please contact a technical expert.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.red,
+                        ),
+                      )
+                    : const Text(""),
                 // Gives a description on the survey section.
                 Center(
                   child: Text(
@@ -133,7 +157,9 @@ class _SurveySectionState extends State<SurveySection> {
 
                 // Opens the survey section in an AR view.
                 ElevatedButton(
-                  onPressed: () async => _openARSection(),
+                  onPressed: () {
+                    _openARSection();
+                  },
                   style:
                       ElevatedButton.styleFrom(primary: AppColours.appYellow),
                   child: const Text('Open section in AR'),
@@ -143,7 +169,7 @@ class _SurveySectionState extends State<SurveySection> {
                 // Allows rest of the display to be scrollable to be able to see and answer the questions,
                 // add and save images.
                 Container(
-                  height: screenHeight * 0.6,
+                  height: screenHeight * 0.55,
                   padding: const EdgeInsets.only(
                     left: 20,
                     right: 20,
@@ -351,7 +377,7 @@ class _SurveySectionState extends State<SurveySection> {
                 questionID: widget.questionID,
                 arContent: arContentPush,
                 openThroughQR: false,
-                seenTutorial: false,
+                seenTutorial: !app_globals.tutorialEnabled,
               ),
             ),
           );
@@ -396,6 +422,7 @@ class _SurveySectionState extends State<SurveySection> {
           'question': _answers[i].question,
           'answer': _answers[i].answer,
           'questionNumber': _answers[i].questionNumber,
+          'issueFlagged': _issueFlagged,
           'timestamp': FieldValue.serverTimestamp()
         });
       }
@@ -419,8 +446,11 @@ class _SurveySectionState extends State<SurveySection> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            SurveySection(questionID: questionID, vesselID: widget.vesselID),
+        builder: (context) => SurveySection(
+          questionID: questionID,
+          vesselID: widget.vesselID,
+          issueFlagged: _issueFlagged,
+        ),
       ),
     );
     setState(() {
@@ -448,11 +478,11 @@ class _SurveySectionState extends State<SurveySection> {
       // add them to answersList.
       for (var document in querySnapshot.docs) {
         answersList.add(Answer(
-          document['question'],
-          document['answer'],
-          document['sectionID'],
-          document['questionNumber'],
-        ));
+            document['question'],
+            document['answer'],
+            document['sectionID'],
+            document['questionNumber'],
+            document['issueFlagged']));
       }
       setState(() {
         // REFERENCE accessed 20/03/2022 https://stackoverflow.com/a/53549197
@@ -461,6 +491,12 @@ class _SurveySectionState extends State<SurveySection> {
         answersList
             .sort((a, b) => a.questionNumber.compareTo(b.questionNumber));
         // END REFERENCE
+
+        if (answersList[0].issueFlagged = true) {
+          _issueFlagged = true;
+        } else {
+          _issueFlagged = false;
+        }
       });
     } catch (error) {
       debugPrint("Error: $error");
@@ -592,7 +628,7 @@ class _DisplayQuestionsState extends State<DisplayQuestions> {
                             _answers.removeWhere((response) =>
                                 response.question == questionText);
                             _answers.add(Answer(questionText, answer,
-                                questionID, questionNumber));
+                                questionID, questionNumber, _issueFlagged));
                           });
                         },
                         decoration: InputDecoration(
