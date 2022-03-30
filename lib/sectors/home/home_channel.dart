@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/communication/channel.dart';
+import 'package:shipping_inspection_app/userdashboard.dart';
 import '../../utils/app_colours.dart';
 import '../drawer/drawer_globals.dart' as app_globals;
 
@@ -42,31 +43,45 @@ class HomeChannel extends StatelessWidget {
     }
   }
 
+  void goToChannel() {
+    if(app_globals.savedChannels[id] != " ") {
+      app_globals.setSavedChannelCurrent(app_globals.savedChannels[id]);
+    } else {
+      app_globals.setSavedChannelCurrent("");
+    }
+    indexNotifier.value = 2;
+  }
+
   @override
   Widget build(BuildContext context) {
     int displayId = id + 1;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return Container(
-      height: screenHeight * 0.06,
-      width: screenWidth * 0.435,
-      decoration: BoxDecoration(
-        color: AppColours.appPurpleLight,
-        borderRadius: BorderRadius.circular(25.0),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text('$displayId: ',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 14,)
-          ),
-          Center(
-            child: getSavedChannelString(),
-          )
-        ]
+    return InkWell(
+      onTap: () {
+        goToChannel();
+      },
+      child: Container(
+        height: screenHeight * 0.06,
+        width: screenWidth * 0.435,
+        decoration: BoxDecoration(
+          color: AppColours.appPurpleLight,
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text('$displayId: ',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,)
+            ),
+            Center(
+              child: getSavedChannelString(),
+            )
+          ]
+        )
       )
     );
   }

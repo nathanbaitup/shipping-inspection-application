@@ -25,6 +25,12 @@ void toggleSavedChannelsEnabled() {
 
 int savedChannelSum = 3;
 
+String savedChannelCurrent = "";
+
+void setSavedChannelCurrent(String tappedChannel) {
+  savedChannelCurrent = tappedChannel;
+}
+
 // --- HISTORY GLOBALS
 // -- For usage in History Logs
 List<Record> records = [];
