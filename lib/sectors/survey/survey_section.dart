@@ -65,14 +65,6 @@ class _SurveySectionState extends State<SurveySection> {
     super.initState();
   }
 
-  // Sets if the issue flagged bool has been activated to display a message to the user.
-  void _initialiseIssueFlagged() {
-    setState(() {
-      _issueFlagged = widget.issueFlagged;
-    });
-    debugPrint("$_issueFlagged");
-  }
-
   @override
   Widget build(BuildContext context) {
     // Gets the height and width of the current device.
@@ -455,6 +447,13 @@ class _SurveySectionState extends State<SurveySection> {
     );
     setState(() {
       _loading = false;
+    });
+  }
+
+  // Sets if the issue flagged bool has been activated to display a message to the user.
+  void _initialiseIssueFlagged() {
+    setState(() {
+      _issueFlagged = widget.issueFlagged;
     });
   }
 
