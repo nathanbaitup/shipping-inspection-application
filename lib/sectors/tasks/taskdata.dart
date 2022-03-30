@@ -10,5 +10,8 @@ class TaskData {
       // , this.stage
       );
 
-
+  @override
+  String toString() {
+    return 'TaskData{title: $title, description: $description}';
+  }
 }

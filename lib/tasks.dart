@@ -1,12 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/tasks/taskdata.dart';
-import 'package:shipping_inspection_app/utils/back_button.dart';
-import 'package:shipping_inspection_app/utils/taskcard.dart';
+ import 'package:shipping_inspection_app/utils/taskcard.dart';
 import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
-
-import 'package:provider/provider.dart';
 
 import 'home.dart';
 
@@ -26,6 +23,49 @@ class _TasksPageState extends State<TasksPage> {
 
   final _taskFormKey = GlobalKey<FormState>();
 
+  List<TaskData> allTasks = [];
+
+
+  // Generates an object list from the tasks stored in the Firestore collection
+  Future<List<TaskData>> _pullFirestoreTasks() async {
+    setState(() {
+      loading = true;
+    });
+    try {
+      // Creates a instance reference for the Task_Form collection
+      CollectionReference reference =
+      FirebaseFirestore.instance.collection('Task_Form');
+      // Obtains all task data
+      QuerySnapshot querySnapshot = await reference
+          .get();
+
+      // Retrieves all data from the snapshot instance and adds these to a list of tasks as Dart object
+      for (var document in querySnapshot.docs) {
+        allTasks.add(TaskData(
+          document['title'],
+          document['description'],
+        ));
+      }
+
+    }//prints a debug message should an error occur when accessing the records
+    catch (error) {
+      debugPrint("Error: $error");
+    }
+    setState(() {
+      loading = false;
+    });
+    // returns a list of task objects
+    return allTasks;
+
+  }
+
+  // Initializes the state and pulls an updated list of tasks.
+  @override
+  void initState() {
+    _pullFirestoreTasks();
+    super.initState();
+  }
+
 
   showTasksDialog(BuildContext context) {
 
@@ -39,6 +79,7 @@ class _TasksPageState extends State<TasksPage> {
         ,
       ),
       onPressed: () async {
+
         if (_taskFormKey.currentState!.validate()) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -52,14 +93,15 @@ class _TasksPageState extends State<TasksPage> {
           await FirebaseFirestore.instance
               .collection("Task_Form")
               .add({
-            'name': addedTask.title,
-            'email': addedTask.description,
+            'title': addedTask.title,
+            'description': addedTask.description,
           });
 
           print("Latest task:");
           print(addedTask.title + " / " + addedTask.description);
 
           Navigator.of(context).pop();
+
         }
       }
       );
@@ -158,6 +200,7 @@ class _TasksPageState extends State<TasksPage> {
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
