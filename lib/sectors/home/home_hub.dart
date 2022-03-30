@@ -8,6 +8,7 @@ import 'package:shipping_inspection_app/sectors/home/home_channel.dart';
 import 'package:shipping_inspection_app/sectors/home/home_percent.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/shared/section_header.dart';
+import 'package:shipping_inspection_app/tasks.dart';
 import '../../main.dart';
 import '../../shared/history_format.dart';
 import '../../utils/app_colours.dart';
@@ -88,7 +89,8 @@ class _HomeHubState extends State<HomeHub> {
                               padding: const EdgeInsets.all(20.0),
                               child: Row(
                                 children: [
-                                  sectionHeader("Progress")
+                                  sectionHeader("Progress"),
+                                  
                                 ],
                               ),
                             ),

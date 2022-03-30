@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/tasks/taskdata.dart';
- import 'package:shipping_inspection_app/utils/taskcard.dart';
+import 'package:shipping_inspection_app/utils/taskcard.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
 
-import 'home.dart';
+import 'dart:async';
+
+
 
 class TasksPage extends StatefulWidget {
   final String vesselID;
@@ -28,7 +30,6 @@ class _TasksPageState extends State<TasksPage> {
   // Generates an object list from the tasks stored in the Firestore collection
   Future<List<TaskData>> _pullFirestoreTasks() async {
     setState(() {
-      loading = true;
     });
     try {
       // Creates a instance reference for the Task_Form collection
@@ -51,7 +52,6 @@ class _TasksPageState extends State<TasksPage> {
       debugPrint("Error: $error");
     }
     setState(() {
-      loading = false;
     });
     // returns a list of task objects
     return allTasks;
