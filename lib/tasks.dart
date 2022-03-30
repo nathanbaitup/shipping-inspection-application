@@ -14,11 +14,11 @@ class TasksPage extends StatefulWidget {
 
 class _TasksPageState extends State<TasksPage> {
 
+  late int id;
   late String title;
   late String description;
 
   final _taskFormKey = GlobalKey<FormState>();
-
 
 
   showTasksDialog(BuildContext context) {
