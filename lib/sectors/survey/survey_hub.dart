@@ -6,6 +6,7 @@ import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_totals.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
 import 'package:shipping_inspection_app/utils/app_colours.dart';
+import '../../shared/section_header.dart';
 import '../drawer/drawer_globals.dart' as app_globals;
 
 import '../camera/qr_scanner_controller.dart';
@@ -67,21 +68,7 @@ class _SurveyHubState extends State<SurveyHub> {
                     padding: const EdgeInsets.all(20.0),
                     child: Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(10.0),
-                          decoration: const BoxDecoration(
-                            color: AppColours.appPurple,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: const Text(
-                            "QR Camera",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
+                        sectionHeader("QR Camera"),
                         TextButton(
                           style: TextButton.styleFrom(
                             primary: Colors.white,
@@ -139,21 +126,7 @@ class _SurveyHubState extends State<SurveyHub> {
                     padding: const EdgeInsets.all(20.0),
                     child: Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(10.0),
-                          decoration: const BoxDecoration(
-                            color: AppColours.appPurple,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: const Text(
-                            "Sections",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
+                        sectionHeader("Sections"),
                         TextButton(
                           style: TextButton.styleFrom(
                             primary: Colors.white,

@@ -8,6 +8,7 @@ import 'package:shipping_inspection_app/sectors/history/history_buttons.dart';
 import 'package:shipping_inspection_app/sectors/home/home_channel.dart';
 import 'package:shipping_inspection_app/sectors/home/home_percent.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
+import 'package:shipping_inspection_app/shared/section_header.dart';
 import '../../main.dart';
 import '../../shared/history_cleardialog.dart';
 import '../../shared/history_format.dart';
@@ -88,21 +89,7 @@ class _HomeHubState extends State<HomeHub> {
                               padding: const EdgeInsets.all(20.0),
                               child: Row(
                                 children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(10.0),
-                                    decoration: const BoxDecoration(
-                                      color: AppColours.appPurple,
-                                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                                    ),
-                                    child: const Text(
-                                      "Progress",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
+                                  sectionHeader("Progress")
                                 ],
                               ),
                             ),
@@ -138,21 +125,7 @@ class _HomeHubState extends State<HomeHub> {
                               padding: const EdgeInsets.all(20.0),
                               child: Row(
                                 children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(10.0),
-                                    decoration: const BoxDecoration(
-                                      color: AppColours.appPurple,
-                                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                                    ),
-                                    child: const Text(
-                                      "Channels",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
+                                  sectionHeader("Channels"),
                                   TextButton(
                                     style: TextButton.styleFrom(
                                       primary: Colors.white,
@@ -186,21 +159,7 @@ class _HomeHubState extends State<HomeHub> {
                               padding: const EdgeInsets.all(20.0),
                               child: Row(
                                 children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(10.0),
-                                    decoration: const BoxDecoration(
-                                      color: AppColours.appPurple,
-                                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                                    ),
-                                    child: const Text(
-                                      "History",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
+                                  sectionHeader("History"),
                                   historyButtons(context),
                                 ],
                               ),
