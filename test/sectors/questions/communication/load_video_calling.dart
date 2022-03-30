@@ -99,7 +99,7 @@ void main() {
           await tester.pump(const Duration(milliseconds: 400));
 
           // Finding the textField
-          final textField = find.byType(TextFormField);
+          // final textField = find.byType(TextFormField);
 
           // REFERENCE https://stackoverflow.com/a/54236046
 
