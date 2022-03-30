@@ -56,7 +56,7 @@ class _SurveyHubState extends State<SurveyHub> {
                           )),
                       child: const Center(
                         child: Text(
-                          "AR Hub",
+                          "Survey Hub",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.black,
