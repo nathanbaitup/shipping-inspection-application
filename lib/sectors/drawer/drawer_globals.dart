@@ -145,6 +145,20 @@ TextStyle getSettingsTitleStyle() {
       decoration: TextDecoration.underline);
 }
 
+// --- TUTORIAL GLOBALS
+// -- For usage in Tutorial Settings + Survey Sections
+
+bool tutorialEnabled = true;
+
+void setTutorialEnabled(bool value) {
+  tutorialEnabled = value;
+}
+
+bool getTutorialEnabled(bool value) {
+  return tutorialEnabled;
+}
+
+
 // --- USERNAME GLOBALS
 // -- For usage in Username Settings + History Logs + Calls
 String username = "Current User";
