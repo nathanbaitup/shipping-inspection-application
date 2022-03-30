@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/tasks/taskdata.dart';
 import 'package:shipping_inspection_app/utils/back_button.dart';
@@ -32,7 +33,7 @@ class _TasksPageState extends State<TasksPage> {
         style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)
         ,
       ),
-      onPressed: () {
+      onPressed: () async {
         if (_taskFormKey.currentState!.validate()) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -44,6 +45,14 @@ class _TasksPageState extends State<TasksPage> {
 
           print("Latest task:");
           print(addedTask.title + " / " + addedTask.description);
+
+          // Handles the storage of the form entry into the Firestore collection
+          await FirebaseFirestore.instance
+              .collection("Task_Form")
+              .add({
+            'name': addedTask.title,
+            'email': addedTask.description,
+          });
 
           Navigator.of(context).pop();
 
