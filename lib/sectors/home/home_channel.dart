@@ -1,5 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/communication/channel.dart';
 import '../../utils/app_colours.dart';
 import '../drawer/drawer_globals.dart' as app_globals;
@@ -28,12 +29,16 @@ class HomeChannel extends StatelessWidget {
       return const Text(
         'Empty',
         style: TextStyle(
+            color: Colors.white,
             fontSize: 14,
             fontStyle: FontStyle.italic),
       );
     } else {
       return Text(
-        channel.name
+        channel.name,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 14,)
       );
     }
   }
@@ -54,7 +59,11 @@ class HomeChannel extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('$displayId: '),
+          Text('$displayId: ',
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 14,)
+          ),
           Center(
             child: getSavedChannelString(),
           )

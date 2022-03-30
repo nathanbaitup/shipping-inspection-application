@@ -7,6 +7,16 @@ as app_globals;
 import '../utils/app_colours.dart';
 
 List<Widget> formatRecords() {
+
+  //Organise records by date
+  for (var i = 0; i < app_globals.records.length; i++) {
+    app_globals.records.sort((a, b){ //sorting in ascending order
+      return a.getDatetime.compareTo(b.getDatetime);
+    });
+  }
+
+
+  //Format records into text
   List<Widget> recordListTiles = [const SizedBox(height: 15)];
   for (var i = 0; i < app_globals.records.length; i++) {
     var currentRecord = app_globals.records[i];
@@ -322,11 +332,11 @@ class RecordWidget extends StatelessWidget {
           child: ListTile(
               title: Text.rich(
                 TextSpan(text: "User ", children: <TextSpan>[
-                  TextSpan(text: record[0], style: bold),
+                  TextSpan(text: record[0], style: const TextStyle(fontStyle: FontStyle.italic, color: AppColours.appPurpleLight)),
                   TextSpan(text: record[1]),
-                  TextSpan(text: record[2], style: bold),
+                  TextSpan(text: record[2], style: const TextStyle(fontStyle: FontStyle.italic, color: AppColours.appPurpleLight)),
                   TextSpan(text: record[3]),
-                  TextSpan(text: record[4], style: bold)
+                  TextSpan(text: record[4], style: const TextStyle(fontStyle: FontStyle.italic, color: AppColours.appPurpleLight))
                 ]),
               )),
       ),
