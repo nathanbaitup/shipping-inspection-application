@@ -99,11 +99,11 @@ void main() {
           await tester.pump(const Duration(milliseconds: 400));
 
           // Finding the textField
-          final textField = find.byType(TextFormField);
+          // final textField = find.byType(TextFormField);
 
           // REFERENCE https://stackoverflow.com/a/54236046
 
-          var textResult = textField.evaluate().single.widget as TextFormField;
+          // var textResult = textField.evaluate().single.widget as TextFormField;
         }),
       );
     },
