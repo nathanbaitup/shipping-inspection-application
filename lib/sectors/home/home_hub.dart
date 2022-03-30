@@ -90,7 +90,23 @@ class _HomeHubState extends State<HomeHub> {
                               child: Row(
                                 children: [
                                   sectionHeader("Progress"),
-                                  
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      primary: Colors.white,
+                                      backgroundColor: AppColours.appGrey,
+                                      elevation: 2,
+                                      shape: const CircleBorder(),
+                                    ),
+                                    child: const ImageIcon(AssetImage("images/todo.png")),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const TasksPage(vesselID: ''),
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ],
                               ),
                             ),
