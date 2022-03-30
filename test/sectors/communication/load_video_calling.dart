@@ -69,43 +69,47 @@ void main() {
         }),
       );
 
-      testWidgets(
-        'Testing Generate Channel button',
-        ((tester) async {
-          SystemChrome.setPreferredOrientations(
-              [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+      // Commented out test, this is due to no current way of working a randomized string into a expect function.
 
-          await Firebase.initializeApp();
+      // testWidgets(
+      //   'Testing Generate Channel button',
+      //   ((tester) async {
+      //     SystemChrome.setPreferredOrientations(
+      //         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
-          await tester.pumpWidget(
-            buildTestWidget(
-              const ChannelNameSelection(
-                vesselID: "test",
-              ),
-            ),
-          );
+      //     await Firebase.initializeApp();
 
-          // INIT Complete here
+      //     await tester.pumpWidget(
+      //       buildTestWidget(
+      //         const ChannelNameSelection(
+      //           vesselID: "test",
+      //         ),
+      //       ),
+      //     );
 
-          // Finding the button
-          await tester.tap(
-            find.byKey(
-              const Key('IDWALCommunicationGenerateChannelButton'),
-            ),
-          );
+      //     // INIT Complete here
 
-          // reloading the widget
+      //     // Finding the button
+      //     await tester.tap(
+      //       find.byKey(
+      //         const Key('IDWALCommunicationGenerateChannelButton'),
+      //       ),
+      //     );
 
-          await tester.pump(const Duration(milliseconds: 400));
+      //     // reloading the widget
 
-          // Finding the textField
-          // final textField = find.byType(TextFormField);
+      //     await tester.pump(const Duration(milliseconds: 400));
 
-          // REFERENCE https://stackoverflow.com/a/54236046
+      //     // Finding the textField
+      //     final textField = find.byType(TextFormField);
 
-          // var textResult = textField.evaluate().single.widget as TextFormField;
-        }),
-      );
+      //     // REFERENCE https://stackoverflow.com/a/54236046
+
+      //     var textResult = textField.evaluate().single.widget as TextFormField;
+
+      //     expect(textResult, textResult.toString());
+      //   }),
+      // );
     },
   );
 }
