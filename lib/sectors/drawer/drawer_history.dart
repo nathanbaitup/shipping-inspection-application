@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../shared/history_format.dart';
 import '../../utils/app_colours.dart';
+import '../history/history_buttons.dart';
 import 'drawer_globals.dart' as app_globals;
 
 class MenuHistory extends StatefulWidget {
@@ -22,20 +23,38 @@ class _MenuHistoryState extends State<MenuHistory> {
             color: AppColours.appPurple,
           ),
         ),
-        body: Container(
-            padding: const EdgeInsets.only(
-              left: 5,
-              right: 5,
-            ),
-            margin: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              border: Border.all(color: AppColours.appPurple),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(20),
+        body: Column(
+            children: [
+              Container(
+                height: 75,
+                child: Row(
+                  children: [
+                    historyButtons(context),
+                  ]
+                )
               ),
-            ),
-            child: getHistoryBody()
-        )
+              Expanded(
+                child: Container(
+                    padding: const EdgeInsets.only(
+                      left: 5,
+                      right: 5,
+                    ),
+                    margin: const EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                      bottom: 20,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColours.appPurple),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    child: getHistoryBody()
+                )
+              )
+            ],
+          ),
     );
   }
 }

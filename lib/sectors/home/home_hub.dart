@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_history.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_channels.dart';
 import 'package:shipping_inspection_app/sectors/drawer/settings/settings_history.dart';
+import 'package:shipping_inspection_app/sectors/history/history_buttons.dart';
 import 'package:shipping_inspection_app/sectors/home/home_channel.dart';
 import 'package:shipping_inspection_app/sectors/home/home_percent.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
@@ -200,71 +201,7 @@ class _HomeHubState extends State<HomeHub> {
                                       ),
                                     ),
                                   ),
-                                  TextButton(
-                                    style: TextButton.styleFrom(
-                                      primary: Colors.white,
-                                      backgroundColor: AppColours.appGrey,
-                                      elevation: 2,
-                                      shape: const CircleBorder(),
-                                    ),
-                                    child: const Icon(Icons.settings),
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => const SettingsHistory(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  const Spacer(),
-                                  Row(children: [
-                                    SizedBox(
-                                      height: 40,
-                                      child: TextButton(
-                                        style: TextButton.styleFrom(
-                                          primary: Colors.white,
-                                          backgroundColor: app_globals.getButtonColourCheck(
-                                              AppColours.appRed,
-                                              app_globals.getHistoryEnabled()),
-                                          elevation: 2,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(18.0)),
-                                        ),
-                                        child: const Text("Clear"),
-                                        onPressed: app_globals.getHistoryEnabled()
-                                            ? () => {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder: (BuildContext context) {
-                                                      return historyClearDialog(context);
-                                                    },
-                                                  )
-                                                }
-                                            : null),
-                                    ),
-                                    TextButton(
-                                        style: TextButton.styleFrom(
-                                          primary: Colors.white,
-                                          backgroundColor: app_globals.getButtonColourCheck(
-                                              AppColours.appBlue,
-                                              app_globals.getHistoryEnabled()),
-                                          elevation: 2,
-                                          shape: const CircleBorder(),
-                                        ),
-                                        child: const Icon(Icons.history),
-                                        onPressed: app_globals.getHistoryEnabled()
-                                            ? () => {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const MenuHistory(),
-                                                    ),
-                                                  ),
-                                                }
-                                            : null),
-                                  ])
+                                  historyButtons(context),
                                 ],
                               ),
                             ),
