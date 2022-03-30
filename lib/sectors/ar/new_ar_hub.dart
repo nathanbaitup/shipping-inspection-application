@@ -28,6 +28,8 @@ import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
 import 'ar_onboarding_screen.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
+// Updates a counter to differentiate between the fire extinguisher and valve models.
+int updateModelRender = 1;
 
 class NewARHub extends StatefulWidget {
   final String vesselID;
@@ -235,9 +237,8 @@ class _NewARHubState extends State<NewARHub> {
   }
 
   // Function that handles adding an object to the AR scene.
-  // TODO: allow for multiple items to be loaded dynamically based on the question ID.
   Future<void> _onPlaneOrPointTap(List<ARHitTestResult> userTapResults) async {
-    if (anchors.length == 1 && nodes.length == 1) {
+    if (anchors.length == 1 || nodes.length == 1) {
       debugPrint("Already displaying a model.");
     } else {
       // Gets the users hit point and sets the first tap to a plane type.
@@ -264,13 +265,15 @@ class _NewARHubState extends State<NewARHub> {
         switch (widget.questionID) {
           case 'f&s':
             {
-              switch (widgetQuestionID) {
+              // Checks to see what question is displayed and changes the model
+              // from an extinguisher to a valve.
+              switch (updateModelRender) {
                 case 2:
                   {
                     newNode = ARNode(
                       type: NodeType.localGLTF2,
                       // "Valve II" (https://skfb.ly/6zxYE) by Víctor Hernández is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-                      uri: "Models/modern_fire_extinguisher/scene.gltf",
+                      uri: "Models/valve_ii/scene.gltf",
                       scale: vector_math.Vector3(0.2, 0.2, 0.2),
                       position: vector_math.Vector3(0.0, 0.0, 0.0),
                       rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
@@ -298,6 +301,7 @@ class _NewARHubState extends State<NewARHub> {
               }
             }
             break;
+          // Sets the model to a lifeboat.
           case 'lifesaving':
             {
               newNode = ARNode(
@@ -310,7 +314,8 @@ class _NewARHubState extends State<NewARHub> {
               );
             }
             break;
-
+          // Sets the model to an engine. Due to the size of the model this takes
+          // a while to render in.
           case 'engine':
             {
               newNode = ARNode(
@@ -322,10 +327,9 @@ class _NewARHubState extends State<NewARHub> {
               );
             }
             break;
-
+          // defaults to the duck as a placeholder, can be modified for new sections.
           default:
             {
-              // defaults to duck
               newNode = ARNode(
                 type: NodeType.webGLB,
                 uri:
@@ -336,6 +340,7 @@ class _NewARHubState extends State<NewARHub> {
               );
             }
         }
+        //TODO: add CC's to settings page at the bottom and readme?
 
         // Takes the node just created and links it to the anchor as added by the
         // user to display where pressed.
@@ -551,8 +556,6 @@ class ARQuestionWidget extends StatelessWidget {
   }
 }
 
-int widgetQuestionID = 1;
-
 class ARContentWidget extends StatefulWidget {
   final List<String> arContent;
 
@@ -563,14 +566,15 @@ class ARContentWidget extends StatefulWidget {
 }
 
 class _MyARContentState extends State<ARContentWidget> {
+  int widgetQuestionID = 1;
   void _updateWidgetQuestion() {
     setState(() {
       int newQuestion = widgetQuestionID + 1;
       if (newQuestion > (widget.arContent.length - 1)) {
         newQuestion = 1;
-        widgetQuestionID = 2;
       }
       widgetQuestionID = newQuestion;
+      updateModelRender = newQuestion;
     });
   }
 
