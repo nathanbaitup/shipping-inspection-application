@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -55,7 +54,9 @@ class HomePercentActive extends StatelessWidget {
                 backgroundColor: AppColours.appPurpleLighter,
                 progressColor: AppColours.appLavender,
                 center: Text(
-                  '${(loadingPercent * 100).round()}%',
+                  loadingPercent.isNaN
+                      ? '${00.00} %'
+                      : '${(loadingPercent * 100).round()}%',
                   style: const TextStyle(
                       fontWeight: FontWeight.w700, color: Colors.white),
                 ),
@@ -72,7 +73,6 @@ class HomePercentActive extends StatelessWidget {
               ),
             ]));
   }
-
 }
 
 class HomePercentLoad extends StatelessWidget {
@@ -103,5 +103,4 @@ class HomePercentLoad extends StatelessWidget {
       ],
     );
   }
-
 }
