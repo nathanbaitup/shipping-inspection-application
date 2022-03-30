@@ -44,26 +44,13 @@ class _SettingsChannelsState extends State<SettingsChannels> {
               ),
               onPressed: globals.getSavedChannelsEnabled()
                   ? () => {
-                        setState(() async {
+                        setState(() {
                           globals.addRecord(
                               "channels-delete",
                               globals.getUsername(),
                               DateTime.now(),
                               channel.name);
                           deleteChannel(channel.channelID);
-                          await FirebaseFirestore.instance
-                              .collection("History_Logging")
-                              .add({
-                                'title': "Delete Channel",
-                                'username': globals.getUsername(),
-                                'time': DateTime.now(),
-                                'permission': 'Call Channel',
-                                'channelName': channel.name,
-                              })
-                              .then((value) =>
-                                  debugPrint("Record has been added"))
-                              .catchError((error) =>
-                                  debugPrint("Failed to add record: $error"));
                         })
                       }
                   : null),
@@ -138,15 +125,41 @@ class _SettingsChannelsState extends State<SettingsChannels> {
             ]),
             actions: [
               ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     globals.savedChannels[channel.channelID] =
                         dialogController.text;
                     if (edit) {
                       globals.addRecord("channels-edit", globals.getUsername(),
                           DateTime.now(), dialogController.text);
+
+                      await FirebaseFirestore.instance
+                          .collection("History_Logging")
+                          .add({
+                            'title': "Edit Channel",
+                            'username': globals.getUsername(),
+                            'time': DateTime.now(),
+                            'permission': 'Edit',
+                            'channelName': dialogController.text,
+                          })
+                          .then((value) => debugPrint("Record has been added"))
+                          .catchError((error) =>
+                              debugPrint("Failed to add record: $error"));
                     } else {
                       globals.addRecord("channels-new", globals.getUsername(),
                           DateTime.now(), dialogController.text);
+
+                      await FirebaseFirestore.instance
+                          .collection("History_Logging")
+                          .add({
+                            'title': "New Channel",
+                            'username': globals.getUsername(),
+                            'time': DateTime.now(),
+                            'permission': 'Added',
+                            'channelName': dialogController.text,
+                          })
+                          .then((value) => debugPrint("Record has been added"))
+                          .catchError((error) =>
+                              debugPrint("Failed to add record: $error"));
                     }
                     globals.savePrefs();
                     globals.homeStateUpdate();
@@ -196,7 +209,7 @@ class _SettingsChannelsState extends State<SettingsChannels> {
                             const Icon(Icons.save, color: AppColours.appPurple),
                         initialValue: globals.getSavedChannelsEnabled(),
                         activeSwitchColor: AppColours.appPurple,
-                        onToggle: (bool value) {
+                        onToggle: (bool value) async {
                           globals.toggleSavedChannelsEnabled();
                           if (globals.getSavedChannelsEnabled()) {
                             globals.addRecord(
@@ -204,12 +217,38 @@ class _SettingsChannelsState extends State<SettingsChannels> {
                                 globals.getUsername(),
                                 DateTime.now(),
                                 "Saved Channels");
+
+                            await FirebaseFirestore.instance
+                                .collection("History_Logging")
+                                .add({
+                                  'title': "Saves Channels Enabled",
+                                  'username': globals.getUsername(),
+                                  'time': DateTime.now(),
+                                  'permission': 'Saved',
+                                })
+                                .then((value) =>
+                                    debugPrint("Record has been added"))
+                                .catchError((error) =>
+                                    debugPrint("Failed to add record: $error"));
                           } else {
                             globals.addRecord(
                                 "settings-disable",
                                 globals.getUsername(),
                                 DateTime.now(),
                                 "Saved Channels");
+
+                            await FirebaseFirestore.instance
+                                .collection("History_Logging")
+                                .add({
+                                  'title': "Saves Channels Disabled",
+                                  'username': globals.getUsername(),
+                                  'time': DateTime.now(),
+                                  'permission': 'Saved',
+                                })
+                                .then((value) =>
+                                    debugPrint("Record has been added"))
+                                .catchError((error) =>
+                                    debugPrint("Failed to add record: $error"));
                           }
                           setState(() {
                             value = globals.getSavedChannelsEnabled();
