@@ -252,7 +252,7 @@ class _TasksPageState extends State<TasksPage> {
                       child: ElevatedButton(
                         style:
                       ElevatedButton.styleFrom(primary: AppColours.appPurple, shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(10),
                         ),),
                         onPressed: () {
                           showTasksDialog(context);
@@ -280,7 +280,7 @@ class _TasksPageState extends State<TasksPage> {
                 flex: 5,
                 child: ListView(
                   shrinkWrap: true,
-                  physics: AlwaysScrollableScrollPhysics(),
+                  physics: const AlwaysScrollableScrollPhysics(),
                   children: <Widget>[
                     for (TaskData cardTask in allTasks)
                       TaskCard(title: cardTask.title.toString(),
