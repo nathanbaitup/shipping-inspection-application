@@ -35,11 +35,7 @@ void main() {
             ),
           );
 
-          // await tester.tap(goToVideoCallingScreen);
-
-          // final titleFinder = find.text('Join/Create Channel');
-
-          // expect(titleFinder, findsOneWidget);
+          // INIT Complete here
 
           final finder = find.byType(MaterialButton);
 
@@ -63,7 +59,10 @@ void main() {
             ),
           );
 
-          await tester.enterText(find.byType(TextFormField), 'hi');
+          // INIT Complete here
+
+          await tester.enterText(
+              find.byType(TextFormField), 'load-video-calling.dart test-2');
         }),
       );
 
@@ -92,8 +91,18 @@ void main() {
             ),
           );
 
+          // reloading the widget
+
+          await tester.pump(const Duration(milliseconds: 400));
+
           // Finding the textField
           final textField = find.byType(TextFormField);
+
+          // REFERENCE https://stackoverflow.com/a/54236046
+
+          var textResult = textField.evaluate().single.widget as TextFormField;
+
+          // print(textResult);
 
           // final result = textField.;
         }),
