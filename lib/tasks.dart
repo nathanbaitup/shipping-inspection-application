@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/sectors/tasks/taskdata.dart';
  import 'package:shipping_inspection_app/utils/taskcard.dart';
-import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart' as globals;
 
 import 'home.dart';
@@ -97,18 +96,24 @@ class _TasksPageState extends State<TasksPage> {
             'description': addedTask.description,
           });
 
+          //debug
           print("Latest task:");
           print(addedTask.title + " / " + addedTask.description);
 
+          //debug
           for (TaskData aTask in allTasks){
             print(aTask.toString());
           }
 
+          //clears current task list so it can be replaced by the newly updated Firestore list
+          allTasks = [];
 
+          //replaces the task list with the latest values from the Firestore collection
+          _pullFirestoreTasks();
 
           Navigator.pop(context, true);
           setState(() {
-            // refresh state
+            (context);
           });
 
 
@@ -249,13 +254,6 @@ class _TasksPageState extends State<TasksPage> {
                           borderRadius: new BorderRadius.circular(10),
                         ),),
                         onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => const AddTask(),
-                          //   ),
-                          // );
-
                           showTasksDialog(context);
                         },
                         child: const Center(
@@ -282,7 +280,6 @@ class _TasksPageState extends State<TasksPage> {
                 child: ListView(
                   shrinkWrap: true,
                   physics: AlwaysScrollableScrollPhysics(),
-
                   children: <Widget>[
                     for (TaskData cardTask in allTasks)
                       TaskCard(title: cardTask.title.toString(),
