@@ -63,6 +63,9 @@ void main() {
 
           await tester.enterText(
               find.byType(TextFormField), 'load-video-calling.dart test-2');
+
+          // Expect to find the item on screen.
+          expect(find.text('load-video-calling.dart test-2'), findsOneWidget);
         }),
       );
 
@@ -101,31 +104,8 @@ void main() {
           // REFERENCE https://stackoverflow.com/a/54236046
 
           var textResult = textField.evaluate().single.widget as TextFormField;
-
-          // print(textResult);
-
-          // final result = textField.;
         }),
       );
     },
   );
 }
-
-// https://stackoverflow.com/a/56184403 Fix MediaQuery bug?
-
-// void main() {
-//   Widget createWidgetForTesting({required Widget child}) {
-//     return MaterialApp(
-//       home: child,
-//     );
-//   }
-
-//   testWidgets('Login Page smoke test', (WidgetTester tester) async {
-//     await tester.pumpWidget(createWidgetForTesting(
-//         child: new ChannelNameSelection(
-//       vesselID: 'HelloWorldTesting',
-//     )));
-
-//     await tester.pumpAndSettle();
-//   });
-// }
