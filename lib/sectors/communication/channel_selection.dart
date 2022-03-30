@@ -17,6 +17,9 @@ final _channelNameController = TextEditingController();
 
 final ValueNotifier<bool> channelNotifier = ValueNotifier(globals.getSavedChannelsEnabled());
 
+String saveTitle = "Save to...";
+String pasteTitle = "Select Channel to Paste";
+
 class ChannelNameSelection extends StatefulWidget {
   final String vesselID;
   const ChannelNameSelection({Key? key, required this.vesselID})
@@ -31,6 +34,13 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
   bool loading = false;
   bool hasInternet = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _channelNameController.text = globals.savedChannelCurrent;
+    globals.savedChannelCurrent = "";
+  }
+
   List<Widget> getChannelButtons(bool value) {
     List<Widget> channelButtons = [];
     if(value) {
@@ -40,7 +50,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
           onPressed: () {
             setState(() {
               showOptionsDialog(
-                  context, "Select Channel to Save");
+                  context, saveTitle);
             });
           },
         ),
@@ -48,7 +58,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
           onPressed: () {
             setState(() {
               showOptionsDialog(
-                  context, "Select Channel to Paste");
+                  context, pasteTitle);
             });
           },
           icon: const Icon(Icons.more_vert),
@@ -62,7 +72,6 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
 
   @override
   Widget build(BuildContext context) {
-    _channelNameController.text = globals.savedChannelCurrent;
     return ValueListenableBuilder<bool>(
         valueListenable: channelNotifier,
         builder: (_, channelEnableValue, __) {
@@ -329,9 +338,9 @@ SimpleDialogOption channelOption(
     emptyFont = FontStyle.normal;
   }
 
-  if (title == "Select Channel to Save") {
+  if (title == saveTitle) {
     mode = "save";
-  } else if (title == "Select Channel to Paste") {
+  } else if (title == pasteTitle) {
     mode = "paste";
   }
 
