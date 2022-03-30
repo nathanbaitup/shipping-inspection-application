@@ -154,9 +154,10 @@ bool tutorialEnabled = true;
 void setTutorialEnabled(bool value) {
   tutorialEnabled = value;
   savePrefs();
+  homeStateUpdate();
 }
 
-bool getTutorialEnabled(bool value) {
+bool getTutorialEnabled() {
   return tutorialEnabled;
 }
 
