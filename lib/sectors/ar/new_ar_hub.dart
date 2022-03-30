@@ -24,7 +24,7 @@ import '../../utils/app_colours.dart';
 import '../questions/question_brain.dart';
 import '../survey/survey_section.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
-as app_globals;
+    as app_globals;
 import 'ar_onboarding_screen.dart';
 
 QuestionBrain questionBrain = QuestionBrain();
@@ -233,29 +233,58 @@ class _NewARHubState extends State<NewARHub> {
         switch (widget.questionID) {
           case 'f&s':
             {
+              switch (widgetQuestionID) {
+                case 2:
+                  {
+                    newNode = ARNode(
+                      type: NodeType.localGLTF2,
+                      // "Valve II" (https://skfb.ly/6zxYE) by Víctor Hernández is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+                      uri: "Models/modern_fire_extinguisher/scene.gltf",
+                      scale: vector_math.Vector3(0.2, 0.2, 0.2),
+                      position: vector_math.Vector3(0.0, 0.0, 0.0),
+                      rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
+                    );
+                  }
+                  break;
+                default:
+                  {
+                    newNode = ARNode(
+                      // Sets the type of object
+                      type: NodeType.localGLTF2,
+                      // Where the object is rendered from.
+                      // "Fire Extinguisher" (https://skfb.ly/onUZp) by oooFFFFEDDMODELS is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+                      uri:
+                          "Models/fire_extinguisher_3/fire_extinguisher_model_with_render.gltf",
+                      // Sets the overall size of the object on the device.
+                      scale: vector_math.Vector3(0.2, 0.2, 0.2),
+                      // Sets the position to the anchor point created when pressing on the plane.
+                      position: vector_math.Vector3(0.0, 0.0, 0.0),
+                      // Sets the rotation to follow the plane axis.
+                      rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
+                    );
+                  }
+                  break;
+              }
+            }
+            break;
+          case 'lifesaving':
+            {
               newNode = ARNode(
-                // Sets the type of object
                 type: NodeType.localGLTF2,
-                // Where the object is rendered from.
-
-                // This work is based on "Fire Extinguisher" (https://sketchfab.com/3d-models/fire-extinguisher-5288f12eb87f4826a73ebedb60a1c82d) by oooFFFFEDDMODELS (https://sketchfab.com/pierre.marcos.19) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
-                uri:
-                    "Models/fire_extinguisher_3/fire_extinguisher_model_with_render.gltf",
-                // Sets the overall size of the object on the device.
+                // "Lifeboat Compact" (https://skfb.ly/o6SXv) by jeffgeoff95 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+                uri: "Models/lifeboat_compact/scene.gltf",
                 scale: vector_math.Vector3(0.2, 0.2, 0.2),
-                // Sets the position to the anchor point created when pressing on the plane.
                 position: vector_math.Vector3(0.0, 0.0, 0.0),
-                // Sets the rotation to follow the plane axis.
                 rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
               );
             }
             break;
 
-          case 'lifesaving':
+          case 'engine':
             {
               newNode = ARNode(
                 type: NodeType.localGLTF2,
-                uri: "Models/life_boat_small/lifeboat-small.gltf",
+                uri: "Models/ship_engine_low_poly/ship-engine-low-poly.gltf",
                 scale: vector_math.Vector3(0.2, 0.2, 0.2),
                 position: vector_math.Vector3(0.0, 0.0, 0.0),
                 rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
@@ -365,8 +394,7 @@ class _NewARHubState extends State<NewARHub> {
       UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
       await uploadTask.then((value) => value.ref.getDownloadURL());
       // Creates a toast to say that data cannot be saved.
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: app_globals.getSnackBarBgColour(),
           content: const Text("Image Saved.")));
     } catch (e) {
@@ -391,12 +419,14 @@ class _NewARHubState extends State<NewARHub> {
 
   void _takeScreenshot() async {
     onTakeScreenshot();
-    app_globals.addRecord("pressed", app_globals.getUsername(),
-        DateTime.now(), 'take screenshot');
+    app_globals.addRecord("pressed", app_globals.getUsername(), DateTime.now(),
+        'take screenshot');
   }
 
   // Returns the user to the survey_section screen, ensuring they are returned to the section they are currently surveying.
   void _returnToSectionScreen() async {
+    nodes = [];
+    anchors = [];
     arSessionManager.dispose();
     // If the user opened a section through the QR scanner, then only one screen
     // needs to be removed from the stack.
@@ -419,8 +449,8 @@ class _NewARHubState extends State<NewARHub> {
       Navigator.pop(context);
       Navigator.pop(context);
     }
-    app_globals.addRecord("pressed", app_globals.getUsername(),
-        DateTime.now(), 'return to section');
+    app_globals.addRecord("pressed", app_globals.getUsername(), DateTime.now(),
+        'return to section');
     await FirebaseFirestore.instance
         .collection("History_Logging")
         .add({
@@ -463,6 +493,8 @@ class ARQuestionWidget extends StatelessWidget {
   }
 }
 
+int widgetQuestionID = 1;
+
 class ARContentWidget extends StatefulWidget {
   final List<String> arContent;
 
@@ -473,13 +505,12 @@ class ARContentWidget extends StatefulWidget {
 }
 
 class _MyARContentState extends State<ARContentWidget> {
-  int widgetQuestionID = 1;
-
   void _updateWidgetQuestion() {
     setState(() {
       int newQuestion = widgetQuestionID + 1;
       if (newQuestion > (widget.arContent.length - 1)) {
         newQuestion = 1;
+        widgetQuestionID = 2;
       }
       widgetQuestionID = newQuestion;
     });

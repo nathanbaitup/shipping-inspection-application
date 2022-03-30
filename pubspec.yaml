@@ -117,11 +117,11 @@ flutter:
      - images/
      - images/ar_onboarding/
      - Models/
-     - Models/fire_extinguisher/
      - Models/fire_extinguisher_3/
-     - Models/lifeboat_accurate/
      - Models/valve/
      - Models/ship_engine_low_poly/
+     - Models/valve_ii/
+     - Models/lifeboat_compact/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
