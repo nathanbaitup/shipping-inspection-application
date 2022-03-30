@@ -122,6 +122,7 @@ flutter:
      - Models/ship_engine_low_poly/
      - Models/valve_ii/
      - Models/lifeboat_compact/
+     - Models/ship_engine_low_poly/ship_engine_lower_face_count/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

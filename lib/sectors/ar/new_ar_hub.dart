@@ -220,9 +220,8 @@ class _NewARHubState extends State<NewARHub> {
           // Shows where a point has been detected within AR.
           showFeaturePoints: false,
           // Show where object can be placed and the texture for the object.
-          // TODO: set to false after testing is completed.
           showPlanes: true,
-          customPlaneTexturePath: "images/triangle.png",
+          customPlaneTexturePath: "images/circle.png",
           // Allow object to move
           handlePans: true,
           // Allow object to rotation
@@ -274,7 +273,7 @@ class _NewARHubState extends State<NewARHub> {
                       type: NodeType.localGLTF2,
                       // "Valve II" (https://skfb.ly/6zxYE) by Víctor Hernández is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
                       uri: "Models/valve_ii/scene.gltf",
-                      scale: vector_math.Vector3(0.2, 0.2, 0.2),
+                      scale: vector_math.Vector3(0.5, 0.5, 0.5),
                       position: vector_math.Vector3(0.0, 0.0, 0.0),
                       rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
                     );
@@ -290,7 +289,7 @@ class _NewARHubState extends State<NewARHub> {
                       uri:
                           "Models/fire_extinguisher_3/fire_extinguisher_model_with_render.gltf",
                       // Sets the overall size of the object on the device.
-                      scale: vector_math.Vector3(0.2, 0.2, 0.2),
+                      scale: vector_math.Vector3(0.1, 0.1, 0.1),
                       // Sets the position to the anchor point created when pressing on the plane.
                       position: vector_math.Vector3(0.0, 0.0, 0.0),
                       // Sets the rotation to follow the plane axis.
@@ -308,7 +307,7 @@ class _NewARHubState extends State<NewARHub> {
                 type: NodeType.localGLTF2,
                 // "Lifeboat Compact" (https://skfb.ly/o6SXv) by jeffgeoff95 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
                 uri: "Models/lifeboat_compact/scene.gltf",
-                scale: vector_math.Vector3(0.2, 0.2, 0.2),
+                scale: vector_math.Vector3(0.1, 0.07, 0.1),
                 position: vector_math.Vector3(0.0, 0.0, 0.0),
                 rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
               );
@@ -320,8 +319,9 @@ class _NewARHubState extends State<NewARHub> {
             {
               newNode = ARNode(
                 type: NodeType.localGLTF2,
-                uri: "Models/ship_engine_low_poly/ship-engine-low-poly.gltf",
-                scale: vector_math.Vector3(0.2, 0.2, 0.2),
+                uri:
+                    "Models/ship_engine_low_poly/ship_engine_lower_face_count/ship-engine-low-poly.gltf",
+                scale: vector_math.Vector3(1.2, 1.2, 1.2),
                 position: vector_math.Vector3(0.0, 0.0, 0.0),
                 rotation: vector_math.Vector4(1.0, 0.0, 0.0, 0.0),
               );
@@ -340,7 +340,6 @@ class _NewARHubState extends State<NewARHub> {
               );
             }
         }
-        //TODO: add CC's to settings page at the bottom and readme?
 
         // Takes the node just created and links it to the anchor as added by the
         // user to display where pressed.
