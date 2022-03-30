@@ -106,7 +106,11 @@ class _TasksPageState extends State<TasksPage> {
 
 
 
-          Navigator.of(context).pop();
+          Navigator.pop(context, true);
+          setState(() {
+            // refresh state
+          });
+
 
         }
       }
@@ -277,33 +281,14 @@ class _TasksPageState extends State<TasksPage> {
                 flex: 5,
                 child: ListView(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: AlwaysScrollableScrollPhysics(),
 
                   children: <Widget>[
-                    TaskCard(
-                      title: 'IMO Guidelines review',
-                      subtitle:
-                          'Review the inspection conventions given by International Maritime Organization (IMO) to keep on top of my duties',
-                      cardColor: Color(0xFFFFE4C7),
-                    ),
-                    TaskCard(
-                      title: 'Engine Bay',
-                      subtitle:
-                          'Complete engine bay inspection for the SS Milwaukee',
-                      cardColor: Color(0xFFDBCFF3),
-                    ),
-                  TaskCard(
-                       title: 'Call HQ',
-                       subtitle:
-                           'Contact HQ to request a revision of my duties for this week',
-                       cardColor: Color(0xFFFED4D6),
-                     ),
-                     TaskCard(
-                       title: 'Collaborate with surveyor X',
-                       subtitle:
-                           'Meet up with surveyor X to ask about lifeboat inspection safety guidelines, as I have little experience in this field',
-                       cardColor: Color(0xFFD9E6DC),
-                     ),
+                    for (TaskData cardTask in allTasks)
+                      TaskCard(title: cardTask.title.toString(),
+                          subtitle:  cardTask.description.toString(),
+                          cardColor: Color(0xFFE8E0F8))
+
                    ],
                 ),
 
