@@ -18,9 +18,9 @@ Idwal Vessel Inspection is built using:
 ***
 
 ### APK: 
-Provided within the source zip fiel is an APK version of the application, to download this onto your device, download the APK directly to your android device and follow the steps of the installer. This will install and launch the application.
+Provided within the source zip field is an APK version of the application, to download this onto your device, download the APK directly to your android device and follow the steps of the installer. This will install and launch the application.
 
-_Please note: Installation of Unkown sources must be enabled on your device before the application can be installed._
+_Please note: Installation of Unknown sources must be enabled on your device before the application can be installed._
 For more information surrounding enabling unknown sources please [look at this tutorial.](https://www.appaloosa.io/guides/how-to-install-apps-from-unknown-sources-in-android/)
 
 This setup will include installation for the application for installation onto an android device as well as work device for continued project development.
