@@ -1,3 +1,15 @@
+// ===========================================
+// Title: Channel Selection
+//
+// Original Author: Hamid Iqbal, Osama Ilyas
+// Contributors: Osama Ilyas, Hamid Iqbal, Matt Barnett,
+//
+// Commented By: Osama Ilyas, Hamid Iqbal,  Matt Barnett,
+//
+// Created: Feb 16, 2022 15:24
+// Last Modified: Mar 31, 2022 12:51
+// ===========================================
+
 // ignore_for_file: file_names
 import 'dart:async';
 
@@ -97,7 +109,7 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                           validator: ChannelNameValidator.validate,
                           onChanged: (val) {
                             setState(
-                                  () {
+                              () {
                                 channelName = val;
                               },
                             );
@@ -123,7 +135,8 @@ class _ChannelNameSelectionState extends State<ChannelNameSelection> {
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
                                 borderSide: const BorderSide(
-                                  color: AppColours.appPurpleLighter, width: 2)),
+                                    color: AppColours.appPurpleLighter,
+                                    width: 2)),
                             prefixIcon: const Icon(Icons.video_call),
                             hintText: 'Channel Name',
                             suffixIcon: Row(

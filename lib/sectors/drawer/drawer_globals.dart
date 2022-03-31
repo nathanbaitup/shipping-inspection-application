@@ -41,11 +41,29 @@ void addRecord(type, user, dateTime, section) {
 }
 
 // --- THEME GLOBALS
-// -- For usage in Dark Mode
+// -- For usage in Dark Mode and System Theme
 var appBrightness = SchedulerBinding.instance!.window.platformBrightness;
 
 bool systemThemeEnabled = false;
+
+
+bool getSystemThemeEnabled() {
+  return systemThemeEnabled;
+}
+
+void toggleSystemThemeEnabled() {
+  systemThemeEnabled = !systemThemeEnabled;
+}
+
 bool darkModeEnabled = appBrightness == Brightness.dark;
+
+bool getDarkModeEnabled() {
+  return darkModeEnabled;
+}
+
+void toggleDarkModeEnabled() {
+  darkModeEnabled = !darkModeEnabled;
+}
 
 void initTheme() {
   if(darkModeEnabled) {

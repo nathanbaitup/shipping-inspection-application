@@ -1,17 +1,32 @@
-import 'dart:async';
 
+// ===========================================
+// Title: Survey Hub
+//
+// Original Author: Osama Ilyas
+// Contributors: Matt Barnett, Nathan Baitup, Osama Ilyas
+// Commented By: Matt Barnett, Nathan Baitup
+//
+// Created: Feb 11, 2022 10:58pm
+// Last Modified: Mar 31, 2022 6:32am
+// ===========================================
+
+// External Imports
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+// Internal Imports
 import 'package:shipping_inspection_app/sectors/drawer/drawer_help.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_totals.dart';
 import 'package:shipping_inspection_app/sectors/survey/survey_section.dart';
 import 'package:shipping_inspection_app/utils/app_colours.dart';
 import '../../shared/section_header.dart';
-import '../drawer/drawer_globals.dart' as app_globals;
-
 import '../camera/qr_scanner_controller.dart';
+
+// App Globals
+import '../drawer/drawer_globals.dart' as app_globals;
 
 QuestionBrain questionBrain = QuestionBrain();
 
@@ -26,6 +41,8 @@ class SurveyHub extends StatefulWidget {
 }
 
 class _SurveyHubState extends State<SurveyHub> {
+
+  // Initialise survey hub.
   @override
   void initState() {
     super.initState();
@@ -39,11 +56,15 @@ class _SurveyHubState extends State<SurveyHub> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
+          // Content is wrapped in SingleChildScrollView but defined as
+          // "never scrollable" within the physics parameter to ensure
+          // overflow errors don't occur if the user accesses the keyboard.
           physics: const NeverScrollableScrollPhysics(),
           child: SafeArea(
             child: Center(
               child: Column(
                 children: <Widget>[
+
                   Container(
                       height: screenHeight * 0.12,
                       width: screenWidth,
@@ -56,7 +77,7 @@ class _SurveyHubState extends State<SurveyHub> {
                           )),
                       child: const Center(
                         child: Text(
-                          "AR Hub",
+                          "Survey Hub",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.black,
@@ -65,12 +86,17 @@ class _SurveyHubState extends State<SurveyHub> {
                           ),
                         ),
                       )),
+
                   Container(
                     height: screenHeight * 0.12,
                     padding: const EdgeInsets.all(20.0),
                     child: Row(
                       children: [
                         sectionHeader("QR Camera"),
+
+                        // Help button brings users to a help page in case of
+                        // being unsure how to most effectively use any related
+                        // features.
                         TextButton(
                           style: TextButton.styleFrom(
                             primary: Colors.white,
@@ -95,7 +121,13 @@ class _SurveyHubState extends State<SurveyHub> {
                             );
                           },
                         ),
+
                         const Spacer(),
+
+                        // Open QR Camera button directly opens camera with a
+                        // QR overlay. This allows users to directly access a
+                        // section rather than scroll through the survey sections
+                        // below.
                         SizedBox(
                           width: screenWidth * 0.35,
                           child: TextButton(
@@ -119,16 +151,23 @@ class _SurveyHubState extends State<SurveyHub> {
                       ],
                     ),
                   ),
+
+                  // Divider to make section separation more obvious to users.
                   const Divider(
                     thickness: 1,
                     height: 1,
                   ),
+
                   Container(
                     height: screenHeight * 0.12,
                     padding: const EdgeInsets.all(20.0),
                     child: Row(
                       children: [
                         sectionHeader("Sections"),
+
+                        // Help button brings users to a help page in case of
+                        // being unsure how to most effectively use any related
+                        // features.
                         TextButton(
                           style: TextButton.styleFrom(
                             primary: Colors.white,
@@ -153,32 +192,10 @@ class _SurveyHubState extends State<SurveyHub> {
                             );
                           },
                         ),
-                        Expanded(
-                            child: SizedBox(
-                          height: 35,
-                          child: TextFormField(
-                              decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                    borderSide: const BorderSide(
-                                        color: Colors.grey, width: 1.5),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  prefixIcon: const Icon(
-                                    Icons.search,
-                                    size: 20,
-                                  ),
-                                  hintText: "Search",
-                                  contentPadding: EdgeInsets.zero),
-                              style: const TextStyle(
-                                fontSize: 14,
-                              )),
-                        ))
                       ],
                     ),
                   ),
+
                   Container(
                     height: screenHeight * 0.45,
                     padding: const EdgeInsets.only(
@@ -189,6 +206,12 @@ class _SurveyHubState extends State<SurveyHub> {
                       scrollDirection: Axis.vertical,
                       child: Column(
                         children: const [
+                          // Column contains all survey sections displaying
+                          // the section's progress, name and "Open" buttons to
+                          // access related responses and materials. If more
+                          // elements are added or content is loaded on a smaller
+                          // screen, the item list will have the functionality
+                          // to be scrolled through vertically.
                           SurveySectionWidget(
                               sectionName: "Fire & Safety",
                               sectionMethod: "f&s"),
@@ -268,7 +291,11 @@ class _SurveySectionWidgetState extends State<SurveySectionWidget> {
   @override
   Widget build(BuildContext context) {
     final double screenSize = MediaQuery.of(context).size.width;
+    // Three widgets in each row for each survey section present within the
+    // application.
     return Row(children: [
+
+      // First widget contains the section name.
       Container(
           width: screenSize * 0.35,
           padding: const EdgeInsets.only(
@@ -293,6 +320,9 @@ class _SurveySectionWidgetState extends State<SurveySectionWidget> {
               ),
             ),
           )),
+
+      // Second widget contains the section progress.
+      // E.g. "1 of 2"
       Container(
           width: screenSize * 0.2,
           padding: const EdgeInsets.only(
@@ -316,6 +346,9 @@ class _SurveySectionWidgetState extends State<SurveySectionWidget> {
               ),
             ),
           )),
+
+      // Third widget dynamically loads the survey section corresponding
+      // to the content within the two prior containers.
       SizedBox(
         width: screenSize * 0.275,
         child: TextButton(
