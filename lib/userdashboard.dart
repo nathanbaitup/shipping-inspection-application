@@ -75,6 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
               leading: Transform.scale(
                 scale: 0.7,
                 child: FloatingActionButton(
+                  key: const Key('DrawerButton'),
                   onPressed: () => _scaffoldKey.currentState?.openDrawer(),
                   child: const Icon(Icons.menu),
                 ),

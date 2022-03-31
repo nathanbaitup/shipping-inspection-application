@@ -150,6 +150,7 @@ class _HomeHubState extends State<HomeHub> {
                                       // will be scrollable horizontally.
                                       children: const [
                                         ActiveSurveysWidget(
+                                          key: Key('IDWALFireAndSafetySectionProgressWidget'),
                                           sectionName: 'Fire and Safety',
                                           sectionID: 'f&s',
                                         ),
@@ -180,6 +181,7 @@ class _HomeHubState extends State<HomeHub> {
                                   // settings which, when changed, instantly update
                                   // home-hub content.
                                   TextButton(
+                                    key: const Key('IDWALHomeHubChannelSettingsButton'),
                                     style: TextButton.styleFrom(
                                       primary: Colors.white,
                                       backgroundColor: AppColours.appGrey,

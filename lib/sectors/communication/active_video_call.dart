@@ -113,8 +113,6 @@ class _VideoCallFragmentState extends State<VideoCallFragment> {
 
   // UI elements
   // Generated inside a new MaterialApp to avoid Agora glitches.
-  // TODO Make within the application to reduce size and improve app response time.
-  // TODO Swap views around showing other user in the bigger picture
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

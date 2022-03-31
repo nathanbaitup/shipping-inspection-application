@@ -131,6 +131,7 @@ class _SurveyHubState extends State<SurveyHub> {
                         SizedBox(
                           width: screenWidth * 0.35,
                           child: TextButton(
+                              key: const Key('IDWALQRCameraButton'),
                               style: TextButton.styleFrom(
                                 primary: Colors.white,
                                 backgroundColor: AppColours.appPurpleLighter,
@@ -169,6 +170,7 @@ class _SurveyHubState extends State<SurveyHub> {
                         // being unsure how to most effectively use any related
                         // features.
                         TextButton(
+                          key: const Key('IDWALSurveyHubSectionsHelpButton'),
                           style: TextButton.styleFrom(
                             primary: Colors.white,
                             backgroundColor: AppColours.appYellow,
