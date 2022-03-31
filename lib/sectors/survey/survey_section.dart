@@ -466,6 +466,7 @@ class _SurveySectionState extends State<SurveySection> {
   void _initialiseIssueFlagged() {
     setState(() {
       _issueFlagged = widget.issueFlagged;
+      debugPrint('$_issueFlagged');
     });
   }
 
@@ -503,10 +504,13 @@ class _SurveySectionState extends State<SurveySection> {
             .sort((a, b) => a.questionNumber.compareTo(b.questionNumber));
         // END REFERENCE
 
-        if (answersList[0].issueFlagged = true) {
-          _issueFlagged = true;
-        } else {
-          _issueFlagged = false;
+        // Goes through the answer list and sees if any response has been flagged.
+        for (var element in answersList) {
+          if (element.issueFlagged) {
+            _issueFlagged = true;
+          } else {
+            _issueFlagged = false;
+          }
         }
       });
     } catch (error) {
