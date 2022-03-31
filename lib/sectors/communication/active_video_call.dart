@@ -1,3 +1,15 @@
+// ===========================================
+// Title: Active Video Screen
+//
+// Original Author: Hamid Iqbal, Osama Ilyas
+// Contributors: Osama Ilyas, Hamid Iqbal,  Nathan Baitup,
+//
+// Commented By: Osama Ilyas, Hamid Iqbal,  Nathan Baitup,
+//
+// Created: Feb 16, 2022 15:24
+// Last Modified: Mar 31, 2022 12:51
+// ===========================================
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';

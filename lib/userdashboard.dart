@@ -198,7 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.smart_screen),
-                  label: 'AR',
+                  label: 'Surveys',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.call),

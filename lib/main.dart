@@ -1,3 +1,15 @@
+// ===========================================
+// Title: Main
+//
+// Original Author: Matt Barnett
+// Contributors: Matt Barnett, Nathan Baitup, Osama Ilyas, Hamid Iqbal, Brian Ekong
+//
+// Commented By: Matt Barnett, Nathan Baitup, Osama Ilyas, Hamid Iqbal
+//
+// Created: Feb 03, 2022 15:14
+// Last Modified: Mar 31, 2022 12:51
+// ===========================================
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shipping_inspection_app/userdashboard.dart';
@@ -149,7 +161,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    // Idwal logo.
+                    // Tries to load the Idwal logo, if fails displays empty text string.
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.5,
                       child: Image.network(
