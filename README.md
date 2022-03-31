@@ -1,21 +1,27 @@
 # Idwal Vessel Inspector
 ***
 ***
-
-_working description - to be updated upon throughout development_
-This is the source code for the Idwal Vessel Inspection application, developed by Year 3 ASE students. This is a Flutter based application designed specifically for Android devices. This application allows a surveyor to conduct and complete a survey on a ship, with the option to communicate to a technical expert and share their viewfinder, to allow the expert to complete the survey remotely. This application makes use of ARCore, to help with remote inspections, ensuring the surveyor access to the section they are inspecting, the questions to look for and also what area they should be looking for relating to the questions to inspect. 
+This is the source code for the Idwal Vessel Inspection application, developed by Year 3 ASE students. This is a Flutter based application designed specifically for Android devices. This application allows a surveyor to conduct and complete a survey on a ship, with the option to communicate to a technical expert and share their viewfinder, to allow the expert to complete the survey remotely. This application makes use of ARCore, to help with remote inspections, ensuring the surveyor access to the section they are inspecting, the questions to look for and also what area they should be looking for relating to the questions to inspect. Agora is used for video calling to allow for two way A/V calling between a client and surveyor through a channel name.
 
 ## Technology Used:
 ***
 Idwal Vessel Inspection is built using:
-- [Dart][dart_tech]
-- [Flutter][flutter_tech]
-- [Agora][agora_tech]
-- [ARCore][arcore_tech]
-** ADD TECH HERE **
+- [Dart][dart_tech] -  Used for application logic
+- [Flutter][flutter_tech] - Used for application front-end development
+- [Firebase][firebase] - Used for back-end data storage
+
+- [Agora][agora_tech] - Used for video calling
+- [ARCore][arcore_tech] - Used for AR modelling 
+- [Microsoft Azure][azure] - Used to generate tokens for video calling
   
 ## Installation:
 ***
+
+### APK: 
+Provided within the source zip fiel is an APK version of the application, to download this onto your device, download the APK directly to your android device and follow the steps of the installer. This will install and launch the application.
+
+_Please note: Installation of Unkown sources must be enabled on your device before the application can be installed._
+For more information surrounding enabling unknown sources please [look at this tutorial.](https://www.appaloosa.io/guides/how-to-install-apps-from-unknown-sources-in-android/)
 
 This setup will include installation for the application for installation onto an android device as well as work device for continued project development.
 
@@ -89,6 +95,10 @@ Instructions on their use and documentation are provided below.
 | [onboarding][onboarding] | 3.0.0 | Provides the ability to display a splash screen giving instructions on how to use a specific part of the application. |
 | [screenshot][screenshot] | 1.2.3 | Used to capture and save the screenshot taking within the AR scene. |
 | [splash_screen_view][splash_screen_view] | 3.0.0 | Creates a splash screen when the application is initially launched. |
+|  [cloud_firestore][cloud_firestore] | 3.1.10 | Used to save data to Firebase Firestore. |
+| [firebase_core][firebase_core] | 1.13.1 | Used to access Firebase. |
+| [firebase_storage][firebase_storage] | 10.2.9 | Used to save data to Firebase Storage. |
+| [shared_preferences][shared_preferences] | 2.0.13  | Used to access share_preferences.  |
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. Place all links to documentation used here to keep README clean. Ref: http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
@@ -114,4 +124,10 @@ Instructions on their use and documentation are provided below.
 [onboarding]: <https://pub.dev/packages/onboarding>
 [screenshot]: <https://pub.dev/packages/screenshot>
 [splash_screen_view]: <https://pub.dev/packages/splash_screen_view>
+[firebase]: <https://firebase.google.com/>
+[firebase_storage]: <https://pub.dev/packages/firebase_storage>
+[firebase_core]: <https://pub.dev/packages/firebase_core>
+[cloud_firestore]: <https://pub.dev/packages/cloud_firestore>
+[shared_preferences]: <https://pub.dev/packages/shared_preferences>
+[azure]: <https://azure.microsoft.com/en-gb/>
 
