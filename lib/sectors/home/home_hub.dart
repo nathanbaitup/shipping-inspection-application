@@ -23,10 +23,10 @@ import 'package:shipping_inspection_app/tasks.dart';
 import '../../main.dart';
 import '../../shared/history_format.dart';
 import '../../utils/app_colours.dart';
-
-import '../drawer/drawer_globals.dart' as app_globals;
 import '../questions/question_totals.dart';
 import '../survey/survey_section.dart';
+
+import '../drawer/drawer_globals.dart' as app_globals;
 
 QuestionBrain questionBrain = QuestionBrain();
 
