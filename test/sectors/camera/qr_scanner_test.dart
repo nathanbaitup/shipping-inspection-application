@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shipping_inspection_app/sectors/camera/qr_scanner_controller.dart';
 
-main() {
+void main() {
   group("Testing the QR Scanner displays correctly", () {
     testWidgets("Should load the QR Camera screen",
         (WidgetTester tester) async {

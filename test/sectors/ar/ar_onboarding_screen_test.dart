@@ -11,7 +11,7 @@ Widget buildTestWidget(Widget widget) {
   );
 }
 
-main() {
+void main() {
   group("Testing the AR Instructions screen displays correctly", () {
     testWidgets("Should load the AR Instructions Screen",
         (WidgetTester tester) async {
