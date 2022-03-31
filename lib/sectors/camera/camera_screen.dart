@@ -1,3 +1,15 @@
+// ===========================================
+// Title: Camera Screen
+//
+// Original Author: Nathan Baitup
+// Contributors: Nathan Baitup
+//
+// Commented By: Nathan Baitup
+//
+// Created: Feb 14, 2022 19:52
+// Last Modified: Mar 31, 2022 12:51
+// ===========================================
+
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';

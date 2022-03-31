@@ -1,3 +1,15 @@
+// ===========================================
+// Title: New AR Hub
+//
+// Original Author: Nathan Baitup
+// Contributors: Nathan Baitup, Matt Barnett, Hamid Iqbal
+//
+// Commented By: Nathan Baitup
+//
+// Created: Feb 24, 2022 22:05
+// Last Modified: Mar 31, 2022 12:50
+// ===========================================
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 

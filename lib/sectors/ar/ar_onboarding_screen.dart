@@ -1,3 +1,15 @@
+// ===========================================
+// Title: AR Introduction
+//
+// Original Author: Nathan Baitup
+// Contributors: Nathan Baitup
+//
+// Commented By: Nathan Baitup
+//
+// Created: Feb 13, 2022 16:40
+// Last Modified: Mar 31, 2022 12:48
+// ===========================================
+
 import 'package:flutter/material.dart';
 import 'package:onboarding/onboarding.dart';
 
