@@ -2,18 +2,21 @@
 // ===========================================
 // Title: Survey Hub
 //
-// Author: Osama Ilyas
+// Original Author: Osama Ilyas
 // Contributors: Matt Barnett, Nathan Baitup, Osama Ilyas
+// Commented By: Matt Barnett, Nathan Baitup
 //
 // Created: Feb 11, 2022 10:58pm
 // Last Modified: Mar 31, 2022 6:32am
 // ===========================================
 
+// External Imports
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+// Internal Imports
 import 'package:shipping_inspection_app/sectors/drawer/drawer_help.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_totals.dart';
@@ -22,6 +25,7 @@ import 'package:shipping_inspection_app/utils/app_colours.dart';
 import '../../shared/section_header.dart';
 import '../camera/qr_scanner_controller.dart';
 
+// App Globals
 import '../drawer/drawer_globals.dart' as app_globals;
 
 QuestionBrain questionBrain = QuestionBrain();
