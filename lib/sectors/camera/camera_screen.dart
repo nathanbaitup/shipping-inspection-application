@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import '../../utils/app_colours.dart';
 import '../survey/survey_section.dart';
 
-// TODO: cleanup this dart file in a separate branch for code quality.
 class CameraScreen extends StatefulWidget {
   // A list of all available cameras on the phone.
   final List<CameraDescription> cameras;

@@ -8,7 +8,7 @@ import 'package:shipping_inspection_app/sectors/drawer/drawer_settings.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_help.dart';
 import 'package:shipping_inspection_app/utils/app_colours.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
-  as app_globals;
+    as app_globals;
 
 String vesselID = '';
 
@@ -28,7 +28,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   void initState() {
     super.initState();
@@ -36,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
     HomeHub(vesselID: vesselID),
     SurveyHub(vesselID: vesselID),
@@ -63,8 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
           selectedIndex = index;
           return Scaffold(
             key: _scaffoldKey,
-            floatingActionButtonLocation: FloatingActionButtonLocation
-                .startFloat,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.startFloat,
 
             // -- App Bar Start
 
@@ -76,6 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
               leading: Transform.scale(
                 scale: 0.7,
                 child: FloatingActionButton(
+                  key: const Key('DrawerButton'),
                   onPressed: () => _scaffoldKey.currentState?.openDrawer(),
                   child: const Icon(Icons.menu),
                 ),
@@ -111,8 +111,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         Navigator.of(context).pop();
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (
-                                BuildContext context) => const MenuHelp()));
+                            builder: (BuildContext context) =>
+                                const MenuHelp()));
                       },
                       icon: const Icon(Icons.help),
                     ),
@@ -129,16 +129,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         Navigator.of(context).pop();
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (
-                                BuildContext context) => const MenuHistory()));
+                            builder: (BuildContext context) =>
+                                const MenuHistory()));
                       },
                       icon: const Icon(Icons.history),
                     ),
                     onTap: () {
                       Navigator.of(context).pop();
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (
-                              BuildContext context) => const MenuHistory()));
+                          builder: (BuildContext context) =>
+                              const MenuHistory()));
                     }),
                 _drawerDivider(),
                 ListTile(
@@ -167,16 +167,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         Navigator.of(context).pop();
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (
-                                BuildContext context) => const MenuSettings()));
+                            builder: (BuildContext context) =>
+                                const MenuSettings()));
                       },
                       icon: const Icon(Icons.settings),
                     ),
                     onTap: () {
                       Navigator.of(context).pop();
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (
-                              BuildContext context) => const MenuSettings()));
+                          builder: (BuildContext context) =>
+                              const MenuSettings()));
                     }),
                 _drawerDivider(),
               ]),
@@ -212,8 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
             // -- Nav Bar End
           );
-        }
-    );
+        });
   }
 
   SizedBox _drawerDivider() {
