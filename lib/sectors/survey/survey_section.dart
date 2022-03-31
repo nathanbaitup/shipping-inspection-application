@@ -157,7 +157,9 @@ class _SurveySectionState extends State<SurveySection> {
 
                 // Opens the survey section in an AR view.
                 ElevatedButton(
-                  onPressed: () async => _openARSection(),
+                  onPressed: () {
+                    _openARSection();
+                  },
                   style:
                       ElevatedButton.styleFrom(primary: AppColours.appYellow),
                   child: const Text('Open section in AR'),
@@ -375,7 +377,7 @@ class _SurveySectionState extends State<SurveySection> {
                 questionID: widget.questionID,
                 arContent: arContentPush,
                 openThroughQR: false,
-                seenTutorial: false,
+                seenTutorial: !app_globals.tutorialEnabled,
               ),
             ),
           );
