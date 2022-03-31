@@ -1,16 +1,30 @@
+// ===========================================
+// Title: Main
+//
+// Original Author: Matt Barnett
+// Contributors: Matt Barnett, Nathan Baitup, Osama Ilyas, Hamid Iqbal, Brian Ekong
+//
+// Commented By: Matt Barnett, Nathan Baitup, Osama Ilyas, Hamid Iqbal
+//
+// Created: Feb 03, 2022 15:14
+// Last Modified: Mar 31, 2022 12:51
+// ===========================================
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:shipping_inspection_app/utils/colours.dart';
 import 'package:shipping_inspection_app/userdashboard.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shipping_inspection_app/utils/app_colours.dart';
 import 'package:shipping_inspection_app/sectors/drawer/drawer_globals.dart'
-    as globals;
+    as app_globals;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const ShipApp());
 }
+
+final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 
 // The vesselID used to differentiate surveys saved in the database.
 String vesselID = '';
@@ -26,39 +40,43 @@ class _ShipAppState extends State<ShipApp> {
   @override
   void initState() {
     super.initState();
-    globals.loadPrefs();
+    app_globals.loadPrefs();
     // Requests camera and microphone permissions on app load.
     _requestPermissions();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Shipping Application',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch().copyWith(
-            primary: LightColors.sPurple,
-            secondary: LightColors.sPurple,
-            brightness: Brightness.light,
-            /* light theme settings */
-        )),
-        darkTheme: ThemeData(
-            colorScheme: ColorScheme.fromSwatch().copyWith(
-              primary: Colors.white,
-              secondary: LightColors.sPurple,
-              brightness: Brightness.dark,
-              /* dark theme settings */
-        )),
-        themeMode: ThemeMode.system,
-        // Dark mode now follows system settings
-        // Requires Android 10 (API level 29) or above to switch to dark mode
-        debugShowCheckedModeBanner: false,
-        // Checks if vesselID is empty, if true opens the welcome screen
-        // else opens the application with the vesselID parsed in.
-        home: vesselID.isEmpty
-            ? const WelcomePage()
-            : MyHomePage(
-                title: 'Idwal Vessel Inspection', vesselID: vesselID));
+    return ValueListenableBuilder<ThemeMode>(
+        valueListenable: themeNotifier,
+        builder: (_, mode, __) {
+          return MaterialApp(
+              title: 'Shipping Application',
+              theme: ThemeData(
+                  colorScheme: ColorScheme.fromSwatch().copyWith(
+                primary: AppColours.appPurple,
+                secondary: AppColours.appPurple,
+                brightness: Brightness.light,
+                /* light theme settings */
+              )),
+              darkTheme: ThemeData(
+                  colorScheme: ColorScheme.fromSwatch().copyWith(
+                primary: AppColours.appPurple,
+                secondary: AppColours.appPurple,
+                brightness: Brightness.dark,
+                /* dark theme settings */
+              )),
+              themeMode: mode,
+              // Dark mode now follows system settings
+              // Requires Android 10 (API level 29) or above to switch to dark mode
+              debugShowCheckedModeBanner: false,
+              // Checks if vesselID is empty, if true opens the welcome screen
+              // else opens the application with the vesselID parsed in.
+              home: vesselID.isEmpty
+                  ? const WelcomePage()
+                  : MyHomePage(
+                      title: 'Idwal Vessel Inspection', vesselID: vesselID));
+        });
   }
 
   // Checks if permissions have been granted and asks the user for permission if not.
@@ -116,7 +134,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 width: screenWidth,
                 padding: const EdgeInsets.all(0.0),
                 decoration: const BoxDecoration(
-                  color: LightColors.sLavender,
+                  color: AppColours.appLavender,
                   borderRadius: BorderRadius.only(
                     bottomRight: Radius.circular(30.0),
                     bottomLeft: Radius.circular(30.0),
@@ -143,11 +161,16 @@ class _WelcomePageState extends State<WelcomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    // Idwal logo.
+                    // Tries to load the Idwal logo, if fails displays empty text string.
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.5,
                       child: Image.network(
-                          'https://www.idwalmarine.com/hs-fs/hubfs/IDWAL-Logo-CMYK-Blue+White.png?width=2000&name=IDWAL-Logo-CMYK-Blue+White.png'),
+                        'https://www.idwalmarine.com/hs-fs/hubfs/IDWAL-Logo-CMYK-Blue+White.png?width=2000&name=IDWAL-Logo-CMYK-Blue+White.png',
+                        errorBuilder: (BuildContext context, Object exception,
+                            StackTrace? stackTrace) {
+                          return const Text('');
+                        },
+                      ),
                     ),
                     const SizedBox(height: 20),
 
@@ -175,11 +198,14 @@ class _WelcomePageState extends State<WelcomePage> {
                       child: TextField(
                         controller: _vesselController,
                         decoration: InputDecoration(
-                          labelText: 'enter the vessel name ',
+                          labelText: 'Enter the Vessel name ',
                           errorText: _validation
-                              ? 'Please enter a vessel name or id'
+                              ? 'Please enter a Vessel name or ID'
                               : null,
-                          border: const OutlineInputBorder(),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: app_globals.getTextColour(), width: 1),
+                          ),
                         ),
                       ),
                     ),
@@ -204,8 +230,8 @@ class _WelcomePageState extends State<WelcomePage> {
                           runApp(const ShipApp());
                         }
                       },
-                      style:
-                          ElevatedButton.styleFrom(primary: LightColors.sGreen),
+                      style: ElevatedButton.styleFrom(
+                          primary: AppColours.appPurple),
                       child: const Text('Continue to Application'),
                     ),
 
