@@ -18,7 +18,7 @@ Idwal Vessel Inspection is built using:
 ***
 
 ### APK: 
-Provided within the source zip field is an APK version of the application, to download this onto your device, download the APK directly to your android device and follow the steps of the installer. This will install and launch the application.
+Provided within the source zip file is an APK version of the application, to download this onto your device, download the APK directly to your android device and follow the steps of the installer. This will install and launch the application.
 
 _Please note: Installation of Unknown sources must be enabled on your device before the application can be installed._
 For more information surrounding enabling unknown sources please [look at this tutorial.](https://www.appaloosa.io/guides/how-to-install-apps-from-unknown-sources-in-android/)
@@ -28,7 +28,7 @@ This setup will include installation for the application for installation onto a
 ### Flutter installation:
 
 As this is a flutter project, first you must ensure that Flutter is installed on your computer. This project has been built using Flutter version 2.10.0
-To install Flutter on windows navigate to the flutter [website][flutter_install], where you will then be presented the option to select the device you want to install flutter on. Once selected a device you will then be given the latest stable release of flutter and installation documentation to enusre flutter is installed correctly.
+To install Flutter on windows navigate to the flutter [website][flutter_install], where you will then be presented the option to select the device you want to install flutter on. Once selected a device you will then be given the latest stable release of flutter and installation documentation to ensure flutter is installed correctly.
 
 ### Setup :
 
