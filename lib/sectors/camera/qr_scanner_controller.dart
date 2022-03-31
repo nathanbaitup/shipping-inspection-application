@@ -1,3 +1,15 @@
+// ===========================================
+// Title: QR Screen
+//
+// Original Author: Nathan Baitup
+// Contributors: Nathan Baitup
+//
+// Commented By: Nathan Baitup
+//
+// Created: Feb 28, 2022 20:03
+// Last Modified: Mar 31, 2022 12:51
+// ===========================================
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';

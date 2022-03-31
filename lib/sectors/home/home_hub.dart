@@ -1,3 +1,15 @@
+
+// ===========================================
+// Title: Home Hub
+//
+// Original Author: Matt Barnett
+// Contributors: Matt Barnett, Nathan Baitup
+// Commented By: Matt Barnett, Nathan Baitup
+//
+// Created: Mar 29, 2022 1:01am
+// Last Modified: Mar 31, 2022 6:07am
+// ===========================================
+
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,10 +24,10 @@ import 'package:shipping_inspection_app/tasks.dart';
 import '../../main.dart';
 import '../../shared/history_format.dart';
 import '../../utils/app_colours.dart';
-
-import '../drawer/drawer_globals.dart' as app_globals;
 import '../questions/question_totals.dart';
 import '../survey/survey_section.dart';
+
+import '../drawer/drawer_globals.dart' as app_globals;
 
 QuestionBrain questionBrain = QuestionBrain();
 
@@ -43,6 +55,8 @@ class _HomeHubState extends State<HomeHub> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return ValueListenableBuilder<bool>(
+        // Updates homepage state when notified.
+        // Notified by calling "app_globals.homeStateUpdate()".
         valueListenable: homeStateNotifier,
         builder: (_, homeState, __) {
           return Scaffold(
@@ -65,6 +79,7 @@ class _HomeHubState extends State<HomeHub> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
+                                      //Displays dynamically updating current username & vessel ID.
                                       Text(
                                         app_globals.getUsername(),
                                         textAlign: TextAlign.center,
@@ -83,21 +98,32 @@ class _HomeHubState extends State<HomeHub> {
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
-                                    ])),
+                                    ]
+                                )
+                            ),
                             Container(
                               height: screenHeight * 0.12,
                               padding: const EdgeInsets.all(20.0),
                               child: Row(
                                 children: [
+                                  // Section header class simply denotes below-content.
+                                  // Used as a class to maintain style consistency.
+                                  // Found in Home Hub and Survey Hub.
                                   sectionHeader("Progress"),
+                                  const Spacer(),
+                                  // Button in progress header takes you to tasks page.
                                   TextButton(
                                     style: TextButton.styleFrom(
                                       primary: Colors.white,
-                                      backgroundColor: AppColours.appGrey,
+                                      backgroundColor: AppColours.appBlue,
                                       elevation: 2,
                                       shape: const CircleBorder(),
+                                      fixedSize: const Size.fromRadius(20)
                                     ),
-                                    child: const ImageIcon(AssetImage("images/todo.png")),
+                                    child: const ImageIcon(
+                                      AssetImage("images/todo.png"),
+                                      size: 20,
+                                    ),
                                     onPressed: () {
                                       Navigator.push(
                                         context,
@@ -107,7 +133,6 @@ class _HomeHubState extends State<HomeHub> {
                                       );
                                     },
                                   ),
-
                                 ],
                               ),
                             ),
@@ -119,6 +144,10 @@ class _HomeHubState extends State<HomeHub> {
                                 child: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
+                                      // Class "ActiveSurveyWidget" will get input survey section
+                                      // and display its progress and metrics.
+                                      // When more are added to replicate the survey, the container
+                                      // will be scrollable horizontally.
                                       children: const [
                                         ActiveSurveysWidget(
                                           sectionName: 'Fire and Safety',
@@ -134,16 +163,22 @@ class _HomeHubState extends State<HomeHub> {
                                         ),
                                       ],
                                     ))),
+
+                            // Divider to make section separation more obvious to users.
                             const Divider(
                               thickness: 1,
                               height: 1,
                             ),
+
                             Container(
                               height: screenHeight * 0.12,
                               padding: const EdgeInsets.all(20.0),
                               child: Row(
                                 children: [
                                   sectionHeader("Channels"),
+                                  // Settings button brings you directly to channels
+                                  // settings which, when changed, instantly update
+                                  // home-hub content.
                                   TextButton(
                                     style: TextButton.styleFrom(
                                       primary: Colors.white,
@@ -164,21 +199,37 @@ class _HomeHubState extends State<HomeHub> {
                                 ],
                               ),
                             ),
+
+                            // Returns column of all saved channels in rows of
+                            // two. The return will vary depending on the whether
+                            // saved channels is enabled, how many channels the
+                            // user has enabled and if the user has defined the
+                            // name of any channels.
                             Column(children: getHomeChannels()),
+
                             const SizedBox(
                               height: 20,
                             ),
+                            // Divider to make section separation more obvious to users.
                             const Divider(
                               thickness: 1,
                               height: 1,
                             ),
+
                             Container(
                               height: screenHeight * 0.12,
                               padding: const EdgeInsets.all(20.0),
                               child: Row(
                                 children: [
                                   sectionHeader("History"),
+
+                                  // History buttons class is instanced here
+                                  // and in the history drawer page. Contains
+                                  // buttons that allow you to change history
+                                  // settings, clear all current history and
+                                  // create a new instance of the history page.
                                   historyButtons(context),
+
                                 ],
                               ),
                             ),
@@ -199,22 +250,37 @@ class _HomeHubState extends State<HomeHub> {
                                     Radius.circular(20),
                                   ),
                                 ),
-                                child: getHistoryBody())
+
+                                // Returns history records of the current
+                                // use-session. Will return just varying text if
+                                // there are no current records or if history
+                                // logging as been disabled.
+                                child: getHistoryBody()
+
+                            )
                           ])))));
 
         });
   }
 }
 
+// Returns all saved channels in a widget format that is interact-able and dynamic.
 List<Widget> getHomeChannels() {
+
+  // List to store all saved channel content to be displayed on the home-hub.
   List<Widget> homeChannels = [];
 
   int currentChannel = 0;
+
+  // Check if saved channels are enabled.
   if (app_globals.getSavedChannelsEnabled()) {
+    //  If they are, iterate through each saved channel.
     for (int i = 0; i < (app_globals.savedChannelSum / 2); i++) {
       List<Widget> rowContent = [];
 
       if (app_globals.savedChannelSum - 1 > currentChannel) {
+        // If the number of remaining channels is currently even, create
+        // a row to display them together.
         rowContent = [
           Container(
             padding: const EdgeInsets.only(
@@ -236,6 +302,8 @@ List<Widget> getHomeChannels() {
           const Spacer(),
         ];
       } else {
+        // If the number of remaining channels is just one, display it in the
+        // center of the page by itself.
         rowContent = [
           const Spacer(),
           HomeChannel(id: currentChannel),
@@ -248,6 +316,8 @@ List<Widget> getHomeChannels() {
     }
   } else {
     homeChannels = [
+      // If saved channels are disabled, show no widgets and just
+      // informative text.
       const Text(
         "Saved channels have been disabled.",
         style: TextStyle(fontSize: 15, fontStyle: FontStyle.italic),

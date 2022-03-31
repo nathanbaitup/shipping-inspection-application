@@ -88,6 +88,7 @@ Instructions on their use and documentation are provided below.
 | [internet_connection_checker][internet_connection_checker] | 0.0.1+3 | Provides the ability to check of the user is connected to the internet or not |
 | [onboarding][onboarding] | 3.0.0 | Provides the ability to display a splash screen giving instructions on how to use a specific part of the application. |
 | [screenshot][screenshot] | 1.2.3 | Used to capture and save the screenshot taking within the AR scene. |
+| [splash_screen_view][splash_screen_view] | 3.0.0 | Creates a splash screen when the application is initially launched. |
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. Place all links to documentation used here to keep README clean. Ref: http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
@@ -112,4 +113,5 @@ Instructions on their use and documentation are provided below.
 [internet_connection_checker]: <https://pub.dev/packages/internet_connection_checker>
 [onboarding]: <https://pub.dev/packages/onboarding>
 [screenshot]: <https://pub.dev/packages/screenshot>
+[splash_screen_view]: <https://pub.dev/packages/splash_screen_view>
 
