@@ -90,6 +90,22 @@ class _NewARHubState extends State<NewARHub> {
     arSessionManager.dispose();
   }
 
+  // Creates an int to update if an issue has been flagged or not.
+  int issueFlaggedCounter = 0;
+
+  // Checks if the issue button has been pressed to update an issue setting from true to false.
+  void _onIssueFlagged() async {
+    setState(() {
+      if (issueFlaggedCounter == 0) {
+        issueFlagged = true;
+        issueFlaggedCounter = 1;
+      } else {
+        issueFlagged = false;
+        issueFlaggedCounter = 0;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!widget.seenTutorial) {
@@ -518,22 +534,6 @@ class _NewARHubState extends State<NewARHub> {
         })
         .then((value) => debugPrint("Record has been added"))
         .catchError((error) => debugPrint("Failed to add record: $error"));
-  }
-
-  // Creates an int to update if an issue has been flagged or not.
-  int issueFlaggedCounter = 0;
-
-  // Checks if the issue button has been pressed to update an issue setting from true to false.
-  void _onIssueFlagged() async {
-    setState(() {
-      if (issueFlaggedCounter == 0) {
-        issueFlagged = true;
-        issueFlaggedCounter = 1;
-      } else {
-        issueFlagged = false;
-        issueFlaggedCounter = 0;
-      }
-    });
   }
 }
 
