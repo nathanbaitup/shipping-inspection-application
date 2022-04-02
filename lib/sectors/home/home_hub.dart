@@ -20,7 +20,6 @@ import 'package:shipping_inspection_app/sectors/home/home_channel.dart';
 import 'package:shipping_inspection_app/sectors/home/home_percent.dart';
 import 'package:shipping_inspection_app/sectors/questions/question_brain.dart';
 import 'package:shipping_inspection_app/shared/section_header.dart';
-import 'package:shipping_inspection_app/tasks.dart';
 import '../../main.dart';
 import '../../shared/history_format.dart';
 import '../../utils/app_colours.dart';
@@ -110,29 +109,6 @@ class _HomeHubState extends State<HomeHub> {
                                   // Used as a class to maintain style consistency.
                                   // Found in Home Hub and Survey Hub.
                                   sectionHeader("Progress"),
-                                  const Spacer(),
-                                  // Button in progress header takes you to tasks page.
-                                  TextButton(
-                                    style: TextButton.styleFrom(
-                                      primary: Colors.white,
-                                      backgroundColor: AppColours.appBlue,
-                                      elevation: 2,
-                                      shape: const CircleBorder(),
-                                      fixedSize: const Size.fromRadius(20)
-                                    ),
-                                    child: const ImageIcon(
-                                      AssetImage("images/todo.png"),
-                                      size: 20,
-                                    ),
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => const TasksPage(vesselID: ''),
-                                        ),
-                                      );
-                                    },
-                                  ),
                                 ],
                               ),
                             ),
