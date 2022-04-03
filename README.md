@@ -1,5 +1,6 @@
 # Idwal Vessel Inspector
-***
+
+![https://codemagic.io/apps/6238b868854b7237ec0bc63f/6238b868854b7237ec0bc63e/latest_build](https://api.codemagic.io/apps/6238b868854b7237ec0bc63f/6238b868854b7237ec0bc63e/status_badge.svg)
 ***
 This is the source code for the Idwal Vessel Inspection application, developed by Year 3 ASE students. This is a Flutter based application designed specifically for Android devices. This application allows a surveyor to conduct and complete a survey on a ship, with the option to communicate to a technical expert and share their viewfinder, to allow the expert to complete the survey remotely. This application makes use of ARCore, to help with remote inspections, ensuring the surveyor access to the section they are inspecting, the questions to look for and also what area they should be looking for relating to the questions to inspect. Agora is used for video calling to allow for two way A/V calling between a client and surveyor through a channel name.
 
